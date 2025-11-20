@@ -1,6 +1,6 @@
 # Usage & Examples
 
-This page shows how to use Towel States in practice, split into:
+This page shows how to use Statement in practice, split into:
 
 - **Core usage** – basic patterns.
 - **Advanced usage** – optional patterns for more complex behaviour.

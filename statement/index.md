@@ -1,9 +1,11 @@
-# Towel States
+# Statement
 
 A lightweight, reusable **state machine system** for GameMaker.  
 Designed to be copy-pasted into any project, play nicely with Feather, and stay out of your way when you only need something simple.
 
-Towel States gives you:
+Statement is part of the **Towel** suite of reusable systems for GameMaker.
+
+Statement gives you:
 
 - A `StateMachine` bound to an instance or struct.
 - Named `State` objects with **Enter / Update / Exit / Draw** handlers.
@@ -14,7 +16,7 @@ Towel States gives you:
 
 ## Introduction
 
-Towel States replaces scattered `if (state == ...)` checks with a clear structure:
+Statement replaces scattered `if (state == ...)` checks with a clear structure:
 
 - Each object (or struct) owns a `StateMachine`.
 - Each machine manages one active `State` at a time.
