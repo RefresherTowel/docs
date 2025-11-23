@@ -48,18 +48,18 @@ var spd = stats.move_speed.GetValue();  // canonical, cached
 
 ## 2. Adding basic modifiers
 
-Let's add a flat +5 damage bonus from a wand, and a +20% bonus from a rune.
+Let's add a flat +5 damage bonus from a weapon, and a +20% bonus from a rune.
 
 ```gml
 /// Somewhere in player setup / equipment logic:
 var dmg_stat = stats.damage;
 
-// +5 flat damage from wand
-var wand_mod = new Modifier(5, eMathOps.ADD, "Bronze Wand")
-    .SetLayer(eStatLayer.WANDS)
-    .AddTag("wand");
+// +5 flat damage from weapon
+var weapon_mod = new Modifier(5, eMathOps.ADD, "Bronze Sword")
+    .SetLayer(eStatLayer.EQUIPMENT)
+    .AddTag("sword");
 
-dmg_stat.AddModifier(wand_mod);
+dmg_stat.AddModifier(weapon_mod);
 
 // +20% damage from rune
 var rune_mod = new Modifier(0.20, eMathOps.MULTIPLY, "Aggression Rune")
@@ -84,18 +84,20 @@ Layers let you control the order in which modifiers apply. Out of the box, Catal
 ```gml
 enum eStatLayer {
     BASE_BONUS, // attributes, level scaling, etc.
-    WANDS,      // wand / weapon bonuses
-    RUNES,      // runes / talents
+    EQUIPMENT,  // wand / weapon bonuses
+    AUGMENTS,   // runes / talents / gems / etc
     TEMP,       // short buffs / debuffs
     GLOBAL,     // late-stage global modifiers
 }
 ```
 
+These are found in `scr_catalyst_macro`
+
 For example, you might decide:
 
 - `BASE_BONUS` - attribute-derived bonuses
-- `WANDS` - weapon affixes
-- `RUNES` - talent tree
+- `EQUIPMENT` - weapon affixes
+- `AUGMENTS` - talent tree
 - `TEMP` - potions, short buffs, debuffs
 - `GLOBAL` - auras, curses, global modifiers
 
@@ -106,10 +108,10 @@ var attr_bonus = new Modifier(2, eMathOps.ADD, "Strength")
     .SetLayer(eStatLayer.BASE_BONUS);
 
 var wand_bonus = new Modifier(5, eMathOps.ADD, "Bronze Wand")
-    .SetLayer(eStatLayer.WANDS);
+    .SetLayer(eStatLayer.EQUIPMENT);
 
 var rune_bonus = new Modifier(0.20, eMathOps.MULTIPLY, "Aggression Rune")
-    .SetLayer(eStatLayer.RUNES);
+    .SetLayer(eStatLayer.AUGMENTS);
 
 var temp_buff = new Modifier(0.50, eMathOps.MULTIPLY, "Battle Cry")
     .SetLayer(eStatLayer.TEMP)
@@ -146,9 +148,7 @@ Somewhere central (e.g. a controller object) you should tick the tracker:
 
 ```gml
 /// obj_combat_controller Step
-if (variable_global_exists("__modifier_tracker")) {
-    global.__modifier_tracker.Countdown();
-}
+CatalystModCountdown();
 ```
 
 When a modifier's `duration` reaches 0, Catalyst:
@@ -174,12 +174,12 @@ var preview_ops = [
     {
         value      : 2,
         operation  : eMathOps.ADD,
-        layer      : eStatLayer.WANDS
+        layer      : eStatLayer.EQUIPMENT
     },
     {
         value      : 0.10,
         operation  : eMathOps.MULTIPLY,
-        layer      : eStatLayer.WANDS
+        layer      : eStatLayer.EQUIPMENT
     }
 ];
 
@@ -191,11 +191,11 @@ draw_text(x, y, "Damage: " + string(current) + " → " + string(preview));
 You can also use `PreviewChange` for a single op:
 
 ```gml
-var preview = dmg_stat.PreviewChange(0.15, eMathOps.MULTIPLY, eStatLayer.RUNES);
+var preview = dmg_stat.PreviewChange(0.15, eMathOps.MULTIPLY, eStatLayer.AUGMENTS);
 ```
 
 Previews:
 
 - Don't mutate the stat.
 - Respect all layers, tags, families, and conditions.
-- Can optionally take a context for more advanced runes (see Advanced Topics).
+- Can optionally take a context for more advanced aguments (see Advanced Topics).

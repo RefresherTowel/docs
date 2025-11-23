@@ -82,7 +82,7 @@ For those, Catalyst lets the modifier compute stacks directly from context using
 
 ```gml
 var rune_speed = new Modifier(0.02, eMathOps.MULTIPLY, "Scorched Momentum")
-    .SetLayer(eStatLayer.RUNES)
+    .SetLayer(eStatLayer.AUGMENTS)
     .SetMaxStacks(10)
     .SetStackFunc(function(_stat, _ctx) {
         if (is_undefined(_ctx) || !variable_struct_exists(_ctx, "burning_enemy_count")) {
@@ -131,7 +131,7 @@ A `condition` function lets a modifier apply only when a predicate is true.
 
 ```gml
 var low_hp_damage = new Modifier(0.25, eMathOps.MULTIPLY, "Desperation")
-    .SetLayer(eStatLayer.RUNES)
+    .SetLayer(eStatLayer.AUGMENTS)
     .SetCondition(function(_stat, _ctx) {
         if (is_undefined(_ctx)) return false;
         if (!variable_struct_exists(_ctx, "hp_ratio")) return false;
@@ -196,7 +196,7 @@ In any context where both would apply, Catalyst:
 - Computes each modifier's **effective magnitude** for that context.
 - Keeps only the one with the highest magnitude in that family + layer.
 
-Families are evaluated *per layer* - a family in `RUNES` is separate from a family in `GLOBAL`.
+Families are evaluated *per layer* - a family in `AUGMENTS` is separate from a family in `GLOBAL`.
 
 ---
 
