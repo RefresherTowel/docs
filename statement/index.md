@@ -5,12 +5,13 @@ nav_order: 2              # order among top-level items
 has_children: true        # marks this as a section (still supported)
 ---
 
-# Statement
+# Statement - State Machine for GameMaker
 
-A lightweight, reusable **state machine system** for GameMaker.  
+**Statement** is a lightweight, reusable **state machine system** for GameMaker.  
+
 Designed to be copy-pasted into any project, play nicely with Feather, and stay out of your way when you only need something simple.
 
-Statement is part of the **RefresherTowel Games** suite of reusable systems for GameMaker.
+Statement is part of the **RefresherTowel Games** suite of reusable frameworks for GameMaker.
 
 Statement gives you:
 

@@ -5,12 +5,13 @@ nav_order: 3
 has_children: true
 ---
 
-# Pulse
+# Pulse - Signals System for GameMaker
 
-Pulse - Signals & Events for GameMaker  
+**Pulse** is a lightweight, reusable **signal and event system** for GameMaker.  
 
-A lightweight, reusable **signal and event system** for GameMaker.  
 Designed to be copy-pasted into any project, play nicely with Feather, and stay out of your way when you only need something simple.
+
+Pulse is part of the **RefresherTowel Games** suite of reusable frameworks for GameMaker.
 
 Pulse gives you:
 
