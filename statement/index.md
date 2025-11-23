@@ -3,7 +3,7 @@
 A lightweight, reusable **state machine system** for GameMaker.  
 Designed to be copy-pasted into any project, play nicely with Feather, and stay out of your way when you only need something simple.
 
-Statement is part of the **Towel** suite of reusable systems for GameMaker.
+Statement is part of the **RefresherTowel Games** suite of reusable systems for GameMaker.
 
 Statement gives you:
 
@@ -39,10 +39,10 @@ These are the features most users will use day-to-day:
 
 - **Clear lifecycle**  
   Per-state handlers:
-  - `Enter` — one-time setup when the state becomes active.
-  - `Update` — per-step logic while active.
-  - `Exit` — one-time cleanup when the state stops being active.
-  - `Draw` — optional per-state drawing.
+  - `Enter` - one-time setup when the state becomes active.
+  - `Update` - per-step logic while active.
+  - `Exit` - one-time cleanup when the state stops being active.
+  - `Draw` - optional per-state drawing.
 
 - **Simple state timing**  
   Each machine tracks **how long the current state has been active** (in frames):
@@ -56,7 +56,7 @@ These are the features most users will use day-to-day:
 - **Feather-friendly**  
   Types are annotated for better autocompletion and linting in the GameMaker code editor.
 
-If you’re a beginner or just need something straightforward, you can safely stop at these features.
+If you're a beginner or just need something straightforward, you can safely stop at these features.
 
 ---
 
@@ -94,7 +94,7 @@ You can completely ignore these until you actually need them.
 
 - **GameMaker version:**  
   Any version that supports:
-  - Struct constructors: `function Name(args) constructor { … }`
+  - Struct constructors: `function Name(args) constructor { ... }`
   - `method(owner, fn)`
   - `time_source` APIs
 
@@ -134,7 +134,7 @@ state_machine.Update();
 state_machine.Draw();
 ```
 
-That’s all you need to get a basic state machine up and running.
+That's all you need to get a basic state machine up and running.
 
 ---
 
@@ -142,12 +142,12 @@ That’s all you need to get a basic state machine up and running.
 
 ### Do I need one `StateMachine` per object?
 
-Yes, that’s the intended pattern:
+Yes, that's the intended pattern:
 
-- In an object’s Create event: `state_machine = StateMachine(self);`
+- In an object's Create event: `state_machine = StateMachine(self);`
 - Then add states to that machine for that object.
 
-You *can* bind a machine to a pure struct if you’re doing headless logic, but “one object, one machine” is the most common.
+You *can* bind a machine to a pure struct if you're doing headless logic, but "one object, one machine" is the most common.
 
 ---
 
@@ -162,10 +162,10 @@ Common patterns:
 
 ---
 
-### What’s the difference between `GetStateTime()` and per-state timers?
+### What's the difference between `GetStateTime()` and per-state timers?
 
 - `GetStateTime()` / `SetStateTime()` live on the **StateMachine**:
-  - Represent “how long the current state has been active (in frames)”.
+  - Represent "how long the current state has been active (in frames)".
   - Automatically reset on state change.
   - Incremented in `Update()` while a state is active.
 
@@ -173,7 +173,7 @@ Common patterns:
   - Optional, more flexible timers backed by `time_source`.
   - Good for complex behaviour that needs pausing, restarting, or independent ticking.
 
-If you’re unsure, start with `GetStateTime()` and ignore per-state timers.
+If you're unsure, start with `GetStateTime()` and ignore per-state timers.
 
 ---
 
@@ -183,13 +183,13 @@ If you’re unsure, start with `GetStateTime()` and ignore per-state timers.
 
 Use **queued changes** when:
 
-- You’re inside a state’s `Update` and want to change state *next* frame.
-- You want to avoid “mid-update” re-entrancy issues where code before and after `ChangeState()` runs in different states.
+- You're inside a state's `Update` and want to change state *next* frame.
+- You want to avoid "mid-update" re-entrancy issues where code before and after `ChangeState()` runs in different states.
 
 Use **immediate `ChangeState()`** when:
 
-- You’re doing a hard switch (spawning, respawning, teleporting).
-- You know you’re at a safe point in your logic.
+- You're doing a hard switch (spawning, respawning, teleporting).
+- You know you're at a safe point in your logic.
 
 ---
 
@@ -198,11 +198,11 @@ Use **immediate `ChangeState()`** when:
 Use `PushState` / `PopState` for:
 
 - Temporary overlays (pause, menu, inventory, cutscenes).
-- Situations where you want to “return to whatever state we were in before”.
+- Situations where you want to "return to whatever state we were in before".
 
 Use `ChangeState` when:
 
-- You’re switching between normal, “flat” states (Idle → Move → Attack).
+- You're switching between normal, "flat" states (Idle → Move → Attack).
 
 ---
 
@@ -212,8 +212,8 @@ Use `ChangeState` when:
   Use the GitHub Issues page for this repository.
 
 - **Questions / discussion / examples:**  
-  Join the project’s Discord (link in the repository README).  
-  That’s where you can:
+  Join the project's Discord (link in the repository README).  
+  That's where you can:
   - Ask implementation questions.
   - Share snippets and patterns.
   - See example integrations from other users.

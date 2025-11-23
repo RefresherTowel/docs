@@ -1,0 +1,21 @@
+title: "RefresherTowel Games Documentation Hub"
+description: "Documentation hub for various GM focused systems released by RefresherTowel Games"
+# Your public site URL + the repo path:
+url: "https://refresher-towel.github.io"   # ← change to your username
+baseurl: "/docs"                           # ← change to your repo name
+
+# Use Just the Docs as a remote theme, pinned to a release
+remote_theme: just-the-docs/just-the-docs@v0.10.0
+
+# Core theme options
+search_enabled: true
+color_scheme: dark   # or "light"
+
+# Nice UX bits
+heading_anchors: true
+
+# Top-right links (buy, support, etc.)
+aux_links:
+  "GitHub Profile":
+    - "https://github.com/RefresherTowel"
+aux_links_new_tab: true
