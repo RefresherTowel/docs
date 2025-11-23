@@ -1,3 +1,10 @@
+---
+layout: default
+title: Usage & Examples
+parent: Pulse
+nav_order: 1
+---
+
 # Usage & Examples
 
 This page shows how to use Pulse in practice, split into:
@@ -274,7 +281,7 @@ Remember that these use your debug logger (for example, `EchoDebugInfo`), so log
 
 ### 1. You must flush the queue yourself
 
-Pulse does not automatically flush queued events. If you use `PulsePost`, you **must** call `PulseFlushQueue` somewhere each frame (usually in a central controller object).
+Pulse does not automatically flush queued events. If you use `PulsePost`, you **must** call `PulseFlushQueue` somewhere (usually each frame from a central controller object).
 
 If you never call `PulsePost`, you can ignore the queue entirely.
 

@@ -4,7 +4,7 @@ title: Home
 nav_order: 1
 ---
 
-# RefresherTowel Games Framework Hub
+# Framework Hub
 
 Welcome to the hub for all documentation related to the various GM-focused frameworks created by RefresherTowel Games. Let's look at a short overview of each available framework.
 

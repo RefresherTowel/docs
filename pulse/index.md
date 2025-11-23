@@ -1,3 +1,10 @@
+---
+layout: default
+title: Pulse
+nav_order: 2
+has_children: true
+---
+
 # Pulse
 
 Pulse - Signals & Events for GameMaker  
