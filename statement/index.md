@@ -1,3 +1,10 @@
+---
+layout: default
+title: Statement          # children will use this as `parent:`
+nav_order: 2              # order among top-level items
+has_children: true        # marks this as a section (still supported)
+---
+
 # Statement
 
 A lightweight, reusable **state machine system** for GameMaker.  

@@ -1,3 +1,10 @@
+---
+layout: default
+title: Scripting Reference
+parent: Statement
+nav_order: 1
+---
+
 # Scripting Reference
 
 This page documents the public API of the state machine system.

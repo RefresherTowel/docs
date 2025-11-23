@@ -1,3 +1,10 @@
+---
+layout: default
+title: Usage & Examples
+parent: Statement
+nav_order: 2
+---
+
 # Usage & Examples
 
 This page shows how to use Statement in practice, split into:
