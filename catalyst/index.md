@@ -38,8 +38,10 @@ move speed, crit chance, armor, etc.
 
 It knows about:
 
+#### Core
 - `base_value` - your starting value.
 - `modifiers` - things that change the value (flat, percentage, clamping, etc.).
+#### Advanced
 - `layers` - the order in which different groups of modifiers are applied.
 - `post_process` - an optional soft-cap / curve function applied at the end.
 - `base_func` - an optional derived-base formula (e.g. max HP from vitality + level).
@@ -59,12 +61,15 @@ var dmg_hit = stats.damage.GetValue(hit_ctx);
 
 A `Modifier` describes *how* to change a stat:
 
+#### Core
+- amount: What value to use for the operation
 - operation: `ADD`, `MULTIPLY`, or `FORCE_MIN`
+- duration: optional lifetime in "ticks", managed by `ModifierTracker`
+#### Advanced
 - layer: where in the pipeline it applies (BASE_BONUS, WANDS, RUNES, TEMP, GLOBAL)
 - stacks: how many times it applies (stateful or context-driven)
 - condition: when it is allowed to apply
 - stack_func: how many stacks to use for a given context
-- duration: optional lifetime in "ticks", managed by `ModifierTracker`
 - family + family_mode: how modifiers of the same family combine (STACK_ALL, HIGHEST, LOWEST)
 - tags: labels like `"buff"`, `"debuff"`, `"fire"`, `"movement"`
 
@@ -90,7 +95,7 @@ You can tick it in whatever time-step makes sense for your game loop:
 
 ```gml
 // e.g. in a global controller object, once per turn / wave / second / step:
-global.__modifier_tracker.Countdown();
+CatalystModCountdown();
 ```
 
 Any modifiers whose `duration` reaches 0 are removed from both the tracker
@@ -103,7 +108,7 @@ and their owning `Statistic`.
 - Flat and multiplicative modifiers
 - Ordered layers:
   - `BASE_BONUS` - attributes, level, ancestry
-  - `WANDS`      - weapons or items
+  - `EQUIPMENT`  - weapons or items
   - `RUNES`      - talents / runes / passives
   - `TEMP`       - short-lived buffs / debuffs
   - `GLOBAL`     - late-stage global effects and auras
