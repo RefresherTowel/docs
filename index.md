@@ -4,9 +4,9 @@ title: Home
 nav_order: 1
 ---
 
-# Documentation Hub for RefresherTowel Games Systems
+# RefresherTowel Games Framework Hub
 
-Welcome to the hub for all documentation related to the various GM-focused systems created by RefresherTowel Games. First I'll give a short overview of what each available system is.
+Welcome to the hub for all documentation related to the various GM-focused frameworks created by RefresherTowel Games. Let's look at a short overview of each available framework.
 
 ## Statement
 
@@ -18,9 +18,9 @@ Ever had animations bleed from one action to the next by accident?
 
 Well, **Statement** is the solution for you!
 
-Statement is a simple, but easily expandable state machine engine designed for practical use with flexibility for more advanced users in mind. Get a fully functioning state machine running with 5 simple lines of code, or delve into the hidden depth of the engine to build complex functionality with ease.
+Statement is a simple, but easily expandable state machine engine designed for practical easy use but stacked with lots of flexibility for more advanced users. Get a fully functioning state machine running with 5 simple lines of code, or delve into the hidden depth of the engine to build complex functionality with ease.
 
-Initialise a state machine with a simple `sm = StatementCreate(id)`, easily create states with `StateCreate(id, "idle");`, give the states functionality `_idle.AddUpdate(function() { /* idle state code */ });`, apply them to the state machine `AddState(_idle);` and finally run the state machine `sm.Update()`.
+Initialise a state machine with a simple `sm = StatementCreate(id)`, easily create states with `var _idle = StateCreate(id, "idle");`, give the states functionality `_idle.AddUpdate(function() { /* idle state code */ });`, apply them to the state machine `sm.AddState(_idle);` and finally run the state machine `sm.Update()`.
 
 Or, if you're a pro, delve into the wide variety of options available to you, such as queued states, state stacks (push a UI menu to the core state machine stack, and then simply pop it off to instantly get easy menu functionality), custom states (Statement comes with Enter, Update, Exit and Draw states by default, but you can set your own and call them wherever you want, such as an Animation End state), work with the full history of states a state machine has cycled through, etc. Nearly limitless depth is at your fingertips.
 
