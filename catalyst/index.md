@@ -41,6 +41,7 @@ It knows about:
 #### Core
 - `base_value` - your starting value.
 - `modifiers` - things that change the value (flat, percentage, clamping, etc.).
+
 #### Advanced
 - `layers` - the order in which different groups of modifiers are applied.
 - `post_process` - an optional soft-cap / curve function applied at the end.
@@ -65,6 +66,7 @@ A `Modifier` describes *how* to change a stat:
 - amount: What value to use for the operation
 - operation: `ADD`, `MULTIPLY`, or `FORCE_MIN`
 - duration: optional lifetime in "ticks", managed by `ModifierTracker`
+
 #### Advanced
 - layer: where in the pipeline it applies (BASE_BONUS, WANDS, RUNES, TEMP, GLOBAL)
 - stacks: how many times it applies (stateful or context-driven)
