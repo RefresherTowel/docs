@@ -1,0 +1,9 @@
+// Make inline code inside headings use the heading's font size
+.main-content h1 code,
+.main-content h2 code,
+.main-content h3 code,
+.main-content h4 code,
+.main-content h5 code,
+.main-content h6 code {
+  font-size: inherit;
+}
