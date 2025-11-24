@@ -14,141 +14,176 @@ This page shows some common patterns built with Catalyst, focusing on
 - Low HP damage boost
 - Crit-based stacking damage buff
 - Highest-of-kind global movement aura
-- Armor with diminishing returns
+- Tag-based dispels / cleanses
 
-All examples assume you have a `stats` struct on your actors and are
-comfortable with contexts.
+The rest of this page walks through these ideas as concrete snippets you can
+copy, tweak, or wrap in your own helper functions.
 
 ---
 
 ## Pattern 1: Burning enemies increase move speed
 
-> "+2% move speed per burning enemy near you, up to 10 enemies."
+> "For every burning enemy nearby, move a little faster (up to a cap)."
 
-### Rune modifier
+This is a **context-driven stacks** pattern:
+
+- Movement speed is a stat (`CatalystStatistic`).
+- A modifier (`CatalystModifier`) represents the rule.
+- A `stack_func` reads from the evaluation context to decide how many stacks
+  apply right now.
+
+### Setup
+
+In the player's `Create` event:
 
 ```gml
-// Attach this to the actor's move_speed stat
-var rune_speed = new Modifier(0.02, eMathOps.MULTIPLY, "Scorched Momentum")
-    .SetLayer(eStatLayer.RUNES)
+// Base move speed
+stats.speed = new CatalystStatistic(4).SetName("Move Speed");
+
+// +5% speed per burning enemy nearby, up to 10 enemies
+var burn_speed = new CatalystModifier(1.05, eCatMathOps.MULTIPLY)
+    .SetLayer(eCatStatLayer.AUGMENTS)
     .SetMaxStacks(10)
-    .SetStackFunc(function(_stat, _ctx) {
-        if (is_undefined(_ctx)) return 0;
-        if (!variable_struct_exists(_ctx, "burning_enemy_count")) return 0;
-        return clamp(_ctx.burning_enemy_count, 0, 10);
-    })
+    .SetSourceLabel("Burning Momentum")
     .AddTag("buff")
-    .AddTag("movement")
-    .AddTag("fire");
+    .AddTag("movement");
 
-stats.move_speed.AddModifier(rune_speed);
+burn_speed.SetStackFunc(function(_stat, _ctx) {
+    // _ctx.burning_enemy_count should be provided when we ask for the value
+    var count = _ctx.burning_enemy_count;
+    return clamp(count, 0, 10);
+});
+
+stats.speed.AddModifier(burn_speed);
 ```
 
-### Context builder
+### Using it
+
+Wherever you actually *use* the move speed (for example, the player's `Step`
+event), build a context and pass it into `GetValue`:
 
 ```gml
-function BuildCombatContextForActor(_actor) {
-    var radius = 200;
-    var burning_count = 0;
+// Count nearby burning enemies (implementation is up to your game)
+var burning_count = scr_CountBurningEnemiesNear(id);
 
-    with (obj_enemy) {
-        if (burning && point_distance(x, y, _actor.x, _actor.y) <= radius) {
-            burning_count++;
-        }
-    }
+// Build a context and query the stat
+var ctx = { burning_enemy_count : burning_count };
+var move_speed = stats.speed.GetValue(ctx);
 
-    return {
-        burning_enemy_count : burning_count
-    };
-}
+// Use move_speed for movement
+x += lengthdir_x(move_speed, direction);
+y += lengthdir_y(move_speed, direction);
 ```
 
-### Using it in Step
-
-```gml
-/// obj_player Step
-
-var ctx = BuildCombatContextForActor(self);
-var move_speed = stats.move_speed.GetValue(ctx);
-
-x += lengthdir_x(move_speed, move_direction);
-y += lengthdir_y(move_speed, move_direction);
-```
-
-The rune is fully self-contained:
-
-- It knows its layer, value, max stacks, and tags.
-- It derives stacks from context (no manual `SetStacks` calls).
-- It works for any actor you attach it to, as long as you pass a suitable context.
+If you call `stats.speed.GetValue()` **without** a context, this modifier's
+`stack_func` will effectively contribute 0 stacks (environment-driven effects
+need context to know what is happening).
 
 ---
 
 ## Pattern 2: Low HP damage boost
 
-> "+25% damage while below 30% HP."
+> "Deal more damage when you're on low health."
+
+This is a **conditional modifier** pattern:
+
+- Damage is a stat.
+- A multiplicative modifier applies only while HP is below a threshold.
+- The condition reads from the evaluation context.
+
+### Setup
+
+In the player's `Create` event:
 
 ```gml
-var low_hp_damage = new Modifier(0.25, eMathOps.MULTIPLY, "Desperation")
-    .SetLayer(eStatLayer.RUNES)
-    .SetCondition(function(_stat, _ctx) {
-        if (is_undefined(_ctx)) return false;
-        if (!variable_struct_exists(_ctx, "hp_ratio")) return false;
-        return (_ctx.hp_ratio <= 0.30);
-    })
-    .AddTag("buff")
-    .AddTag("offense");
+stats.damage = new CatalystStatistic(10).SetName("Damage");
+
+var low_hp_boost = new CatalystModifier(1.50, eCatMathOps.MULTIPLY)
+    .SetLayer(eCatStatLayer.AUGMENTS)
+    .SetSourceLabel("Desperation")
+    .AddTag("buff");
+
+low_hp_boost.SetCondition(function(_stat, _ctx) {
+    // Expect hp and hp_max in the context
+    var frac = _ctx.hp / _ctx.hp_max;
+    return (frac <= 0.3); // 30% HP or less
+});
+
+stats.damage.AddModifier(low_hp_boost);
 ```
 
-Context for the player:
+### Using it
+
+Whenever you compute outgoing damage, pass a context containing HP:
 
 ```gml
-/// obj_player Step
-var hp_ratio = hp_current / stats.max_hp.GetValue();
 var ctx = {
-    hp_ratio : hp_ratio
+    hp     : hp,
+    hp_max : max_hp
 };
 
 var dmg = stats.damage.GetValue(ctx);
 ```
 
-When you're not using context-sensitive mods, you can just call `GetValue()` without context.
+If HP is above 30%, the `low_hp_boost` modifier is skipped; if it's 30% or
+lower, the 1.5x multiplier is applied.
 
 ---
 
 ## Pattern 3: Crit-based stacking damage buff
 
-> "On crit, gain a stack of +5% damage for 5 seconds, up to 5 stacks."
+> "On crit, gain a stack of +10% damage for 5 seconds, up to 5 stacks."
 
-This is a **stateful stacks** pattern: stacks depend on discrete events (crits).
+This pattern uses **event-driven stacks** plus **duration**:
+
+- A TEMP-layer modifier holds the stacking buff.
+- Your crit logic calls `AddStacks` and `SetDuration` when appropriate.
+- The global `CatalystModifierTracker` handles ticking and expiration.
+
+### Setup
+
+In the player's `Create` event:
 
 ```gml
-/// In player setup:
-var crit_rune = new Modifier(0.05, eMathOps.MULTIPLY, "Killing Spree")
-    .SetLayer(eStatLayer.RUNES)
+stats.damage = new CatalystStatistic(10).SetName("Damage");
+
+// Crit buff: +10% damage per stack, up to 5 stacks, lasting 5 ticks
+crit_buff = new CatalystModifier(1.10, eCatMathOps.MULTIPLY, 0)
+    .SetLayer(eCatStatLayer.TEMP)
     .SetMaxStacks(5)
-    .SetDuration(300)         // 5 seconds at 60 fps, for example
-    .AddTag("buff")
-    .AddTag("offense");
+    .SetStacks(0) // start at 0 stacks
+    .SetSourceLabel("Sharpened Instinct")
+    .AddTag("buff");
 
-stats.damage.AddModifier(crit_rune);
+stats.damage.AddModifier(crit_buff);
 ```
 
-On crit:
+In a global controller (or similar), make sure you are calling the countdown:
 
 ```gml
-/// When resolving a crit hit:
-crit_rune.AddStacks(1);
-crit_rune.ResetDuration();
+// obj_game_controller Step event
+CatalystModCountdown();
 ```
 
-Damage usage (no context needed here):
+### On crit
+
+Wherever you handle crits (for example in a hit resolution script):
 
 ```gml
-var dmg = stats.damage.GetValue();
+/// @desc Called whenever this player lands a critical hit.
+function Player_OnCrit(_attacker, _target, _damage_ctx) {
+    // Add a stack and refresh the duration to 5 ticks
+    crit_buff
+        .AddStacks(1)
+        .SetDuration(5);
+}
 ```
 
-Since this rune doesn't care about the environment, it doesn't use `stack_func` and
-you don't need a context for it.
+- Each crit adds one stack, up to 5.
+- Every time you refresh the duration, the buff will last 5 more ticks
+  from that point.
+- Once the duration reaches 0 (via `CatalystModCountdown()`), the tracker
+  removes the modifier from the stat.
 
 ---
 
@@ -156,131 +191,109 @@ you don't need a context for it.
 
 > "You can have multiple movement auras, but only the strongest applies."
 
+This is a **family stacking** pattern:
+
+- Several modifiers share a family key, like `"movement_aura"`.
+- The family uses `eCatFamilyStackMode.HIGHEST`.
+- Only the strongest multiplier in that family is applied.
+
+### Setup
+
+Assume you have a movement speed stat:
+
 ```gml
-var haste_minor = new Modifier(0.10, eMathOps.MULTIPLY, "Minor Haste Aura")
-    .SetLayer(eStatLayer.GLOBAL)
-    .SetFamily("haste_aura", eFamilyStackMode.HIGHEST)
+stats.speed = new CatalystStatistic(4).SetName("Move Speed");
+```
+
+Define two global auras in the GLOBAL layer:
+
+```gml
+var haste_minor = new CatalystModifier(1.10, eCatMathOps.MULTIPLY)
+    .SetLayer(eCatStatLayer.GLOBAL)
+    .SetFamily("movement_aura", eCatFamilyStackMode.HIGHEST)
+    .SetSourceLabel("Minor Haste Aura")
     .AddTag("buff")
     .AddTag("aura")
     .AddTag("movement");
 
-var haste_major = new Modifier(0.25, eMathOps.MULTIPLY, "Major Haste Aura")
-    .SetLayer(eStatLayer.GLOBAL)
-    .SetFamily("haste_aura", eFamilyStackMode.HIGHEST)
+var haste_major = new CatalystModifier(1.25, eCatMathOps.MULTIPLY)
+    .SetLayer(eCatStatLayer.GLOBAL)
+    .SetFamily("movement_aura", eCatFamilyStackMode.HIGHEST)
+    .SetSourceLabel("Major Haste Aura")
     .AddTag("buff")
     .AddTag("aura")
     .AddTag("movement");
 
-stats.move_speed.AddModifier(haste_minor);
-stats.move_speed.AddModifier(haste_major);
+stats.speed.AddModifier(haste_minor);
+stats.speed.AddModifier(haste_major);
 ```
 
-In any context where both would apply:
+Even though both auras are attached:
 
-- Catalyst computes their effective magnitudes.
-- Only the stronger one contributes to the final value.
+- Only the **stronger** `1.25` multiplier is applied.
+- If the major aura is removed, the minor one automatically becomes active.
 
-This is per-family, per-layer - you can still have a separate
-movement effect in the RUNES layer if you like.
+You can model things like:
+
+- Local vs global auras sharing the same family.
+- Temporary bonuses that override permanent ones.
 
 ---
 
-## Pattern 5: Armor with diminishing returns
+## Pattern 5: Tag-based dispels & cleanses
 
-> "Armor reduces damage with diminishing returns, capped at 75% DR."
+> "Remove all debuffs on this stat" or "cleanse all fire effects".
 
-You can implement this as a post-process curve on the `armor` stat.
+Tags let you convert many "cleanse" style abilities into simple calls on a
+stat, using `RemoveModifiersByTag`.
+
+### Setup
+
+First, make sure your modifiers are tagged appropriately:
 
 ```gml
-stats.armor.SetPostProcess(function(_stat, _raw, _ctx) {
-    var A = max(0, _raw);
-    var K = 100;        // tuning constant
-    var dr = A / (A + K);
-    var cap = 0.75;
+// A burning debuff that reduces movement temporarily
+var burn_slow = new CatalystModifier(0.8, eCatMathOps.MULTIPLY, 3)
+    .SetLayer(eCatStatLayer.TEMP)
+    .SetSourceLabel("Burning Slow")
+    .AddTag("debuff")
+    .AddTag("fire")
+    .AddTag("movement");
 
-    dr = clamp(dr, 0, cap);
-    return dr;
-});
+stats.speed.AddModifier(burn_slow);
 ```
 
-Now:
+Now you can create simple dispel helpers:
 
 ```gml
-var damage_reduction = stats.armor.GetValue(); // 0..0.75
-var damage_taken     = incoming_damage * (1 - damage_reduction);
-```
-
-You can still apply modifiers to the underlying armor stat (flat additions,
-percentage increases), and they'll all flow into the curve.
-
----
-
-## Pattern 6: Derived max HP from vitality and level
-
-> "Max HP is 50 + vitality * 10 + level * 5."
-
-```gml
-/// In player Create:
-stats = {
-    vitality : new Statistic(10).SetName("Vitality"),
-    max_hp   : new Statistic(0).SetName("Max HP"),
-};
-
-// Derived base for max_hp
-stats.max_hp.SetBaseFunc(function(_stat, _ctx) {
-    var vit   = stats.vitality.GetValue();
-    var level = owner.level;
-    return 50 + vit * 10 + level * 5;
-});
-```
-
-Usage:
-
-```gml
-var max_hp_value = stats.max_hp.GetValue();
-```
-
-If you add gear or rune modifiers to `max_hp`, they will apply on top of this derived base.
-
----
-
-## Pattern 7: Dispel all debuffs on an actor
-
-Suppose you decide that any modifier tagged `"debuff"` should be removable by a cleanse.
-
-First, expose a helper on `Statistic` (if you haven't already):
-
-```gml
-static RemoveModifiersByTag = function(_tag) {
-    var removed = 0;
-    for (var i = array_length(modifiers) - 1; i >= 0; i--) {
-        var m = modifiers[i];
-        if (m.HasTag(_tag)) {
-            m.Destroy(false);
-            array_delete(modifiers, i, 1);
-            removed++;
-        }
-    }
-    if (removed > 0) altered = true;
-    return removed;
-};
-```
-
-Then to cleanse an actor:
-
-```gml
-/// Script: CleanseActorDebuffs(actor)
-function CleanseActorDebuffs(_actor) {
+/// Remove all debuffs from this actor's movement-related stats
+function ClearMovementDebuffs(_actor) {
     with (_actor) {
-        stats.damage.RemoveModifiersByTag("debuff");
-        stats.move_speed.RemoveModifiersByTag("debuff");
-        stats.armor.RemoveModifiersByTag("debuff");
-        // ... any other stats ...
+        stats.speed.RemoveModifiersByTag("debuff");
+        // If you also have jump height, dash distance etc, clear those too:
+        // stats.jump.RemoveModifiersByTag("debuff");
+        // stats.dash.RemoveModifiersByTag("debuff");
     }
 }
 ```
 
-You can also have more specific cleanses, like `"fire"` or `"curse"`.
+You can also have more specific cleanses, like `"fire"` or `"curse"`:
+
+```gml
+/// Remove all fire-related effects from this actor
+function ClearFireEffects(_actor) {
+    with (_actor) {
+        stats.speed.RemoveModifiersByTag("fire");
+        stats.damage.RemoveModifiersByTag("fire");
+    }
+}
+```
+
+Under the hood, `RemoveModifiersByTag`:
+
+- Finds all modifiers on the stat that have the given tag.
+- Calls `Destroy(false)` on each one.
+- Removes them from the stat and marks it as `altered`.
 
 ---
 

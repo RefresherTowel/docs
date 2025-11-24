@@ -50,3 +50,28 @@ mermaid:
 
 logo: "/assets/images/logo.png"          # small logo instead of text title
 favicon_ico: "/assets/images/favicon.ico"                  # or "light" or a custom scheme name
+
+callouts:
+  note:
+    title: Note
+    color: blue
+
+  warning:
+    title: Warning
+    color: red
+
+  important:
+    title: Important
+    color: yellow
+
+  tip:
+    title: Tip
+    color: green
+
+  pro:
+    title: Pro feature
+    color: purple
+
+# Optional global tweak
+callouts_opacity: 0.2        # background strength
+# callouts_level: loud       # stronger colors, especially in dark mode

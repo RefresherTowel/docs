@@ -7,195 +7,202 @@ nav_order: 1
 
 # Catalyst Quickstart
 
-This page walks through the typical steps for using Catalyst in a GameMaker project:
+This page walks through the typical steps for using **Catalyst** in a GameMaker project:
 
-1. Set up stats on an actor
-2. Add basic modifiers (flat and percentage)
-3. Use layers for gear and runes
-4. Integrate duration-based modifiers
-5. Do a simple item preview
+1. Set up stats on an actor (core)
+2. Add basic modifiers (flat and percentage) (core)
+3. Use layers for gear and augments (core)
+4. Integrate duration-based modifiers (core)
+5. Do a simple item preview (core, touching one advanced helper)
+
+For more complex features (context, families, soft caps, etc.) see the **Advanced Topics** page.
 
 ---
 
-## 1. Creating stats on an actor
+## 1. Setting up stats on an actor
 
-A common pattern is to give each actor (player, enemy, NPC) a `stats` struct in its `Create` event.
+The most common pattern is to store your `CatalystStatistic` instances in a struct, or array (indexed via enums for readability) on your actor,
+we'll use a struct for this example in the player object's `Create` event:
 
 ```gml
-/// obj_player Create
+// obj_player Create event
 
 stats = {
-    damage      : new Statistic(10).SetName("Damage"),
-    move_speed  : new Statistic(3).SetName("Move Speed"),
-    max_hp      : new Statistic(100).SetName("Max HP"),
-    armor       : new Statistic(0).SetName("Armor"),
+    damage : new CatalystStatistic(10).SetName("Damage"),
+    speed  : new CatalystStatistic(4).SetName("Move Speed")
 };
-
-// Optional: configure rounding / clamping per stat
-stats.damage.SetRounding(true, 1);          // integers
-stats.move_speed.SetRounding(true, 0.01);   // 2 decimal places
-stats.max_hp.SetClamped(true);              // will clamp to min/max if set
 ```
 
-Later, you get the value like this:
+By default:
+
+- `base_value` is the value you pass to the constructor.
+- The stat will clamp to `[-infinity, infinity]` (no bounds) unless you change them.
+- The stat rounds to an integer when you call `GetValue()`.
+
+You can read values anywhere you have a reference to the stat:
 
 ```gml
-var dmg = stats.damage.GetValue();      // canonical, cached
-var spd = stats.move_speed.GetValue();  // canonical, cached
+var dmg   = stats.damage.GetValue(); // canonical, cached value
+var speed = stats.speed.GetValue();
 ```
 
 ---
 
 ## 2. Adding basic modifiers
 
-Let's add a flat +5 damage bonus from a weapon, and a +20% bonus from a rune.
+To change a stat, you create one or more `CatalystModifier` instances and attach them.
+
+A modifier needs at least:
+
+- `_value` - how much to change the stat by.
+- `_math_operation` - how to apply that value.
 
 ```gml
-/// Somewhere in player setup / equipment logic:
-var dmg_stat = stats.damage;
+// A flat +5 damage bonus
+var flat_bonus = new CatalystModifier(5, eCatMathOps.ADD);
 
-// +5 flat damage from weapon
-var weapon_mod = new Modifier(5, eMathOps.ADD, "Bronze Sword")
-    .SetLayer(eStatLayer.EQUIPMENT)
-    .AddTag("sword");
+// A +20% damage multiplier
+var percent_bonus = new CatalystModifier(1.20, eCatMathOps.MULTIPLY);
 
-dmg_stat.AddModifier(weapon_mod);
-
-// +20% damage from rune
-var rune_mod = new Modifier(0.20, eMathOps.MULTIPLY, "Aggression Rune")
-    .SetLayer(eStatLayer.RUNES)
-    .AddTag("rune");
-
-dmg_stat.AddModifier(rune_mod);
+// Attach to the damage stat
+stats.damage
+    .AddModifier(flat_bonus)
+    .AddModifier(percent_bonus);
 ```
+Note how the MULTIPLY modifier works. To get a 20% increase, you provide 1.2 as the modifiers value. If you wanted to halve the stat's value,
+you would provide 0.5 to the modifier. The stat's value is multiplied directly by the mod's value.
 
-Getting the final damage:
+Now when you query the stat:
 
 ```gml
-var dmg_final = stats.damage.GetValue(); //  (10 + 5) * 1.2 = 18
+var dmg = stats.damage.GetValue(); // (10 + 5) * 1.2 = 18
 ```
+
+> **Note:** `FORCE_MIN` is also available via `eCatMathOps.FORCE_MIN`, which clamps the
+> final value to at least the modifier's `value`. You typically use this for floor effects
+> such as "always do at least 1 damage".
 
 ---
 
-## 3. Using layers for gear vs runes vs temporary effects
+## 3. Using layers for gear and augments
 
-Layers let you control the order in which modifiers apply. Out of the box, Catalyst includes:
+Layers control *when* modifiers apply in the pipeline. This lets you separate
+things like base bonuses, gear, augments, temporary buffs, and global effects.
 
-```gml
-enum eStatLayer {
-    BASE_BONUS, // attributes, level scaling, etc.
-    EQUIPMENT,  // wand / weapon bonuses
-    AUGMENTS,   // runes / talents / gems / etc
-    TEMP,       // short buffs / debuffs
-    GLOBAL,     // late-stage global modifiers
-}
-```
+The `eCatStatLayer` enum defines the available layers:
 
-These are found in `scr_catalyst_macro`
+- `eCatStatLayer.BASE_BONUS`
+- `eCatStatLayer.EQUIPMENT`
+- `eCatStatLayer.AUGMENTS`
+- `eCatStatLayer.TEMP`
+- `eCatStatLayer.GLOBAL`
 
-For example, you might decide:
-
-- `BASE_BONUS` - attribute-derived bonuses
-- `EQUIPMENT` - weapon affixes
-- `AUGMENTS` - talent tree
-- `TEMP` - potions, short buffs, debuffs
-- `GLOBAL` - auras, curses, global modifiers
+For example, you might treat weapons as **EQUIPMENT** and runes as **AUGMENTS**:
 
 ```gml
-var dmg = stats.damage;
+// Weapon adds +3 damage as equipment
+var weapon_mod = new CatalystModifier(3, eCatMathOps.ADD)
+    .SetLayer(eCatStatLayer.EQUIPMENT)
+    .SetSourceLabel("Rusty Sword");
 
-var attr_bonus = new Modifier(2, eMathOps.ADD, "Strength")
-    .SetLayer(eStatLayer.BASE_BONUS);
+// Rune adds +15% damage as an augment
+var rune_mod = new CatalystModifier(1.15, eCatMathOps.MULTIPLY)
+    .SetLayer(eCatStatLayer.AUGMENTS)
+    .SetSourceLabel("Lesser Power Rune");
 
-var wand_bonus = new Modifier(5, eMathOps.ADD, "Bronze Wand")
-    .SetLayer(eStatLayer.EQUIPMENT);
-
-var rune_bonus = new Modifier(0.20, eMathOps.MULTIPLY, "Aggression Rune")
-    .SetLayer(eStatLayer.AUGMENTS);
-
-var temp_buff = new Modifier(0.50, eMathOps.MULTIPLY, "Battle Cry")
-    .SetLayer(eStatLayer.TEMP)
-    .SetDuration(600)       // 600 ticks, for example
-    .AddTag("buff");
-
-dmg.AddModifier(attr_bonus);
-dmg.AddModifier(wand_bonus);
-dmg.AddModifier(rune_bonus);
-dmg.AddModifier(temp_buff);
+stats.damage
+    .AddModifier(weapon_mod)
+    .AddModifier(rune_mod);
 ```
 
-Internally, Catalyst applies modifiers in layer order, and within each layer:
-
-1. All `ADD` modifiers
-2. All `MULTIPLY` modifiers
-3. Later, FORCE_MIN and post_process
+Layers make it easy to reason about the order of operations and to group similar effects together.
 
 ---
 
 ## 4. Duration-based modifiers
 
-Any `Modifier` with a positive duration is registered with the global `ModifierTracker`:
+Catalyst ships with a global `CatalystModifierTracker` instance:
+
+- It is created automatically as `global.__catalyst_modifier_tracker`.
+- The macro `CATALYST_COUNTDOWN` points at this instance.
+- The helper script `CatalystModCountdown()` safely calls its `Countdown()` method.
+
+Any modifier with a positive `duration` will automatically register with the tracker.
+Call `CatalystModCountdown()` once per "tick" (step, turn, second, or whatever makes
+sense for your game) to advance all durations:
 
 ```gml
-var buff = new Modifier(0.50, eMathOps.MULTIPLY, "Battle Cry")
-    .SetLayer(eStatLayer.TEMP)
-    .SetDuration(600);  // 600 ticks
+// obj_game_controller Step event (or wherever your game tick lives)
+CatalystModCountdown();
+```
+
+Creating a timed buff looks like this:
+
+```gml
+// +50% damage buff for 5 ticks
+var buff = new CatalystModifier(1.5, eCatMathOps.MULTIPLY, 5)
+    .SetLayer(eCatStatLayer.TEMP)
+    .SetSourceLabel("Rage Potion");
 
 stats.damage.AddModifier(buff);
 ```
 
-Somewhere central (e.g. a controller object) you should tick the tracker:
+- When `buff.duration` counts down to 0, the tracker will:
+  - Remove it from the tracker itself, and
+  - Remove it from `stats.damage`, marking the stat as altered.
 
-```gml
-/// obj_combat_controller Step
-CatalystModCountdown();
-```
-
-When a modifier's `duration` reaches 0, Catalyst:
-
-- Removes it from the tracker, and
-- Removes it from its owning `Statistic` (if `remove_from_stat` is true).
+Setting `duration` to `-1` (the default) makes a modifier permanent
+(it will not be tracked or counted down).
 
 ---
 
-## 5. Simple item preview ("20 → 28 damage")
+## 5. A simple item preview
 
-You often want to preview what a stat *would* be if a modifier were added, without actually changing anything.
+A common use case is "hover an item and see what it would do to my stats".
 
-Use `PreviewChange` or `PreviewChanges` for this.
+You can use `PreviewChanges` to simulate modifiers as if they were applied,
+without actually attaching them to the stat.
 
 ```gml
+// Suppose the player currently has a damage stat:
 var dmg_stat = stats.damage;
 
-var current = dmg_stat.GetValue();
-
-// Suppose the hovered item grants +2 flat and +10% damage
+// Define how the candidate weapon would change it:
 var preview_ops = [
     {
-        value      : 2,
-        operation  : eMathOps.ADD,
-        layer      : eStatLayer.EQUIPMENT
-    },
-    {
-        value      : 0.10,
-        operation  : eMathOps.MULTIPLY,
-        layer      : eStatLayer.EQUIPMENT
+        value      : 4,
+        operation  : eCatMathOps.ADD,
+        layer      : eCatStatLayer.EQUIPMENT,
+        stacks     : 1,
+        max_stacks : 1,
+        condition  : noone,
+        stack_func : noone,
+        family     : "",
+        family_mode: eCatFamilyStackMode.STACK_ALL
     }
 ];
 
+// Get the current and previewed values
+var current = dmg_stat.GetValue();
 var preview = dmg_stat.PreviewChanges(preview_ops);
 
+// Draw something like: "Damage: 18 → 22"
 draw_text(x, y, "Damage: " + string(current) + " → " + string(preview));
 ```
 
-You can also use `PreviewChange` for a single op:
+For a single hypothetical modifier, you can use `PreviewChange` instead:
 
 ```gml
-var preview = dmg_stat.PreviewChange(0.15, eMathOps.MULTIPLY, eStatLayer.AUGMENTS);
+var preview = dmg_stat.PreviewChange(
+    0.15,
+    eCatMathOps.MULTIPLY,
+    eCatStatLayer.AUGMENTS
+);
 ```
 
 Previews:
 
 - Don't mutate the stat.
 - Respect all layers, tags, families, and conditions.
-- Can optionally take a context for more advanced aguments (see Advanced Topics).
+- Can optionally take a context for more advanced arguments
+  (covered on the **[Advanced Topics](./catalyst_advanced.md)** page).
