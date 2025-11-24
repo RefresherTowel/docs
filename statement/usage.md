@@ -21,9 +21,9 @@ This page shows how to use Statement in practice, split into:
 
 ```gml
 /// Create Event
-state_machine = StateMachine(self);
+state_machine = Statement(self);
 
-var idle = State(self, "Idle")
+var idle = StatementState(self, "Idle")
     .AddEnter(function() {
         DebugInfo("Entered Idle");
     })
@@ -44,7 +44,7 @@ state_machine.Draw();
 
 This sets up:
 
-- A `StateMachine` bound to `self`.
+- A `Statement` bound to `self`.
 - One state, `Idle`, with `Enter` + `Update` handlers.
 - The machine driven from Step (and optionally Draw).
 
@@ -54,10 +54,10 @@ This sets up:
 
 ```gml
 /// Create Event
-state_machine = StateMachine(self);
+state_machine = Statement(self);
 
 // Idle
-var idle = State(self, "Idle")
+var idle = StatementState(self, "Idle")
     .AddEnter(function() {
         sprite_index = spr_player_idle;
         hsp = vsp = 0;
@@ -69,7 +69,7 @@ var idle = State(self, "Idle")
     });
 
 // Move
-var move = State(self, "Move")
+var move = StatementState(self, "Move")
     .AddEnter(function() {
         sprite_index = spr_player_move;
     })
@@ -106,7 +106,7 @@ state_machine.Draw();
 ### 3. Using `GetStateTime()` for Behaviour
 
 ```gml
-var attack = State(self, "Attack")
+var attack = StatementState(self, "Attack")
     .AddEnter(function() {
         sprite_index = spr_player_attack;
         image_index = 0;
@@ -131,7 +131,7 @@ Because `state_machine` resets `state_age` automatically on state change, you ca
 ### 4. Queued Transitions to Avoid Mid-Update Re-entry
 
 ```gml
-var move = State(self, "Move")
+var move = StatementState(self, "Move")
     .AddUpdate(function() {
         // movement logic...
 
@@ -141,7 +141,7 @@ var move = State(self, "Move")
         }
     });
 
-var attack = State(self, "Attack")
+var attack = StatementState(self, "Attack")
     .AddEnter(function() {
         sprite_index = spr_player_attack;
         image_index = 0;
@@ -167,7 +167,7 @@ If you want explicit control over when queued transitions happen:
 
 ```gml
 /// Create
-state_machine = StateMachine(self)
+state_machine = Statement(self)
     .SetQueueAutoProcessing(false);
 
 
@@ -186,12 +186,12 @@ Now you can insert queue processing at a specific spot in your step pipeline.
 
 ```gml
 /// Create
-state_machine = StateMachine(self);
+state_machine = Statement(self);
 
 // Existing states: Idle, Move, Attack... (omitted)
 
 // Pause overlay
-var pause = State(self, "Pause")
+var pause = StatementState(self, "Pause")
     .AddEnter(function() {
         hsp = vsp = 0;
     })
@@ -231,7 +231,7 @@ state_machine.Draw();
 ### 7. Per-State Timers for More Complex Timing
 
 ```gml
-var charge = State(self, "Charge")
+var charge = StatementState(self, "Charge")
     .AddEnter(function() {
         TimerStart(); // per-state timer
     })
@@ -242,7 +242,7 @@ var charge = State(self, "Charge")
         }
     });
 
-var release = State(self, "Release")
+var release = StatementState(self, "Release")
     .AddEnter(function() {
         // some effect...
     })
@@ -318,7 +318,7 @@ This runs for every transition, making it useful for:
 
 5. **Clean up when resetting**  
    - Use `ClearStates()` when you want to fully reset the machine.  
-   - Use `StateKillTimers()` if you want to globally destroy all state timers for all machines.
+   - Use `StatementStateKillTimers()` if you want to globally destroy all state timers for all machines.
 
 ---
 

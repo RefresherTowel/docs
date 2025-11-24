@@ -20,46 +20,46 @@ It’s split into:
 
 ### Core Types
 
-#### `StateMachine(owner)`
+#### `Statement(owner)`
 
 Create a state machine bound to the given owner instance or struct.
 
 ```gml
-var sm = StateMachine(self);
+var sm = Statement(self);
 ```
 
 - `owner`: `Id.Instance` or `Struct`  
-- **Returns:** `Struct.StateMachine`
+- **Returns:** `Struct.StatementStatement`
 
 
-#### `State(owner, name)`
+#### `StatementState(owner, name)`
 
 Create a new state bound to the given owner.
 
 ```gml
-var idle = State(self, "Idle");
+var idle = StatementState(self, "Idle");
 ```
 
 - `owner`: `Id.Instance` or `Struct`  
 - `name`: `String`  
-- **Returns:** `Struct.State`
+- **Returns:** `Struct.StatementState`
 
 If `owner` is neither an existing instance nor a struct, the constructor logs a severe debug message and returns `undefined`.
 
 ---
 
-### Core StateMachine Methods
+### Core Statement Methods
 
 #### `AddState(state)`
 
-Register a `State` on this machine.
+Register a `StatementState` on this machine.
 
 ```gml
 sm.AddState(idle);
 ```
 
-- `state`: `Struct.State`  
-- **Returns:** `Struct.StateMachine`
+- `state`: `Struct.StatementState`  
+- **Returns:** `Struct.StatementStatement`
 
 The **first** state added becomes the active state and runs its `Enter` handler (if defined).
 
@@ -77,7 +77,7 @@ var idle    = sm.GetState("Idle");
 ```
 
 - `name` *(optional)*: `String`  
-- **Returns:** `Struct.State` or `Undefined` if not found / no current state.
+- **Returns:** `Struct.StatementState` or `Undefined` if not found / no current state.
 
 ---
 
@@ -104,7 +104,7 @@ sm.ChangeState("Hitstun", true); // force, ignoring can_exit
 
 - `name`: `String`  
 - `force` *(optional)*: `Bool`  
-- **Returns:** `Struct.State` or `Undefined` if target doesn’t exist.
+- **Returns:** `Struct.StatementState` or `Undefined` if target doesn’t exist.
 
 Behaviour:
 
@@ -177,7 +177,7 @@ state_machine.SetStateTime(0);
 ```
 
 - `time`: `Real`  
-- **Returns:** `Struct.StateMachine`
+- **Returns:** `Struct.StatementStatement`
 
 ---
 
@@ -201,7 +201,7 @@ Returns the machine for chaining.
 
 ---
 
-### Core State Methods
+### Core StatementState Methods
 
 #### `AddEnter(fn)`
 
@@ -214,7 +214,7 @@ idle.AddEnter(function() {
 ```
 
 - `fn`: `Function` — automatically `method(owner, fn)` bound.  
-- **Returns:** `Struct.State`
+- **Returns:** `Struct.StatementState`
 
 ---
 
@@ -228,7 +228,7 @@ idle.AddUpdate(function() {
 });
 ```
 
-- **Returns:** `Struct.State`
+- **Returns:** `Struct.StatementState`
 
 ---
 
@@ -242,13 +242,13 @@ idle.AddExit(function() {
 });
 ```
 
-- **Returns:** `Struct.State`
+- **Returns:** `Struct.StatementState`
 
 ---
 
 #### `AddDraw(fn)`
 
-Bind a `Draw` handler that runs each Draw while the state is active if you call `StateMachine.Draw()`.
+Bind a `Draw` handler that runs each Draw while the state is active if you call `Statement.Draw()`.
 
 ```gml
 idle.AddDraw(function() {
@@ -256,7 +256,7 @@ idle.AddDraw(function() {
 });
 ```
 
-- **Returns:** `Struct.State`
+- **Returns:** `Struct.StatementState`
 
 ---
 
@@ -277,7 +277,7 @@ sm.SetQueueAutoProcessing(true);
 ```
 
 - `enabled`: `Bool`  
-- **Returns:** `Struct.StateMachine`
+- **Returns:** `Struct.StatementStatement`
 
 Default: `true`.
 
@@ -293,7 +293,7 @@ sm.QueueState("Attack");
 
 - `name`: `String`  
 - `force` *(optional)*: `Bool`  
-- **Returns:** `Struct.StateMachine`
+- **Returns:** `Struct.StatementStatement`
 
 ---
 
@@ -305,7 +305,7 @@ Process any pending queued state change immediately.
 sm.ProcessQueuedState();
 ```
 
-- **Returns:** `Struct.State` or `Undefined`
+- **Returns:** `Struct.StatementState` or `Undefined`
 
 Clears the queue before calling `ChangeState()`.
 
@@ -343,7 +343,7 @@ Cancel any queued state without processing it.
 sm.ClearQueuedState();
 ```
 
-- **Returns:** `Struct.StateMachine`
+- **Returns:** `Struct.StatementStatement`
 
 ---
 
@@ -358,7 +358,7 @@ sm.SetHistoryLimit(32);
 ```
 
 - `limit`: `Real`  
-- **Returns:** `Struct.StateMachine`
+- **Returns:** `Struct.StatementStatement`
 
 `limit <= 0` means unlimited history.
 
@@ -383,7 +383,7 @@ var st = sm.GetHistoryAt(0);
 ```
 
 - `index`: `Real`  
-- **Returns:** `Struct.State` or `-1` if invalid.
+- **Returns:** `Struct.StatementState` or `-1` if invalid.
 
 ---
 
@@ -395,7 +395,7 @@ Quickly switch back to `previous_state`.
 sm.PreviousState();
 ```
 
-- **Returns:** `Struct.State` or `Undefined`.
+- **Returns:** `Struct.StatementState` or `Undefined`.
 
 ---
 
@@ -419,7 +419,7 @@ Print all state names registered on this machine (via debug system).
 sm.PrintStateNames();
 ```
 
-- **Returns:** `Struct.StateMachine`
+- **Returns:** `Struct.StatementStatement`
 
 ---
 
@@ -435,7 +435,7 @@ sm.PushState("Pause");
 
 - `name`: `String`  
 - `force` *(optional)*: `Bool`  
-- **Returns:** `Struct.State` or `Undefined`.
+- **Returns:** `Struct.StatementState` or `Undefined`.
 
 ---
 
@@ -448,7 +448,7 @@ sm.PopState();
 ```
 
 - `force` *(optional)*: `Bool`  
-- **Returns:** `Struct.State` or `Undefined`.
+- **Returns:** `Struct.StatementState` or `Undefined`.
 
 Handles empty stacks and invalid entries safely.
 
@@ -467,7 +467,7 @@ sm.SetStateChangeBehaviour(method(self, function() {
 ```
 
 - `fn`: `Function`  
-- **Returns:** `Struct.StateMachine`
+- **Returns:** `Struct.StatementStatement`
 
 Called after the old state’s `Exit`, after `state` is updated, and before new state `Enter`.
 
@@ -477,10 +477,10 @@ Called after the old state’s `Exit`, after `state` is updated, and before new 
 
 #### `RunState(event)`
 
-Run a specific `eStateEvents` index on the current state.
+Run a specific `eStatementEvents` index on the current state.
 
 ```gml
-sm.RunState(eStateEvents.ENTER);
+sm.RunState(eStatementEvents.ENTER);
 ```
 
 - `event`: `Real`  
@@ -494,7 +494,7 @@ Normally you don’t need this; use `Update()` / `Draw()` instead.
 
 ### Per-State Timers (Advanced)
 
-These live on `State` and are considered **advanced**. If you only need “time in state”, prefer `GetStateTime()` on the machine.
+These live on `StatementState` and are considered **advanced**. If you only need “time in state”, prefer `GetStateTime()` on the machine.
 
 #### `TimerStart()`
 
@@ -504,7 +504,7 @@ Create and start a per-state timer (if not already created), resetting it to 0.
 state.TimerStart();
 ```
 
-- **Returns:** `Struct.State`
+- **Returns:** `Struct.StatementState`
 
 ---
 
@@ -517,7 +517,7 @@ state.TimerSet(30);
 ```
 
 - `time`: `Real`  
-- **Returns:** `Struct.State`
+- **Returns:** `Struct.StatementState`
 
 ---
 
@@ -541,7 +541,7 @@ Pause the per-state timer.
 state.TimerPause();
 ```
 
-- **Returns:** `Struct.State`
+- **Returns:** `Struct.StatementState`
 
 ---
 
@@ -553,7 +553,7 @@ Restart the per-state timer if it exists.
 state.TimerRestart();
 ```
 
-- **Returns:** `Struct.State`
+- **Returns:** `Struct.StatementState`
 
 ---
 
@@ -565,7 +565,7 @@ Kill (destroy) the per-state timer.
 state.TimerKill();
 ```
 
-- **Returns:** `Struct.State`
+- **Returns:** `Struct.StatementState`
 
 ---
 
@@ -592,7 +592,7 @@ sm.AdvSetStateTimer(0);
 ```
 
 - `time`: `Real`  
-- **Returns:** `Struct.StateMachine`
+- **Returns:** `Struct.StatementStatement`
 
 ---
 
@@ -607,7 +607,7 @@ sm.RemoveState("Debug");
 ```
 
 - `name`: `String`  
-- **Returns:** `Struct.StateMachine`
+- **Returns:** `Struct.StatementStatement`
 
 ---
 
@@ -623,12 +623,12 @@ Call this if you are discarding a machine and want to ensure no associated timer
 
 ---
 
-#### `StateKillTimers()`
+#### `StatementStateKillTimers()`
 
 Global helper: destroy all state timers registered in `global.__state_timers` and clear the array.
 
 ```gml
-StateKillTimers();
+StatementStateKillTimers();
 ```
 
 Use this if you want a global “nuke all state timers” reset, e.g. when restarting a run or unloading a big system.

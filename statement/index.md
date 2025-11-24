@@ -15,9 +15,9 @@ Statement is part of the **RefresherTowel Games** suite of reusable frameworks f
 
 Statement gives you:
 
-- A `StateMachine` bound to an instance or struct.
-- Named `State` objects with **Enter / Update / Exit / Draw** handlers.
-- Built-in **state age** timing.
+- A `Statement` bound to an instance or struct.
+- Named `StatementState` structs with **Enter / Update / Exit / Draw** handlers.
+- Built-in **state** timing (i.e. how long a state has been active for).
 - Optional **queued transitions**, **state stacks**, **history**, and **per-state timers** for more advanced use cases.
 
 ---
@@ -26,8 +26,8 @@ Statement gives you:
 
 Statement replaces scattered `if (state == ...)` checks with a clear structure:
 
-- Each object (or struct) owns a `StateMachine`.
-- Each machine manages one active `State` at a time.
+- Each object (or struct) owns a `Statement`.
+- Each machine manages one active `StatementState` at a time.
 - States can define:
   - `Enter` (runs once when entered)
   - `Update` (runs each Step)
@@ -54,12 +54,12 @@ These are the features most users will use day-to-day:
 
 - **Simple state timing**  
   Each machine tracks **how long the current state has been active** (in frames):
-  - `GetStateTime()` / `SetStateTime()` on the `StateMachine`.
+  - `GetStateTime()` / `SetStateTime()` on the `Statement`.
 
 - **Named states & transitions**  
-  - `StateMachine.AddState(state)`
-  - `StateMachine.ChangeState("Name")`
-  - `StateMachine.GetStateName()`
+  - `Statement.AddState(state)`
+  - `Statement.ChangeState("Name")`
+  - `Statement.GetStateName()`
 
 - **Feather-friendly**  
   Types are annotated for better autocompletion and linting in the GameMaker code editor.
@@ -87,9 +87,9 @@ These features are entirely optional. You only need them if your project calls f
   - Helpers like `GetHistoryCount()` / `GetHistoryAt()` / `GetPreviousStateName()`.
 
 - **Per-state timers**
-  - Optional timers on each `State` backed by `time_source`.
+  - Optional timers on each `StatementState` backed by `time_source`.
   - `TimerStart()`, `TimerGet()`, `TimerPause()`, `TimerRestart()`, `TimerKill()`.
-  - Global `StateKillTimers()` to clean up all state timers at once.
+  - Global `StatementStateKillTimers()` to clean up all state timers at once.
 
 - **State-change hook**
   - `SetStateChangeBehaviour(fn)` to run custom logic whenever the state changes (for logging, analytics, signals, etc).
@@ -107,7 +107,7 @@ You can completely ignore these until you actually need them.
   - `time_source` APIs
 
 - **Scripts you need:**
-  - The state system script (containing `StateMachine`, `State`, `StateKillTimers`, etc.).
+  - The state system script (containing `Statement`, `StatementState`, `StatementStateKillTimers`, etc.).
   - Your debug system script (providing `DebugInfo`, `DebugWarn`, `DebugSevere`).
 
 No additional extensions or assets are required.
@@ -116,13 +116,13 @@ No additional extensions or assets are required.
 
 ## Quick Start (Core)
 
-A minimal example: single machine, single state.
+A minimal example: single machine, single state, using the helper functions `StatementCreate()` and `StateCreate()`.
 
 ```gml
 /// Create Event
-state_machine = StateMachine(self);
+state_machine = StatementCreate(self);
 
-var idle = State(self, "Idle")
+var idle = StateCreate(self, "Idle")
     .AddEnter(function() {
         DebugInfo("Entered Idle");
     })
@@ -148,11 +148,11 @@ That's all you need to get a basic state machine up and running.
 
 ## FAQ (Core)
 
-### Do I need one `StateMachine` per object?
+### Do I need one `Statement` per object?
 
 Yes, that's the intended pattern:
 
-- In an object's Create event: `state_machine = StateMachine(self);`
+- In an object's Create event: `state_machine = Statement(self);`
 - Then add states to that machine for that object.
 
 You *can* bind a machine to a pure struct if you're doing headless logic, but "one object, one machine" is the most common.
@@ -172,7 +172,7 @@ Common patterns:
 
 ### What's the difference between `GetStateTime()` and per-state timers?
 
-- `GetStateTime()` / `SetStateTime()` live on the **StateMachine**:
+- `GetStateTime()` / `SetStateTime()` live on the **Statement**:
   - Represent "how long the current state has been active (in frames)".
   - Automatically reset on state change.
   - Incremented in `Update()` while a state is active.
