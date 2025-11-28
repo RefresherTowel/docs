@@ -108,7 +108,10 @@ You can completely ignore these until you actually need them.
 
 - **Scripts you need:**
   - The state system script (containing `Statement`, `StatementState`, `StatementStateKillTimers`, etc.).
-  - Your debug system script (providing `DebugInfo`, `DebugWarn`, `DebugSevere`).
+  - The **Echo** debug helper library (shipped free with Statement). It provides the debug functions used in the examples: `EchoDebugInfo`, `EchoDebugWarn`, and `EchoDebugSevere`.
+
+Statement’s examples and internal debug calls use these Echo helpers. If you remove Echo from your project or choose not to import it, you’ll either need to provide your own functions with the same names, or update the debug calls in Statement to use your own debug system instead.
+{: .note}
 
 No additional extensions or assets are required.
 
@@ -116,15 +119,15 @@ No additional extensions or assets are required.
 
 ## Quick Start (Core)
 
-A minimal example: single machine, single state, using the helper functions `StatementCreate()` and `StateCreate()`.
+A minimal example: single machine, single state.
 
 ```gml
 /// Create Event
-state_machine = StatementCreate(self);
+state_machine = new Statement(self);
 
-var idle = StateCreate(self, "Idle")
+var idle = new StatementState(self, "Idle")
     .AddEnter(function() {
-        DebugInfo("Entered Idle");
+        EchoDebugInfo("Entered Idle");
     })
     .AddUpdate(function() {
         // Simple idle behaviour
@@ -133,16 +136,20 @@ var idle = StateCreate(self, "Idle")
 
 state_machine.AddState(idle);
 
-
 /// Step Event
 state_machine.Update();
-
 
 /// Draw Event (optional)
 state_machine.Draw();
 ```
 
 That's all you need to get a basic state machine up and running.
+
+If you find `new Statement(self)` and `new StatementState(self, "Idle")` a bit verbose, it’s perfectly fine to define your own project-specific helper function (for example `StateM()`) that wraps the constructor call. Statement itself does **not** ship any helpers like this to avoid name clashes with other libraries.
+{: .note}
+
+Always construct `Statement` and `StatementState` using the `new` keyword (for example `state_machine = new Statement(self);`). Calling these constructors without `new` will silently fail and your state machine will not work.
+{: .warning}
 
 ---
 
@@ -152,7 +159,7 @@ That's all you need to get a basic state machine up and running.
 
 Yes, that's the intended pattern:
 
-- In an object's Create event: `state_machine = Statement(self);`
+- In an object's Create event: `state_machine = new Statement(self);`
 - Then add states to that machine for that object.
 
 You *can* bind a machine to a pure struct if you're doing headless logic, but "one object, one machine" is the most common.
@@ -179,9 +186,10 @@ Common patterns:
 
 - Per-state timers (`TimerStart()`, `TimerGet()`, etc.) live on the **State**:
   - Optional, more flexible timers backed by `time_source`.
-  - Good for complex behaviour that needs pausing, restarting, or independent ticking.
+  - Once started, a state’s timer advances every frame via the time-source system until you change out of that state or explicitly stop/pause/reset the timer, even if `Update()` is not being called for a while.
+  - Good for specialised behaviour that needs pausing, restarting, or independent ticking across different update rates.
 
-If you're unsure, start with `GetStateTime()` and ignore per-state timers.
+In 99% of cases you’ll just use `GetStateTime()` on the machine and ignore per-state timers entirely.
 
 ---
 
@@ -230,4 +238,4 @@ If you hit behaviour that looks wrong, include:
 
 - A short code snippet.
 - Which functions you called (`ChangeState`, `QueueState`, etc).
-- Any relevant debug output from `DebugInfo/Warn/Severe`.
+- Any relevant debug output from `EchoDebugInfo/EchoDebugWarn/EchoDebugSevere`.

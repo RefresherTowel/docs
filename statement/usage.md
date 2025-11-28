@@ -21,17 +21,17 @@ This page shows how to use Statement in practice, split into:
 
 ```gml
 /// Create Event
-state_machine = Statement(self);
+state_machine = new Statement(self);
 
-var idle = StatementState(self, "Idle")
+var _idle = new StatementState(self, "Idle")
     .AddEnter(function() {
-        DebugInfo("Entered Idle");
+        EchoDebugInfo("Entered Idle");
     })
     .AddUpdate(function() {
         image_angle += 1;
     });
 
-state_machine.AddState(idle);
+state_machine.AddState(_idle);
 
 
 /// Step Event
@@ -54,10 +54,10 @@ This sets up:
 
 ```gml
 /// Create Event
-state_machine = Statement(self);
+state_machine = new Statement(self);
 
 // Idle
-var idle = StatementState(self, "Idle")
+var _idle = new StatementState(self, "Idle")
     .AddEnter(function() {
         sprite_index = spr_player_idle;
         hsp = vsp = 0;
@@ -69,28 +69,28 @@ var idle = StatementState(self, "Idle")
     });
 
 // Move
-var move = StatementState(self, "Move")
+var _move = new StatementState(self, "Move")
     .AddEnter(function() {
         sprite_index = spr_player_move;
     })
     .AddUpdate(function() {
-        var dx = keyboard_check(ord("D")) - keyboard_check(ord("A"));
-        var dy = keyboard_check(ord("S")) - keyboard_check(ord("W"));
+        var _dx = keyboard_check(ord("D")) - keyboard_check(ord("A"));
+        var _dy = keyboard_check(ord("S")) - keyboard_check(ord("W"));
 
-        hsp = dx * 4;
-        vsp = dy * 4;
+        hsp = _dx * 4;
+        vsp = _dy * 4;
 
         x += hsp;
         y += vsp;
 
-        if (dx == 0 && dy == 0) {
+        if (_dx == 0 && _dy == 0) {
             state_machine.ChangeState("Idle");
         }
     });
 
 state_machine
-    .AddState(idle)
-    .AddState(move);
+    .AddState(_idle)
+    .AddState(_move);
 
 
 /// Step Event
@@ -106,7 +106,7 @@ state_machine.Draw();
 ### 3. Using `GetStateTime()` for Behaviour
 
 ```gml
-var attack = StatementState(self, "Attack")
+var _attack = new StatementState(self, "Attack")
     .AddEnter(function() {
         sprite_index = spr_player_attack;
         image_index = 0;
@@ -119,7 +119,7 @@ var attack = StatementState(self, "Attack")
         }
     });
 
-state_machine.AddState(attack);
+state_machine.AddState(_attack);
 ```
 
 Because `state_machine` resets `state_age` automatically on state change, you can often skip the explicit `SetStateTime(0)`.
@@ -131,7 +131,7 @@ Because `state_machine` resets `state_age` automatically on state change, you ca
 ### 4. Queued Transitions to Avoid Mid-Update Re-entry
 
 ```gml
-var move = StatementState(self, "Move")
+var _move = new StatementState(self, "Move")
     .AddUpdate(function() {
         // movement logic...
 
@@ -141,7 +141,7 @@ var move = StatementState(self, "Move")
         }
     });
 
-var attack = StatementState(self, "Attack")
+var _attack = new StatementState(self, "Attack")
     .AddEnter(function() {
         sprite_index = spr_player_attack;
         image_index = 0;
@@ -153,8 +153,8 @@ var attack = StatementState(self, "Attack")
     });
 
 state_machine
-    .AddState(move)
-    .AddState(attack);
+    .AddState(_move)
+    .AddState(_attack);
 ```
 
 Because transitions are queued, the rest of the current `Update` runs in the **old** state, and `Attack` starts cleanly next frame.
@@ -167,7 +167,7 @@ If you want explicit control over when queued transitions happen:
 
 ```gml
 /// Create
-state_machine = Statement(self)
+state_machine = new Statement(self)
     .SetQueueAutoProcessing(false);
 
 
@@ -186,12 +186,12 @@ Now you can insert queue processing at a specific spot in your step pipeline.
 
 ```gml
 /// Create
-state_machine = Statement(self);
+state_machine = new Statement(self);
 
 // Existing states: Idle, Move, Attack... (omitted)
 
 // Pause overlay
-var pause = StatementState(self, "Pause")
+var _pause = new StatementState(self, "Pause")
     .AddEnter(function() {
         hsp = vsp = 0;
     })
@@ -207,7 +207,7 @@ var pause = StatementState(self, "Pause")
         draw_text(32, 32, "PAUSED");
     });
 
-state_machine.AddState(pause);
+state_machine.AddState(_pause);
 
 
 /// Step
@@ -231,18 +231,21 @@ state_machine.Draw();
 ### 7. Per-State Timers for More Complex Timing
 
 ```gml
-var charge = StatementState(self, "Charge")
+/// Create Event
+state_machine = new Statement(self);
+
+charge = new StatementState(self, "Charge")
     .AddEnter(function() {
-        TimerStart(); // per-state timer
+        charge.TimerStart(); // per-state timer
     })
     .AddUpdate(function() {
-        // Charge for at least 60 frames
-        if (TimerGet() >= 60) {
+        // Charge for at least 60 frames, regardless of how often Update runs
+        if (charge.TimerGet() >= 60) {
             state_machine.ChangeState("Release");
         }
     });
 
-var release = StatementState(self, "Release")
+release = new StatementState(self, "Release")
     .AddEnter(function() {
         // some effect...
     })
@@ -255,23 +258,27 @@ state_machine
     .AddState(release);
 ```
 
-You can pause and restart the timer:
+You can pause and restart the per-state timer:
 
 ```gml
 if (game_is_paused) {
-    TimerPause();
+    charge.TimerPause();
 } else {
-    TimerRestart();
+    charge.TimerRestart();
 }
 ```
 
----
+**Please note:** If you need to access a state from its own handlers or from other events, store it in an instance variable (like `charge` and `release` above), not a local `var`. Local variables only exist for the duration of the event or function where they are declared, while instance variables live for the lifetime of the instance.
+{: .note}
 
+Most of the time you can rely on `GetStateTime()` on the machine instead and skip per-state timers entirely.
+
+---
 ### 8. State Change Hook for Logging & Signals
 
 ```gml
 state_machine.SetStateChangeBehaviour(method(self, function() {
-    DebugInfo("State changed to: " + string(state_machine.GetStateName()));
+    EchoDebugInfo("State changed to: " + string(state_machine.GetStateName()));
     // You could also emit a signal here, update UI, etc.
 }));
 ```
@@ -281,6 +288,111 @@ This runs for every transition, making it useful for:
 - Debugging.
 - Analytics.
 - Emitting events into your own signal/event system.
+
+---
+
+### 9. Custom state events (advanced)
+
+You can define your own event index and bind/run it manually. For example, add an `ANIMATION_END` event:
+
+```gml
+// scripts/scr_statement_macro/scr_statement_macro.gml (or your own macro script)
+enum eStatementEvents {
+    ENTER,
+    EXIT,
+    STEP,
+    DRAW,
+    ANIMATION_END, // custom
+    NUM            // keep NUM last
+}
+```
+
+In Create, bind a handler for that event:
+
+```gml
+/// obj_player Create
+state_machine = new Statement(self);
+
+var _attack = new StatementState(self, "Attack")
+    .AddEnter(function() {
+        sprite_index = spr_player_attack;
+        image_index = 0;
+    })
+    .AddStateEvent(eStatementEvents.ANIMATION_END, function() {
+        // Transition when the attack animation finishes
+        state_machine.ChangeState("Idle");
+    });
+
+state_machine.AddState(_attack);
+```
+
+In the Animation End event of the object, run the custom event if present:
+
+```gml
+/// obj_player Animation End Event
+if (state_machine.GetStateName() == "Attack"
+&& state_machine.state.HasStateEvent(eStatementEvents.ANIMATION_END)) {
+    state_machine.RunState(eStatementEvents.ANIMATION_END);
+}
+```
+
+This pattern lets you hook into additional event points (like Animation End) while keeping logic organized in your states.
+
+---
+
+### 10. Inspecting or clearing a queued state
+
+If you’re queuing transitions manually, you can inspect or clear the pending change:
+
+```gml
+/// Debug overlay
+if (state_machine.HasQueuedState()) {
+    var _queued = state_machine.GetQueuedStateName();
+    draw_text(16, 16, "Queued state: " + string(_queued));
+}
+
+/// Cancel a queued change (e.g., input cancelled)
+state_machine.ClearQueuedState();
+```
+
+---
+
+### 11. History peek (previous states)
+
+You can check where you’ve been:
+
+```gml
+// Last state name
+var _prev = state_machine.GetPreviousStateName();
+
+// All history entries
+var _count = state_machine.GetHistoryCount();
+for (var i = 0; i < _count; ++i) {
+    var _st = state_machine.GetHistoryAt(i);
+    if (!is_undefined(_st)) {
+        draw_text(16, 48 + i * 16, "History " + string(i) + ": " + _st.name);
+    }
+}
+```
+
+Use `SetHistoryLimit(limit)` if you want to cap how many entries are kept.
+
+---
+
+### 12. Resetting / cleaning up a machine
+
+When restarting or discarding a machine:
+
+```gml
+// Fully reset states and queues
+state_machine.ClearStates();
+
+// Cleanup timers owned by states on this machine (e.g., in Destroy)
+state_machine.Destroy();
+
+// Global nuke of all state timers across machines (e.g., when reloading a run)
+StatementStateKillTimers();
+```
 
 ---
 
@@ -313,12 +425,13 @@ This runs for every transition, making it useful for:
    For actual control (e.g. temporary overlays), prefer `PushState` / `PopState` or `PreviousState()`.
 
 4. **Per-state timers are independent of `GetStateTime()`**  
-   Per-state timers are controlled by `Timer*` methods and `time_source`.  
-   They do not automatically match `GetStateTime()`; use whichever better fits your logic.
+   Per-state timers use `Timer*` methods and underlying `time_source` objects. Once started, they tick based on the time-source, not on how often you call `Update()`.  
+   They do not automatically match `GetStateTime()`; in almost all cases you should prefer `GetStateTime()` and only reach for per-state timers when you need that extra flexibility.
 
 5. **Clean up when resetting**  
-   - Use `ClearStates()` when you want to fully reset the machine.  
-   - Use `StatementStateKillTimers()` if you want to globally destroy all state timers for all machines.
+   - Use `ClearStates()` when you want to fully reset the machine’s states.  
+   - Call `state_machine.Destroy()` in your instance’s Destroy/Cleanup event when you are done with a machine so that any per-state timers owned by its states are cleaned up.  
+   - Use `StatementStateKillTimers()` if you want to globally destroy all state timers for all machines (e.g. when restarting a run).
 
 ---
 

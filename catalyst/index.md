@@ -40,9 +40,9 @@ It knows about:
 
 #### Core
 
-- `base_value` - your starting value.
-- `min_value` / `max_value` - optional clamping bounds.
-- `rounded` - whether to round to integer when returning values.
+- `base_value` – your starting value.
+- `min_value` / `max_value` – optional clamping bounds.
+- `rounded` – whether to round to integer when returning values.
 - Attached `CatalystModifier` instances that change the value.
 
 You ask a stat for its value via:
@@ -57,14 +57,14 @@ var dmg_hit = stats.damage.GetValue(hit_ctx);
 
 #### Advanced
 
-- **Layers** - the order in which groups of modifiers apply
+- **Layers** – the order in which groups of modifiers apply
   (`eCatStatLayer.BASE_BONUS`, `EQUIPMENT`, `AUGMENTS`, `TEMP`, `GLOBAL`).
-- **Derived base** - `base_func(stat, context)` to compute the base from other stats
+- **Derived base** – `base_func(stat, context)` to compute the base from other stats
   (for example, max HP from vitality and level).
-- **Post-processing** - `post_process(stat, raw_value, context)` for soft caps and curves.
-- **Tags** - labels on the stat itself for grouping and rules.
-- **On-change callbacks** - functions invoked when the cached value changes.
-- **Context-aware evaluation** - every condition / stack / base / post function can
+- **Post-processing** – `post_process(stat, raw_value, context)` for soft caps and curves.
+- **Tags** – labels on the stat itself for grouping and rules.
+- **On-change callbacks** – functions invoked when the cached value changes.
+- **Context-aware evaluation** – every condition / stack / base / post function can
   receive an optional `_context` you pass into `GetValue(context)`.
 
 ---
@@ -75,28 +75,28 @@ A `CatalystModifier` describes *how* to change a stat.
 
 #### Core
 
-- **Amount** - `value`, the number you add or multiply with.
-- **Operation** - one of `eCatMathOps.ADD`, `eCatMathOps.MULTIPLY`, or `eCatMathOps.FORCE_MIN`.
-- **Duration** - optional lifetime in "ticks", managed by the global `CatalystModifierTracker`.
+- **Amount** – `value`, the number you add or multiply with.
+- **Operation** – one of `eCatMathOps.ADD`, `eCatMathOps.MULTIPLY`, or `eCatMathOps.FORCE_MIN`.
+- **Duration** – optional lifetime in “ticks”, managed by the global `CatalystModifierTracker`.
 
 #### Advanced
 
-- **Layer** - where in the pipeline it applies (`eCatStatLayer.BASE_BONUS`, `EQUIPMENT`,
+- **Layer** – where in the pipeline it applies (`eCatStatLayer.BASE_BONUS`, `EQUIPMENT`,
   `AUGMENTS`, `TEMP`, `GLOBAL`).
-- **Stacks** - `stacks` and `max_stacks` control how many times it applies.
-- **Condition** - `condition(stat, context)` decides whether it applies at all.
-- **Context-driven stacks** - `stack_func(stat, context)` computes effective stacks
+- **Stacks** – `stacks` and `max_stacks` control how many times it applies.
+- **Condition** – `condition(stat, context)` decides whether it applies at all.
+- **Context-driven stacks** – `stack_func(stat, context)` computes effective stacks
   from the current situation.
-- **Families** - `family` and `family_mode` (`STACK_ALL`, `HIGHEST`, `LOWEST`)
-  control how modifiers of the same "kind" combine.
-- **Tags** - labels like `"buff"`, `"debuff"`, `"fire"`, `"movement"` used for querying
+- **Families** – `family` and `family_mode` (`STACK_ALL`, `HIGHEST`, `LOWEST`)
+  control how modifiers of the same “kind” combine.
+- **Tags** – labels like `"buff"`, `"debuff"`, `"fire"`, `"movement"` used for querying
   and bulk remove / find.
-- **Sources** - three separate ways to track where a modifier came from:
-  - `source_label` - human-readable label (for example `"Bronze Wand"`).
-  - `source_id` - handle (instance, owner struct, inventory item, etc.).
-  - `source_meta` - arbitrary metadata (often a struct) for custom logic.
+- **Sources** – three separate ways to track where a modifier came from:
+  - `source_label` – human-readable label (for example `"Bronze Wand"`).
+  - `source_id` – handle (instance, owner struct, inventory item, etc.).
+  - `source_meta` – arbitrary metadata (often a struct) for custom logic.
   The stat API includes helpers to find / test / remove modifiers by any of these.
-- **Previews** - the stat can simulate modifiers as if they were applied,
+- **Previews** – the stat can simulate modifiers as if they were applied,
   without actually attaching them, via `PreviewChange` and `PreviewChanges`.
 
 Modifiers are attached to a `CatalystStatistic`:
@@ -121,7 +121,7 @@ and counts them down.
 
 Catalyst ships with one global tracker instance:
 
-- `global.__catalyst_modifier_tracker` - created for you at startup.
+- `global.__catalyst_modifier_tracker` – created for you at startup.
 - The macro `CATALYST_COUNTDOWN` points at this instance.
 - Timed `CatalystModifier` instances register with it automatically
   when their `duration` is greater than 0.
@@ -146,11 +146,11 @@ and their owning `CatalystStatistic`.
 - Flat and multiplicative modifiers via `CatalystModifier`
   (`ADD`, `MULTIPLY`, `FORCE_MIN`).
 - Ordered layers so different sources of power stack predictably:
-  - `BASE_BONUS` - attributes, level scaling, ancestry.
-  - `EQUIPMENT`  - weapons, wands, gear.
-  - `AUGMENTS`   - runes, talents, gems, passive trees.
-  - `TEMP`       - short-lived buffs and debuffs.
-  - `GLOBAL`     - late-stage global effects and auras.
+  - `BASE_BONUS` – attributes, level scaling, ancestry.
+  - `EQUIPMENT`  – weapons, wands, gear.
+  - `AUGMENTS`   – runes, talents, gems, passive trees.
+  - `TEMP`       – short-lived buffs and debuffs.
+  - `GLOBAL`     – late-stage global effects and auras.
 - Timed modifiers with durations, tracked by a global `CatalystModifierTracker`
   and advanced by `CatalystModCountdown()`.
 
@@ -166,7 +166,7 @@ and their owning `CatalystStatistic`.
   - Track modifiers by `source_label`, `source_id`, or `source_meta`.
   - Find, test, and remove modifiers based on where they came from.
 - Tags on both stats and modifiers for grouping, UI, and rule logic.
-- Safe "what-if" previews:
+- Safe “what-if” previews:
   - `PreviewChange(...)` for a single hypothetical modifier.
   - `PreviewChanges([...])` for batches of hypothetical changes.
 
@@ -180,7 +180,7 @@ Catalyst is intended for things like:
 - Movement speed modified by buffs, debuffs, and environment.
 - Cooldowns that shrink with combo stacks.
 - HP, armor, and resistance systems with diminishing returns.
-- "Highest-of-kind" auras where only the strongest effect applies.
+- “Highest-of-kind” auras where only the strongest effect applies.
 - Mouseover previews when hovering items: `20 -> 28 damage`.
 
 See the other pages for details:

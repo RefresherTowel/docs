@@ -27,14 +27,13 @@ Enum that describes the outcome of subscription, unsubscription, and dispatch op
 Values include:
 
 - `ePulseResult.LST_ADDED`  
-- `ePulseResult.LST_ALREADY_EXISTS`  
 - `ePulseResult.LST_REMOVED_FROM_SIGNAL`  
 - `ePulseResult.LST_REMOVED_COMPLETELY`  
 - `ePulseResult.LST_DOES_NOT_EXIST_IN_SIGNAL`  
 - `ePulseResult.LST_DOES_NOT_EXIST`  
 - `ePulseResult.SGL_DOES_NOT_EXIST`  
-- `ePulseResult.SGL_NOT_SENT_NO_SGL`  
-- `ePulseResult.SGL_NOT_SENT_NO_LST`  
+- `ePulseResult.SGL_NOT_SENT_NO_SGL`  – the signal has no entry in the controller yet.  
+- `ePulseResult.SGL_NOT_SENT_NO_LST`  – the signal exists but currently has zero listeners.  
 - `ePulseResult.SGL_SENT`  
 
 You will see these returned from functions like `PulseSubscribe`, `PulseUnsubscribe`, `PulseRemove`, and `PulseSend`.
@@ -134,8 +133,8 @@ Recommended for use in Destroy events of parent objects to avoid dangling listen
 Dispatch a signal **immediately**, invoking all matching listeners in priority order.
 
 ```gml
-var payload = { amount: 10 };
-PulseSend(SIG_DAMAGE_TAKEN, payload, id);
+var _payload = { amount: 10 };
+PulseSend(SIG_DAMAGE_TAKEN, _payload, id);
 ```
 
 - `signal`: `Any` – signal identifier.  
@@ -182,7 +181,7 @@ Process queued signals in FIFO order, using the same rules as `PulseSend`.
 
 ```gml
 /// obj_controller Step
-var processed = PulseFlushQueue(128);
+var _processed = PulseFlushQueue(128);
 ```
 
 - `max_events` *(optional)*: `Real` – maximum number of queued events to process this call; negative values (the default `-1`) process **all** pending events.  
@@ -211,7 +210,7 @@ Useful when resetting a scene or abandoning pending work (for example, when rest
 Return the number of events currently queued for deferred dispatch.
 
 ```gml
-var pending = PulseQueueCount();
+var _pending = PulseQueueCount();
 ```
 
 - **Returns:** `Real` – the number of queued events remaining.
@@ -225,7 +224,7 @@ var pending = PulseQueueCount();
 Create a listener configuration struct that you can further customise and then subscribe.
 
 ```gml
-var l = PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
+var _l = PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
     .From(enemy_id)
     .Once()
     .Tag(TAG_RUNE_PROC)
@@ -236,7 +235,7 @@ var l = PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
 - `signal`: `Any` – signal identifier.  
 - `callback`: `Function` – function to invoke when the signal is dispatched.  
 - **Returns:** `Struct` – a listener configuration object with fields:
-  - `id`, `signal`, `callback`  
+  - `ident`, `signal`, `callback`  
   - `from`, `once`, `tag`, `priority`  
   and methods:
   - `.From(from_id)`  
@@ -324,11 +323,11 @@ Internally calls `PulseSubscribeConfig(listener)`.
 Subscribe a listener configuration created by `PulseListener`.
 
 ```gml
-var cfg = PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
+var _cfg = PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
     .From(enemy_id)
     .Once()
     .Priority(5);
-PulseSubscribeConfig(cfg);
+PulseSubscribeConfig(_cfg);
 ```
 
 - `listener`: `Struct` – configuration from `PulseListener`.  
@@ -345,7 +344,7 @@ This is the more explicit form of `listener.Subscribe()` and can be useful when 
 Return the number of listeners currently registered for a specific signal.
 
 ```gml
-var damage_count = PulseCount(SIG_DAMAGE_TAKEN);
+var _damage_count = PulseCount(SIG_DAMAGE_TAKEN);
 ```
 
 - `signal`: `Any`.  
@@ -358,7 +357,7 @@ var damage_count = PulseCount(SIG_DAMAGE_TAKEN);
 Return the total number of active subscriptions held by an instance id across all signals.
 
 ```gml
-var my_subscriptions = PulseCountFor(id);
+var _my_subscriptions = PulseCountFor(id);
 ```
 
 - `id`: `Id.Instance`.  
@@ -409,12 +408,14 @@ and constructed once as:
 global.__pulse_controller = new PulseController();
 ```
 
+These definitions live inside the Pulse script; you do **not** need to duplicate them in your own project.
+
 In normal usage you never need to touch `PulseController` directly. All interaction should go through the public `Pulse*` functions.
 
 Advanced users who want multiple independent buses can create additional controllers manually:
 
 ```gml
-var local_signals = new PulseController();
+var _local_signals = new PulseController();
 // then call local_signals.__add_listener(...) etc. (advanced, not recommended for most users)
 ```
 

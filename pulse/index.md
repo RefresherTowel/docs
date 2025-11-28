@@ -5,7 +5,7 @@ nav_order: 3
 has_children: true
 ---
 
-# Pulse - Signals System for GameMaker
+# Pulse - Signals & Events for GameMaker
 
 **Pulse** is a lightweight, reusable **signal and event system** for GameMaker.  
 
@@ -48,6 +48,10 @@ These are the features most users will interact with day-to-day:
   - `PulseSubscribe(id, signal, callback, [from])`  
   - `PulseSubscribeOnce(id, signal, callback, [from])`  
   - `PulseSend(signal, [data], [from])`  
+
+- **Simple cleanup helpers**  
+  - `PulseUnsubscribe(id, signal, [from], [tag])`  
+  - `PulseRemove(id)` for bulk removal (for example, in Destroy events).  
 
 - **Sender filtering (`from`)**  
   Listeners can choose to only react to events from a specific sender id, or use `noone` to accept events from anyone.
@@ -109,7 +113,7 @@ You can completely ignore these until you actually need them.
     - `EchoDebugWarn(message)`  
     - `EchoDebugSevere(message)`  
 
-Pulse uses your debug system for dumps and warnings, but remains fully functional even if you rarely enable debug output.
+Pulse uses these debug functions for dumps and warnings. They must exist (even if they are simple wrappers or no-ops in release builds), but Pulse will still work if you choose not to log anything.
 
 No additional extensions or assets are required.
 
@@ -127,22 +131,22 @@ A minimal example: one object listening for a signal and another sending it.
 ```gml
 /// obj_player Create
 PulseSubscribe(id, SIG_DAMAGE_TAKEN, function(_data) {
-    var amount = is_struct(_data) ? _data.amount : _data;
-    hp -= amount;
+    var _amount = is_struct(_data) ? _data.amount : _data;
+    hp -= _amount;
 });
 ```
 
 ```gml
 /// obj_enemy: when it hits the player
-var payload = { amount: 5 };
-PulseSend(SIG_DAMAGE_TAKEN, payload, id);
+var _payload = { amount: 5 };
+PulseSend(SIG_DAMAGE_TAKEN, _payload, id);
 ```
 
 That is all you need to get a basic signal flowing through Pulse:
 
 - The player subscribes to `SIG_DAMAGE_TAKEN`.
 - The enemy sends that signal with some payload data.
-- Pulse calls the player’s callback in a `with (player_id)` context.
+- Pulse calls the player’s callback in a `with (id)` context, where `id` is the instance that subscribed, so `self` inside the callback is that instance.
 
 ---
 
@@ -175,12 +179,13 @@ This is helpful when you only want to react to events coming from a specific sou
 
 ### What value does `PulseSubscribe` return?
 
-All mutating operations return a value from the `ePulseResult` enum, for example:
+Subscription, unsubscription, removal, and immediate send operations return a value from the `ePulseResult` enum, for example:
 
 - `ePulseResult.LST_ADDED`
-- `ePulseResult.LST_ALREADY_EXISTS`
 - `ePulseResult.LST_REMOVED_COMPLETELY`
 - `ePulseResult.SGL_SENT`
+
+If you add a duplicate listener tuple (same id + signal + from + tag), Pulse logs a warning in debug builds but still returns `LST_ADDED`.
 
 For simple usage you can ignore these, but they become handy in tools, debug builds, or when you want to assert particular outcomes.
 
@@ -204,7 +209,7 @@ A common pattern is:
 
 ```gml
 /// obj_controller Step
-var processed = PulseFlushQueue(128); // process up to 128 events per step
+var _processed = PulseFlushQueue(128); // process up to 128 events per step
 ```
 
 and use `PulsePost` elsewhere for “next-frame” style work.
@@ -229,8 +234,8 @@ Inside a listener callback you can stop further propagation in two ways:
 2. **Use a struct payload with a `consumed` flag**:
 
    ```gml
-   var ev = { x: mouse_x, y: mouse_y, consumed: false };
-   PulseSend(SIG_INPUT_CLICK, ev);
+   var _ev = { x: mouse_x, y: mouse_y, consumed: false };
+   PulseSend(SIG_INPUT_CLICK, _ev);
 
    // Somewhere else
    PulseSubscribe(id, SIG_INPUT_CLICK, function(_ev) {

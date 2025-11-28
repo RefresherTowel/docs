@@ -29,15 +29,15 @@ Define a signal identifier and wire up a simple listener + sender.
 ```gml
 /// obj_player Create
 PulseSubscribe(id, SIG_DAMAGE_TAKEN, function(_data) {
-    var amount = is_struct(_data) ? _data.amount : _data;
-    hp -= amount;
+    var _amount = is_struct(_data) ? _data.amount : _data;
+    hp -= _amount;
 });
 ```
 
 ```gml
 /// obj_enemy: when it hits the player
-var payload = { amount: 5 };
-PulseSend(SIG_DAMAGE_TAKEN, payload, id);
+var _payload = { amount: 5 };
+PulseSend(SIG_DAMAGE_TAKEN, _payload, id);
 ```
 
 This sets up:
@@ -50,24 +50,34 @@ This sets up:
 
 ### 2. Listening to a specific sender (`from` filter)
 
-Use the optional `from` parameter when subscribing if you only care about events from a particular source.
+Use the optional `from` parameter when subscribing if you only care about events from a particular source. Some practical patterns:
 
 ```gml
-/// obj_player Create
-// Only listen to damage from this boss, not from every enemy.
-PulseSubscribe(id, SIG_DAMAGE_TAKEN, function(_data) {
-    var amount = _data.amount;
-    hp -= amount * 2; // boss damage hits harder
-}, boss_id);
+/// obj_door Create
+// Only react to this door's paired switch
+PulseSubscribe(id, SIG_SWITCH_TOGGLED, function(_data) {
+    if (_data.on) open_door(); else close_door();
+}, switch_id);
 ```
 
 ```gml
-/// obj_boss: when it hits the player
-var payload = { amount: 10 };
-PulseSend(SIG_DAMAGE_TAKEN, payload, id); // 'id' is boss_id here
+/// obj_player Create (local co-op)
+// Only process input routed for this player
+PulseSubscribe(id, SIG_INPUT_MOVE, function(_data) {
+    hsp = _data.dx;
+    vsp = _data.dy;
+}, my_input_router_id);
 ```
 
-- If the same signal is sent from other enemies with a different `from` id, this listener will **ignore** those events.
+```gml
+/// obj_pet Create
+// Only obey commands sent by this pet's owner
+PulseSubscribe(id, SIG_PET_COMMAND, function(_data) {
+    ExecuteCommand(_data.cmd);
+}, owner_id);
+```
+
+- If the same signal is sent from other senders, these listeners will **ignore** those events unless `from` matches.
 - Using `noone` as the `from` value when subscribing means “accept from any sender”.
 
 ---
@@ -99,6 +109,8 @@ The callback will run only for the first `SIG_LEVEL_UP` that matches the subscri
 
 Use `PulsePost` + `PulseFlushQueue` when you want to process events at a controlled part of your frame rather than immediately.
 
+`PulsePost` is fire-and-forget: it enqueues the event and returns `Undefined` (it does not return an `ePulseResult`).
+
 ```gml
 /// obj_game_controller Create
 // No special setup needed; we just decide to flush in Step.
@@ -112,8 +124,8 @@ PulseFlushQueue(128);
 
 ```gml
 /// obj_enemy: when it dies
-var payload = { x: x, y: y };
-PulsePost(SIG_ENEMY_DIED, payload, id);
+var _payload = { x: x, y: y };
+PulsePost(SIG_ENEMY_DIED, _payload, id);
 ```
 
 ```gml
@@ -206,9 +218,9 @@ PulseSubscribe(id, SIG_INPUT_CLICK, function(_ev) {
 
 ```gml
 /// obj_input_router Step
-var ev = { x: device_mouse_x_to_gui(0), y: device_mouse_y_to_gui(0), consumed: false };
+var _ev = { x: device_mouse_x_to_gui(0), y: device_mouse_y_to_gui(0), consumed: false };
 if (mouse_check_button_pressed(mb_left)) {
-    PulseSend(SIG_INPUT_CLICK, ev);
+    PulseSend(SIG_INPUT_CLICK, _ev);
 }
 ```
 
@@ -221,7 +233,28 @@ Use `Priority` on listeners to control which callbacks get first chance to consu
 
 ---
 
-### 7. Priorities for ordering
+### 7. Cleanup and unsubscribe patterns
+
+Make sure listeners don’t linger longer than intended:
+
+```gml
+/// Destroy Event of an object that subscribes to signals
+PulseRemove(id); // remove this instance from all signals
+```
+
+Selective unsubscribe examples:
+
+```gml
+// Remove only subscriptions for this sender
+PulseUnsubscribe(id, SIG_DAMAGE_TAKEN, boss_id);
+
+// Remove only subscriptions with a specific tag
+PulseUnsubscribe(id, SIG_UI_EVENT, undefined, TAG_MENU_OPEN);
+```
+
+---
+
+### 8. Priorities for ordering
 
 By default, listeners share a priority of `0`. Higher numbers are run earlier.
 
@@ -254,7 +287,7 @@ If the high-priority handler consumes the event (returns true or sets `consumed`
 
 ---
 
-### 8. Introspection and debugging
+### 9. Introspection and debugging
 
 Use the introspection helpers when you want to inspect or debug your wiring at runtime.
 
@@ -275,13 +308,30 @@ Typical uses:
 
 Remember that these use your debug logger (for example, `EchoDebugInfo`), so log output can be filtered or turned off via your existing debug settings.
 
+Other quick checks:
+
+```gml
+// Pending queued events (for debug overlay)
+var _pending = PulseQueueCount();
+draw_text(16, 16, "Queued events: " + string(_pending));
+
+// Per-signal / per-id counts
+EchoDebugInfo("Damage listeners: " + string(PulseCount(SIG_DAMAGE_TAKEN)));
+EchoDebugInfo("My subscriptions: " + string(PulseCountFor(id)));
+
+// Trigger a dump on a debug key
+if (keyboard_check_pressed(ord("P"))) {
+    PulseDumpSignal(SIG_UI_CLICK);
+}
+```
+
 ---
 
 ## Gotchas & Best Practices
 
 ### 1. You must flush the queue yourself
 
-Pulse does not automatically flush queued events. If you use `PulsePost`, you **must** call `PulseFlushQueue` somewhere (usually each frame from a central controller object).
+**Pulse does not automatically flush queued events.** If you use `PulsePost`, you **must** call `PulseFlushQueue` somewhere (usually each frame from a central controller object).
 
 If you never call `PulsePost`, you can ignore the queue entirely.
 
@@ -289,7 +339,7 @@ If you never call `PulsePost`, you can ignore the queue entirely.
 
 ### 2. Changes during dispatch affect the next send, not the current one
 
-Because Pulse takes a snapshot of listeners before dispatching:
+**Because Pulse takes a snapshot of listeners before dispatching:**
 
 - Subscribing or unsubscribing during a callback will not affect the *current* event.
 - Changes take effect on the next `PulseSend` / `PulseFlushQueue` call.

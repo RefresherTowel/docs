@@ -42,9 +42,14 @@ By default:
 You can read values anywhere you have a reference to the stat:
 
 ```gml
-var dmg   = stats.damage.GetValue(); // canonical, cached value
-var speed = stats.speed.GetValue();
+var _dmg   = stats.damage.GetValue(); // canonical, cached value
+var _speed = stats.speed.GetValue();
 ```
+
+> **Please note:** I usually store my stats in an enum indexed array, as opposed to a struct, to allow for ease of looping through
+> all stats, and for slightly better retrieval speed. However, I will use a struct for these examples, since it is easier to
+> read. Either way is almost always fine though, so choose whichever method you prefer.
+{: .note}
 
 ---
 
@@ -54,28 +59,27 @@ To change a stat, you create one or more `CatalystModifier` instances and attach
 
 A modifier needs at least:
 
-- `_value` - how much to change the stat by.
-- `_math_operation` - how to apply that value.
+- `_value` – how much to change the stat by.
+- `_math_operation` – how to apply that value.
 
 ```gml
 // A flat +5 damage bonus
-var flat_bonus = new CatalystModifier(5, eCatMathOps.ADD);
+var _flat_bonus = new CatalystModifier(5, eCatMathOps.ADD);
 
 // A +20% damage multiplier
-var percent_bonus = new CatalystModifier(1.20, eCatMathOps.MULTIPLY);
+var _percent_bonus = new CatalystModifier(0.20, eCatMathOps.MULTIPLY);
 
 // Attach to the damage stat
 stats.damage
-    .AddModifier(flat_bonus)
-    .AddModifier(percent_bonus);
+    .AddModifier(_flat_bonus)
+    .AddModifier(_percent_bonus);
 ```
-Note how the MULTIPLY modifier works. To get a 20% increase, you provide 1.2 as the modifiers value. If you wanted to halve the stat's value,
-you would provide 0.5 to the modifier. The stat's value is multiplied directly by the mod's value.
+Note how the MULTIPLY modifier works. To get a 20% increase, you provide 0.20 as the modifier's value (internally applied as `power(1 + value, stacks)`). If you wanted to halve the stat's value, you would provide -0.50 to the modifier (for a 50% reduction).
 
 Now when you query the stat:
 
 ```gml
-var dmg = stats.damage.GetValue(); // (10 + 5) * 1.2 = 18
+var _dmg = stats.damage.GetValue(); // (10 + 5) * 1.20 = 18
 ```
 
 > **Note:** `FORCE_MIN` is also available via `eCatMathOps.FORCE_MIN`, which clamps the
@@ -101,18 +105,18 @@ For example, you might treat weapons as **EQUIPMENT** and runes as **AUGMENTS**:
 
 ```gml
 // Weapon adds +3 damage as equipment
-var weapon_mod = new CatalystModifier(3, eCatMathOps.ADD)
+var _weapon_mod = new CatalystModifier(3, eCatMathOps.ADD)
     .SetLayer(eCatStatLayer.EQUIPMENT)
     .SetSourceLabel("Rusty Sword");
 
 // Rune adds +15% damage as an augment
-var rune_mod = new CatalystModifier(1.15, eCatMathOps.MULTIPLY)
+var _rune_mod = new CatalystModifier(0.15, eCatMathOps.MULTIPLY)
     .SetLayer(eCatStatLayer.AUGMENTS)
     .SetSourceLabel("Lesser Power Rune");
 
 stats.damage
-    .AddModifier(weapon_mod)
-    .AddModifier(rune_mod);
+    .AddModifier(_weapon_mod)
+    .AddModifier(_rune_mod);
 ```
 
 Layers make it easy to reason about the order of operations and to group similar effects together.
@@ -140,11 +144,11 @@ Creating a timed buff looks like this:
 
 ```gml
 // +50% damage buff for 5 ticks
-var buff = new CatalystModifier(1.5, eCatMathOps.MULTIPLY, 5)
+var _buff = new CatalystModifier(0.50, eCatMathOps.MULTIPLY, 5)
     .SetLayer(eCatStatLayer.TEMP)
     .SetSourceLabel("Rage Potion");
 
-stats.damage.AddModifier(buff);
+stats.damage.AddModifier(_buff);
 ```
 
 - When `buff.duration` counts down to 0, the tracker will:
@@ -165,10 +169,10 @@ without actually attaching them to the stat.
 
 ```gml
 // Suppose the player currently has a damage stat:
-var dmg_stat = stats.damage;
+var _dmg_stat = stats.damage;
 
 // Define how the candidate weapon would change it:
-var preview_ops = [
+var _preview_ops = [
     {
         value      : 4,
         operation  : eCatMathOps.ADD,
@@ -183,17 +187,17 @@ var preview_ops = [
 ];
 
 // Get the current and previewed values
-var current = dmg_stat.GetValue();
-var preview = dmg_stat.PreviewChanges(preview_ops);
+var _current = _dmg_stat.GetValue();
+var _preview = _dmg_stat.PreviewChanges(_preview_ops);
 
 // Draw something like: "Damage: 18 → 22"
-draw_text(x, y, "Damage: " + string(current) + " → " + string(preview));
+draw_text(x, y, "Damage: " + string(_current) + " → " + string(_preview));
 ```
 
 For a single hypothetical modifier, you can use `PreviewChange` instead:
 
 ```gml
-var preview = dmg_stat.PreviewChange(
+var _preview = _dmg_stat.PreviewChange(
     0.15,
     eCatMathOps.MULTIPLY,
     eCatStatLayer.AUGMENTS
@@ -205,4 +209,4 @@ Previews:
 - Don't mutate the stat.
 - Respect all layers, tags, families, and conditions.
 - Can optionally take a context for more advanced arguments
-  (covered on the **[Advanced Topics](./catalyst_advanced.md)** page).
+  (covered on the **Advanced Topics** page).

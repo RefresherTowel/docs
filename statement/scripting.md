@@ -25,11 +25,11 @@ It’s split into:
 Create a state machine bound to the given owner instance or struct.
 
 ```gml
-var sm = Statement(self);
+sm = new Statement(self);
 ```
 
-- `owner`: `Id.Instance` or `Struct`  
-- **Returns:** `Struct.StatementStatement`
+- `owner`: `ID.Instance` or `Struct`  
+- **Returns:** `Struct.Statement`
 
 
 #### `StatementState(owner, name)`
@@ -37,10 +37,10 @@ var sm = Statement(self);
 Create a new state bound to the given owner.
 
 ```gml
-var idle = StatementState(self, "Idle");
+idle = new StatementState(self, "Idle");
 ```
 
-- `owner`: `Id.Instance` or `Struct`  
+- `owner`: `ID.Instance` or `Struct`  
 - `name`: `String`  
 - **Returns:** `Struct.StatementState`
 
@@ -59,7 +59,7 @@ sm.AddState(idle);
 ```
 
 - `state`: `Struct.StatementState`  
-- **Returns:** `Struct.StatementStatement`
+- **Returns:** `Struct.Statement`
 
 The **first** state added becomes the active state and runs its `Enter` handler (if defined).
 
@@ -72,8 +72,8 @@ If a state with the same name already exists, it is replaced (with a warning).
 Get a state by name, or the current state if no name is provided.
 
 ```gml
-var current = sm.GetState();
-var idle    = sm.GetState("Idle");
+var _current = sm.GetState();
+var _idle    = sm.GetState("Idle");
 ```
 
 - `name` *(optional)*: `String`  
@@ -86,7 +86,7 @@ var idle    = sm.GetState("Idle");
 Get the name of the current state.
 
 ```gml
-var name = sm.GetStateName();
+var _name = sm.GetStateName();
 ```
 
 - **Returns:** `String` or `Undefined`.
@@ -111,6 +111,7 @@ Behaviour:
 - If target doesn’t exist: logs a warning and returns `undefined`.
 - If target is already active: does nothing and returns current state.
 - If current state has `can_exit == false` and `force == false`: refuses to change and returns current state.
+- A manual `ChangeState` clears any queued transition.
 - Otherwise:
   - Runs old state `Exit` (if present).
   - Updates history (`previous_state`, `previous_states`).
@@ -118,6 +119,8 @@ Behaviour:
   - Resets `state_age` to 0.
   - Runs optional state-change hook.
   - Runs new state `Enter` (if present).
+
+If an `Exit` handler changes state itself, the outer `ChangeState` respects that redirect and returns immediately.
 
 ---
 
@@ -177,7 +180,7 @@ state_machine.SetStateTime(0);
 ```
 
 - `time`: `Real`  
-- **Returns:** `Struct.StatementStatement`
+- **Returns:** `Struct.Statement`
 
 ---
 
@@ -213,7 +216,7 @@ idle.AddEnter(function() {
 });
 ```
 
-- `fn`: `Function` — automatically `method(owner, fn)` bound.  
+- `fn`: `Function` — automatically `method(owner, fn)` bound. In other words, the scope of the function runs from whoever has been supplied as the owner of the state (most often the instance running the state machine itself). This behaviour extends through to all the `fn` arguments in the other three `Add*()` methods below.
 - **Returns:** `Struct.StatementState`
 
 ---
@@ -238,7 +241,7 @@ Bind an `Exit` handler that runs once when the state stops being active.
 
 ```gml
 idle.AddExit(function() {
-    DebugInfo("Leaving Idle");
+    EchoDebugInfo("Leaving Idle");
 });
 ```
 
@@ -260,6 +263,40 @@ idle.AddDraw(function() {
 
 ---
 
+#### `AddStateEvent(event, fn)`
+
+Bind a handler to a specific `eStatementEvents` index.
+
+```gml
+// Equivalent to AddUpdate, but explicit about the event index
+idle.AddStateEvent(eStatementEvents.STEP, function() {
+    // custom update logic
+});
+```
+
+- `event`: `Real` – one of the `eStatementEvents` values (`ENTER`, `EXIT`, `STEP`, `DRAW`).
+- `fn`: `Function` — automatically `method(owner, fn)` bound.
+- **Returns:** `Struct.StatementState`
+
+Use the dedicated helpers (`AddEnter`/`AddUpdate`/`AddExit`/`AddDraw`) for readability; `AddStateEvent` is available if you prefer a single entry point.
+
+---
+
+#### `HasStateEvent(event)`
+
+Check whether this state has a handler for a given `eStatementEvents` index.
+
+```gml
+if (!idle.HasStateEvent(eStatementEvents.DRAW)) {
+    // maybe attach one, or skip drawing
+}
+```
+
+- `event`: `Real` – one of the `eStatementEvents` values (`ENTER`, `EXIT`, `STEP`, `DRAW`).
+- **Returns:** `Bool`
+
+---
+
 ## Advanced API
 
 The following features are optional. You can ignore them unless your project specifically benefits from them.
@@ -277,7 +314,7 @@ sm.SetQueueAutoProcessing(true);
 ```
 
 - `enabled`: `Bool`  
-- **Returns:** `Struct.StatementStatement`
+- **Returns:** `Struct.Statement`
 
 Default: `true`.
 
@@ -293,7 +330,7 @@ sm.QueueState("Attack");
 
 - `name`: `String`  
 - `force` *(optional)*: `Bool`  
-- **Returns:** `Struct.StatementStatement`
+- **Returns:** `Struct.Statement`
 
 ---
 
@@ -307,7 +344,7 @@ sm.ProcessQueuedState();
 
 - **Returns:** `Struct.StatementState` or `Undefined`
 
-Clears the queue before calling `ChangeState()`.
+If the current state cannot exit (and `force` was not set when queuing), the queued transition remains pending. Otherwise the queue entry is cleared before calling `ChangeState()`.
 
 ---
 
@@ -328,7 +365,7 @@ if (sm.HasQueuedState()) { /* … */ }
 Get the name of the queued state, if any.
 
 ```gml
-var next = sm.GetQueuedStateName();
+var _next = sm.GetQueuedStateName();
 ```
 
 - **Returns:** `String` or `Undefined`
@@ -343,7 +380,7 @@ Cancel any queued state without processing it.
 sm.ClearQueuedState();
 ```
 
-- **Returns:** `Struct.StatementStatement`
+- **Returns:** `Struct.Statement`
 
 ---
 
@@ -358,7 +395,7 @@ sm.SetHistoryLimit(32);
 ```
 
 - `limit`: `Real`  
-- **Returns:** `Struct.StatementStatement`
+- **Returns:** `Struct.Statement`
 
 `limit <= 0` means unlimited history.
 
@@ -367,7 +404,7 @@ sm.SetHistoryLimit(32);
 #### `GetHistoryCount()`
 
 ```gml
-var count = sm.GetHistoryCount();
+var _count = sm.GetHistoryCount();
 ```
 
 - **Returns:** `Real` – length of `previous_states`.
@@ -379,11 +416,13 @@ var count = sm.GetHistoryCount();
 Get a previous state by history index.
 
 ```gml
-var st = sm.GetHistoryAt(0);
+var _st = sm.GetHistoryAt(0);
 ```
 
 - `index`: `Real`  
-- **Returns:** `Struct.StatementState` or `-1` if invalid.
+- **Returns:** `Struct.StatementState` or `Undefined` if invalid.
+
+Use `is_undefined(st)` to check whether the index was valid before using the result.
 
 ---
 
@@ -404,7 +443,7 @@ sm.PreviousState();
 Name of the most recent previous state.
 
 ```gml
-var prev = sm.GetPreviousStateName();
+var _prev = sm.GetPreviousStateName();
 ```
 
 - **Returns:** `String` or `Undefined`.
@@ -419,7 +458,7 @@ Print all state names registered on this machine (via debug system).
 sm.PrintStateNames();
 ```
 
-- **Returns:** `Struct.StatementStatement`
+- **Returns:** `Struct.Statement`
 
 ---
 
@@ -436,6 +475,8 @@ sm.PushState("Pause");
 - `name`: `String`  
 - `force` *(optional)*: `Bool`  
 - **Returns:** `Struct.StatementState` or `Undefined`.
+
+If the transition is blocked (for example `can_exit == false` and not forced), the current state is **not** pushed.
 
 ---
 
@@ -462,14 +503,14 @@ Register a callback to be run whenever the machine changes state.
 
 ```gml
 sm.SetStateChangeBehaviour(method(self, function() {
-    DebugInfo("Now in state: " + string(state_machine.GetStateName()));
+    EchoDebugInfo("Now in state: " + string(state_machine.GetStateName()));
 }));
 ```
 
 - `fn`: `Function`  
-- **Returns:** `Struct.StatementStatement`
+- **Returns:** `Struct.Statement`
 
-Called after the old state’s `Exit`, after `state` is updated, and before new state `Enter`.
+Called after the old state’s `Exit`, after `state` is updated, and before new state `Enter`. When the provided function is called, it will be given the previous state as an argument.
 
 ---
 
@@ -483,18 +524,38 @@ Run a specific `eStatementEvents` index on the current state.
 sm.RunState(eStatementEvents.ENTER);
 ```
 
-- `event`: `Real`  
+`eStatementEvents` is an enum defined inside Statement (in `scr_statement_macro`) that maps the built-in handler types:
+
+- `eStatementEvents.ENTER`
+- `eStatementEvents.STEP`
+- `eStatementEvents.EXIT`
+- `eStatementEvents.NUM` – a sentinel used internally as a “one past the end” value when looping over event types. It is **not** a real event and should not be passed to `RunState`.
+
+- `event`: `Real` (usually one of the `eStatementEvents` values)  
 - **Returns:** Any or `Undefined` if:
-  - No active state, or
-  - Event not implemented.
+  - There is no active state, or
+  - The chosen event is not implemented on the current state.
 
 Normally you don’t need this; use `Update()` / `Draw()` instead.
 
----
+If you’re confident editing Statement itself, you can extend `eStatementEvents` with your own custom event types. The enum is defined in `scr_statement_macro`. **Always insert new entries *before* `NUM`**; `NUM` is used as an “end of enum” marker when initialising internal arrays (such as the `state_event` array), so adding entries after `NUM` will break that initialisation.
+{: .note}
 
+---
 ### Per-State Timers (Advanced)
 
-These live on `StatementState` and are considered **advanced**. If you only need “time in state”, prefer `GetStateTime()` on the machine.
+Per-state timers live on individual `StatementState` instances and are considered **advanced**. In almost all cases (99% of use cases) you can ignore them and just use the machine-level state time via `GetStateTime()` / `SetStateTime()`.
+
+Per-state timers are backed by GameMaker **time sources** and tick independently of `Update()`:
+- Once a state becomes active and its timer is started, that timer advances every frame until you change out of that state or explicitly stop/pause/reset the timer.
+- Because they use time sources internally, they can continue advancing even if the instance is deactivated or you temporarily stop calling `Update()`.
+
+By contrast, `GetStateTime()` / `SetStateTime()` live on the **Statement** itself:
+- Represent “how long the current state has been active (in frames)”.
+- Reset automatically on state change.
+- Only increment when you call `Update()` on the machine.
+
+If you're unsure which to use, start with `GetStateTime()` and ignore per-state timers; they exist mainly for specialised cases where you need a timer tightly bound to a specific state’s lifetime.
 
 #### `TimerStart()`
 
@@ -526,7 +587,7 @@ state.TimerSet(30);
 Get the current per-state timer value.
 
 ```gml
-var t = state.TimerGet();
+var _t = state.TimerGet();
 ```
 
 - **Returns:** `Real`
@@ -571,31 +632,6 @@ state.TimerKill();
 
 ### Machine-Level Access to Per-State Timer
 
-#### `AdvGetStateTimer()`
-
-Get the current state’s per-state timer value (advanced feature).
-
-```gml
-var t = sm.AdvGetStateTimer();
-```
-
-- **Returns:** `Real` or `Undefined` if there is no active state.
-
----
-
-#### `AdvSetStateTimer(time)`
-
-Set the current state’s per-state timer value (advanced feature).
-
-```gml
-sm.AdvSetStateTimer(0);
-```
-
-- `time`: `Real`  
-- **Returns:** `Struct.StatementStatement`
-
----
-
 ### Cleanup & Global Helpers
 
 #### `RemoveState(name)`
@@ -607,7 +643,7 @@ sm.RemoveState("Debug");
 ```
 
 - `name`: `String`  
-- **Returns:** `Struct.StatementStatement`
+- **Returns:** `Struct.Statement`
 
 ---
 
@@ -625,7 +661,7 @@ Call this if you are discarding a machine and want to ensure no associated timer
 
 #### `StatementStateKillTimers()`
 
-Global helper: destroy all state timers registered in `global.__state_timers` and clear the array.
+Global helper: destroy all state timers registered in `global.__statement_timers` and clear the array.
 
 ```gml
 StatementStateKillTimers();
