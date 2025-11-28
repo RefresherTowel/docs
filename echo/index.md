@@ -1,3 +1,10 @@
+---
+layout: default
+title: Echo
+nav_order: 4
+has_children: true
+---
+
 # Echo - Debug Logger for GameMaker
 
 Echo is a lightweight, drop-in debug logging helper for GameMaker that centralises your debug output, adds optional stack traces, and keeps a rolling in-memory history you can dump to disk when you need it.
