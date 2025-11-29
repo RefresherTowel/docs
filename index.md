@@ -10,7 +10,7 @@ Welcome to the hub for all documentation related to the various GM-focused frame
 
 ## **[Statement](/docs/statement/)**
 
-Hve you ever found yourself writing tons of if statements trying to wrangle your player character so that their running, climbing, attack and jumping actions all function correctly?
+Have you ever found yourself writing tons of if statements trying to wrangle your player character so that their running, climbing, attack and jumping actions all function correctly?
 
 Ever had animations bleed from one action to the next by accident?
 
