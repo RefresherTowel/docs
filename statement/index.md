@@ -116,8 +116,8 @@ You can safely ignore these until you actually need them.
   - The Statement  script library.
   - The **Echo** debug helper library (shipped free with Statement). It provides the debug functions used in the examples: `EchoDebugInfo`, `EchoDebugWarn`, and `EchoDebugSevere`.
 
-> Statement's examples and internal debug calls use these Echo helpers. If you remove Echo from your project or choose not to import it, you can either write `show_debug_message()`
-> wrappers with the same names, or update the debug calls in Statement to use your own debug system instead.
+> Statement's examples and internal debug calls use these Echo helpers. If you remove Echo from your project or choose not to import it, you can either write some simple `show_debug_message()`
+> wrapper functions with the same names, or update the debug calls in Statement to use your own debug system instead.
 {: .note}
 
 No additional extensions or assets are required.
@@ -156,8 +156,16 @@ state_machine.Draw();
 
 That's all you need to get a basic state machine up and running.
 
-> If you find `new Statement(self)` and `new StatementState(self, "Idle")` a bit verbose, it's perfectly fine to define your own project-specific helper function (for example `StateM()`) that
-> wraps the constructor call. Statement itself does **not** ship any  helpers like this to avoid name clashes with other libraries.
+> If you find `new Statement(self)` and `new StatementState(self, "Idle")` a bit verbose, it's perfectly fine to define your own project-specific helper function that wraps the constructor call, for example:
+> ```gml
+> function SM() {
+>   return new Statement(self);
+> }
+> function State(_state_name) {
+>   return new StatementState(self, _state_name)
+> }
+> ```
+> Statement itself does **not** ship any  helpers like this to avoid name clashes with other libraries.
 {: .note}
 
 Always construct `Statement` and `StatementState` using the `new` keyword (for example `state_machine = new Statement(self);`). Calling these constructors without `new` will silently fail and your state machine will not work.
@@ -198,7 +206,7 @@ Common patterns:
 
 - Per-state timers (`TimerStart()`, `TimerGet()`, etc.) live on each individual **State** struct:
   - Optional, more flexible timers backed by `time_source`.
-  - Once started, a state's timer advances every frame via the time-source system until you change out of that state or explicitly stop/pause/reset the timer, even if `Update()` is not being called for a while.
+  - Once started, a state's timer advances every frame via a time source until you change out of that state or explicitly stop/pause/reset the timer, even if `Update()` is not being called for a while.
   - Good for specialised behaviour that needs pausing, restarting, or independent ticking across different update rates (for example, these timers continue ticking even if the instance is disabled).
 
 In 99% of cases you'll just use `GetStateTime()` on the machine and ignore per-state timers entirely.

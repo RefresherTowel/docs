@@ -490,7 +490,7 @@ Behind the scenes, each Statement state uses an array indexed with enums to deci
 > - `eStatementEvents.STEP`
 > - `eStatementEvents.EXIT`
 > - `eStatementEvents.NUM` - a sentinel used internally as a "one past the end" value when looping over event types. It is **not** a real event and should not be passed to `RunState`.
-{: .info}
+{: .note}
 
 #### `AddStateEvent(event, fn)`
 
