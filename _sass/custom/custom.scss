@@ -13,3 +13,22 @@
 .main-content figure.highlight {
   background: #271f25;
 }
+
+/* Code block container (Rouge / Jekyll wrappers) */
+.main-content div.highlighter-rouge,
+.main-content figure.highlight,
+.main-content pre {
+  padding: 0.9rem 1rem;     /* inside spacing */
+  //margin: 1rem 0;           /* space above/below */
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  overflow: auto;           /* horizontal scroll if needed */
+}
+
+/* Ensure the inner <pre> doesn't add its own padding/margins on top */
+.main-content div.highlighter-rouge pre,
+.main-content figure.highlight pre,
+.main-content pre {
+  margin: 0;
+}
+
