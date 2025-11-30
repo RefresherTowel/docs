@@ -482,15 +482,23 @@ Called after the old state’s `Exit`, after `state` is updated, and before new 
 
 ### Low-Level Event Running
 
-Behind the scenes, each Statement state uses an array indexed with enums to decide what handler to run. For instance, `Update()`, runs the handler stored in the array position indexed by `eStatementEvents.STEP`. In most circumstances, you don't need to worry about this stuff, simply use `Update()` / `Draw()` and it will be handled automatically. However, if you're confident editing Statement itself, you can extend `eStatementEvents` with your own custom event types. The enum is defined in `scr_statement_macro`. **Always insert new entries *before* `NUM`**; `NUM` is used as an "end of enum" marker when initialising internal arrays (such as the `state_event` array), so adding entries after `NUM` will break that initialisation. After editing the enum, you can then use the following methods to add or run custom state handlers, or check whether they exist.
+Behind the scenes, each Statement state uses an array indexed with enums to decide what handler to run. For instance, `Update()`, runs the handler stored in the array position indexed by `eStatementEvents.STEP`. In most circumstances, you don't need to worry about this stuff, simply use `Update()` / `Draw()` and it will be handled automatically.
 
-> `eStatementEvents` is an enum defined inside Statement (in `scr_statement_macro`) that maps the built-in handler types:
+However, if you're confident editing Statement itself, you can extend `eStatementEvents` with your own custom event types. The enum is defined in `scr_statement_macro`.
+
+> **Always insert new entries *before* `NUM`**; `NUM` is used as an "end of enum" marker when initialising internal arrays (such as the `state_event` array), so adding entries after `NUM` will break that initialisation. After editing the enum, you can then use
+> the following methods to add or run custom state handlers, or check whether they exist.
+{: .warning}
+
+> `eStatementEvents` is an enum defined inside the Statement framework (in `scr_statement_macro`) that maps the built-in handler types:
 > 
 > - `eStatementEvents.ENTER`
 > - `eStatementEvents.STEP`
 > - `eStatementEvents.EXIT`
 > - `eStatementEvents.NUM` - a sentinel used internally as a "one past the end" value when looping over event types. It is **not** a real event and should not be passed to `RunState`.
 {: .note}
+
+---
 
 #### `AddStateEvent(event, fn)`
 
