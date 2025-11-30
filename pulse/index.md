@@ -9,9 +9,11 @@ has_children: true
 
 **Pulse** is a lightweight, reusable **signal and event system** for GameMaker.  
 
-Designed to be copy-pasted into any project, play nicely with Feather, and stay out of your way when you only need something simple.
+Designed to be dropped directly into any project and used immediately, with only a few lines of code.
 
-Pulse is part of the **RefresherTowel Games** suite of reusable frameworks for GameMaker.
+Pulse is part of the **RefresherTowel Games** suite of reusable frameworks for GameMaker. All of my
+frameworks come with extensive documentation and complete integration with Feather to make using them as 
+easy as possible.
 
 Pulse gives you:
 
@@ -57,10 +59,10 @@ These are the features most users will interact with day-to-day:
   Listeners can choose to only react to events from a specific sender id, or use `noone` to accept events from anyone.
 
 - **One-shot listeners**  
-  Use `PulseSubscribeOnce` when you want a listener that automatically unsubscribes itself after the first matching event.
+  Use `PulseSubscribeOnce` when you want a listener that automatically unsubscribes itself after the first matching event. Perfect for hooking one time tutorial popups into your project.
 
 - **Feather-friendly**  
-  Functions are annotated with JSDoc-style comments for better autocompletion and linting in GameMaker’s code editor.
+  Functions are fully annotated with JSDoc-style comments for better autocompletion and linting in GameMaker's code editor.
 
 If you are a beginner or just need straightforward messaging, you can safely stop at these features.
 

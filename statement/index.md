@@ -11,7 +11,7 @@ has_children: true        # marks this as a section (still supported)
 
 Designed to be dropped directly into any project and used immediately, with only a few lines of code.
 
-Statement is part of the **RefresherTowel Games** suite of reusable frameworks for GameMaker. All of these
+Statement is part of the **RefresherTowel Games** suite of reusable frameworks for GameMaker. All of my
 frameworks come with extensive documentation and complete integration with Feather to make using them as 
 easy as possible.
 
@@ -64,7 +64,7 @@ These are the features most users will use day-to-day:
   - `Statement.GetStateName()`
 
 - **Feather-friendly**  
-  Types are annotated for better autocompletion and linting in the GameMaker code editor.
+  Functions are fully annotated with JSDoc-style comments for better autocompletion and linting in GameMaker's code editor.
 
 If you're a beginner or just need something straightforward, you can safely stop at these features.
 
