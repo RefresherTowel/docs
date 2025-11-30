@@ -9,30 +9,32 @@ has_children: true        # marks this as a section (still supported)
 
 **Statement** is a lightweight, reusable **state machine system** for GameMaker.  
 
-Designed to be copy-pasted into any project, play nicely with Feather, and stay out of your way when you only need something simple.
+Designed to be dropped directly into any project and used immediately, with only a few lines of code.
 
-Statement is part of the **RefresherTowel Games** suite of reusable frameworks for GameMaker.
+Statement is part of the **RefresherTowel Games** suite of reusable frameworks for GameMaker. All of these
+frameworks come with extensive documentation and complete integration with Feather to make using them as 
+easy as possible.
 
 Statement gives you:
 
-- A `Statement` bound to an instance or struct.
-- Named `StatementState` structs with **Enter / Update / Exit / Draw** handlers.
-- Built-in **state** timing (i.e. how long a state has been active for).
-- Optional **queued transitions**, **state stacks**, **history**, and **per-state timers** for more advanced use cases.
+- A `Statement` state machine bound to an instance or struct.
+- Named `StatementState` states with inbuilt **Enter / Update / Exit / Draw** handlers (plus easy extension of adding new handlers).
+- Built-in **state machine** timing (i.e. how long a state has been active for).
+- Optional **queued transitions**, **state stacks**, **history**, **per-state timers**, and more for advanced use cases.
 
 ---
 
 ## Introduction
 
-Statement replaces scattered `if (state == ...)` checks with a clear structure:
+Statement replaces scattered `if (state == ...)` checks or giant switch statements with a clear structure:
 
-- Each object (or struct) owns a `Statement`.
-- Each machine manages one active `StatementState` at a time.
+- Each object (or struct) owns a `Statement` state machine.
+- Each state machine manages one active `StatementState` at a time.
 - States can define:
   - `Enter` (runs once when entered)
-  - `Update` (runs each Step)
+  - `Update` (runs each when called, usually each Step)
   - `Exit` (runs once when leaving)
-  - `Draw` (optional, runs each Draw if you use it)
+  - `Draw` (optional, simply run it in a Draw Event to add an easy to manage drawing handler for a state)
 
 You can keep things **very simple** (just one state and `Update`) or layer on more advanced features as your project grows.
 
@@ -43,7 +45,7 @@ You can keep things **very simple** (just one state and `Update`) or layer on mo
 These are the features most users will use day-to-day:
 
 - **Owner-bound states**  
-  States are bound to an instance or struct; handlers are automatically `method(owner, fn)` wrapped so `self` behaves as expected.
+  State code is automatically scoped to the owner instance or struct. No need to worry about figuring out how to access your instance from within the state.
 
 - **Clear lifecycle**  
   Per-state handlers:
@@ -53,8 +55,8 @@ These are the features most users will use day-to-day:
   - `Draw` - optional per-state drawing.
 
 - **Simple state timing**  
-  Each machine tracks **how long the current state has been active** (in frames):
-  - `GetStateTime()` / `SetStateTime()` on the `Statement`.
+  Each state machine tracks **how long the current state has been active** (in frames):
+  - `GetStateTime()` / `SetStateTime()` on the `Statement` state machine.
 
 - **Named states & transitions**  
   - `Statement.AddState(state)`
@@ -87,14 +89,18 @@ These features are entirely optional. You only need them if your project calls f
   - Helpers like `GetHistoryCount()` / `GetHistoryAt()` / `GetPreviousStateName()`.
 
 - **Per-state timers**
-  - Optional timers on each `StatementState` backed by `time_source`.
-  - `TimerStart()`, `TimerGet()`, `TimerPause()`, `TimerRestart()`, `TimerKill()`.
-  - Global `StatementStateKillTimers()` to clean up all state timers at once.
+  - Optional advanced timers on each `StatementState` handled via time sources.
+  - Helpers like `TimerStart()`, `TimerGet()`, `TimerPause()`, `TimerRestart()`, `TimerKill()`.
+  - Global `StatementStateKillTimers()` to clean up all state timers at once (on a change of room, for instance).
 
 - **State-change hook**
   - `SetStateChangeBehaviour(fn)` to run custom logic whenever the state changes (for logging, analytics, signals, etc).
 
-You can completely ignore these until you actually need them.
+- **Custom state handlers**
+  - Add extra handlers beyond the `Begin`, `Update`, `End` and `Draw` easily (for instance, add an `Animation End` handler
+    for the state, that runs in the Animation End Event).
+
+You can safely ignore these until you actually need them.
 
 ---
 
@@ -107,10 +113,11 @@ You can completely ignore these until you actually need them.
   - `time_source` APIs
 
 - **Scripts you need:**
-  - The state system script (containing `Statement`, `StatementState`, `StatementStateKillTimers`, etc.).
+  - The Statement  script library.
   - The **Echo** debug helper library (shipped free with Statement). It provides the debug functions used in the examples: `EchoDebugInfo`, `EchoDebugWarn`, and `EchoDebugSevere`.
 
-Statement’s examples and internal debug calls use these Echo helpers. If you remove Echo from your project or choose not to import it, you’ll either need to provide your own functions with the same names, or update the debug calls in Statement to use your own debug system instead.
+> Statement's examples and internal debug calls use these Echo helpers. If you remove Echo from your project or choose not to import it, you can either write `show_debug_message()`
+> wrappers with the same names, or update the debug calls in Statement to use your own debug system instead.
 {: .note}
 
 No additional extensions or assets are required.
@@ -121,8 +128,8 @@ No additional extensions or assets are required.
 
 A minimal example: single machine, single state.
 
+**Create Event**
 ```gml
-/// Create Event
 state_machine = new Statement(self);
 
 var idle = new StatementState(self, "Idle")
@@ -135,17 +142,22 @@ var idle = new StatementState(self, "Idle")
     });
 
 state_machine.AddState(idle);
+```
 
-/// Step Event
+**Step Event**
+```gml
 state_machine.Update();
+```
 
-/// Draw Event (optional)
+**Draw Event (optional)**
+```gml
 state_machine.Draw();
 ```
 
 That's all you need to get a basic state machine up and running.
 
-If you find `new Statement(self)` and `new StatementState(self, "Idle")` a bit verbose, it’s perfectly fine to define your own project-specific helper function (for example `StateM()`) that wraps the constructor call. Statement itself does **not** ship any helpers like this to avoid name clashes with other libraries.
+> If you find `new Statement(self)` and `new StatementState(self, "Idle")` a bit verbose, it's perfectly fine to define your own project-specific helper function (for example `StateM()`) that
+> wraps the constructor call. Statement itself does **not** ship any  helpers like this to avoid name clashes with other libraries.
 {: .note}
 
 Always construct `Statement` and `StatementState` using the `new` keyword (for example `state_machine = new Statement(self);`). Calling these constructors without `new` will silently fail and your state machine will not work.
@@ -179,17 +191,17 @@ Common patterns:
 
 ### What's the difference between `GetStateTime()` and per-state timers?
 
-- `GetStateTime()` / `SetStateTime()` live on the **Statement**:
+- `GetStateTime()` / `SetStateTime()` live on the **Statement** state machine itself:
   - Represent "how long the current state has been active (in frames)".
   - Automatically reset on state change.
   - Incremented in `Update()` while a state is active.
 
-- Per-state timers (`TimerStart()`, `TimerGet()`, etc.) live on the **State**:
+- Per-state timers (`TimerStart()`, `TimerGet()`, etc.) live on each individual **State** struct:
   - Optional, more flexible timers backed by `time_source`.
-  - Once started, a state’s timer advances every frame via the time-source system until you change out of that state or explicitly stop/pause/reset the timer, even if `Update()` is not being called for a while.
-  - Good for specialised behaviour that needs pausing, restarting, or independent ticking across different update rates.
+  - Once started, a state's timer advances every frame via the time-source system until you change out of that state or explicitly stop/pause/reset the timer, even if `Update()` is not being called for a while.
+  - Good for specialised behaviour that needs pausing, restarting, or independent ticking across different update rates (for example, these timers continue ticking even if the instance is disabled).
 
-In 99% of cases you’ll just use `GetStateTime()` on the machine and ignore per-state timers entirely.
+In 99% of cases you'll just use `GetStateTime()` on the machine and ignore per-state timers entirely.
 
 ---
 
@@ -206,6 +218,7 @@ Use **immediate `ChangeState()`** when:
 
 - You're doing a hard switch (spawning, respawning, teleporting).
 - You know you're at a safe point in your logic.
+- In general, it's safe to simply use `ChangeState()`, but queueing will occasionally be necessary in some circumstances.
 
 ---
 
@@ -214,11 +227,11 @@ Use **immediate `ChangeState()`** when:
 Use `PushState` / `PopState` for:
 
 - Temporary overlays (pause, menu, inventory, cutscenes).
-- Situations where you want to "return to whatever state we were in before".
+- Situations where you want to "change to a new state and then return to whatever state we were in before".
 
 Use `ChangeState` when:
 
-- You're switching between normal, "flat" states (Idle → Move → Attack).
+- You're switching between normal, "flat" states (Idle -> Move -> Attack).
 
 ---
 
