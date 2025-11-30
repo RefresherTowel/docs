@@ -23,6 +23,7 @@ Pulse gives you:
 - Built-in support for **one-shot listeners**, **sender filters**, **tags**, **priorities**, and **cancellation**.
 - Both **immediate** and **queued** dispatch modes.
 - Handy **introspection utilities** for debugging and profiling.
+- Weak-ref subscribers keep the system lean: stale listeners are pruned automatically as you dispatch.
 
 ---
 
@@ -55,6 +56,7 @@ These are the features most users will interact with day-to-day:
 - **Simple cleanup helpers**  
   - `PulseUnsubscribe(id, signal, [from], [tag])`  
   - `PulseRemove(id)` for bulk removal (for example, in Destroy events).  
+  - Weak references mean Pulse will try to prune dead listeners automatically, but explicit cleanup is still recommended in state/room transitions.
 
 - **Sender filtering (`from`)**  
   Listeners can choose to only react to events from a specific sender id, or use `noone` to accept events from anyone.
@@ -77,6 +79,9 @@ These features are optional. You only need them if your project calls for more c
   - `PulseListener(id, signal, callback)` creates a listener config struct.  
   - Chain `.From()`, `.Once()`, `.Tag()`, `.Priority()` to customise it.  
   - Call `.Subscribe()` or `PulseSubscribeConfig(listener)` to register it.
+
+- **Subscription groups**  
+  - `PulseGroup()` collects multiple subscription handles and lets you `UnsubscribeAll()`/`Destroy()` them together.
 
 - **Tags**  
   Tag listeners (for example `TAG_RUNE_PROC`, `TAG_UI`, `TAG_DEBUG`) so you can selectively unsubscribe or organise your subscriptions.

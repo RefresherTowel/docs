@@ -44,7 +44,7 @@ You will see these returned from functions like `PulseSubscribe`, `PulseUnsubscr
 
 #### `PulseSubscribe(id, signal, callback, [from])`
 
-Register a **persistent** listener for a signal.
+Register a **persistent** listener for a signal. The `id` can be an instance id or a struct; structs are wrapped in weak references so they can be garbage-collected automatically if destroyed.
 
 ```gml
 PulseSubscribe(id, SIG_DAMAGE_TAKEN, function(_data) {
@@ -52,19 +52,23 @@ PulseSubscribe(id, SIG_DAMAGE_TAKEN, function(_data) {
 });
 ```
 
-- `id`: `Id.Instance` – the instance that will receive the callback.  
+- `id`: `Id.Instance or Struct` – receiver; structs are weak-ref wrapped for GC.  
 - `signal`: `Any` – the signal identifier (usually a macro or enum).  
 - `callback`: `Function` – the function to invoke when the signal is dispatched.  
-- `from` *(optional)*: `Id.Instance` – sender filter; `noone` (default) means “accept from any sender”.  
-- **Returns:** `ePulseResult` – typically `LST_ADDED` or `LST_ALREADY_EXISTS`.
+- `from` *(optional)*: `Id.Instance or Struct` – sender filter; `noone` (default) means “accept from any sender”.  
+- **Returns:** `Struct` – a subscription handle with:
+  - fields: `controller`, `id`, `signal`, `from`, `once`, `tag`, `priority`, `active`, `result`
+  - method: `Unsubscribe()`
 
 **Callback context:** callbacks are invoked inside a `with (id)` block, so `self` behaves as that listener instance. The payload is passed as the first argument.
+
+**Auto-cleanup:** weak references mean Pulse will prune listeners whose targets are collected/destroyed. It is still good practice to unsubscribe when you’re done, but Pulse will attempt to keep things tidy.
 
 ---
 
 #### `PulseSubscribeOnce(id, signal, callback, [from])`
 
-Register a **one-shot** listener that automatically unsubscribes itself after the first matching event.
+Register a **one-shot** listener that automatically unsubscribes itself after the first matching event. `id` can be an instance id or struct (weak-ref wrapped).
 
 ```gml
 PulseSubscribeOnce(id, SIG_LEVEL_UP, function(_data) {
@@ -74,7 +78,7 @@ PulseSubscribeOnce(id, SIG_LEVEL_UP, function(_data) {
 ```
 
 - Parameters are the same as `PulseSubscribe`.  
-- **Returns:** `ePulseResult` – typically `LST_ADDED` or `LST_ALREADY_EXISTS`.
+- **Returns:** `Struct` – subscription handle (same shape as `PulseSubscribe`).
 
 The listener is removed after the first time it receives a signal that matches both the `signal` and `from` filter.
 
@@ -95,9 +99,9 @@ PulseUnsubscribe(id, SIG_DAMAGE_TAKEN, boss_id);
 PulseUnsubscribe(id, SIG_DAMAGE_TAKEN, undefined, TAG_BOSS_INTRO);
 ```
 
-- `id`: `Id.Instance` – instance id to remove.  
+- `id`: `Id.Instance or Struct` – listener id/struct to remove.  
 - `signal`: `Any` – signal identifier.  
-- `from` *(optional)*: `Id.Instance` – if provided, only listeners bound to this sender are removed.  
+- `from` *(optional)*: `Id.Instance or Struct` – if provided, only listeners bound to this sender are removed.  
 - `tag` *(optional)*: `Any` – if provided, only listeners with this tag are removed.  
 - **Returns:** `ePulseResult` – for example:
   - `LST_REMOVED_FROM_SIGNAL` – one or more listeners removed.
@@ -117,12 +121,12 @@ Completely remove an instance id from all signals it is currently listening to.
 PulseRemove(id);
 ```
 
-- `id`: `Id.Instance` – instance id to remove.  
+- `id`: `Id.Instance or Struct` – listener id/struct to remove.  
 - **Returns:** `ePulseResult` – either:
   - `LST_REMOVED_COMPLETELY` – at least one listener was removed, or  
   - `LST_DOES_NOT_EXIST` – this id was not subscribed to any signal.
 
-Recommended for use in Destroy events of parent objects to avoid dangling listeners.
+Recommended for use in Destroy events of parent objects to avoid dangling listeners. Pulse will prune dead weak references automatically, but explicit cleanup keeps things predictable.
 
 ---
 
@@ -139,7 +143,7 @@ PulseSend(SIG_DAMAGE_TAKEN, _payload, id);
 
 - `signal`: `Any` – signal identifier.  
 - `data` *(optional)*: `Any` – payload passed to listeners.  
-- `from` *(optional)*: `Id.Instance` – sender id used for `from` filtering; default `noone`.  
+- `from` *(optional)*: `Id.Instance or Struct` – sender id/struct used for `from` filtering; default `noone`.  
 - **Returns:** `ePulseResult` – for example:
   - `SGL_SENT` – at least one listener ran.  
   - `SGL_NOT_SENT_NO_SGL` – no such signal exists.  
@@ -231,7 +235,7 @@ var _l = PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
     .Priority(5);
 ```
 
-- `id`: `Id.Instance` – listener instance.  
+- `id`: `Id.Instance or Struct` – listener target; structs are weak-ref wrapped.  
 - `signal`: `Any` – signal identifier.  
 - `callback`: `Function` – function to invoke when the signal is dispatched.  
 - **Returns:** `Struct` – a listener configuration object with fields:
@@ -256,7 +260,7 @@ Set a `from` filter on the listener configuration.
 listener.From(boss_id);
 ```
 
-- `from_id`: `Id.Instance`.  
+- `from_id`: `Id.Instance or Struct`.  
 - **Returns:** `Struct` – the same listener config (for chaining).
 
 ---
@@ -312,7 +316,7 @@ PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
     .Subscribe();
 ```
 
-- **Returns:** `ePulseResult` – result of the underlying subscription.
+- **Returns:** `Struct` – subscription handle (same as `PulseSubscribe`) with `Unsubscribe()`, metadata, and `result` telling you the ePulseResult outcome.
 
 Internally calls `PulseSubscribeConfig(listener)`.
 
@@ -331,7 +335,7 @@ PulseSubscribeConfig(_cfg);
 ```
 
 - `listener`: `Struct` – configuration from `PulseListener`.  
-- **Returns:** `ePulseResult` – result of the underlying subscription.
+- **Returns:** `Struct` – subscription handle (same as `PulseSubscribe`) with `Unsubscribe()`, metadata, and `result`.
 
 This is the more explicit form of `listener.Subscribe()` and can be useful when you want to keep a config around for later use.
 
@@ -360,7 +364,7 @@ Return the total number of active subscriptions held by an instance id across al
 var _my_subscriptions = PulseCountFor(id);
 ```
 
-- `id`: `Id.Instance`.  
+- `id`: `Id.Instance or Struct`.  
 - **Returns:** `Real` – number of subscriptions for that id.
 
 ---
@@ -392,6 +396,31 @@ PulseDumpSignal(SIG_DAMAGE_TAKEN);
 
 ---
 
+### Subscription Groups
+
+#### `PulseGroup()`
+
+Create a group for tracking multiple subscription handles so you can clean them up together. Handles are the structs returned by `PulseSubscribe`, `PulseSubscribeOnce`, `listener.Subscribe()`, or `PulseSubscribeConfig()`.
+
+```gml
+group = PulseGroup();
+
+group.Add([
+    PulseSubscribe(id, SIG_A, OnA),
+    PulseSubscribeOnce(id, SIG_B, OnB)
+]);
+```
+
+- **Returns:** `Struct` – group object with methods:
+  - `Add(handle_or_array)` / `Track(handle_or_array)` – add one handle or an array of handles.
+  - `UnsubscribeAll()` – call `Unsubscribe()` on every tracked handle (safe even if already inactive).
+  - `Clear()` – forget tracked handles without unsubscribing them.
+  - `Destroy()` – `UnsubscribeAll()` then `Clear()`.
+
+Groups are handy for bundling subscriptions per state/room. Pulse prunes dead weakrefs automatically, but groups make intentional cleanup straightforward.
+
+---
+
 ### Internal Types (Advanced / Optional)
 
 #### `PULSE` macro and `PulseController`
@@ -420,3 +449,5 @@ var _local_signals = new PulseController();
 ```
 
 However, this is considered an advanced pattern and is not required for standard usage of Pulse.
+
+Pulse uses weak references for struct/instance subscribers and prunes dead listeners whenever it dispatches or cleans up a signal. Manual cleanup (for example, `PulseRemove` in Destroy events) remains a good habit, but Pulse will try to keep the bus tidy even if you forget occasionally.

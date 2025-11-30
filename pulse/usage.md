@@ -233,7 +233,36 @@ Use `Priority` on listeners to control which callbacks get first chance to consu
 
 ---
 
-### 7. Cleanup and unsubscribe patterns
+### 7. Grouping subscriptions for cleanup
+
+`PulseGroup()` lets you collect multiple subscription handles (the structs returned by `PulseSubscribe`, `PulseSubscribeOnce`, or `listener.Subscribe()`) and dispose of them together.
+
+```gml
+/// obj_player Create
+sub_group = PulseGroup()
+    .Add(PulseSubscribe(id, SIG_INPUT_MOVE, OnMove, my_input_router))
+    .Add(PulseSubscribeOnce(id, SIG_FIRST_HIT, OnFirstHit));
+```
+
+When the state ends or the object is destroyed:
+
+```gml
+/// obj_player Destroy
+if (!is_undefined(sub_group)) {
+    sub_group.UnsubscribeAll();
+}
+```
+
+- `Add` (or `Track`) accepts a single handle or an array.
+- `UnsubscribeAll` calls `Unsubscribe()` on each tracked handle (safe if already inactive).
+- `Clear` forgets the handles without unsubscribing.
+- `Destroy` unsubscribes everything then clears.
+
+Pulse will still prune dead weakrefs automatically, but groups keep explicit cleanup straightforward when swapping states or rooms.
+
+---
+
+### 8. Cleanup and unsubscribe patterns
 
 Make sure listeners don’t linger longer than intended:
 
@@ -254,7 +283,7 @@ PulseUnsubscribe(id, SIG_UI_EVENT, undefined, TAG_MENU_OPEN);
 
 ---
 
-### 8. Priorities for ordering
+### 9. Priorities for ordering
 
 By default, listeners share a priority of `0`. Higher numbers are run earlier.
 
@@ -287,7 +316,7 @@ If the high-priority handler consumes the event (returns true or sets `consumed`
 
 ---
 
-### 9. Introspection and debugging
+### 10. Introspection and debugging
 
 Use the introspection helpers when you want to inspect or debug your wiring at runtime.
 
