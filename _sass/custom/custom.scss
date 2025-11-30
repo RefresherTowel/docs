@@ -7,3 +7,9 @@
 .main-content h6 code {
   font-size: 150%;
 }
+
+.main-content pre,
+.main-content div.highlighter-rouge,
+.main-content figure.highlight {
+  background: #271f25;
+}

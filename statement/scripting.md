@@ -504,7 +504,7 @@ However, if you're confident editing Statement itself, you can extend `eStatemen
 
 **StatementState method**. Bind a handler to a specific `eStatementEvents` index. This is your "custom" handler entry point.
 
-**Create Event***
+**Create Event**
 ```gml
 // Assuming you have added ANIMATION_END to the enum list (before NUM)
 idle.AddStateEvent(eStatementEvents.ANIMATION_END, function() {
