@@ -9,10 +9,10 @@ nav_order: 1
 
 This page documents the public API of the state machine system.
 
-It’s split into:
+It's split into:
 
-- **Core API** – recommended reading for everyone.
-- **Advanced API** – optional tools for more complex behaviours.
+- **Core API** - recommended reading for everyone.
+- **Advanced API** - optional tools for more complex behaviours.
 
 ---
 
@@ -25,7 +25,7 @@ It’s split into:
 Create a state machine bound to the given owner instance or struct.
 
 ```gml
-sm = new Statement(self);
+state_machine = new Statement(self);
 ```
 
 - `owner`: `ID.Instance` or `Struct`  
@@ -55,7 +55,7 @@ If `owner` is neither an existing instance nor a struct, the constructor logs a 
 Register a `StatementState` on this machine.
 
 ```gml
-sm.AddState(idle);
+state_machine.AddState(idle);
 ```
 
 - `state`: `Struct.StatementState`  
@@ -72,8 +72,8 @@ If a state with the same name already exists, it is replaced (with a warning).
 Get a state by name, or the current state if no name is provided.
 
 ```gml
-var _current = sm.GetState();
-var _idle    = sm.GetState("Idle");
+var _current = state_machine.GetState();
+var _idle    = state_machine.GetState("Idle");
 ```
 
 - `name` *(optional)*: `String`  
@@ -86,7 +86,7 @@ var _idle    = sm.GetState("Idle");
 Get the name of the current state.
 
 ```gml
-var _name = sm.GetStateName();
+var _name = state_machine.GetStateName();
 ```
 
 - **Returns:** `String` or `Undefined`.
@@ -98,17 +98,17 @@ var _name = sm.GetStateName();
 Immediately change to another state.
 
 ```gml
-sm.ChangeState("Attack");
-sm.ChangeState("Hitstun", true); // force, ignoring can_exit
+state_machine.ChangeState("Attack");
+state_machine.ChangeState("Hitstun", true); // force, ignoring can_exit
 ```
 
 - `name`: `String`  
 - `force` *(optional)*: `Bool`  
-- **Returns:** `Struct.StatementState` or `Undefined` if target doesn’t exist.
+- **Returns:** `Struct.StatementState` or `Undefined` if target doesn't exist.
 
 Behaviour:
 
-- If target doesn’t exist: logs a warning and returns `undefined`.
+- If target doesn't exist: logs a warning and returns `undefined`.
 - If target is already active: does nothing and returns current state.
 - If current state has `can_exit == false` and `force == false`: refuses to change and returns current state.
 - A manual `ChangeState` clears any queued transition.
@@ -134,22 +134,22 @@ state_machine.Update();
 ```
 
 - Processes any queued state (if auto-processing enabled).
-- Runs the current state’s `Update` handler (if present).
-- Increments `state_age` (if there’s an active state).
-- **Returns:** whatever the state’s Update handler returns, or `Undefined`.
+- Runs the current state's `Update` handler (if present).
+- Increments `state_age` (if there's an active state).
+- **Returns:** whatever the state's Update handler returns, or `Undefined`.
 
 ---
 
 #### `Draw()`
 
-Optional helper to run the current state’s Draw handler.
+Optional helper to run the current state's Draw handler.
 
 ```gml
 // Draw Event
 state_machine.Draw();
 ```
 
-- **Returns:** whatever the state’s Draw handler returns, or `Undefined` if not implemented.
+- **Returns:** whatever the state's Draw handler returns, or `Undefined` if not implemented.
 
 Use only if you want per-state drawing.
 
@@ -173,7 +173,7 @@ Automatically reset on each state change.
 
 #### `SetStateTime(time)`
 
-Manually set the current state’s age.
+Manually set the current state's age.
 
 ```gml
 state_machine.SetStateTime(0);
@@ -189,7 +189,7 @@ state_machine.SetStateTime(0);
 Clear all states and reset the machine.
 
 ```gml
-sm.ClearStates();
+state_machine.ClearStates();
 ```
 
 Clears:
@@ -216,7 +216,7 @@ idle.AddEnter(function() {
 });
 ```
 
-- `fn`: `Function` — automatically `method(owner, fn)` bound. In other words, the scope of the function runs from whoever has been supplied as the owner of the state (most often the instance running the state machine itself). This behaviour extends through to all the `fn` arguments in the other three `Add*()` methods below.
+- `fn`: `Function` - automatically `method(owner, fn)` bound. In other words, the scope of the function runs from whoever has been supplied as the owner of the state (most often the instance running the state machine itself). This behaviour extends through to all the `fn` arguments in the other three `Add*()` methods below.
 - **Returns:** `Struct.StatementState`
 
 ---
@@ -260,40 +260,6 @@ idle.AddDraw(function() {
 ```
 
 - **Returns:** `Struct.StatementState`
-
----
-
-#### `AddStateEvent(event, fn)`
-
-Bind a handler to a specific `eStatementEvents` index.
-
-```gml
-// Equivalent to AddUpdate, but explicit about the event index
-idle.AddStateEvent(eStatementEvents.STEP, function() {
-    // custom update logic
-});
-```
-
-- `event`: `Real` – one of the `eStatementEvents` values (`ENTER`, `EXIT`, `STEP`, `DRAW`).
-- `fn`: `Function` — automatically `method(owner, fn)` bound.
-- **Returns:** `Struct.StatementState`
-
-Use the dedicated helpers (`AddEnter`/`AddUpdate`/`AddExit`/`AddDraw`) for readability; `AddStateEvent` is available if you prefer a single entry point.
-
----
-
-#### `HasStateEvent(event)`
-
-Check whether this state has a handler for a given `eStatementEvents` index.
-
-```gml
-if (!idle.HasStateEvent(eStatementEvents.DRAW)) {
-    // maybe attach one, or skip drawing
-}
-```
-
-- `event`: `Real` – one of the `eStatementEvents` values (`ENTER`, `EXIT`, `STEP`, `DRAW`).
-- **Returns:** `Bool`
 
 ---
 
@@ -516,32 +482,67 @@ Called after the old state’s `Exit`, after `state` is updated, and before new 
 
 ### Low-Level Event Running
 
-#### `RunState(event)`
+Behind the scenes, each Statement state uses an array indexed with enums to decide what handler to run. For instance, `Update()`, runs the handler stored in the array position indexed by `eStatementEvents.STEP`. In most circumstances, you don't need to worry about this stuff, simply use `Update()` / `Draw()` and it will be handled automatically. However, if you're confident editing Statement itself, you can extend `eStatementEvents` with your own custom event types. The enum is defined in `scr_statement_macro`. **Always insert new entries *before* `NUM`**; `NUM` is used as an "end of enum" marker when initialising internal arrays (such as the `state_event` array), so adding entries after `NUM` will break that initialisation. After editing the enum, you can then use the following methods to add or run custom state handlers, or check whether they exist.
 
-Run a specific `eStatementEvents` index on the current state.
+> `eStatementEvents` is an enum defined inside Statement (in `scr_statement_macro`) that maps the built-in handler types:
+> 
+> - `eStatementEvents.ENTER`
+> - `eStatementEvents.STEP`
+> - `eStatementEvents.EXIT`
+> - `eStatementEvents.NUM` - a sentinel used internally as a "one past the end" value when looping over event types. It is **not** a real event and should not be passed to `RunState`.
+{: .info}
 
+#### `AddStateEvent(event, fn)`
+
+**StatementState method**. Bind a handler to a specific `eStatementEvents` index. This is your "custom" handler entry point.
+
+**Create Event***
 ```gml
-sm.RunState(eStatementEvents.ENTER);
+// Assuming you have added ANIMATION_END to the enum list (before NUM)
+idle.AddStateEvent(eStatementEvents.ANIMATION_END, function() {
+    // custom logic dealing with the end of animations in the idle state
+});
 ```
 
-`eStatementEvents` is an enum defined inside Statement (in `scr_statement_macro`) that maps the built-in handler types:
+- `event`: `Real` - one of the `eStatementEvents` values (`ENTER`, `EXIT`, `STEP`, `DRAW`).
+- `fn`: `Function` - automatically `method(owner, fn)` bound.
+- **Returns:** `Struct.StatementState`
 
-- `eStatementEvents.ENTER`
-- `eStatementEvents.STEP`
-- `eStatementEvents.EXIT`
-- `eStatementEvents.NUM` – a sentinel used internally as a “one past the end” value when looping over event types. It is **not** a real event and should not be passed to `RunState`.
+---
+
+#### `HasStateEvent(event)`
+
+**StatementState** method. Check whether this state has a handler for a given `eStatementEvents` index.
+
+```gml
+if (!idle.HasStateEvent(eStatementEvents.ANIMATION_END)) {
+    // maybe attach one
+}
+```
+
+- `event`: `Real` - one of the `eStatementEvents` values (`ENTER`, `EXIT`, `STEP`, `DRAW`).
+- **Returns:** `Bool`
+
+---
+
+#### `RunState(event)`
+
+**Statement method**. Run a specific `eStatementEvents` index on the current state. This is scoped to the state machine itself, unlike the other two which are scoped to the state, to keep parity with the other handlers, like `state_machine.Update()`, etc.
+
+**Animation End Event**
+```gml
+if (state_machine.GetState().HasStateEvent(eStatementEvents.ANIMATION_END)) {
+    state_machine.RunState(eStatementEvents.ANIMATION_END);
+}
+```
 
 - `event`: `Real` (usually one of the `eStatementEvents` values)  
 - **Returns:** Any or `Undefined` if:
   - There is no active state, or
   - The chosen event is not implemented on the current state.
 
-Normally you don’t need this; use `Update()` / `Draw()` instead.
-
-If you’re confident editing Statement itself, you can extend `eStatementEvents` with your own custom event types. The enum is defined in `scr_statement_macro`. **Always insert new entries *before* `NUM`**; `NUM` is used as an “end of enum” marker when initialising internal arrays (such as the `state_event` array), so adding entries after `NUM` will break that initialisation.
-{: .note}
-
 ---
+
 ### Per-State Timers (Advanced)
 
 Per-state timers live on individual `StatementState` instances and are considered **advanced**. In almost all cases (99% of use cases) you can ignore them and just use the machine-level state time via `GetStateTime()` / `SetStateTime()`.
@@ -551,11 +552,11 @@ Per-state timers are backed by GameMaker **time sources** and tick independently
 - Because they use time sources internally, they can continue advancing even if the instance is deactivated or you temporarily stop calling `Update()`.
 
 By contrast, `GetStateTime()` / `SetStateTime()` live on the **Statement** itself:
-- Represent “how long the current state has been active (in frames)”.
+- Represent "how long the current state has been active (in frames)".
 - Reset automatically on state change.
 - Only increment when you call `Update()` on the machine.
 
-If you're unsure which to use, start with `GetStateTime()` and ignore per-state timers; they exist mainly for specialised cases where you need a timer tightly bound to a specific state’s lifetime.
+If you're unsure which to use, start with `GetStateTime()` and ignore per-state timers; they exist mainly for very specialised cases where you need a timer tightly bound to a specific state's lifetime.
 
 #### `TimerStart()`
 
@@ -667,6 +668,6 @@ Global helper: destroy all state timers registered in `global.__statement_timers
 StatementStateKillTimers();
 ```
 
-Use this if you want a global “nuke all state timers” reset, e.g. when restarting a run or unloading a big system.
+Use this if you want a global "nuke all state timers" reset, e.g. when restarting a run or changing rooms.
 
 ---
