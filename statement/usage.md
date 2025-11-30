@@ -9,9 +9,9 @@ nav_order: 2
 
 This page shows how to use Statement in practice, split into:
 
-- **Core usage** – basic patterns.
-- **Advanced usage** – optional patterns for more complex behaviour.
-- **Gotchas** – things to keep in mind.
+- **Core usage** - basic patterns.
+- **Advanced usage** - optional patterns for more complex behaviour.
+- **Gotchas** - things to keep in mind.
 
 ---
 
@@ -19,8 +19,8 @@ This page shows how to use Statement in practice, split into:
 
 ### 1. Basic Hello World
 
+**Create Event**
 ```gml
-/// Create Event
 state_machine = new Statement(self);
 
 var _idle = new StatementState(self, "Idle")
@@ -32,28 +32,30 @@ var _idle = new StatementState(self, "Idle")
     });
 
 state_machine.AddState(_idle);
+```
 
-
-/// Step Event
+**Step Event**
+```gml
 state_machine.Update();
+```
 
-
-/// Draw Event (optional)
+**Draw Event (optional)**
+```gml
 state_machine.Draw();
 ```
 
 This sets up:
 
-- A `Statement` bound to `self`.
+- A `Statement` state machine bound to `self`.
 - One state, `Idle`, with `Enter` + `Update` handlers.
-- The machine driven from Step (and optionally Draw).
+- The state machine driven from Step (and optionally Draw).
 
 ---
 
 ### 2. Multiple States with Simple Transitions
 
+**Create Event**
 ```gml
-/// Create Event
 state_machine = new Statement(self);
 
 // Idle
@@ -63,7 +65,7 @@ var _idle = new StatementState(self, "Idle")
         hsp = vsp = 0;
     })
     .AddUpdate(function() {
-        if (keyboard_check_any_pressed()) {
+        if (keyboard_check_pressed(vk_anykey)) {
             state_machine.ChangeState("Move");
         }
     });
@@ -91,15 +93,19 @@ var _move = new StatementState(self, "Move")
 state_machine
     .AddState(_idle)
     .AddState(_move);
+```
 
-
-/// Step Event
+**Step Event**
+```gml
 state_machine.Update();
+```
 
-
-/// Draw Event
+**Draw Event**
+```gml
 state_machine.Draw();
 ```
+
+Now if you press any key while in the Idle state, it will transition to the Move state automatically. If you're not pressing a movement key, it will transition back to the Idle state.
 
 ---
 
@@ -110,7 +116,6 @@ var _attack = new StatementState(self, "Attack")
     .AddEnter(function() {
         sprite_index = spr_player_attack;
         image_index = 0;
-        // state_machine.SetStateTime(0); // optional: age is already reset on ChangeState
     })
     .AddUpdate(function() {
         // Stay in Attack for 20 frames
@@ -122,7 +127,7 @@ var _attack = new StatementState(self, "Attack")
 state_machine.AddState(_attack);
 ```
 
-Because `state_machine` resets `state_age` automatically on state change, you can often skip the explicit `SetStateTime(0)`.
+Because `state_machine` resets `state_age` automatically on state change, you don't need to call `SetStateTime(0)` when changing into/out of a state.
 
 ---
 
@@ -165,13 +170,14 @@ Because transitions are queued, the rest of the current `Update` runs in the **o
 
 If you want explicit control over when queued transitions happen:
 
+**Create Event**
 ```gml
-/// Create
 state_machine = new Statement(self)
     .SetQueueAutoProcessing(false);
+```
 
-
-/// Step
+**Step Event**
+```gml
 // Do your own logic...
 // When ready to apply queued transitions:
 state_machine.ProcessQueuedState();
@@ -184,8 +190,8 @@ Now you can insert queue processing at a specific spot in your step pipeline.
 
 ### 6. Using Push/Pop for Overlays (Pause State)
 
+**Create Event**
 ```gml
-/// Create
 state_machine = new Statement(self);
 
 // Existing states: Idle, Move, Attack... (omitted)
@@ -208,10 +214,11 @@ var _pause = new StatementState(self, "Pause")
     });
 
 state_machine.AddState(_pause);
+```
 
-
-/// Step
-if (keyboard_check_pressed(vk_escape)
+**Step Event**
+```gml
+if (keyboard_check_released(vk_escape)
 && state_machine.GetStateName() != "Pause") {
     state_machine.PushState("Pause");
 }
@@ -230,8 +237,8 @@ state_machine.Draw();
 
 ### 7. Per-State Timers for More Complex Timing
 
+**Create Event**
 ```gml
-/// Create Event
 state_machine = new Statement(self);
 
 charge = new StatementState(self, "Charge")
@@ -268,10 +275,10 @@ if (game_is_paused) {
 }
 ```
 
-**Please note:** If you need to access a state from its own handlers or from other events, store it in an instance variable (like `charge` and `release` above), not a local `var`. Local variables only exist for the duration of the event or function where they are declared, while instance variables live for the lifetime of the instance.
+If you need to access a state from its own handlers or from other events, store it in an instance variable (like `charge` and `release` above), not a local `var`. Local variables only exist for the duration of the event or function where they are declared, while instance variables live for the lifetime of the instance. Alternatively, if you have access to the state machine itself, you can retrieve specific states via the `GetState()` method.
 {: .note}
 
-Most of the time you can rely on `GetStateTime()` on the machine instead and skip per-state timers entirely.
+Almost all of the time you can rely on `GetStateTime()` on the machine instead and skip per-state timers entirely.
 
 ---
 ### 8. State Change Hook for Logging & Signals
@@ -289,14 +296,17 @@ This runs for every transition, making it useful for:
 - Analytics.
 - Emitting events into your own signal/event system.
 
+> The function given as the argument for `SetStateChangeBehaviour()` is **NOT** automatically bound to the owner of the state. This is done to allow you greater expression in how you might want it scoped (for instance, scoping it to your debug logger or something). This is why we are using `method()` explicitly to bind the scope in this example.
+{: .warning}
+
 ---
 
 ### 9. Custom state events (advanced)
 
 You can define your own event index and bind/run it manually. For example, add an `ANIMATION_END` event:
 
+**`scr_statement_macro` Script**
 ```gml
-// scripts/scr_statement_macro/scr_statement_macro.gml (or your own macro script)
 enum eStatementEvents {
     ENTER,
     EXIT,
@@ -309,8 +319,8 @@ enum eStatementEvents {
 
 In Create, bind a handler for that event:
 
+**Create Event**
 ```gml
-/// obj_player Create
 state_machine = new Statement(self);
 
 var _attack = new StatementState(self, "Attack")
@@ -328,10 +338,9 @@ state_machine.AddState(_attack);
 
 In the Animation End event of the object, run the custom event if present:
 
+**Animation End Event**
 ```gml
-/// obj_player Animation End Event
-if (state_machine.GetStateName() == "Attack"
-&& state_machine.state.HasStateEvent(eStatementEvents.ANIMATION_END)) {
+if (state_machine.GetState().HasStateEvent(eStatementEvents.ANIMATION_END)) {
     state_machine.RunState(eStatementEvents.ANIMATION_END);
 }
 ```
@@ -342,7 +351,7 @@ This pattern lets you hook into additional event points (like Animation End) whi
 
 ### 10. Inspecting or clearing a queued state
 
-If you’re queuing transitions manually, you can inspect or clear the pending change:
+If you're queuing transitions manually, you can inspect or clear the pending change:
 
 ```gml
 /// Debug overlay
@@ -359,7 +368,7 @@ state_machine.ClearQueuedState();
 
 ### 11. History peek (previous states)
 
-You can check where you’ve been:
+You can check where you've been:
 
 ```gml
 // Last state name
@@ -400,11 +409,11 @@ StatementStateKillTimers();
 
 ### Core Gotchas
 
-1. **Don’t forget to call `Update()`**  
-   If you don’t call `state_machine.Update()` each Step, your states will never run their Update handlers and queued transitions won’t process (unless you call `ProcessQueuedState()` manually).
+1. **Don't forget to call `Update()`**  
+   If you don't call `state_machine.Update()` each Step, your states will never run their Update handlers and queued transitions won't process (unless you call `ProcessQueuedState()` manually).
 
 2. **Draw is optional**  
-   Only call `state_machine.Draw()` if you’re using per-state `AddDraw()` handlers. Combining regular object drawing and per-state drawing is fine, but be consistent.
+   Only call `state_machine.Draw()` if you're using per-state `AddDraw()` handlers. Combining regular object drawing and per-state drawing is fine, but be consistent.
 
 3. **Owner must be valid**  
    Create states from valid contexts (where `self` exists) or pass a struct as the owner. Passing destroyed IDs or invalid values logs a severe warning and returns `undefined`.
@@ -417,7 +426,7 @@ StatementStateKillTimers();
    If a state sets `can_exit = false`, `ChangeState("Other")` will do nothing unless `force == true`. Make sure to set `can_exit = true` again when you actually want to leave.
 
 2. **Queued transitions are one-shot**  
-   Once a queued state is processed (or cleared), it’s gone.  
+   Once a queued state is processed (or cleared), it's gone.  
    If you want repeated attempts, call `QueueState()` again from your logic.
 
 3. **History is for introspection, not control flow**  
@@ -429,10 +438,7 @@ StatementStateKillTimers();
    They do not automatically match `GetStateTime()`; in almost all cases you should prefer `GetStateTime()` and only reach for per-state timers when you need that extra flexibility.
 
 5. **Clean up when resetting**  
-   - Use `ClearStates()` when you want to fully reset the machine’s states.  
-   - Call `state_machine.Destroy()` in your instance’s Destroy/Cleanup event when you are done with a machine so that any per-state timers owned by its states are cleaned up.  
+   - Use `ClearStates()` when you want to fully reset the machine's states.  
+   - Call `state_machine.Destroy()` in your instance's Destroy/Cleanup event when you are done with a machine so that any per-state timers owned by its states are cleaned up.  
    - Use `StatementStateKillTimers()` if you want to globally destroy all state timers for all machines (e.g. when restarting a run).
 
----
-
-That should give you a clean, beginner-friendly path (core sections) with clearly flagged advanced features for power users.
