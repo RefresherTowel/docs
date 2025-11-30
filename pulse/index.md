@@ -28,12 +28,13 @@ Pulse gives you:
 
 ## Introduction
 
-Pulse replaces scattered “call this script if X happens” patterns with a small, focused signal layer:
+Pulse replaces scattered "call this script if X happens" patterns with a small, focused signal layer:
 
-- You define **signal identifiers** (usually macros or enums).
+- You define **signal identifiers** (usually macros, enums or plain strings, if you're daring).
 - Objects **subscribe** to the signals they care about.
 - Anywhere in your project can **send** or **post** those signals.
 - Pulse fans signals out to all matching listeners, in priority order, until the event is optionally consumed.
+- Pulse uses weak references for its subscribers, so controller structs and instances won't be kept alive just because they're listening on the bus. Dead listeners are automatically pruned as you dispatch signals, keeping the system lean without you having to remember to unsubscribe from every corner of your code.
 
 You can keep things **very simple** (just `PulseSubscribe` + `PulseSend`) or layer on more advanced features as your project grows.
 
@@ -81,7 +82,7 @@ These features are optional. You only need them if your project calls for more c
   Tag listeners (for example `TAG_RUNE_PROC`, `TAG_UI`, `TAG_DEBUG`) so you can selectively unsubscribe or organise your subscriptions.
 
 - **Priorities**  
-  Each listener has a numeric `priority`. Higher values run *earlier*. Useful for things like “core gameplay logic first, VFX last”.
+  Each listener has a numeric `priority`. Higher values run *earlier*. Useful for things like "core gameplay logic first, VFX last".
 
 - **Cancellation / consumption**  
   A listener can **stop further propagation** of a signal by either:
