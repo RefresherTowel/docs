@@ -262,7 +262,7 @@ var idle = new StatementState(self, "Idle")
 var hurt = new StatementState(self, "Hurt")
     .AddEnter(function() {
         // First we grab the payload that was given during the transition to this state (the transition occurs in
-        // the codeblock below this one, in the collision event with the enemy)
+        // the codeblock below this one, in the collision event with the enemy bullet)
         var data = state_machine.GetLastTransitionData();
         if (is_struct(data)) {
             // And now we can use the data, in this case printing the damage we took to console

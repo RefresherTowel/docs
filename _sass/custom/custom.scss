@@ -1,13 +1,3 @@
-// Make inline code inside headings use the heading's font size
-.main-content h1 code,
-.main-content h2 code,
-.main-content h3 code,
-.main-content h4 code,
-.main-content h5 code,
-.main-content h6 code {
-  font-size: 120%;
-}
-
 .main-content pre,
 .main-content div.highlighter-rouge,
 .main-content figure.highlight {
@@ -33,6 +23,102 @@
 }
 
 .main-content :not(pre) > code {
-  font-size: 100%;
+  font-size: 90%;
   padding: 0.12em 0.35em;
+}
+
+// Make inline code inside headings use the heading's font size
+.main-content h4 code,
+.main-content h5 code,
+.main-content h6 code {
+  font-size: 140%;
+}
+
+/* "On this page" box: sit in the far-right gutter without affecting layout */
+.sticky-toc {
+  position: fixed;                 /* removed from layout flow => no content shift */
+  top: 5rem;                       /* tweak for your header height */
+  right: 1.25rem;                  /* anchors to viewport right edge */
+  width: 20rem;                    /* adjust to taste */
+  bottom: 5rem;
+  max-height: calc(100vh - 6rem);  /* stay on-screen */
+  overflow: auto;
+
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  z-index: 50;                     /* ensure it sits above content */
+}
+
+/* Don’t show as fixed unless there’s enough horizontal space (prevents overlap) */
+@media (max-width: 1400px) {
+  .sticky-toc {
+    position: static;     /* falls back into the page */
+    width: auto;
+    max-height: none;
+    overflow: visible;
+    margin-bottom: 1rem;
+  }
+}
+
+/* --- TOC: remove the alpha markers (kramdown) and show dash bullets --- */
+
+/* Make sure the default markers/counters cannot show */
+.sticky-toc ol,
+.sticky-toc ul {
+  list-style: none !important;
+  margin: 0.5rem 0 0 0;
+  padding-left: 0;
+}
+
+/* Hide any marker pseudo-elements the theme/browser might use */
+.sticky-toc li::marker {
+  content: "" !important;
+}
+
+/* If the theme uses CSS counters for ordered lists, disable them */
+.sticky-toc ol {
+  counter-reset: none !important;
+}
+.sticky-toc ol > li {
+  counter-increment: none !important;
+}
+.sticky-toc ol > li::before {
+  counter-increment: none !important;
+}
+
+/* Our dash bullets */
+.sticky-toc li {
+  position: relative;
+  margin: 0.15rem 0;
+  padding-left: 0.5rem;
+}
+
+.sticky-toc li::before {
+  content: "-" !important;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0.7;
+}
+
+/* Nested indentation */
+.sticky-toc li ol,
+.sticky-toc li ul {
+  margin-top: 0.15rem;
+  margin-left: 0.25rem;
+  padding-left: 0;
+}
+
+/* Optional link styling */
+.sticky-toc a {
+  display: block;
+  padding: 0.18rem 0.35rem;
+  padding-left: 0.1rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+.sticky-toc a:hover {
+  text-decoration: underline;
 }

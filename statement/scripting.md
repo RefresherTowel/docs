@@ -5,6 +5,18 @@ parent: Statement
 nav_order: 1
 ---
 
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
+
+1. TOC
+{:toc}
+
+</details>
+</div>
+
+
 # Scripting Reference
 
 This page documents the public API of the state machine system.
@@ -20,6 +32,8 @@ It's split into:
 
 ### Core Types
 
+---
+
 #### `Statement(owner)`
 
 Create a state machine bound to the given owner instance or struct.
@@ -31,6 +45,7 @@ state_machine = new Statement(self);
 - `owner`: `ID.Instance` or `Struct`  
 - **Returns:** `Struct.Statement`
 
+---
 
 #### `StatementState(owner, name)`
 
