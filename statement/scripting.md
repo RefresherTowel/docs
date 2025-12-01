@@ -93,16 +93,59 @@ var _name = state_machine.GetStateName();
 
 ---
 
-#### `ChangeState(name, [force])`
 
-Immediately change to another state.
+#### `IsInState(name_or_state)`
+
+Check whether the current state matches the supplied name or state struct.
+
+```gml
+if (state_machine.IsInState("Hurt")) {
+    // Already in the Hurt state.
+}
+
+if (state_machine.IsInState(my_attack_state)) {
+    // Using a direct state reference.
+}
+```
+
+- `name_or_state`: `String` or `Struct.StatementState`
+- **Returns:** `Bool`
+
+Accepts either a state name or a `StatementState` struct. If called with an unsupported type or when there is no active state, it returns `false` (and logs a warning for unsupported types).
+
+---
+
+#### `EnsureState(name, [data], [force])`
+
+Ensure that the current state matches the supplied name. If it is already active, no transition occurs.
+
+```gml
+// Make sure we are in Idle; only changes if needed.
+state_machine.EnsureState("Idle");
+
+// Ensure Hurt with a payload.
+state_machine.EnsureState("Hurt", { damage: _damage; });
+```
+
+- `name`: `String`
+- `data` *(optional)*: `Any` - payload attached to the transition if a change is required.
+- `force` *(optional)*: `Bool`
+- **Returns:** `Struct.StatementState` or `Undefined` if the target does not exist.
+
+Internally this is equivalent to checking the current state's name and only calling `ChangeState` when different, which avoids redundant transitions and Exit/Enter calls.
+
+
+#### `ChangeState(name, [data], [force])`
+
+Immediately change to another state, optionally with a transition payload.
 
 ```gml
 state_machine.ChangeState("Attack");
-state_machine.ChangeState("Hitstun", true); // force, ignoring can_exit
+state_machine.ChangeState("Hitstun", { damage: 5 }, true); // payload + force
 ```
 
 - `name`: `String`  
+- `data` *(optional)*: `Any` - payload retrievable via `GetLastTransitionData()`.  
 - `force` *(optional)*: `Bool`  
 - **Returns:** `Struct.StatementState` or `Undefined` if target doesn't exist.
 
@@ -117,7 +160,7 @@ Behaviour:
   - Updates history (`previous_state`, `previous_states`).
   - Switches `state` to the new state.
   - Resets `state_age` to 0.
-  - Runs optional state-change hook.
+  - Runs optional state-change hook (see `SetStateChangeBehaviour`).
   - Runs new state `Enter` (if present).
 
 If an `Exit` handler changes state itself, the outer `ChangeState` respects that redirect and returns immediately.
@@ -133,8 +176,10 @@ Drive the state machine for one Step.
 state_machine.Update();
 ```
 
+- Skips processing when `IsPaused()` is true.
 - Processes any queued state (if auto-processing enabled).
 - Runs the current state's `Update` handler (if present).
+- Evaluates declarative transitions defined on the current state.
 - Increments `state_age` (if there's an active state).
 - **Returns:** whatever the state's Update handler returns, or `Undefined`.
 
@@ -160,7 +205,7 @@ Use only if you want per-state drawing.
 Get how long (in frames) the current state has been active.
 
 ```gml
-if (state_machine.GetStateTime() > 30) {
+if (state_machine.GetStateTime() > get_game_speed(gamespeed_fps) * 0.5) {
     // half a second at 60 FPS
 }
 ```
@@ -269,6 +314,34 @@ The following features are optional. You can ignore them unless your project spe
 
 ---
 
+### Pausing
+
+#### `SetPaused(paused)`
+
+Pause or resume the state machine. When paused, `Update()` skips queue processing, STEP handlers, declarative transitions, and state age increments. Manual `ChangeState` calls still work.
+
+```gml
+state_machine.SetPaused(true);  // freeze
+state_machine.SetPaused(false); // resume
+```
+
+- `paused`: `Bool`
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `IsPaused()`
+
+Check whether the machine is currently paused.
+
+```gml
+if (state_machine.IsPaused()) { /* skip logic */ }
+```
+
+- **Returns:** `Bool`
+
+---
+
 ### Queueing
 
 #### `SetQueueAutoProcessing(enabled)`
@@ -276,7 +349,7 @@ The following features are optional. You can ignore them unless your project spe
 Control whether queued transitions are automatically processed inside `Update()`.
 
 ```gml
-sm.SetQueueAutoProcessing(true);
+state_machine.SetQueueAutoProcessing(true);
 ```
 
 - `enabled`: `Bool`  
@@ -286,15 +359,16 @@ Default: `true`.
 
 ---
 
-#### `QueueState(name, [force])`
+#### `QueueState(name, [data], [force])`
 
 Queue a state change to be processed later.
 
 ```gml
-sm.QueueState("Attack");
+state_machine.QueueState("Attack");
 ```
 
 - `name`: `String`  
+- `data` *(optional)*: `Any` - payload retrievable via `GetLastTransitionData()` if the transition succeeds.  
 - `force` *(optional)*: `Bool`  
 - **Returns:** `Struct.Statement`
 
@@ -305,7 +379,7 @@ sm.QueueState("Attack");
 Process any pending queued state change immediately.
 
 ```gml
-sm.ProcessQueuedState();
+state_machine.ProcessQueuedState();
 ```
 
 - **Returns:** `Struct.StatementState` or `Undefined`
@@ -319,7 +393,7 @@ If the current state cannot exit (and `force` was not set when queuing), the que
 Check if a queued state is pending.
 
 ```gml
-if (sm.HasQueuedState()) { /* … */ }
+if (state_machine.HasQueuedState()) { /* ... */ }
 ```
 
 - **Returns:** `Bool`
@@ -331,10 +405,22 @@ if (sm.HasQueuedState()) { /* … */ }
 Get the name of the queued state, if any.
 
 ```gml
-var _next = sm.GetQueuedStateName();
+var _next = state_machine.GetQueuedStateName();
 ```
 
 - **Returns:** `String` or `Undefined`
+
+---
+
+#### `GetQueuedStateData()`
+
+Get the payload attached to a queued state, if any.
+
+```gml
+var _payload = state_machine.GetQueuedStateData();
+```
+
+- **Returns:** `Any` or `Undefined`
 
 ---
 
@@ -343,7 +429,7 @@ var _next = sm.GetQueuedStateName();
 Cancel any queued state without processing it.
 
 ```gml
-sm.ClearQueuedState();
+state_machine.ClearQueuedState();
 ```
 
 - **Returns:** `Struct.Statement`
@@ -357,7 +443,7 @@ sm.ClearQueuedState();
 Set how many previous states to keep in history.
 
 ```gml
-sm.SetHistoryLimit(32);
+state_machine.SetHistoryLimit(32);
 ```
 
 - `limit`: `Real`  
@@ -369,11 +455,13 @@ sm.SetHistoryLimit(32);
 
 #### `GetHistoryCount()`
 
+Get how many entries are currently stored in the previous state history.
+
 ```gml
-var _count = sm.GetHistoryCount();
+var _count = state_machine.GetHistoryCount();
 ```
 
-- **Returns:** `Real` – length of `previous_states`.
+- **Returns:** `Real`
 
 ---
 
@@ -382,51 +470,144 @@ var _count = sm.GetHistoryCount();
 Get a previous state by history index.
 
 ```gml
-var _st = sm.GetHistoryAt(0);
+var _st = state_machine.GetHistoryAt(0);
 ```
 
 - `index`: `Real`  
-- **Returns:** `Struct.StatementState` or `Undefined` if invalid.
-
-Use `is_undefined(st)` to check whether the index was valid before using the result.
+- **Returns:** `Struct.StatementState` or `Undefined` if the index is invalid.
 
 ---
 
-#### `PreviousState()`
+#### `ClearHistory()`
 
-Quickly switch back to `previous_state`.
+Clear the previous state history without affecting the current state.
 
 ```gml
-sm.PreviousState();
+state_machine.ClearHistory();
 ```
 
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `PreviousState([data], [force])`
+
+Convenience helper to change back to the most recent previous state.
+
+```gml
+state_machine.PreviousState();
+```
+
+- `data` *(optional)*: `Any` - payload attached to this transition.
+- `force` *(optional)*: `Bool`
 - **Returns:** `Struct.StatementState` or `Undefined`.
+
+This is roughly equivalent to:
+
+```gml
+state_machine.ChangeState(state_machine.GetPreviousStateName(), data, force);
+```
+
+but is safer and handles edge cases for you.
 
 ---
 
 #### `GetPreviousStateName()`
 
-Name of the most recent previous state.
+Get the name of the most recent previous state in history.
 
 ```gml
-var _prev = sm.GetPreviousStateName();
+var _prev = state_machine.GetPreviousStateName();
 ```
 
 - **Returns:** `String` or `Undefined`.
 
 ---
 
-#### `PrintStateNames()`
+#### `WasPreviouslyInState(name, [depth])`
 
-Print all state names registered on this machine (via debug system).
+Check whether the state at the given history depth matches the supplied name.
 
 ```gml
-sm.PrintStateNames();
+// Was the last state "Attack"?
+if (state_machine.WasPreviouslyInState("Attack")) {
+    // ...
+}
+
+// Was the state three transitions ago "Patrol"?
+if (state_machine.WasPreviouslyInState("Patrol", 3)) {
+    // ...
+}
+```
+
+- `name`: `String`
+- `depth` *(optional)*: `Real` - 1 checks the most recent previous state, 2 checks the one before that, etc. Defaults to 1.
+- **Returns:** `Bool`
+
+Returns `false` if there is not enough history, or if the entry at that depth is not a valid `StatementState`.
+
+---
+
+#### `GetLastTransitionData()`
+
+Get the payload attached to the most recent successful state transition, if any.
+
+```gml
+var _data = state_machine.GetLastTransitionData();
+if (is_struct(_data)) {
+    EchoDebugInfo("Last transition damage: " + string(_data.damage));
+}
+```
+
+- **Returns:** `Any` or `Undefined`.
+
+This works for direct `ChangeState`, queued transitions, stack pushes/pops, and other transitions that go through the machine.
+
+---
+
+#### `PrintStateNames()`
+
+Print all state names registered on this machine (via the debug system).
+
+```gml
+state_machine.PrintStateNames();
 ```
 
 - **Returns:** `Struct.Statement`
 
 ---
+
+#### `DebugDescribe()`
+
+Return a one-line debug description of this state machine, including owner, current state, previous state, age, queued state (if any), state stack depth, and history count.
+
+```gml
+EchoDebugInfo(state_machine.DebugDescribe());
+```
+
+- **Returns:** `String`
+
+Useful for quick logging of state machine status without having to inspect multiple values manually.
+
+---
+
+#### `PrintStateHistory([limit])`
+
+Print the previous state history for this machine, from most recent backwards.
+
+```gml
+// Dump entire history
+state_machine.PrintStateHistory();
+
+// Or only the last 5 entries
+state_machine.PrintStateHistory(5);
+```
+
+- `limit` *(optional)*: `Real` - maximum number of history entries to print. Use 0 or a negative value to print the full history.
+- **Returns:** `Struct.Statement`
+
+By default the method prints a short summary (similar to `DebugDescribe()`) and then each history entry with its index.
+
 
 ### State Stack (Push / Pop)
 
@@ -435,7 +616,7 @@ sm.PrintStateNames();
 Push current state onto a stack and change to `name`.
 
 ```gml
-sm.PushState("Pause");
+state_machine.PushState("Pause");
 ```
 
 - `name`: `String`  
@@ -446,18 +627,55 @@ If the transition is blocked (for example `can_exit == false` and not forced), t
 
 ---
 
-#### `PopState([force])`
+#### `PopState([data], [force])`
 
 Pop the last pushed state from the stack and change back to it.
 
 ```gml
-sm.PopState();
+state_machine.PopState();
 ```
 
+- `data` *(optional)*: `Any` - payload for this transition.  
 - `force` *(optional)*: `Bool`  
 - **Returns:** `Struct.StatementState` or `Undefined`.
 
 Handles empty stacks and invalid entries safely.
+
+---
+
+#### `GetStateStackDepth()`
+
+Number of entries currently on the state stack.
+
+```gml
+var _depth = state_machine.GetStateStackDepth();
+```
+
+- **Returns:** `Real`
+
+---
+
+#### `PeekStateStack()`
+
+Peek at the most recently pushed state without popping it.
+
+```gml
+var _top = state_machine.PeekStateStack();
+```
+
+- **Returns:** `Struct.StatementState` or `Undefined`.
+
+---
+
+#### `ClearStateStack()`
+
+Clear all entries from the state stack without changing the current state.
+
+```gml
+state_machine.ClearStateStack();
+```
+
+- **Returns:** `Struct.Statement`
 
 ---
 
@@ -468,15 +686,15 @@ Handles empty stacks and invalid entries safely.
 Register a callback to be run whenever the machine changes state.
 
 ```gml
-sm.SetStateChangeBehaviour(method(self, function() {
+state_machine.SetStateChangeBehaviour(method(self, function() {
     EchoDebugInfo("Now in state: " + string(state_machine.GetStateName()));
 }));
 ```
 
-- `fn`: `Function`  
+- `fn`: `Function` - called as `fn(previous_state, transition_data)`; both may be `undefined`.  
 - **Returns:** `Struct.Statement`
 
-Called after the old state’s `Exit`, after `state` is updated, and before new state `Enter`. When the provided function is called, it will be given the previous state as an argument.
+Called after the old state's `Exit`, after `state` is updated, and before new state `Enter`.
 
 ---
 
@@ -533,6 +751,69 @@ if (!idle.HasStateEvent(eStatementEvents.ANIMATION_END)) {
 
 ---
 
+### Exit Control & Declarative Transitions (StatementState)
+
+#### `SetCanExit(can_exit)` / `LockExit()` / `UnlockExit()`
+
+Control whether a state can be exited without forcing.
+
+```gml
+state.LockExit();      // block transitions unless force == true
+state.SetCanExit(true); // equivalent to UnlockExit()
+```
+
+- `can_exit`: `Bool`
+- **Returns:** `Struct.StatementState`
+
+When `can_exit == false`, `ChangeState`/queued transitions will only leave this state if `force == true`.
+
+---
+
+#### `AddTransition(target_name, condition, [force])`
+
+Add a declarative transition that will be evaluated each `Update()` while the state is active. When the condition returns true, the machine changes to `target_name`.
+
+```gml
+idle.AddTransition("Run", function() {
+    return abs(hsp) > 0.1;
+});
+```
+
+- `target_name`: `String`
+- `condition`: `Function` - automatically bound to the owner via `method(owner, fn)`.
+- `force` *(optional)*: `Bool` - ignore `can_exit` when firing.
+- **Returns:** `Struct.StatementState`
+
+Transitions are checked in the order they were added; the first condition returning true will fire.
+
+---
+
+#### `ClearTransitions()`
+
+Remove all declarative transitions from this state.
+
+```gml
+state.ClearTransitions();
+```
+
+- **Returns:** `Struct.StatementState`
+
+---
+
+#### `EvaluateTransitions()`
+
+Evaluate this state's declarative transitions and return the first matching record.
+
+```gml
+var _tr = state.EvaluateTransitions();
+```
+
+- **Returns:** `Struct` `{ target_name, condition, force }` or `Undefined`.
+
+Normally you do not call this directly; the machine calls `EvaluateTransitions()` after each `Update()` and then applies the transition via `ChangeState`. Use it manually only for custom control.
+
+---
+
 #### `RunState(event)`
 
 **Statement method**. Run a specific `eStatementEvents` index on the current state. This is scoped to the state machine itself, unlike the other two which are scoped to the state, to keep parity with the other handlers, like `state_machine.Update()`, etc.
@@ -548,6 +829,22 @@ if (state_machine.GetState().HasStateEvent(eStatementEvents.ANIMATION_END)) {
 - **Returns:** Any or `Undefined` if:
   - There is no active state, or
   - The chosen event is not implemented on the current state.
+
+---
+
+#### `EvaluateTransitions([data])` (machine)
+
+Force evaluation of declarative transitions on the current state and apply the first passing transition.
+
+```gml
+state_machine.EvaluateTransitions();          // after custom update loop
+state_machine.EvaluateTransitions(payload);   // attach payload if a transition fires
+```
+
+- `data` *(optional)*: `Any` - payload attached to the transition if one fires.
+- **Returns:** `Struct.StatementState` or `Undefined` if no transition fired or no active state.
+
+This is normally called automatically at the end of `Update()`. Use it manually if you disable auto-processing or run custom update ordering.
 
 ---
 
@@ -639,8 +936,6 @@ state.TimerKill();
 
 ---
 
-### Machine-Level Access to Per-State Timer
-
 ### Cleanup & Global Helpers
 
 #### `RemoveState(name)`
@@ -648,7 +943,7 @@ state.TimerKill();
 Remove a state by name from this machine.
 
 ```gml
-sm.RemoveState("Debug");
+state_machine.RemoveState("Debug");
 ```
 
 - `name`: `String`  
@@ -661,7 +956,7 @@ sm.RemoveState("Debug");
 Helper to clean up state-specific timers for all states registered on this machine (current and history).
 
 ```gml
-sm.Destroy();
+state_machine.Destroy();
 ```
 
 Call this if you are discarding a machine and want to ensure no associated timers continue ticking.

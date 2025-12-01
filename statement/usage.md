@@ -105,7 +105,7 @@ state_machine.Update();
 state_machine.Draw();
 ```
 
-Now if you press any key while in the Idle state, it will transition to the Move state automatically. If you're not pressing a movement key, it will transition back to the Idle state.
+Now if you press any key while in the Idle state, it will transition to the Move state automatically. If you're not pressing a movement key while in the Move state, it will transition back to the Idle state.
 
 ---
 
@@ -162,7 +162,7 @@ state_machine
     .AddState(_attack);
 ```
 
-Because transitions are queued, the rest of the current `Update` runs in the **old** state, and `Attack` starts cleanly next frame.
+Because transitions are queued, the rest of the current event runs with the **old** state, and `Attack` starts cleanly next frame.
 
 ---
 
@@ -188,7 +188,29 @@ Now you can insert queue processing at a specific spot in your step pipeline.
 
 ---
 
-### 6. Using Push/Pop for Overlays (Pause State)
+### 6. Pausing a State Machine
+
+You can pause automatic processing (Update/queue/declarative transitions) while still allowing manual transitions.
+
+```gml
+// e.g., global pause toggle
+if (game_paused) {
+    state_machine.SetPaused(true);
+} else {
+    state_machine.SetPaused(false);
+}
+
+// Step Event
+if (!state_machine.IsPaused()) {
+    state_machine.Update();
+}
+```
+
+Pausing does **not** prevent manual `ChangeState` calls or `Draw()`; it just freezes the automatic flow inside `Update()`.
+
+---
+
+### 7. Using Push/Pop for Overlays (Pause State)
 
 **Create Event**
 ```gml
@@ -235,7 +257,7 @@ state_machine.Draw();
 
 ---
 
-### 7. Per-State Timers for More Complex Timing
+### 8. Per-State Timers for More Complex Timing
 
 **Create Event**
 ```gml
@@ -278,10 +300,10 @@ if (game_is_paused) {
 If you need to access a state from its own handlers or from other events, store it in an instance variable (like `charge` and `release` above), not a local `var`. Local variables only exist for the duration of the event or function where they are declared, while instance variables live for the lifetime of the instance. Alternatively, if you have access to the state machine itself, you can retrieve specific states via the `GetState()` method.
 {: .note}
 
-Almost all of the time you can rely on `GetStateTime()` on the machine instead and skip per-state timers entirely.
+Almost all of the time you can rely on `GetStateTime()` on the machine instead and skip per-state timers entirely, they are implemented for very niche circumstances.
 
 ---
-### 8. State Change Hook for Logging & Signals
+### 9. State Change Hook for Logging & Signals
 
 ```gml
 state_machine.SetStateChangeBehaviour(method(self, function() {
@@ -301,9 +323,59 @@ This runs for every transition, making it useful for:
 
 ---
 
-### 9. Custom state events (advanced)
+### 10. Declarative transitions
 
-You can define your own event index and bind/run it manually. For example, add an `ANIMATION_END` event:
+Add transitions to a state that fire automatically when conditions pass. They are evaluated after each `Update()`.
+
+```gml
+var _run = new StatementState(self, "Run")
+    .AddUpdate(function() {
+        // run logic...
+    })
+    .AddTransition("Idle", function() {
+        return abs(hsp) < 0.05; // condition bound to owner via method()
+    })
+    .AddTransition("Jump", function() {
+        return keyboard_check_pressed(vk_space);
+    });
+```
+
+- Transitions are checked in the order they were added; the first that returns `true` fires.
+- You can attach a payload via `ChangeState` or `EvaluateTransitions(payload)`, then read it in the next state's `Enter` via `GetLastTransitionData()`.
+- If you need to disable automatic evaluation (for custom ordering), set `SetQueueAutoProcessing(false)` and call `EvaluateTransitions()` manually.
+
+---
+
+### 11. Transition payloads & ensuring states
+
+Carry data across transitions and avoid redundant changes.
+
+```gml
+// When taking damage, carry a payload into the new state.
+state_machine.ChangeState("Hitstun", { damage: last_damage });
+
+// In the Hitstun state's Enter
+hitstun.AddEnter(function() {
+    var _payload = state_machine.GetLastTransitionData();
+    if (is_struct(_payload)) hp -= _payload.damage;
+});
+
+// Only change if not already in Idle
+state_machine.EnsureState("Idle");
+
+// Quick checks
+if (state_machine.IsInState("Attack")) {
+    // do something
+}
+```
+
+Use `GetQueuedStateData()` when inspecting queued transitions, and `WasPreviouslyInState(name, depth)` when reasoning about history.
+
+---
+
+### 12. Custom state events (advanced)
+
+You can define your own event index and bind/run it manually. For example, add an `ANIMATION_END` enum:
 
 **`scr_statement_macro` Script**
 ```gml
@@ -349,7 +421,7 @@ This pattern lets you hook into additional event points (like Animation End) whi
 
 ---
 
-### 10. Inspecting or clearing a queued state
+### 13. Inspecting or clearing a queued state
 
 If you're queuing transitions manually, you can inspect or clear the pending change:
 
@@ -366,7 +438,7 @@ state_machine.ClearQueuedState();
 
 ---
 
-### 11. History peek (previous states)
+### 14. History peek (previous states)
 
 You can check where you've been:
 
@@ -382,13 +454,16 @@ for (var i = 0; i < _count; ++i) {
         draw_text(16, 48 + i * 16, "History " + string(i) + ": " + _st.name);
     }
 }
+
+// Quick debug dump
+state_machine.PrintStateHistory(5); // or state_machine.DebugDescribe();
 ```
 
 Use `SetHistoryLimit(limit)` if you want to cap how many entries are kept.
 
 ---
 
-### 12. Resetting / cleaning up a machine
+### 15. Resetting / cleaning up a machine
 
 When restarting or discarding a machine:
 
@@ -418,15 +493,18 @@ StatementStateKillTimers();
 3. **Owner must be valid**  
    Create states from valid contexts (where `self` exists) or pass a struct as the owner. Passing destroyed IDs or invalid values logs a severe warning and returns `undefined`.
 
+4. **Debug helpers are your friend**  
+   `DebugDescribe()` and `PrintStateHistory([limit])` emit quick summaries to your debug logger, which helps confirm wiring during development.
+
 ---
 
 ### Advanced Gotchas
 
-1. **`can_exit` gates transitions**  
-   If a state sets `can_exit = false`, `ChangeState("Other")` will do nothing unless `force == true`. Make sure to set `can_exit = true` again when you actually want to leave.
+1. **Locked states (`can_exit` flag) gates transitions**  
+   If a state is locked via `LockExit();` (or `SetCanExit(false);`), then `ChangeState("Other")` will do nothing unless the `force` argument is true. Make sure to set `UnlockExit()` (or `SetCanExit(true);`) again when you actually want to leave.
 
 2. **Queued transitions are one-shot**  
-   Once a queued state is processed (or cleared), it's gone.  
+   Once a queued state is processed (or cleared), it's gone.
    If you want repeated attempts, call `QueueState()` again from your logic.
 
 3. **History is for introspection, not control flow**  
@@ -434,11 +512,10 @@ StatementStateKillTimers();
    For actual control (e.g. temporary overlays), prefer `PushState` / `PopState` or `PreviousState()`.
 
 4. **Per-state timers are independent of `GetStateTime()`**  
-   Per-state timers use `Timer*` methods and underlying `time_source` objects. Once started, they tick based on the time-source, not on how often you call `Update()`.  
+   Per-state timers use `Timer*` methods and GMs underlying `time_source` functionality. Once started, they tick based on the time-source, not on how often you call `Update()`.  
    They do not automatically match `GetStateTime()`; in almost all cases you should prefer `GetStateTime()` and only reach for per-state timers when you need that extra flexibility.
 
 5. **Clean up when resetting**  
-   - Use `ClearStates()` when you want to fully reset the machine's states.  
-   - Call `state_machine.Destroy()` in your instance's Destroy/Cleanup event when you are done with a machine so that any per-state timers owned by its states are cleaned up.  
+   - Use `ClearStates()` when you want to fully reset the machine's states.
+   - Call `state_machine.Destroy()` in your instance's Destroy/Cleanup event when you are done with a machine so that any per-state timers owned by its states are cleaned up.
    - Use `StatementStateKillTimers()` if you want to globally destroy all state timers for all machines (e.g. when restarting a run).
-

@@ -20,7 +20,7 @@ Statement gives you:
 - A `Statement` state machine bound to an instance or struct.
 - Named `StatementState` states with inbuilt **Enter / Update / Exit / Draw** handlers (plus easy extension of adding new handlers).
 - Built-in **state machine** timing (i.e. how long a state has been active for).
-- Optional **queued transitions**, **state stacks**, **history**, **per-state timers**, and more for advanced use cases.
+- Optional **queued transitions**, **declarative transitions**, **state stacks**, **state history**, **transition payloads**, **non interruptible states**, **pause support**, and rich **introspection and debug helpers**.
 
 ---
 
@@ -62,6 +62,7 @@ These are the features most users will use day-to-day:
   - `Statement.AddState(state)`
   - `Statement.ChangeState("Name")`
   - `Statement.GetStateName()`
+  - `Statement.GetLastTransitionData()` for payloads attached to the most recent transition.
 
 - **Feather-friendly**  
   Functions are fully annotated with JSDoc-style comments for better autocompletion and linting in GameMaker's code editor.
@@ -78,29 +79,69 @@ These features are entirely optional. You only need them if your project calls f
   - `QueueState()` to request a state change.
   - `ProcessQueuedState()` to apply it later.
   - `SetQueueAutoProcessing()` to have `Update()` handle it automatically.
+  - Queued transitions respect a state's `can_exit` setting and will wait until the state allows exiting, unless the transition is forced.
+
+- **Declarative transitions**
+  - Define transitions directly on a `StatementState` with `AddTransition(target_name, condition, [force])`.
+  - Each `Update()`, after running the state's Update handler, Statement evaluates these transitions in the order they were added.
+  - As soon as a condition returns true, the machine will change to the target state (again respecting `can_exit` unless forced).
+  - This is ideal for AI style behaviour such as "Idle until the player is close, then Chase" without having to call `ChangeState` manually.
+
+- **Transition payloads**
+  - All state changes can carry an optional payload object:
+    - `ChangeState("Hurt", { damage = _damage, source = _source; });`
+    - `QueueState("Attack", { target = oPlayer; });`
+    - `PushState("Menu", { from = "Game"; });`
+  - The state machine remembers the payload for the last successful transition:
+    - `Statement.GetLastTransitionData()`.
+  - The state change hook receives it as the second argument so you can record or react to extra context.
 
 - **State stack (Push / Pop)**
-  - `PushState("Menu")` / `PopState()` for temporary overlays like pause menus, cutscenes, or modals.
-  - Preserves clean Enter/Exit lifecycles.
+  - `PushState("Menu")` and `PopState()` for temporary overlays like pause menus, cutscenes, or modals.
+  - Preserves clean Enter and Exit lifecycles.
+  - Helpers such as `GetStateStackDepth()`, `PeekStateStack()`, and `ClearStateStack()` for inspection and maintenance.
 
-- **History & introspection**
-  - `previous_state` + `previous_states[]` history.
+- **History and introspection**
+  - `previous_state` and `previous_states[]` history.
   - `SetHistoryLimit(limit)` to cap memory usage.
-  - Helpers like `GetHistoryCount()` / `GetHistoryAt()` / `GetPreviousStateName()`.
+  - Helpers like:
+    - `GetHistoryCount()` and `GetHistoryAt(index)`.
+    - `GetPreviousStateName()`.
+    - `ClearHistory()` and `WasPreviouslyInState("Name", [depth])`.
 
-- **Per-state timers**
+- **Non interruptible states**
+  - Each `StatementState` has a flag that controls whether the machine is allowed to leave that state.
+  - When the flag is false, all normal transitions into other states are blocked until you turn it back on.
+  - This is ideal for stagger states, unskippable attack windows, or short cinematics that must not be interrupted by other systems.
+  - A separate `force` flag on transitions lets you override this when you need emergency changes such as a "Dead" state.
+
+- **Pause support**
+  - `Statement.SetPaused(true)` stops the machine from processing in `Update()`:
+    - No Update handlers are run.
+    - No queued transitions are processed.
+    - No declarative transitions are evaluated.
+    - The state age does not advance.
+  - Draw and manual calls such as `ChangeState()` still work while paused so you can safely apply forced transitions or visual changes.
+
+- **Per state timers**
   - Optional advanced timers on each `StatementState` handled via time sources.
-  - Helpers like `TimerStart()`, `TimerGet()`, `TimerPause()`, `TimerRestart()`, `TimerKill()`.
-  - Global `StatementStateKillTimers()` to clean up all state timers at once (on a change of room, for instance).
+  - Helpers like `TimerStart()`, `TimerGet()`, `TimerPause()`, `TimerRestart()`, and `TimerKill()`.
+  - Global `StatementStateKillTimers()` to clean up all state timers at once for example on a change of room.
 
-- **State-change hook**
-  - `SetStateChangeBehaviour(fn)` to run custom logic whenever the state changes (for logging, analytics, signals, etc).
+- **State change hook**
+  - `SetStateChangeBehaviour(fn)` to run custom logic whenever the state changes (for logging, analytics, signals, and more).
+  - Your hook is called as `fn(previous_state, data)` where `data` is the payload passed into the transition if one was supplied.
 
 - **Custom state handlers**
-  - Add extra handlers beyond the `Begin`, `Update`, `End` and `Draw` easily (for instance, add an `Animation End` handler
-    for the state, that runs in the Animation End Event).
+  - Add extra handlers beyond the built in Enter, Update, Exit, and Draw easily (for example an Animation End handler
+    that runs in the Animation End Event).
 
-You can safely ignore these until you actually need them.
+- **Debug and inspection**
+  - `PrintStateNames()` dumps all registered states on the machine.
+  - `DebugDescribe()` returns a one line summary of the machine including owner, current state, previous state, state age, queued state name, stack depth, and history count.
+  - `PrintStateHistory([limit])` logs the previous state history for this machine from most recent backwards.
+
+You can safely ignore all of these if you so wish. Statement is designed to "just work" with only the core features, but provide a large amount of hidden depth with these more advanced options.
 
 ---
 
@@ -113,7 +154,7 @@ You can safely ignore these until you actually need them.
   - `time_source` APIs
 
 - **Scripts you need:**
-  - The Statement  script library.
+  - The Statement script library.
   - The **Echo** debug helper library (shipped free with Statement). It provides the debug functions used in the examples: `EchoDebugInfo`, `EchoDebugWarn`, and `EchoDebugSevere`.
 
 > Statement's examples and internal debug calls use these Echo helpers. If you remove Echo from your project or choose not to import it, you can either write some simple `show_debug_message()`
@@ -170,6 +211,57 @@ That's all you need to get a basic state machine up and running.
 
 Always construct `Statement` and `StatementState` using the `new` keyword (for example `state_machine = new Statement(self);`). Calling these constructors without `new` will silently fail and your state machine will not work.
 {: .warning}
+
+---
+
+## Quick Start (with transitions and payloads)
+
+Here is a slightly more advanced example that:
+
+- Uses two states (`Idle` and `Hurt`).
+- Changes into `Hurt` with a payload.
+- Reads that payload in the `Hurt` state's Enter handler.
+
+**Create Event**
+```gml
+state_machine = new Statement(self);
+
+var idle = new StatementState(self, "Idle")
+    .AddUpdate(function() {
+        // Idle code
+    });
+
+var hurt = new StatementState(self, "Hurt")
+    .AddEnter(function() {
+        // First we grab the payload that was given during the transition to this state (the transition occurs in
+        // the codeblock below this one, in the collision event with the enemy)
+        var data = state_machine.GetLastTransitionData();
+        if (is_struct(data)) {
+            // And now we can use the data, in this case printing the damage we took to console
+            EchoDebugInfo("Entered Hurt with damage: " + string(data.damage_taken));
+        }
+    })
+    .AddUpdate(function() {
+        // Recovery logic here.
+        // When done, return to Idle.
+        if (hurt_anim_finished) {
+            state_machine.ChangeState("Idle");
+        }
+    });
+
+state_machine
+    .AddState(idle)
+    .AddState(hurt);
+```
+
+**On collision with enemy bullet**
+```gml
+var _current_hp = hp;
+hp -= other.damage;
+var _hp_change = _current_hp - hp;
+// Now we switch to the hurt state, providing the amount of damage taken as the optional payload for us to read in the hurt state
+state_machine.ChangeState("Hurt", { damage_taken = _hp_change; });
+```
 
 ---
 
@@ -240,6 +332,62 @@ Use `PushState` / `PopState` for:
 Use `ChangeState` when:
 
 - You're switching between normal, "flat" states (Idle -> Move -> Attack).
+
+---
+
+### How do I make a state non interruptible?
+
+Each `StatementState` has a `can_exit` flag. When it is false, the state machine will refuse to leave that state unless a transition is explicitly forced.
+
+A common pattern is a stagger state:
+
+```gml
+var stagger = new StatementState(self, "Stagger")
+    .AddEnter(function() {
+        state_machine.GetState().LockExit();
+    })
+    .AddUpdate(function() {
+        if (state_machine.GetStateTime() >= game_get_speed(gamespeed_fps) * 0.5) {
+            // We've been staggered for half a second, so unlock the exit blocker and change state
+            state_machine.GetState().UnlockExit();
+            state_machine.QueueState("Idle");
+        }
+    });
+```
+
+If you need an emergency override, you can use the force flag while changing the state
+```gml
+state_machine.ChangeState("Dead", undefined,true);
+```
+This forces the state change to ignore the can exit flag on the state.
+
+### How do I pause a state machine?
+
+Call `SetPaused(true)` on the machine:
+
+```gml
+state_machine.SetPaused(true);  // freeze automatic processing
+```
+
+While paused:
+
+- `Update()` does nothing.
+- Queued transitions are not processed.
+- Declarative transitions are not evaluated.
+- The state age does not advance.
+
+Draw and manual transitions still work:
+```gml
+if (state_machine.IsPaused()) {
+    // Still allowed:
+    state_machine.ChangeState("Dead", undefined, true);
+}
+```
+
+To resume, call:
+```gml
+state_machine.SetPaused(false);
+```
 
 ---
 
