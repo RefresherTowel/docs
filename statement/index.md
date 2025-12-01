@@ -28,15 +28,15 @@ idle_state = new StatementState(self, "Idle")
 ```
 - Built-in **state machine** timing (i.e. how long a state has been active for).
 - Optional advanced features like:
- - **Queued transitions**
- - **Declarative automated transitions** (simply set a condition for a state change and a target state and the state will automatically change when that condition is met)
- - **State stacks**
- - **State history**
- - **Transition payloads** (pass data easily between states as they change)
- - **Non interruptible states**
- - **Pause support** (halt updates for a state machine with one method call)
- - **Rich introspection and debug helpers**
- - *And more*
+  - **Queued transitions**
+  - **Declarative automated transitions** (simply set a condition for a state change and a target state and the state will automatically change when that condition is met)
+  - **State stacks**
+  - **State history**
+  - **Transition payloads** (pass data easily between states as they change)
+  - **Non interruptible states**
+  - **Pause support** (halt updates for a state machine with one method call)
+  - **Rich introspection and debug helpers**
+  - *And more*
 
 ---
 
