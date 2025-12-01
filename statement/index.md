@@ -22,9 +22,9 @@ Statement gives you:
 - **Chainable methods**: the fluid interface lets you chain your method calls one after the other. For example:
 ```gml
 idle_state = new StatementState(self, "Idle")
-  .AddEnter(_enter_func)
-  .AddUpdate(_update_func)
-  .AddExit(_exit_func);
+    .AddEnter(_enter_func)
+    .AddUpdate(_update_func)
+    .AddExit(_exit_func);
 ```
 - Built-in **state machine** timing (i.e. how long a state has been active for).
 - Optional advanced features like:
