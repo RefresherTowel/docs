@@ -171,10 +171,22 @@ You can safely ignore all of these if you so wish. Statement is designed to "jus
 
 - **Scripts you need:**
   - The Statement script library.
-  - The **Echo** debug helper library (shipped free with Statement). It provides the debug functions used in the examples: `EchoDebugInfo`, `EchoDebugWarn`, and `EchoDebugSevere`.
+  - The **Echo** debug helper library (shipped free with Statement). It provides the debug functions used throughout Statement: `EchoDebugInfo`, `EchoDebugWarn`, and `EchoDebugSevere`.
 
 > Statement's examples and internal debug calls use these Echo helpers. If you remove Echo from your project or choose not to import it, you can either write some simple `show_debug_message()`
-> wrapper functions with the same names, or update the debug calls in Statement to use your own debug system instead.
+> wrapper functions with the same names, such as:
+```gml
+function EchoDebugInfo(_string) {
+  show_debug_message(_string);
+}
+function EchoDebugWarn(_string) {
+  show_debug_message(_string);
+}
+function EchoDebugSevere(_string) {
+  show_debug_message(_string);
+}
+```
+> Or update the debug calls in Statement to use your own debug system instead.
 {: .note}
 
 No additional extensions or assets are required.
