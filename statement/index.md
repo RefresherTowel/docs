@@ -19,6 +19,10 @@ Statement gives you:
 
 - A `Statement` state machine bound to an instance or struct.
 - Named `StatementState` states with inbuilt **Enter / Update / Exit / Draw** handlers (plus easy extension of adding new handlers).
+- **Chainable methods**: the fluid interface lets you chain your method calls one after the other. For example:
+```gml
+idle_state = new StatementState(self, "Idle").AddEnter(_enter_func).AddUpdate(_update_func).AddExit(_exit_func);
+```
 - Built-in **state machine** timing (i.e. how long a state has been active for).
 - Optional **queued transitions**, **declarative transitions**, **state stacks**, **state history**, **transition payloads**, **non interruptible states**, **pause support**, and rich **introspection and debug helpers**.
 
