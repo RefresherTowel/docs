@@ -5,6 +5,17 @@ parent: Statement
 nav_order: 2
 ---
 
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
+
+1. TOC
+{:toc}
+
+</details>
+</div>
+
 # Usage & Examples
 
 This page shows how to use Statement in practice, split into:
@@ -201,9 +212,8 @@ if (game_paused) {
 }
 
 // Step Event
-if (!state_machine.IsPaused()) {
-    state_machine.Update();
-}
+// You can run Update unconditionally, but it will only do its work if the state machine is not paused
+state_machine.Update();
 ```
 
 Pausing does **not** prevent manual `ChangeState` calls or `Draw()`; it just freezes the automatic flow inside `Update()`.

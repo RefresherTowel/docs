@@ -139,7 +139,7 @@ Ensure that the current state matches the supplied name. If it is already active
 state_machine.EnsureState("Idle");
 
 // Ensure Hurt with a payload.
-state_machine.EnsureState("Hurt", { damage: _damage; });
+state_machine.EnsureState("Hurt", { damage: _damage });
 ```
 
 - `name`: `String`
@@ -220,7 +220,7 @@ Use only if you want per-state drawing.
 Get how long (in frames) the current state has been active.
 
 ```gml
-if (state_machine.GetStateTime() > get_game_speed(gamespeed_fps) * 0.5) {
+if (state_machine.GetStateTime() > game_get_speed(gamespeed_fps) * 0.5) {
     // half a second at 60 FPS
 }
 ```
@@ -745,7 +745,7 @@ idle.AddStateEvent(eStatementEvents.ANIMATION_END, function() {
 });
 ```
 
-- `event`: `Real` - one of the `eStatementEvents` values (`ENTER`, `EXIT`, `STEP`, `DRAW`).
+- `event`: `Real` - one of the `eStatementEvents` values (`ENTER`, `EXIT`, `STEP`, `DRAW` or any custom `eStatementEvents` value you've defined).
 - `fn`: `Function` - automatically `method(owner, fn)` bound.
 - **Returns:** `Struct.StatementState`
 

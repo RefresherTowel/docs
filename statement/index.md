@@ -5,19 +5,37 @@ nav_order: 2              # order among top-level items
 has_children: true        # marks this as a section (still supported)
 ---
 
-# Statement - State Machine for GameMaker
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
 
-**Statement** is a lightweight, reusable **state machine system** for GameMaker.  
+1. TOC
+{:toc}
 
-Designed to be dropped directly into any project and used immediately, with only a few lines of code.
+</details>
+</div>
+
+![Statement icon](../assets/statement_icon.png)
+{: .text-center}
+# Statement
+{: .text-center}
+*Turn your states into a Statement!*
+{: .text-center}
+
+**Statement** is a lightweight but feature rich **state machine system** for GameMaker, designed to be your new go-to for state logic.
+
+You can drop it into any project and get a full state machine running in just a few lines of code.
 
 Statement is part of the **RefresherTowel Games** suite of reusable frameworks for GameMaker. All of my
 frameworks come with extensive documentation and complete integration with Feather to make using them as 
 easy as possible.
 
+Most GameMaker projects start with a simple `state` variable and end with a mess of switches, flags, and special cases. Statement cuts through that. You give each object a state machine, define a few named states, and let Statement handle the rest. The result is code that is easier to read, easier to debug, and much easier to grow. And when you are ready to go beyond the basics, Statement has enough power under the hood to handle complex state machine behavior without changing that simple workflow.
+
 Statement gives you:
 
-- A `Statement` state machine bound to an instance or struct.
+- An easy to declare `Statement` state machine bound to an instance or struct.
 - Named `StatementState` states with inbuilt **Enter / Update / Exit / Draw** handlers (plus easy extension of adding new handlers).
 - **Chainable methods**: the fluid interface lets you chain your method calls one after the other. For example:
 ```gml
@@ -105,9 +123,9 @@ These features are entirely optional. You only need them if your project calls f
 
 - **Transition payloads**
   - All state changes can carry an optional payload object:
-    - `ChangeState("Hurt", { damage = _damage, source = _source; });`
-    - `QueueState("Attack", { target = oPlayer; });`
-    - `PushState("Menu", { from = "Game"; });`
+    - `ChangeState("Hurt", { damage: _damage, source: _source });`
+    - `QueueState("Attack", { target: oPlayer });`
+    - `PushState("Menu", { from: "Game" });`
   - The state machine remembers the payload for the last successful transition:
     - `Statement.GetLastTransitionData()`.
   - The state change hook receives it as the second argument so you can record or react to extra context.
@@ -288,7 +306,7 @@ var _current_hp = hp;
 hp -= other.damage;
 var _hp_change = _current_hp - hp;
 // Now we switch to the hurt state, providing the amount of damage taken as the optional payload for us to read in the hurt state
-state_machine.ChangeState("Hurt", { damage_taken = _hp_change; });
+state_machine.ChangeState("Hurt", { damage_taken: _hp_change });
 ```
 
 ---
@@ -388,6 +406,8 @@ If you need an emergency override, you can use the force flag while changing the
 state_machine.ChangeState("Dead", undefined,true);
 ```
 This forces the state change to ignore the can exit flag on the state.
+
+---
 
 ### How do I pause a state machine?
 

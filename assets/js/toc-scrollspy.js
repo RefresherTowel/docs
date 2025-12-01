@@ -4,6 +4,42 @@
 
   console.log("[toc-scrollspy] loaded");
 
+  const ScrollTocLinkToCenter = (linkEl) => {
+    // Only relevant if the TOC panel is actually scrollable
+    if (toc.scrollHeight <= toc.clientHeight + 1) return;
+
+    // Only recenter if it's drifting toward edges (reduces jitter)
+    const edgePadding = 40;
+
+    const tocRect = toc.getBoundingClientRect();
+    const linkRect = linkEl.getBoundingClientRect();
+
+    const linkTop = linkRect.top - tocRect.top;
+    const linkBottom = linkRect.bottom - tocRect.top;
+
+    const alreadyComfortable =
+      linkTop >= edgePadding && linkBottom <= (toc.clientHeight - edgePadding);
+
+    if (alreadyComfortable) return;
+
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    const behavior = reduceMotion ? "auto" : "smooth";
+
+    // link's top position within the TOC scroll content
+    const linkTopInToc = linkTop + toc.scrollTop;
+    const linkCenter = linkTopInToc + (linkRect.height * 0.5);
+
+    // target scrollTop to center that link
+    let target = linkCenter - (toc.clientHeight * 0.5);
+
+    // clamp
+    const maxScroll = toc.scrollHeight - toc.clientHeight;
+    if (target < 0) target = 0;
+    if (target > maxScroll) target = maxScroll;
+
+    toc.scrollTo({ top: target, behavior });
+  };
+
   const links = Array.from(toc.querySelectorAll('a[href^="#"]'));
   if (!links.length) return;
 
@@ -26,8 +62,8 @@
 
   if (!items.length) return;
 
-  // Sort by document position (safer than TOC order if anything weird happens)
-  items.sort((x, y) => x.el.compareDocumentPosition(y.el) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
+  // Keep order consistent with document layout
+  items.sort((x, y) => (x.el.offsetTop || 0) - (y.el.offsetTop || 0));
 
   const HEADER_OFFSET_PX = 110; // tweak to taste
 
@@ -46,17 +82,10 @@
     it.a.classList.add("is-active");
     it.li?.classList.add("is-active");
 
-    // Keep active item visible in the TOC (nice for very long API lists)
-    const tocBox = toc;
-    const linkBox = it.a.getBoundingClientRect();
-    const tocRect = tocBox.getBoundingClientRect();
-    if (linkBox.top < tocRect.top || linkBox.bottom > tocRect.bottom) {
-      it.a.scrollIntoView({ block: "nearest" });
-    }
+    ScrollTocLinkToCenter(it.a);
   };
 
   const pickCurrent = () => {
-    // last heading whose top edge has passed our offset line
     let current = items[0].id;
 
     for (const it of items) {
@@ -77,10 +106,9 @@
     });
   };
 
-  // Attach listeners to both window and likely scroll containers used by Just the Docs.
+  // Listen to possible scrollers (Just the Docs often scrolls .main-content-wrap)
   const candidates = [
     window,
-    document,
     document.scrollingElement,
     document.querySelector(".main-content-wrap"),
     document.querySelector(".main"),
@@ -93,14 +121,11 @@
   for (const target of unique) {
     try {
       target.addEventListener("scroll", schedule, { passive: true });
-    } catch {
-      // ignore targets that don't support addEventListener
-    }
+    } catch {}
   }
 
   window.addEventListener("resize", schedule);
   window.addEventListener("hashchange", schedule);
 
-  // Initial highlight
   schedule();
 })();
