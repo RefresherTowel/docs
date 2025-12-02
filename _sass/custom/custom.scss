@@ -144,3 +144,13 @@
 .main-content h4 {
   scroll-margin-top: 5.5rem; /* adjust to your header height */
 }
+
+// Remove the inner grey box from highlighted code blocks
+.highlighter-rouge .highlight {
+  background: transparent;
+  padding: 0;
+}
+
+.highlighter-rouge .highlight pre {
+  border-radius: 0; // or whatever you like
+}
