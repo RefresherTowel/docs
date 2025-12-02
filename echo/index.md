@@ -85,14 +85,13 @@ enum __ECHO_eDebugLevel {
 ```
 
 Behaviour:
-```
+
 | Level                       | Logs INFO | Logs WARNING | Logs SEVERE |
 |----------------------------|:---------:|:------------:|:-----------:|
 | `__ECHO_eDebugLevel.NONE`        |    ✖    |      ✖      |     ✖      |
 | `__ECHO_eDebugLevel.SEVERE_ONLY` |    ✖    |      ✖      |     ✔      |
 | `__ECHO_eDebugLevel.COMPREHENSIVE`|   ✖   |      ✔      |     ✔      |
 | `__ECHO_eDebugLevel.COMPLETE`    |    ✔    |      ✔      |     ✔      |
-```
 
 Default level: `COMPREHENSIVE`.
 

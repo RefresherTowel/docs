@@ -27,9 +27,7 @@ has_children: true        # marks this as a section (still supported)
 
 You can drop it into any project and get a full state machine running in just a few lines of code.
 
-Statement is part of the **RefresherTowel Games** suite of reusable frameworks for GameMaker. All of my
-frameworks come with extensive documentation and complete integration with Feather to make using them as 
-easy as possible.
+Statement is part of the upcoming **RefresherTowel Games** suite of reusable frameworks for GameMaker. It is the first release in the line, with more frameworks to follow as their documentation is finalized. Every framework in the suite will ship with extensive docs and full Feather integration to keep them easy to drop into your projects.
 
 Most GameMaker projects start with a simple `state` variable and end with a mess of switches, flags, and special cases. Statement cuts through that. You give each object a state machine, define a few named states, and let Statement handle the rest. The result is code that is easier to read, easier to debug, and much easier to grow. And when you are ready to go beyond the basics, Statement has enough power under the hood to handle complex state machine behavior without changing that simple workflow.
 

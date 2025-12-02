@@ -122,3 +122,25 @@
 .sticky-toc a:hover {
   text-decoration: underline;
 }
+
+/* Highlight the current section in the sticky TOC */
+.sticky-toc a.is-active {
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+/* If you want the dash to “pop” too */
+.sticky-toc li.is-active::before {
+  opacity: 1;
+}
+.sticky-toc li::before {
+  opacity: 0.55; /* baseline */
+}
+
+/* Optional: headings won’t hide under the top bar when you click TOC links */
+.main-content h2,
+.main-content h3,
+.main-content h4 {
+  scroll-margin-top: 5.5rem; /* adjust to your header height */
+}

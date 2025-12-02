@@ -3,51 +3,96 @@ layout: default
 title: Home
 nav_order: 1
 ---
+![Framework icon](./assets/framework_bundle_icon.png)
+{: .text-center}
+# Frameworks
+{: .text-center}
+*All you need in one bundle!*
+{: .text-center}
 
-# Framework Hub
+Welcome to the hub for all documentation related to the GameMaker focused frameworks created by RefresherTowel Games.
 
-Welcome to the hub for all documentation related to the various GM-focused frameworks created by RefresherTowel Games. Let's look at a short overview of each available framework.
+Each framework is built to solve a specific pain point, with a clean API, full Feather support, and detailed docs.
 
-## **[Statement](/docs/statement/)**
+---
 
-Have you ever found yourself writing tons of if statements trying to wrangle your player character so that their running, climbing, attack and jumping actions all function correctly?
+[![Statement icon](./assets/statement_icon.png){: style="max-width: 256px;"}](/docs/statement/)
+{: .text-center }
+## [**STATEMENT**](/docs/statement/)
+{: .text-center }
+> #### *Turn your states into a Statement!*
 
-Ever had animations bleed from one action to the next by accident?
+Tired of giant `if` chains and switch blocks trying to keep your player or enemies in the right state?
 
-Well, **Statement** is the solution for you!
+**Statement** is a lightweight but feature rich state machine framework for GameMaker. It gives each object a clear set of states with `Enter`, `Update`, `Exit`, and optional `Draw` handlers.
 
-Statement is a simple, but easily expandable state machine engine designed for practical easy use but stacked with lots of flexibility for more advanced users. Get a fully functioning state machine running with 5 simple lines of code, or delve into the hidden depth of the engine to build complex functionality with ease.
+- Clean, named states instead of scattered `state == ...` checks.
+- Simple to start: one machine, a couple of states, and a single `Update()` call.
+- Opt in extras when you need them: queued transitions, state stacks, history, transition payloads, non interruptible states, and more.
 
-Initialise a state machine with a simple `sm = StatementCreate(id)`, easily create states with `var _idle = StateCreate(id, "idle");`, give the states functionality `_idle.AddUpdate(function() { /* idle state code */ });`, apply them to the state machine `sm.AddState(_idle);` and finally run the state machine `sm.Update()`.
+##### [**PURCHASE STATEMENT**]()
+{: .text-center }
+##### [**EXPLORE THE STATEMENT DOCS**](/docs/statement/)
+{: .text-center }
 
-Or, if you're a pro, delve into the wide variety of options available to you, such as queued states, state stacks (push a UI menu to the core state machine stack, and then simply pop it off to instantly get easy menu functionality), custom states (Statement comes with Enter, Update, Exit and Draw states by default, but you can set your own and call them wherever you want, such as an Animation End state), work with the full history of states a state machine has cycled through, etc. Nearly limitless depth is at your fingertips.
+---
 
-## **[Pulse](/docs/pulse/)**
+[![Pulse icon](./assets/pulse_icon.png){: style="max-width: 256px;"}](/docs/pulse/)
+{: .text-center }
+## [**PULSE**](/docs/pulse/)
+{: .text-center }
+> #### *The beating heart of your game*
 
-Do you want damage to your character triggering an animation on your healthbar?
+Want damage events to update your health bar, play a sound, and trigger screen shake, without wiring everything together by hand?
 
-What about a modular effect applied to your weapon that intelligently understands to apply itself when you attack?
+**Pulse** is a lightweight signals and events framework for GameMaker. It gives you a clean way to broadcast events and let any number of listeners react.
 
-Then the **Pulse** is the system for you! Pulse is a fully featured "signal" system, allowing you to make things listen for, and act, when certain events happen ("signals").
+- Subscribe listeners once and decouple them from the sender.
+- Fire a signal and let UI, audio, VFX, and gameplay all respond.
+- Advanced tools for later: consumable signals, priorities, deferred processing, tags, and sender filters.
 
-Designed with both beginners and advanced users in mind, you can quickly and easily add listeners to signals and send out signals for those listeners, via `PulseSubscribe(id, "signal", function() { /* Signal action */ })` and `PulseSend("signal")`, or you can dive into the feature-rich belly, posting consumable signals (perhaps for clicking UI components, no more activating multiple buttons stacked on top of each other), tagging signals to sub-divide what should react when, take advantage of deferred signal processing, applying priorities, "from" filters (only listen to a signal when it's emitted from a specific thing), there are tons of options at your disposal.
+> Note: Pulse is not released yet. These docs are here as a preview and may change before launch. Right now, only **Statement** is available on itch.
+{: .note}
 
-## **[Catalyst](/docs/catalyst/)**
+##### [**LEARN MORE ABOUT PULSE**](/docs/pulse/)
+{: .text-center }
 
-Are you having trouble dealing with the stats in your game?
+---
 
-Ever tried to add multiple buffs and debuffs that all act on different timers and effect a single stat, ending up with some serious spaghetti code?
+[![Catalyst icon](./assets/catalyst_icon.png){: style="max-width: 256px;"}](/docs/catalyst/)
+{: .text-center }
+## [**CATALYST**](/docs/catalyst/)
+{: .text-center }
+> #### *Turn raw numbers into reactions*
 
-**Catalyst** is here to save your day!
+Struggling to keep your stats, buffs, and item effects under control as your game grows?
 
-Catalyst is a feature-rich framework for handling modifiable stats, such as speed, damage, poison resistance, etc. At its core, Catalyst is very easy to use, but it has been designed with a huge amount of flexibility in mind.
+**Catalyst** is a feature rich yet easy to use stats and modifiers framework for GameMaker. It treats stats as living systems instead of isolated numbers.
 
-Set up stats easily with `speed = CatStat(10);`, add modifiers like `CatMod(-1, eCatMathOps.ADD);` and retrieve up to date values with `speed.GetValue()` and you're done!
+- Handle health, damage, resistances, buffs, debuffs, item bonuses, and more in one consistent way.
+- Stack and combine effects without writing a new special case every time.
+- Built for weird ideas: context aware modifiers, derived stats, and complex interactions without tearing up your code.
 
-Or you can delve into the deep functionality, with layer stacking (apply all your "base" effects before "rune" effects, for instance), restrict stacks in various ways (only the highest effect in an effect family is applied), build your base value from other stats (have your base max hp built automatically from your strength * constitution + vitality, for example), have modifiers work in a context aware environment (a speed modifier that stacks based on the number of burning enemies around the player, for example), set clamps, min and/or max values, preview changes non-destructively (easy to see how the stats change if you add a new armour piece, for instance, without having to actually apply the new armour piece), remove modifiers based on a variety of options (such as tags, so effects like "cleanse" become simple to implement), the list is endless.
+> Note: Catalyst is not released yet. These docs are here as a preview and may change before launch. Right now, only **Statement** is available on itch.
+{: .note}
 
-## **[Echo](/docs/echo/)**
+##### [**LEARN MORE ABOUT CATALYST**](/docs/catalyst/)
+{: .text-center }
 
-Debugging doesn't have to be boring. Spice up your old `show_debug_message()` calls with **Echo**!
+---
 
-Echo makes debugging a breeze by allowing you *options* when debugging. Give each debug message a priority and filter what hits your console, or dump a full debug history for the current session to file, get stack tracing in your console, and even switch Echo off completely with the flip of a single bit!
+[![Echo icon](./assets/echo_icon.png){: style="max-width: 256px;"}](/docs/echo/)
+{: .text-center }
+## [**ECHO**](/docs/echo/)
+{: .text-center }
+> #### *Hear what your game is telling you*
+
+Plain debug logs are fine at first, but quickly become noise once your project grows.
+
+**Echo** is a lightweight **debugging** framework for GameMaker. Your game is always talking and Echo helps you hear what it is telling you. Instead of a wall of `show_debug_message()` calls, you get structured logs, levels, history, and tools that make problems stand out instead of hiding in the noise.
+
+- Log at different levels and filter what hits the console.
+- Keep a debug history for the current session and dump it to file when needed.
+- Optional extras like stack traces and an easy way to mute all logging with a single setting.
+
+Echo ships free with all available frameworks and integrates cleanly with their designs.

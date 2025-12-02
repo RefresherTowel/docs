@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   sodipodi:docname="echo_icon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1"
+     inkscape:cx="336"
+     inkscape:cy="221.5"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     showgrid="false" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient45"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#35fd00;stop-opacity:0;"
+         offset="0.30341882"
+         id="stop45" />
+      <stop
+         style="stop-color:#35fd00;stop-opacity:1;"
+         offset="1"
+         id="stop44" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient43"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#35fd00;stop-opacity:1;"
+         offset="0"
+         id="stop42" />
+      <stop
+         style="stop-color:#35fd00;stop-opacity:0;"
+         offset="0.69999999"
+         id="stop43" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient41"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#35fd00;stop-opacity:1;"
+         offset="0"
+         id="stop40" />
+      <stop
+         style="stop-color:#35fd00;stop-opacity:0;"
+         offset="0.60000002"
+         id="stop41" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient36"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#35fd00;stop-opacity:1;"
+         offset="0"
+         id="stop36" />
+      <stop
+         style="stop-color:#35fd00;stop-opacity:0;"
+         offset="0.60000002"
+         id="stop37" />
+    </linearGradient>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1354"
+       x="-0.62775044"
+       y="-0.01168632"
+       width="2.2555009"
+       height="1.0233726">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="21.515 0"
+         id="feGaussianBlur1354" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter3587"
+       x="-2.5605335"
+       y="0"
+       width="6.1210669"
+       height="1">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="70.796 0"
+         id="feGaussianBlur3587" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter3661"
+       x="-0.12742408"
+       y="0"
+       width="1.2548482"
+       height="1">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="4.425 0"
+         id="feGaussianBlur3661" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient45"
+       id="linearGradient37"
+       x1="118.25857"
+       y1="76.250435"
+       x2="148.0242"
+       y2="76.250435"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-1,0,0,1,266.28277,0)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient36"
+       id="linearGradient38"
+       x1="104.22367"
+       y1="57.988457"
+       x2="104.22367"
+       y2="20.43989"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient43"
+       id="linearGradient39"
+       x1="88.492943"
+       y1="65.088326"
+       x2="58.727314"
+       y2="65.088326"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient41"
+       id="linearGradient40"
+       x1="103.37576"
+       y1="94.853951"
+       x2="103.37576"
+       y2="132.06097"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter45"
+       x="-0.18327774"
+       y="-0.14763624"
+       width="1.3665555"
+       height="1.2952725">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="2.3539137"
+         id="feGaussianBlur45" />
+    </filter>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3589"
+       transform="matrix(0.55820087,0,0,0.55820087,46.045927,37.190754)"
+       style="fill:#35fd00;fill-opacity:1">
+      <path
+         style="mix-blend-mode:normal;fill:#35fd00;stroke-linecap:square;stroke-miterlimit:1.84;paint-order:stroke fill markers;filter:url(#filter3587);fill-opacity:1"
+         d="m 100.04297,-47.351562 h 66.35742 v 66.357421 h -66.35742 z"
+         transform="rotate(45,-1.4171121e-6,2.3333333e-7)"
+         id="path3588" />
+      <path
+         style="fill:#35fd00;stroke-linecap:square;stroke-miterlimit:1.84;paint-order:stroke fill markers;filter:url(#filter3587);fill-opacity:1"
+         d="M 82.583984,-64.810547 V 36.464844 H 183.85937 V -64.810547 Z"
+         transform="rotate(45,-1.4171121e-6,2.3333333e-7)"
+         id="rect3587" />
+    </g>
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke-width:1.959;stroke-linecap:square;stroke-miterlimit:1.84;paint-order:stroke fill markers"
+       id="rect1"
+       width="83.815948"
+       height="83.815948"
+       x="91.862747"
+       y="-56.629677"
+       transform="rotate(45)" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#6600f7;stroke-width:1.959;stroke-linecap:square;stroke-miterlimit:1.84;stroke-opacity:1;paint-order:stroke fill markers;filter:url(#filter1354)"
+       id="rect1354"
+       width="83.815948"
+       height="83.815948"
+       x="91.313553"
+       y="-56.080482"
+       transform="rotate(45)" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#35fd00;stroke-width:1.959;stroke-linecap:square;stroke-miterlimit:1.84;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect1353"
+       width="83.815948"
+       height="83.815948"
+       x="91.313553"
+       y="-56.080482"
+       transform="rotate(45)"
+       inkscape:export-filename="pulse_icon.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       id="g45"
+       transform="translate(0.84756539,2.6382665)">
+      <path
+         id="path45"
+         style="font-size:50.8px;font-family:'Achtung! Polizei';-inkscape-font-specification:'Achtung! Polizei';letter-spacing:0.994833px;opacity:0.779736;fill:#00fd7d;fill-opacity:1;stroke-width:1.959;stroke-linecap:square;stroke-miterlimit:1.84;paint-order:stroke fill markers;filter:url(#filter45)"
+         d="m 87.962891,57.646484 c 0,12.578776 0,25.157552 0,37.736328 10.274739,10e-7 20.549479,0 30.824219,0 0,-2.833333 0,-5.666666 0,-8.5 -6.61458,10e-7 -13.22917,0 -19.843751,0 0,-2.127604 0,-4.255208 0,-6.382812 6.614581,0 13.229171,0 19.843751,0 0,-2.833333 0,-5.666667 0,-8.5 -6.61458,0 -13.22917,0 -19.843751,0 0,-2.127604 0,-4.255208 0,-6.382812 6.614581,0 13.229171,-10e-7 19.843751,0 0,-2.833334 0,-5.666667 0,-8.5 -10.27474,-10e-7 -20.54948,0 -30.824219,0 0,0.176432 0,0.352864 0,0.529296 z" />
+      <path
+         d="m 98.414818,87.412544 h 19.843752 v 7.441407 H 88.492943 V 57.64692 h 29.765627 v 7.441406 H 98.414818 v 7.441406 h 19.843752 v 7.441406 H 98.414818 Z"
+         id="text1"
+         style="font-size:50.8px;font-family:'Achtung! Polizei';-inkscape-font-specification:'Achtung! Polizei';letter-spacing:0.994833px;fill:#35fd00;stroke-width:1.959;stroke-linecap:square;stroke-miterlimit:1.84;paint-order:stroke fill markers"
+         aria-label="E"
+         sodipodi:nodetypes="ccccccccccccc" />
+      <path
+         d="M 138.10233,87.412543 H 118.25857 V 94.85395 H 148.0242 V 57.64692 h -29.76563 v 7.441405 h 19.84376 v 7.441406 h -19.84376 v 7.441406 h 19.84376 z"
+         id="path30"
+         style="font-size:50.8px;font-family:'Achtung! Polizei';-inkscape-font-specification:'Achtung! Polizei';letter-spacing:0.994833px;opacity:0.121586;fill:url(#linearGradient37);stroke-width:1.959;stroke-linecap:square;stroke-miterlimit:1.84;paint-order:stroke fill markers"
+         aria-label="E"
+         sodipodi:nodetypes="ccccccccccccc" />
+      <path
+         d="M 98.414809,50.205513 H 118.25857 V 57.64692 H 88.49294 V 20.43989 h 29.76563 v 7.441405 H 98.414809 v 7.441406 h 19.843761 v 7.441406 H 98.414809 Z"
+         id="path31"
+         style="font-size:50.8px;font-family:'Achtung! Polizei';-inkscape-font-specification:'Achtung! Polizei';letter-spacing:0.994833px;opacity:0.121586;fill:url(#linearGradient38);stroke-width:1.959;stroke-linecap:square;stroke-miterlimit:1.84;paint-order:stroke fill markers"
+         aria-label="E"
+         sodipodi:nodetypes="ccccccccccccc" />
+      <path
+         d="M 68.649182,87.412543 H 88.492943 V 94.85395 H 58.727313 V 57.64692 h 29.76563 v 7.441405 H 68.649182 v 7.441406 h 19.843761 v 7.441406 H 68.649182 Z"
+         id="path32"
+         style="font-size:50.8px;font-family:'Achtung! Polizei';-inkscape-font-specification:'Achtung! Polizei';letter-spacing:0.994833px;opacity:0.121586;fill:url(#linearGradient39);stroke-width:1.959;stroke-linecap:square;stroke-miterlimit:1.84;paint-order:stroke fill markers"
+         aria-label="E"
+         sodipodi:nodetypes="ccccccccccccc" />
+      <path
+         d="m 98.41481,124.61957 h 19.84376 v 7.44141 H 88.492941 V 94.853951 h 29.765629 v 7.441409 H 98.41481 v 7.4414 h 19.84376 v 7.44141 H 98.41481 Z"
+         id="path33"
+         style="font-size:50.8px;font-family:'Achtung! Polizei';-inkscape-font-specification:'Achtung! Polizei';letter-spacing:0.994833px;opacity:0.121586;fill:url(#linearGradient40);stroke-width:1.959;stroke-linecap:square;stroke-miterlimit:1.84;paint-order:stroke fill markers"
+         aria-label="E"
+         sodipodi:nodetypes="ccccccccccccc" />
+    </g>
+    <g
+       id="g3661"
+       transform="translate(17.86719,3.4299433)"
+       inkscape:export-filename="echo_icon.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <rect
+         style="mix-blend-mode:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:3.35247;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:1.84;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke;filter:url(#filter3661)"
+         id="rect3661"
+         width="83.34375"
+         height="17.991667"
+         x="68.048515"
+         y="136.07422"
+         transform="matrix(0.93917777,0,0,1.4780399,-16.690823,-92.583022)" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.4px;font-family:'Car Lock';-inkscape-font-specification:'Car Lock';text-align:start;letter-spacing:0.994833px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#35fd00;fill-opacity:1;stroke:none;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:1.84;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         x="55.718376"
+         y="130.51794"
+         id="text3661"><tspan
+           sodipodi:role="line"
+           id="tspan3661"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.4px;font-family:'Car Lock';-inkscape-font-specification:'Car Lock';fill:#35fd00;fill-opacity:1;stroke:none;stroke-width:3.2"
+           x="55.718376"
+           y="130.51794">ECHO</tspan></text>
+    </g>
+  </g>
+</svg>
