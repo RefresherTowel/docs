@@ -38,7 +38,7 @@ It's split into:
 
 Create a state machine bound to the given owner instance or struct.
 
-```gml
+```js
 state_machine = new Statement(self);
 ```
 
@@ -51,7 +51,7 @@ state_machine = new Statement(self);
 
 Create a new state bound to the given owner.
 
-```gml
+```js
 idle = new StatementState(self, "Idle");
 ```
 
@@ -69,7 +69,7 @@ If `owner` is neither an existing instance nor a struct, the constructor logs a 
 
 Register a `StatementState` on this machine.
 
-```gml
+```js
 state_machine.AddState(idle);
 ```
 
@@ -86,7 +86,7 @@ If a state with the same name already exists, it is replaced (with a warning).
 
 Get a state by name, or the current state if no name is provided.
 
-```gml
+```js
 var _current = state_machine.GetState();
 var _idle    = state_machine.GetState("Idle");
 ```
@@ -100,7 +100,7 @@ var _idle    = state_machine.GetState("Idle");
 
 Get the name of the current state.
 
-```gml
+```js
 var _name = state_machine.GetStateName();
 ```
 
@@ -113,7 +113,7 @@ var _name = state_machine.GetStateName();
 
 Check whether the current state matches the supplied name or state struct.
 
-```gml
+```js
 if (state_machine.IsInState("Hurt")) {
     // Already in the Hurt state.
 }
@@ -134,7 +134,7 @@ Accepts either a state name or a `StatementState` struct. If called with an unsu
 
 Ensure that the current state matches the supplied name. If it is already active, no transition occurs.
 
-```gml
+```js
 // Make sure we are in Idle; only changes if needed.
 state_machine.EnsureState("Idle");
 
@@ -154,7 +154,7 @@ Internally this is equivalent to checking the current state's name and only call
 
 Immediately change to another state, optionally with a transition payload.
 
-```gml
+```js
 state_machine.ChangeState("Attack");
 state_machine.ChangeState("Hitstun", { damage: 5 }, true); // payload + force
 ```
@@ -186,7 +186,7 @@ If an `Exit` handler changes state itself, the outer `ChangeState` respects that
 
 Drive the state machine for one Step.
 
-```gml
+```js
 // Step Event
 state_machine.Update();
 ```
@@ -204,7 +204,7 @@ state_machine.Update();
 
 Optional helper to run the current state's Draw handler.
 
-```gml
+```js
 // Draw Event
 state_machine.Draw();
 ```
@@ -219,7 +219,7 @@ Use only if you want per-state drawing.
 
 Get how long (in frames) the current state has been active.
 
-```gml
+```js
 if (state_machine.GetStateTime() > game_get_speed(gamespeed_fps) * 0.5) {
     // half a second at 60 FPS
 }
@@ -235,7 +235,7 @@ Automatically reset on each state change.
 
 Manually set the current state's age.
 
-```gml
+```js
 state_machine.SetStateTime(0);
 ```
 
@@ -248,7 +248,7 @@ state_machine.SetStateTime(0);
 
 Clear all states and reset the machine.
 
-```gml
+```js
 state_machine.ClearStates();
 ```
 
@@ -270,7 +270,7 @@ Returns the machine for chaining.
 
 Bind an `Enter` handler that runs once when the state becomes active.
 
-```gml
+```js
 idle.AddEnter(function() {
     sprite_index = spr_player_idle;
 });
@@ -285,7 +285,7 @@ idle.AddEnter(function() {
 
 Bind an `Update` handler that runs every Step while the state is active.
 
-```gml
+```js
 idle.AddUpdate(function() {
     // Idle behaviour
 });
@@ -299,7 +299,7 @@ idle.AddUpdate(function() {
 
 Bind an `Exit` handler that runs once when the state stops being active.
 
-```gml
+```js
 idle.AddExit(function() {
     EchoDebugInfo("Leaving Idle");
 });
@@ -313,7 +313,7 @@ idle.AddExit(function() {
 
 Bind a `Draw` handler that runs each Draw while the state is active if you call `Statement.Draw()`.
 
-```gml
+```js
 idle.AddDraw(function() {
     draw_self();
 });
@@ -335,7 +335,7 @@ The following features are optional. You can ignore them unless your project spe
 
 Pause or resume the state machine. When paused, `Update()` skips queue processing, STEP handlers, declarative transitions, and state age increments. Manual `ChangeState` calls still work.
 
-```gml
+```js
 state_machine.SetPaused(true);  // freeze
 state_machine.SetPaused(false); // resume
 ```
@@ -349,7 +349,7 @@ state_machine.SetPaused(false); // resume
 
 Check whether the machine is currently paused.
 
-```gml
+```js
 if (state_machine.IsPaused()) { /* skip logic */ }
 ```
 
@@ -363,7 +363,7 @@ if (state_machine.IsPaused()) { /* skip logic */ }
 
 Control whether queued transitions are automatically processed inside `Update()`.
 
-```gml
+```js
 state_machine.SetQueueAutoProcessing(true);
 ```
 
@@ -378,7 +378,7 @@ Default: `true`.
 
 Queue a state change to be processed later.
 
-```gml
+```js
 state_machine.QueueState("Attack");
 ```
 
@@ -393,7 +393,7 @@ state_machine.QueueState("Attack");
 
 Process any pending queued state change immediately.
 
-```gml
+```js
 state_machine.ProcessQueuedState();
 ```
 
@@ -407,7 +407,7 @@ If the current state cannot exit (and `force` was not set when queuing), the que
 
 Check if a queued state is pending.
 
-```gml
+```js
 if (state_machine.HasQueuedState()) { /* ... */ }
 ```
 
@@ -419,7 +419,7 @@ if (state_machine.HasQueuedState()) { /* ... */ }
 
 Get the name of the queued state, if any.
 
-```gml
+```js
 var _next = state_machine.GetQueuedStateName();
 ```
 
@@ -431,7 +431,7 @@ var _next = state_machine.GetQueuedStateName();
 
 Get the payload attached to a queued state, if any.
 
-```gml
+```js
 var _payload = state_machine.GetQueuedStateData();
 ```
 
@@ -443,7 +443,7 @@ var _payload = state_machine.GetQueuedStateData();
 
 Cancel any queued state without processing it.
 
-```gml
+```js
 state_machine.ClearQueuedState();
 ```
 
@@ -457,7 +457,7 @@ state_machine.ClearQueuedState();
 
 Set how many previous states to keep in history.
 
-```gml
+```js
 state_machine.SetHistoryLimit(32);
 ```
 
@@ -472,7 +472,7 @@ state_machine.SetHistoryLimit(32);
 
 Get how many entries are currently stored in the previous state history.
 
-```gml
+```js
 var _count = state_machine.GetHistoryCount();
 ```
 
@@ -484,7 +484,7 @@ var _count = state_machine.GetHistoryCount();
 
 Get a previous state by history index.
 
-```gml
+```js
 var _st = state_machine.GetHistoryAt(0);
 ```
 
@@ -497,7 +497,7 @@ var _st = state_machine.GetHistoryAt(0);
 
 Clear the previous state history without affecting the current state.
 
-```gml
+```js
 state_machine.ClearHistory();
 ```
 
@@ -509,7 +509,7 @@ state_machine.ClearHistory();
 
 Convenience helper to change back to the most recent previous state.
 
-```gml
+```js
 state_machine.PreviousState();
 ```
 
@@ -519,7 +519,7 @@ state_machine.PreviousState();
 
 This is roughly equivalent to:
 
-```gml
+```js
 state_machine.ChangeState(state_machine.GetPreviousStateName(), data, force);
 ```
 
@@ -531,7 +531,7 @@ but is safer and handles edge cases for you.
 
 Get the name of the most recent previous state in history.
 
-```gml
+```js
 var _prev = state_machine.GetPreviousStateName();
 ```
 
@@ -543,7 +543,7 @@ var _prev = state_machine.GetPreviousStateName();
 
 Check whether the state at the given history depth matches the supplied name.
 
-```gml
+```js
 // Was the last state "Attack"?
 if (state_machine.WasPreviouslyInState("Attack")) {
     // ...
@@ -567,7 +567,7 @@ Returns `false` if there is not enough history, or if the entry at that depth is
 
 Get the payload attached to the most recent successful state transition, if any.
 
-```gml
+```js
 var _data = state_machine.GetLastTransitionData();
 if (is_struct(_data)) {
     EchoDebugInfo("Last transition damage: " + string(_data.damage));
@@ -584,7 +584,7 @@ This works for direct `ChangeState`, queued transitions, stack pushes/pops, and 
 
 Print all state names registered on this machine (via the debug system).
 
-```gml
+```js
 state_machine.PrintStateNames();
 ```
 
@@ -596,7 +596,7 @@ state_machine.PrintStateNames();
 
 Return a one-line debug description of this state machine, including owner, current state, previous state, age, queued state (if any), state stack depth, and history count.
 
-```gml
+```js
 EchoDebugInfo(state_machine.DebugDescribe());
 ```
 
@@ -610,7 +610,7 @@ Useful for quick logging of state machine status without having to inspect multi
 
 Print the previous state history for this machine, from most recent backwards.
 
-```gml
+```js
 // Dump entire history
 state_machine.PrintStateHistory();
 
@@ -630,7 +630,7 @@ By default the method prints a short summary (similar to `DebugDescribe()`) and 
 
 Push current state onto a stack and change to `name`.
 
-```gml
+```js
 state_machine.PushState("Pause");
 ```
 
@@ -646,7 +646,7 @@ If the transition is blocked (for example `can_exit == false` and not forced), t
 
 Pop the last pushed state from the stack and change back to it.
 
-```gml
+```js
 state_machine.PopState();
 ```
 
@@ -662,7 +662,7 @@ Handles empty stacks and invalid entries safely.
 
 Number of entries currently on the state stack.
 
-```gml
+```js
 var _depth = state_machine.GetStateStackDepth();
 ```
 
@@ -674,7 +674,7 @@ var _depth = state_machine.GetStateStackDepth();
 
 Peek at the most recently pushed state without popping it.
 
-```gml
+```js
 var _top = state_machine.PeekStateStack();
 ```
 
@@ -686,7 +686,7 @@ var _top = state_machine.PeekStateStack();
 
 Clear all entries from the state stack without changing the current state.
 
-```gml
+```js
 state_machine.ClearStateStack();
 ```
 
@@ -700,7 +700,7 @@ state_machine.ClearStateStack();
 
 Register a callback to be run whenever the machine changes state.
 
-```gml
+```js
 state_machine.SetStateChangeBehaviour(method(self, function() {
     EchoDebugInfo("Now in state: " + string(state_machine.GetStateName()));
 }));
@@ -738,7 +738,7 @@ However, if you're confident editing Statement itself, you can extend `eStatemen
 **StatementState method**. Bind a handler to a specific `eStatementEvents` index. This is your "custom" handler entry point.
 
 **Create Event**
-```gml
+```js
 // Assuming you have added ANIMATION_END to the enum list (before NUM)
 idle.AddStateEvent(eStatementEvents.ANIMATION_END, function() {
     // custom logic dealing with the end of animations in the idle state
@@ -755,7 +755,7 @@ idle.AddStateEvent(eStatementEvents.ANIMATION_END, function() {
 
 **StatementState** method. Check whether this state has a handler for a given `eStatementEvents` index.
 
-```gml
+```js
 if (!idle.HasStateEvent(eStatementEvents.ANIMATION_END)) {
     // maybe attach one
 }
@@ -772,7 +772,7 @@ if (!idle.HasStateEvent(eStatementEvents.ANIMATION_END)) {
 
 Control whether a state can be exited without forcing.
 
-```gml
+```js
 state.LockExit();      // block transitions unless force == true
 state.SetCanExit(true); // equivalent to UnlockExit()
 ```
@@ -788,7 +788,7 @@ When `can_exit == false`, `ChangeState`/queued transitions will only leave this 
 
 Add a declarative transition that will be evaluated each `Update()` while the state is active. When the condition returns true, the machine changes to `target_name`.
 
-```gml
+```js
 idle.AddTransition("Run", function() {
     return abs(hsp) > 0.1;
 });
@@ -807,7 +807,7 @@ Transitions are checked in the order they were added; the first condition return
 
 Remove all declarative transitions from this state.
 
-```gml
+```js
 state.ClearTransitions();
 ```
 
@@ -819,7 +819,7 @@ state.ClearTransitions();
 
 Evaluate this state's declarative transitions and return the first matching record.
 
-```gml
+```js
 var _tr = state.EvaluateTransitions();
 ```
 
@@ -834,7 +834,7 @@ Normally you do not call this directly; the machine calls `EvaluateTransitions()
 **Statement method**. Run a specific `eStatementEvents` index on the current state. This is scoped to the state machine itself, unlike the other two which are scoped to the state, to keep parity with the other handlers, like `state_machine.Update()`, etc.
 
 **Animation End Event**
-```gml
+```js
 if (state_machine.GetState().HasStateEvent(eStatementEvents.ANIMATION_END)) {
     state_machine.RunState(eStatementEvents.ANIMATION_END);
 }
@@ -851,7 +851,7 @@ if (state_machine.GetState().HasStateEvent(eStatementEvents.ANIMATION_END)) {
 
 Force evaluation of declarative transitions on the current state and apply the first passing transition.
 
-```gml
+```js
 state_machine.EvaluateTransitions();          // after custom update loop
 state_machine.EvaluateTransitions(payload);   // attach payload if a transition fires
 ```
@@ -882,7 +882,7 @@ If you're unsure which to use, start with `GetStateTime()` and ignore per-state 
 
 Create and start a per-state timer (if not already created), resetting it to 0.
 
-```gml
+```js
 state.TimerStart();
 ```
 
@@ -894,7 +894,7 @@ state.TimerStart();
 
 Set the per-state timer value.
 
-```gml
+```js
 state.TimerSet(30);
 ```
 
@@ -907,7 +907,7 @@ state.TimerSet(30);
 
 Get the current per-state timer value.
 
-```gml
+```js
 var _t = state.TimerGet();
 ```
 
@@ -919,7 +919,7 @@ var _t = state.TimerGet();
 
 Pause the per-state timer.
 
-```gml
+```js
 state.TimerPause();
 ```
 
@@ -931,7 +931,7 @@ state.TimerPause();
 
 Restart the per-state timer if it exists.
 
-```gml
+```js
 state.TimerRestart();
 ```
 
@@ -943,7 +943,7 @@ state.TimerRestart();
 
 Kill (destroy) the per-state timer.
 
-```gml
+```js
 state.TimerKill();
 ```
 
@@ -957,7 +957,7 @@ state.TimerKill();
 
 Remove a state by name from this machine.
 
-```gml
+```js
 state_machine.RemoveState("Debug");
 ```
 
@@ -970,7 +970,7 @@ state_machine.RemoveState("Debug");
 
 Helper to clean up state-specific timers for all states registered on this machine (current and history).
 
-```gml
+```js
 state_machine.Destroy();
 ```
 
@@ -982,7 +982,7 @@ Call this if you are discarding a machine and want to ensure no associated timer
 
 Global helper: destroy all state timers registered in `global.__statement_timers` and clear the array.
 
-```gml
+```js
 StatementStateKillTimers();
 ```
 

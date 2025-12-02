@@ -31,7 +31,7 @@ This page shows how to use Statement in practice, split into:
 ### 1. Basic Hello World
 
 **Create Event**
-```gml
+```js
 state_machine = new Statement(self);
 
 var _idle = new StatementState(self, "Idle")
@@ -46,12 +46,12 @@ state_machine.AddState(_idle);
 ```
 
 **Step Event**
-```gml
+```js
 state_machine.Update();
 ```
 
 **Draw Event (optional)**
-```gml
+```js
 state_machine.Draw();
 ```
 
@@ -66,7 +66,7 @@ This sets up:
 ### 2. Multiple States with Simple Transitions
 
 **Create Event**
-```gml
+```js
 state_machine = new Statement(self);
 
 // Idle
@@ -107,12 +107,12 @@ state_machine
 ```
 
 **Step Event**
-```gml
+```js
 state_machine.Update();
 ```
 
 **Draw Event**
-```gml
+```js
 state_machine.Draw();
 ```
 
@@ -122,7 +122,7 @@ Now if you press any key while in the Idle state, it will transition to the Move
 
 ### 3. Using `GetStateTime()` for Behaviour
 
-```gml
+```js
 var _attack = new StatementState(self, "Attack")
     .AddEnter(function() {
         sprite_index = spr_player_attack;
@@ -146,7 +146,7 @@ Because `state_machine` resets `state_age` automatically on state change, you do
 
 ### 4. Queued Transitions to Avoid Mid-Update Re-entry
 
-```gml
+```js
 var _move = new StatementState(self, "Move")
     .AddUpdate(function() {
         // movement logic...
@@ -182,13 +182,13 @@ Because transitions are queued, the rest of the current event runs with the **ol
 If you want explicit control over when queued transitions happen:
 
 **Create Event**
-```gml
+```js
 state_machine = new Statement(self)
     .SetQueueAutoProcessing(false);
 ```
 
 **Step Event**
-```gml
+```js
 // Do your own logic...
 // When ready to apply queued transitions:
 state_machine.ProcessQueuedState();
@@ -203,7 +203,7 @@ Now you can insert queue processing at a specific spot in your step pipeline.
 
 You can pause automatic processing (Update/queue/declarative transitions) while still allowing manual transitions.
 
-```gml
+```js
 // e.g., global pause toggle
 if (game_paused) {
     state_machine.SetPaused(true);
@@ -223,7 +223,7 @@ Pausing does **not** prevent manual `ChangeState` calls or `Draw()`; it just fre
 ### 7. Using Push/Pop for Overlays (Pause State)
 
 **Create Event**
-```gml
+```js
 state_machine = new Statement(self);
 
 // Existing states: Idle, Move, Attack... (omitted)
@@ -249,7 +249,7 @@ state_machine.AddState(_pause);
 ```
 
 **Step Event**
-```gml
+```js
 if (keyboard_check_released(vk_escape)
 && state_machine.GetStateName() != "Pause") {
     state_machine.PushState("Pause");
@@ -270,7 +270,7 @@ state_machine.Draw();
 ### 8. Per-State Timers for More Complex Timing
 
 **Create Event**
-```gml
+```js
 state_machine = new Statement(self);
 
 charge = new StatementState(self, "Charge")
@@ -299,7 +299,7 @@ state_machine
 
 You can pause and restart the per-state timer:
 
-```gml
+```js
 if (game_is_paused) {
     charge.TimerPause();
 } else {
@@ -315,7 +315,7 @@ Almost all of the time you can rely on `GetStateTime()` on the machine instead a
 ---
 ### 9. State Change Hook for Logging & Signals
 
-```gml
+```js
 state_machine.SetStateChangeBehaviour(method(self, function() {
     EchoDebugInfo("State changed to: " + string(state_machine.GetStateName()));
     // You could also emit a signal here, update UI, etc.
@@ -337,7 +337,7 @@ This runs for every transition, making it useful for:
 
 Add transitions to a state that fire automatically when conditions pass. They are evaluated after each `Update()`.
 
-```gml
+```js
 var _run = new StatementState(self, "Run")
     .AddUpdate(function() {
         // run logic...
@@ -360,7 +360,7 @@ var _run = new StatementState(self, "Run")
 
 Carry data across transitions and avoid redundant changes.
 
-```gml
+```js
 // When taking damage, carry a payload into the new state.
 state_machine.ChangeState("Hitstun", { damage: last_damage });
 
@@ -388,7 +388,7 @@ Use `GetQueuedStateData()` when inspecting queued transitions, and `WasPreviousl
 You can define your own event index and bind/run it manually. For example, add an `ANIMATION_END` enum:
 
 **`scr_statement_macro` Script**
-```gml
+```js
 enum eStatementEvents {
     ENTER,
     EXIT,
@@ -402,7 +402,7 @@ enum eStatementEvents {
 In Create, bind a handler for that event:
 
 **Create Event**
-```gml
+```js
 state_machine = new Statement(self);
 
 var _attack = new StatementState(self, "Attack")
@@ -421,7 +421,7 @@ state_machine.AddState(_attack);
 In the Animation End event of the object, run the custom event if present:
 
 **Animation End Event**
-```gml
+```js
 if (state_machine.GetState().HasStateEvent(eStatementEvents.ANIMATION_END)) {
     state_machine.RunState(eStatementEvents.ANIMATION_END);
 }
@@ -435,7 +435,7 @@ This pattern lets you hook into additional event points (like Animation End) whi
 
 If you're queuing transitions manually, you can inspect or clear the pending change:
 
-```gml
+```js
 /// Debug overlay
 if (state_machine.HasQueuedState()) {
     var _queued = state_machine.GetQueuedStateName();
@@ -452,7 +452,7 @@ state_machine.ClearQueuedState();
 
 You can check where you've been:
 
-```gml
+```js
 // Last state name
 var _prev = state_machine.GetPreviousStateName();
 
@@ -477,7 +477,7 @@ Use `SetHistoryLimit(limit)` if you want to cap how many entries are kept.
 
 When restarting or discarding a machine:
 
-```gml
+```js
 // Fully reset states and queues
 state_machine.ClearStates();
 

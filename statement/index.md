@@ -36,7 +36,7 @@ Statement gives you:
 - An easy to declare `Statement` state machine bound to an instance or struct.
 - Named `StatementState` states with inbuilt **Enter / Update / Exit / Draw** handlers (plus easy extension of adding new handlers).
 - **Chainable methods**: the fluid interface lets you chain your method calls one after the other. For example:
-```gml
+```js
 idle_state = new StatementState(self, "Idle")
     .AddEnter(_enter_func)
     .AddUpdate(_update_func)
@@ -191,7 +191,7 @@ You can safely ignore all of these if you so wish. Statement is designed to "jus
 
 > Statement's examples and internal debug calls use these Echo helpers. If you remove Echo from your project or choose not to import it, you can either write some simple `show_debug_message()`
 > wrapper functions with the same names, such as:
-```gml
+```js
 function EchoDebugInfo(_string) {
   show_debug_message(_string);
 }
@@ -214,10 +214,10 @@ No additional extensions or assets are required.
 A minimal example: single machine, single state.
 
 **Create Event**
-```gml
+```js
 state_machine = new Statement(self);
 
-var idle = new StatementState(self, "Idle")
+var _idle = new StatementState(self, "Idle")
     .AddEnter(function() {
         EchoDebugInfo("Entered Idle");
     })
@@ -226,23 +226,23 @@ var idle = new StatementState(self, "Idle")
         image_angle += 1;
     });
 
-state_machine.AddState(idle);
+state_machine.AddState(_idle);
 ```
 
 **Step Event**
-```gml
+```js
 state_machine.Update();
 ```
 
 **Draw Event (optional)**
-```gml
+```js
 state_machine.Draw();
 ```
 
 That's all you need to get a basic state machine up and running.
 
 > If you find `new Statement(self)` and `new StatementState(self, "Idle")` a bit verbose, it's perfectly fine to define your own project-specific helper function that wraps the constructor call, for example:
-> ```gml
+> ```js
 > function SM() {
 >   return new Statement(self);
 > }
@@ -267,22 +267,22 @@ Here is a slightly more advanced example that:
 - Reads that payload in the `Hurt` state's Enter handler.
 
 **Create Event**
-```gml
+```js
 state_machine = new Statement(self);
 
-var idle = new StatementState(self, "Idle")
+var _idle = new StatementState(self, "Idle")
     .AddUpdate(function() {
         // Idle code
     });
 
-var hurt = new StatementState(self, "Hurt")
+var _hurt = new StatementState(self, "Hurt")
     .AddEnter(function() {
         // First we grab the payload that was given during the transition to this state (the transition occurs in
         // the codeblock below this one, in the collision event with the enemy bullet)
-        var data = state_machine.GetLastTransitionData();
-        if (is_struct(data)) {
+        var _data = state_machine.GetLastTransitionData();
+        if (is_struct(_data)) {
             // And now we can use the data, in this case printing the damage we took to console
-            EchoDebugInfo("Entered Hurt with damage: " + string(data.damage_taken));
+            EchoDebugInfo("Entered Hurt with damage: " + string(_data.damage_taken));
         }
     })
     .AddUpdate(function() {
@@ -294,12 +294,12 @@ var hurt = new StatementState(self, "Hurt")
     });
 
 state_machine
-    .AddState(idle)
-    .AddState(hurt);
+    .AddState(_idle)
+    .AddState(_hurt);
 ```
 
 **On collision with enemy bullet**
-```gml
+```js
 var _current_hp = hp;
 hp -= other.damage;
 var _hp_change = _current_hp - hp;
@@ -313,12 +313,12 @@ state_machine.ChangeState("Hurt", { damage_taken: _hp_change });
 
 ### Do I need one `Statement` per object?
 
-Yes, that's the intended pattern:
+While this the generally intended pattern:
 
 - In an object's Create event: `state_machine = new Statement(self);`
 - Then add states to that machine for that object.
 
-You *can* bind a machine to a pure struct if you're doing headless logic, but "one object, one machine" is the most common.
+You can have as many state machines per object as you want without any problems. You can *also* bind a machine to a pure struct if you're doing headless logic, but "one object, one machine" is the most common usage.
 
 ---
 
@@ -385,8 +385,8 @@ Each `StatementState` has a `can_exit` flag. When it is false, the state machine
 
 A common pattern is a stagger state:
 
-```gml
-var stagger = new StatementState(self, "Stagger")
+```js
+var _stagger = new StatementState(self, "Stagger")
     .AddEnter(function() {
         state_machine.GetState().LockExit();
     })
@@ -400,7 +400,7 @@ var stagger = new StatementState(self, "Stagger")
 ```
 
 If you need an emergency override, you can use the force flag while changing the state
-```gml
+```js
 state_machine.ChangeState("Dead", undefined,true);
 ```
 This forces the state change to ignore the can exit flag on the state.
@@ -411,7 +411,7 @@ This forces the state change to ignore the can exit flag on the state.
 
 Call `SetPaused(true)` on the machine:
 
-```gml
+```js
 state_machine.SetPaused(true);  // freeze automatic processing
 ```
 
@@ -423,7 +423,7 @@ While paused:
 - The state age does not advance.
 
 Draw and manual transitions still work:
-```gml
+```js
 if (state_machine.IsPaused()) {
     // Still allowed:
     state_machine.ChangeState("Dead", undefined, true);
@@ -431,7 +431,7 @@ if (state_machine.IsPaused()) {
 ```
 
 To resume, call:
-```gml
+```js
 state_machine.SetPaused(false);
 ```
 
@@ -439,18 +439,25 @@ state_machine.SetPaused(false);
 
 ## Help & Support
 
-- **Bug reports / feature requests:**  
-  Use the GitHub Issues page for this repository.
+#### **Bug reports / feature requests:**  
+  The best place to report bugs and request features is the GitHub Issues page:
 
-- **Questions / discussion / examples:**  
-  Join the project's Discord (link in the repository README).  
+  [**Statement issues**](https://github.com/RefresherTowel/Statement/issues)
+
+  Please include:
+
+  - A short code snippet.
+  - Which functions you called (`ChangeState`, `QueueState`, etc).
+  - Any relevant debug output from `EchoDebugInfo/EchoDebugWarn/EchoDebugSevere`.
+
+  If you are not comfortable using GitHub, you can also post in the [**Statement channel on the RefresherTowel Games Discord**](https://discord.gg/8spFZdyvkb) and I can file an issue for you.
+
+#### **Questions / discussion / examples:**  
+  Join the project's Discord:
+  
+  [**RefresherTowel Games - Statement Channel**](https://discord.gg/8spFZdyvkb)
+
   That's where you can:
   - Ask implementation questions.
   - Share snippets and patterns.
   - See example integrations from other users.
-
-If you hit behaviour that looks wrong, include:
-
-- A short code snippet.
-- Which functions you called (`ChangeState`, `QueueState`, etc).
-- Any relevant debug output from `EchoDebugInfo/EchoDebugWarn/EchoDebugSevere`.

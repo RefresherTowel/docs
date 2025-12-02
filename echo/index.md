@@ -5,9 +5,27 @@ nav_order: 4
 has_children: true
 ---
 
-# Echo - Debug Logger for GameMaker
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
 
-Echo is a lightweight, drop-in debug logging helper for GameMaker that centralises your debug output, adds optional stack traces, and keeps a rolling in-memory history you can dump to disk when you need it.
+1. TOC
+{:toc}
+
+</details>
+</div>
+
+![Echo icon](../assets/echo_icon.png)
+{: .text-center}
+# Echo
+{: .text-center}
+*Hear what your game is telling you*
+{: .text-center}
+
+Echo is a lightweight debug logger for GameMaker. Your game is already telling you what is happening; Echo helps you actually hear it. Swap scattered `show_debug_message` calls for level based logs with tags, optional stack traces, and a history buffer you can dump to a file when something gets weird.
+
+Echo respects the `ECHO_DEBUG_ENABLED` macro, so you can leave debug calls in your code without spamming release builds.
 
 It's designed to sit alongside your other utility libraries (like `Statement`, `Pulse`, etc.) and stay out of the way until you need it.
 
@@ -20,7 +38,7 @@ Echo is part of the **RefresherTowel Games** suite of reusable frameworks for Ga
 1. **Import the Echo script** into your project (the file that defines the `EchoDebug*` functions and enums).
 2. Make sure the macro at the top of the script is set appropriately:
 
-   ```gml
+   ```js
    #macro ECHO_DEBUG_ENABLED 1
    ```
 
@@ -29,7 +47,7 @@ Echo is part of the **RefresherTowel Games** suite of reusable frameworks for Ga
 
 3. Start logging:
 
-   ```gml
+   ```js
    // Basic usage (default urgency = WARNING)
    EchoDebug("Player spawned");
 
@@ -39,7 +57,7 @@ Echo is part of the **RefresherTowel Games** suite of reusable frameworks for Ga
    EchoDebugSevere("Null reference in combat resolver!");
 
    // Adjust level at runtime
-   EchoDebugSetLevel(__ECHO_eDebugLevel.COMPLETE);
+   EchoDebugSetLevel(eEchoDebugLevel.COMPLETE);
    ```
 
 ---
@@ -48,7 +66,7 @@ Echo is part of the **RefresherTowel Games** suite of reusable frameworks for Ga
 
 ### Macro: `ECHO_DEBUG_ENABLED`
 
-```gml
+```js
 #macro ECHO_DEBUG_ENABLED 1
 ```
 
@@ -67,16 +85,17 @@ Controls whether Echo is active:
 - Convenience helpers (`EchoDebugInfo/Warn/Severe`) are thin wrappers around `EchoDebug` and will also return `false` when disabled.
   - Tag filtering (see below) also returns `false` if Echo is disabled.
 
-> ⚠️ **Important:** Many getters that normally return a `Real`, `String` or `Array` will instead return `false` when Echo is disabled. Always check for `false` if you're calling them in code that might run with Echo off.
+> Many getters that normally return a `Real`, `String` or `Array` will instead return `false` when Echo is disabled. Always check for `false` if you're calling them in code that might run with Echo off.
+{: .warning}
 
 ---
 
-### Enum: `__ECHO_eDebugLevel`
+### Enum: `eEchoDebugLevel`
 
 Controls how much Echo logs:
 
-```gml
-enum __ECHO_eDebugLevel {
+```js
+enum eEchoDebugLevel {
     NONE,
     SEVERE_ONLY,
     COMPREHENSIVE,
@@ -88,21 +107,21 @@ Behaviour:
 
 | Level                       | Logs INFO | Logs WARNING | Logs SEVERE |
 |----------------------------|:---------:|:------------:|:-----------:|
-| `__ECHO_eDebugLevel.NONE`        |    ✖    |      ✖      |     ✖      |
-| `__ECHO_eDebugLevel.SEVERE_ONLY` |    ✖    |      ✖      |     ✔      |
-| `__ECHO_eDebugLevel.COMPREHENSIVE`|   ✖   |      ✔      |     ✔      |
-| `__ECHO_eDebugLevel.COMPLETE`    |    ✔    |      ✔      |     ✔      |
+| `eEchoDebugLevel.NONE`        |    ✖    |      ✖      |     ✖      |
+| `eEchoDebugLevel.SEVERE_ONLY` |    ✖    |      ✖      |     ✔      |
+| `eEchoDebugLevel.COMPREHENSIVE`|   ✖   |      ✔      |     ✔      |
+| `eEchoDebugLevel.COMPLETE`    |    ✔    |      ✔      |     ✔      |
 
 Default level: `COMPREHENSIVE`.
 
 ---
 
-### Enum: `__ECHO_eDebugUrgency`
+### Enum: `eEchoDebugUrgency`
 
 Used to mark the importance of a given message:
 
-```gml
-enum __ECHO_eDebugUrgency {
+```js
+enum eEchoDebugUrgency {
     INFO,
     WARNING,
     SEVERE
@@ -119,21 +138,23 @@ enum __ECHO_eDebugUrgency {
 
 ### `EchoDebug(message, [urgency], [tag]) -> Boolean`
 
-```gml
-EchoDebug(message, [urgency = __ECHO_eDebugUrgency.WARNING], [tag]);
+```js
+EchoDebug(message, [urgency = eEchoDebugUrgency.WARNING], [tag]);
 ```
 
 Sends a message to Echo with an optional urgency.
 
-- `message`: `String` – text to log.
-- `urgency` (optional): `__ECHO_eDebugUrgency` – `INFO`, `WARNING`, or `SEVERE` (default `WARNING`).
-- `tag` (optional): `String` or `Array<String>` – one or more tags (e.g., `"UI"` or `["Physics","Jump"]`). Empty/omitted means “no tag”.
+- `message`: `String` - text to log.
+- `urgency` (optional): `eEchoDebugUrgency` - `INFO`, `WARNING`, or `SEVERE` (default `WARNING`).
+- `tag` (optional): `String` or `Array<String>` - one or more tags (e.g., `"UI"` or `["Physics","Jump"]`). Empty/omitted means "no tag".
 
-- **Filters by level** according to `__ECHO_eDebugLevel` (see table above).
+- **Filters by level** according to `eEchoDebugLevel` (see table above).
 - **Adds to history** with a timestamp in the form:
 
   ```text
-  [YYYY-MM-DD HH:MM:SS] (URGENCY): message + optional stack trace
+[YYYY-MM-DD HH:MM:SS] (URGENCY)[tag1 | tag2]:
+message
+(optional stack trace...)
   ```
 
 - **Prints to the GameMaker debug console** via `show_debug_message`.
@@ -151,10 +172,10 @@ Sends a message to Echo with an optional urgency.
 
 Examples:
 
-```gml
-EchoDebug("Spawning wave", __ECHO_eDebugUrgency.INFO);
-EchoDebug("Unexpected state in AI tree", __ECHO_eDebugUrgency.WARNING);
-EchoDebug("Failed to load save file!", __ECHO_eDebugUrgency.SEVERE);
+```js
+EchoDebug("Spawning wave", eEchoDebugUrgency.INFO);
+EchoDebug("Unexpected state in AI tree", eEchoDebugUrgency.WARNING);
+EchoDebug("Failed to load save file!", eEchoDebugUrgency.SEVERE);
 ```
 
 ---
@@ -163,38 +184,38 @@ EchoDebug("Failed to load save file!", __ECHO_eDebugUrgency.SEVERE);
 
 #### `EchoDebugInfo(message, [tag])`
 
-```gml
+```js
 EchoDebugInfo(message, [tag]);
 ```
 
 Equivalent to:
 
-```gml
-EchoDebug(message, __ECHO_eDebugUrgency.INFO, tag);
+```js
+EchoDebug(message, eEchoDebugUrgency.INFO, tag);
 ```
 
 #### `EchoDebugWarn(message, [tag])`
 
-```gml
+```js
 EchoDebugWarn(message, [tag]);
 ```
 
 Equivalent to:
 
-```gml
-EchoDebug(message, __ECHO_eDebugUrgency.WARNING, tag);
+```js
+EchoDebug(message, eEchoDebugUrgency.WARNING, tag);
 ```
 
 #### `EchoDebugSevere(message, [tag])`
 
-```gml
+```js
 EchoDebugSevere(message, [tag]);
 ```
 
 Equivalent to:
 
-```gml
-EchoDebug(message, __ECHO_eDebugUrgency.SEVERE, tag);
+```js
+EchoDebug(message, eEchoDebugUrgency.SEVERE, tag);
 ```
 
 When Echo is enabled, this **always** includes a stack trace in the logged message (subject to the level filter as described above).
@@ -205,13 +226,13 @@ When Echo is enabled, this **always** includes a stack trace in the logged messa
 
 #### `EchoDebugSetLevel(level) -> Boolean`
 
-```gml
-EchoDebugSetLevel(__ECHO_eDebugLevel.COMPLETE);
+```js
+EchoDebugSetLevel(eEchoDebugLevel.COMPLETE);
 ```
 
 Sets the global debug level.
 
-- `level` should be one of the entries from `__ECHO_eDebugLevel`.
+- `level` should be one of the entries from `eEchoDebugLevel`.
 - Returns `true` on success.
 - Returns `false` and prints a warning if:
   - `level` is not a real, or
@@ -220,9 +241,9 @@ Sets the global debug level.
 
 #### `EchoDebugGetLevel([stringify = false]) -> Real | String | Boolean`
 
-```gml
-var level      = EchoDebugGetLevel();          // -> Real enum value
-var level_name = EchoDebugGetLevel(true);      // -> "COMPLETE", "COMPREHENSIVE", etc.
+```js
+var _level      = EchoDebugGetLevel();          // -> Real enum value
+var _level_name = EchoDebugGetLevel(true);      // -> "COMPLETE", "COMPREHENSIVE", etc.
 ```
 
 - When Echo is enabled:
@@ -247,11 +268,11 @@ Simply provide either a string, or an array of strings to the `EchoDebug()` or i
 
 You can manipulate which tags are allowed through the debugger at any point in time via these helper functions:
 
-- `EchoDebugSetTags(["UI","Physics"])` – only log messages whose `tag` overlaps this list.
-- `EchoDebugClearTags()` – remove the filter (log all tags).
-- `EchoDebugGetTags()` – read the current tag filter (empty array means “allow all”).
+- `EchoDebugSetTags(["UI","Physics"])` - only log messages whose `tag` overlaps this list.
+- `EchoDebugClearTags()` - remove the filter (log all tags).
+- `EchoDebugGetTags()` - read the current tag filter (empty array means "allow all").
 
-If the tag filter is non-empty, `EchoDebug` (and its helpers) will only log messages whose `tag` matches at least one allowed tag. Messages that don’t match return `false` and are not recorded.
+If the tag filter is non-empty, `EchoDebug` (and its helpers) will only log messages whose `tag` matches at least one allowed tag. Messages that don't match return `false` and are not recorded.
 
 ---
 
@@ -261,8 +282,8 @@ Echo keeps an in-memory history of log lines (simple strings). This can be bound
 
 #### `EchoDebugGetHistorySize() -> Real | Boolean`
 
-```gml
-var max_entries = EchoDebugGetHistorySize();
+```js
+var _max_entries = EchoDebugGetHistorySize();
 ```
 
 - When enabled: returns the **maximum number of entries** Echo will keep in history.
@@ -271,7 +292,7 @@ var max_entries = EchoDebugGetHistorySize();
 
 #### `EchoDebugSetHistorySize(max) -> Boolean`
 
-```gml
+```js
 EchoDebugSetHistorySize(200);   // Keep up to 200 most recent entries
 EchoDebugSetHistorySize(0);     // Unlimited history
 ```
@@ -286,7 +307,7 @@ EchoDebugSetHistorySize(0);     // Unlimited history
 
 #### `EchoDebugClearHistory() -> Boolean`
 
-```gml
+```js
 EchoDebugClearHistory();
 ```
 
@@ -297,10 +318,10 @@ Clears all entries from the in-memory history.
 
 #### `EchoDebugGetHistory() -> Array<String> | Boolean`
 
-```gml
-var history = EchoDebugGetHistory();
-if (history != false) {
-    // history is a new array; you can safely read/mutate it
+```js
+var _history = EchoDebugGetHistory();
+if (_history != false) {
+    // _history is a new array; you can safely read/mutate it
 }
 ```
 
@@ -310,8 +331,8 @@ if (history != false) {
 
 #### `EchoDebugDumpLog() -> Boolean`
 
-```gml
-var ok = EchoDebugDumpLog();
+```js
+var _ok = EchoDebugDumpLog();
 ```
 
 Writes the current history to a text file in the project's working directory.
@@ -338,10 +359,37 @@ Writes the current history to a text file in the project's working directory.
 
 Echo is a small, namespaced debug logger for GameMaker that gives you:
 
-- Level-based filtering (`NONE` → `COMPLETE`).
+- Level-based filtering (`NONE` -> `COMPLETE`).
 - Per-message urgency (`INFO`, `WARNING`, `SEVERE`).
 - Optional stack traces for severe logs or full debug builds.
 - Rolling in-memory history with a configurable cap.
 - One-shot dumping to a timestamped text file.
 
 Use it wherever you'd normally sprinkle `show_debug_message`, and then **turn it up** when you need to chase something nasty through your game's callstack.
+
+---
+
+## Help & Support
+
+#### **Bug reports / feature requests:**  
+  The best place to report bugs and request features is the GitHub Issues page:
+
+  [**Echo issues**](https://github.com/RefresherTowel/Echo/issues)
+
+  Please include:
+
+  - A short code snippet.
+  - Which functions you called (`EchoDebugSetTags`, `EchoDebug`, etc).
+  - Any relevant debug output from `EchoDebugInfo/EchoDebugWarn/EchoDebugSevere`.
+
+  If you are not comfortable using GitHub, you can also post in the [**Echo channel on the RefresherTowel Games Discord**](https://discord.gg/w5NWDBwNta) and I can file an issue for you.
+
+#### **Questions / discussion / examples:**  
+  Join the project's Discord:
+  
+  [**RefresherTowel Games - Echo Channel**](https://discord.gg/w5NWDBwNta)
+
+  That's where you can:
+  - Ask implementation questions.
+  - Share snippets and patterns.
+  - See example integrations from other users.
