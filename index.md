@@ -3,8 +3,9 @@ layout: default
 title: Home
 nav_order: 1
 ---
-![Framework icon](./assets/framework_bundle_icon.png)
-{: .text-center}
+
+[![Framework icon](./assets/framework_bundle_icon.png){: style="width: 416px;" }]()
+{: .text-center }
 # Frameworks
 {: .text-center}
 *All you need in one bundle!*
