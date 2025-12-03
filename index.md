@@ -31,8 +31,8 @@ Tired of giant `if` chains and switch blocks trying to keep your player or enemi
 - Simple to start: one machine, a couple of states, and a single `Update()` call.
 - Opt in extras when you need them: queued transitions, state stacks, history, transition payloads, non interruptible states, and more.
 
-##### [**PURCHASE STATEMENT**]()
-{: .text-center }
+<iframe frameborder="0" src="https://itch.io/embed/4088827?linkback=true&amp;border_width=2&amp;bg_color=132f4b&amp;fg_color=ffffff&amp;link_color=007992&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/statement">Statement by RefresherTowel</a></iframe>
+
 ##### [**EXPLORE THE STATEMENT DOCS**](/docs/statement/)
 {: .text-center }
 
@@ -96,4 +96,6 @@ Plain debug logs are fine at first, but quickly become noise once your project g
 - Keep a debug history for the current session and dump it to file when needed.
 - Optional extras like stack traces and an easy way to mute all logging with a single setting.
 
-Echo ships free with all available frameworks and integrates cleanly with their designs.
+Echo ships free with all available frameworks and integrates cleanly with their designs. Or you can purchase it for cheap on its own.
+
+<iframe frameborder="0" src="https://itch.io/embed/4089088?border_width=2&amp;bg_color=1d471e&amp;fg_color=ffffff&amp;link_color=109200&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/echo">Echo by RefresherTowel</a></iframe>
