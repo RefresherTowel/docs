@@ -54,6 +54,15 @@ idle_state = new StatementState(self, "Idle")
   - **Rich introspection and debug helpers**
   - *And more*
 
+> Statement ships with [**Echo**](../echo/) (a minimalist, yet powerful, debug logging framework) for free!
+{: .important}
+
+---
+
+## Get Statement
+
+<iframe frameborder="0" src="https://itch.io/embed/4088827?linkback=true&amp;border_width=2&amp;bg_color=132f4b&amp;fg_color=ffffff&amp;link_color=007992&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/statement">Statement by RefresherTowel</a></iframe>
+
 ---
 
 ## Introduction

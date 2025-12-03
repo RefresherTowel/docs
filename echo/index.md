@@ -25,15 +25,27 @@ has_children: true
 
 Echo is a lightweight debug logger for GameMaker. Your game is already telling you what is happening; Echo helps you actually hear it. Swap scattered `show_debug_message` calls for level based logs with tags, optional stack traces, and a history buffer you can dump to a file when something gets weird.
 
-Echo respects the `ECHO_DEBUG_ENABLED` macro, so you can leave debug calls in your code without spamming release builds.
+Echo respects the `ECHO_DEBUG_ENABLED` macro, so you can leave debug calls in your code without spamming release builds when it is off.
 
 It's designed to sit alongside your other utility libraries (like `Statement`, `Pulse`, etc.) and stay out of the way until you need it.
 
 Echo is part of the **RefresherTowel Games** suite of reusable frameworks for GameMaker.
 
+> A bird's eye view of Echo is that it is a minimal, namespaced debug logger for GameMaker that gives you:
+> 
+> - Level-based filtering (`NONE` -> `COMPLETE`).
+> - Tag-based filtering (for example, only display logs tagged "Physics")
+> - Per-message urgency (`INFO`, `WARNING`, `SEVERE`).
+> - Optional stack traces for severe logs or full debug builds.
+> - Rolling in-memory history with a configurable cap.
+> - One-shot dumping to a timestamped text file.
+> 
+> Use it wherever you'd normally sprinkle `show_debug_message`, and then **turn it up** when you need to chase something nasty through your game's callstack.
+{: .note}
+
 ---
 
-## Quick start
+## Quick Start
 
 1. **Import the Echo script** into your project (the file that defines the `EchoDebug*` functions and enums).
 2. Make sure the macro at the top of the script is set appropriately:
@@ -56,9 +68,23 @@ Echo is part of the **RefresherTowel Games** suite of reusable frameworks for Ga
    EchoDebugWarn("Low ammo in magazine");
    EchoDebugSevere("Null reference in combat resolver!");
 
-   // Adjust level at runtime
+   // Optionally adjust level at runtime (default is eEchoDebugLevel.COMPREHENSIVE)
    EchoDebugSetLevel(eEchoDebugLevel.COMPLETE);
    ```
+
+---
+
+## Requirements
+
+- **GameMaker version:**  
+  Any version that supports:
+  - Struct constructors: `function Name(args) constructor { ... }`
+  - `method(owner, fn)`
+
+- **Scripts you need:**
+  - The Echo script library.
+
+No additional extensions or assets are required.
 
 ---
 
@@ -169,6 +195,10 @@ message
   - The message was filtered out by the current level, **or**
   - `ECHO_DEBUG_ENABLED == 0` (in this case, it still prints a basic message to the console).
   - The tag filter (if set) did not match.
+
+> When `ECHO_DEBUG_ENABLED == 0`, `EchoDebug` still prints a simple `[URGENCY] - message` line via `show_debug_message` before returning false.
+{: .note}
+
 
 Examples:
 
@@ -352,20 +382,6 @@ Writes the current history to a text file in the project's working directory.
   - `false` if:
     - Echo is disabled, or
     - The file could not be created (and an error is printed via `show_debug_message`).
-
----
-
-## Summary
-
-Echo is a small, namespaced debug logger for GameMaker that gives you:
-
-- Level-based filtering (`NONE` -> `COMPLETE`).
-- Per-message urgency (`INFO`, `WARNING`, `SEVERE`).
-- Optional stack traces for severe logs or full debug builds.
-- Rolling in-memory history with a configurable cap.
-- One-shot dumping to a timestamped text file.
-
-Use it wherever you'd normally sprinkle `show_debug_message`, and then **turn it up** when you need to chase something nasty through your game's callstack.
 
 ---
 

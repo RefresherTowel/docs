@@ -861,6 +861,9 @@ state_machine.EvaluateTransitions(payload);   // attach payload if a transition 
 
 This is normally called automatically at the end of `Update()`. Use it manually if you disable auto-processing or run custom update ordering.
 
+> This is not the same as `state.EvaluateTransitions();`, as this method actually changes state if a transition fires. This is version of the `EvaluateTransitions()` method, attached to the state machine, is the one that you are most likely to want to use.
+{. :warning}
+
 ---
 
 ### Per-State Timers (Advanced)
