@@ -18,7 +18,7 @@ nav_order: 3
 
 # Statement Lens
 
-![Statement Visual Debugger in action!](../assets/visual_debugger_guide/visual_debugger_intro.gif)
+![Statement Visual Debugger in action!](../assets/visual_debugger_guide/statement_visual_debugger_showoff.gif)
 
 So, you have a bunch of state machines running around your project causing trouble, and you would like to actually see what those little gremlins are doing rather than guess from a wall of `show_debug_message` calls. That is what Statement Lens is for.
 
@@ -273,6 +273,8 @@ Along the top toolbar there are some simple, but very helpful, visibility toggle
 - `Edge History`: limit edges to "all time" or "only edges that were active in the last N ticks".
 
 When your graph starts to look like a bowl of noodles, do not suffer through it. Master the pasta by hiding labels or restrict to "Last 50" edges and you will usually get a much clearer picture of the recent behavior.
+
+![Radial layout](../assets/visual_debugger_guide/statement_radial.png)
 
 For a very quick sanity check:
 
