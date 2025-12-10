@@ -198,6 +198,25 @@ state_machine.Update();
 - Increments `state_age` (if there's an active state).
 - **Returns:** whatever the state's Update handler returns, or `Undefined`.
 
+
+#### `UpdateDelta([dt])`
+
+Drive the state machine using a delta-based accumulator.
+
+```js
+// Step Event
+var dt = delta_time / 1000000; // convert microseconds to seconds, for example
+state_machine.UpdateDelta(dt);
+```
+
+- `dt` *(optional)*: `Real` - unscaled delta for this step. Defaults to `1`.
+- Multiplies `dt` by the machine time scale (`SetTimeScale`) and the global time scale (`StatementSetGlobalTimeScale`) to compute an effective delta.
+- Advances `state_age` and state timers using the effective delta.
+- When the machine's update mode is `eStatementUpdateMode.ACCUMULATED`, runs STEP / declarative transitions once per whole accumulated tick (>= 1).
+- Fractional deltas still advance timers/state age without running STEP, which keeps visual timers in sync even when no STEP runs.
+- When the machine is paused (`IsPaused()`), no processing occurs and `state_age` does not advance.
+- **Returns:** the value returned by the last STEP handler run during this call, or `Undefined` if no STEP ran or there is no active state.
+
 ---
 
 #### `Draw()`
@@ -802,7 +821,7 @@ When `can_exit == false`, `ChangeState`/queued transitions will only leave this 
 
 ---
 
-#### `AddTransition(target_name, condition, [force])`
+#### `AddTransition(target_name, condition, [data], [force])`
 
 Add a declarative transition that will be evaluated each `Update()` while the state is active. When the condition returns true, the machine changes to `target_name`.
 
@@ -814,6 +833,7 @@ idle.AddTransition("Run", function() {
 
 - `target_name`: `String`
 - `condition`: `Function` - automatically bound to the owner via `method(owner, fn)`.
+- `data` *(optional)*: `Any` - payload attached to the transition when it fires (read via `GetLastTransitionData()` in the next state).
 - `force` *(optional)*: `Bool` - ignore `can_exit` when firing.
 - **Returns:** `Struct.StatementState`
 
@@ -990,6 +1010,30 @@ StatementStateKillTimers();
 ```
 
 Use this if you want a global "nuke all state timers" reset, e.g. when restarting a run or changing rooms.
+
+
+#### `StatementSetDefaultUpdateMode(mode)`
+
+Set the global default update mode used by newly created Statement machines.
+
+```js
+StatementSetDefaultUpdateMode(eStatementUpdateMode.ACCUMULATED);
+```
+
+- `mode`: `Constant.eStatementUpdateMode` - default update mode for future machines.
+- Only affects machines created after you call this function. Existing machines keep their current mode (you can change them with `SetUpdateMode()` on each machine).
+
+---
+
+#### `StatementGetDefaultUpdateMode()`
+
+Get the current global default update mode for new Statement machines.
+
+```js
+var defaultMode = StatementGetDefaultUpdateMode();
+```
+
+- **Returns:** `Constant.eStatementUpdateMode`
 
 ---
 
@@ -1223,9 +1267,9 @@ state_machine.SetDebugName(name);
 
 ---
 
-#### `SetGlobalTimeScale(scale)`
-
-Set global time scale for all Statement machines (multiplies per-machine scale).
+```js
+StatementSetGlobalTimeScale(scale);
+```
 
 ```js
 state_machine.SetGlobalTimeScale(scale);
@@ -1245,6 +1289,32 @@ state_machine.SetTimeScale(scale);
 
 - `scale`: `Real`
 - **Returns:** `Struct.Statement`
+
+
+#### `SetUpdateMode(mode)`
+
+Set how `UpdateDelta` processes this machine.
+
+```js
+state_machine.SetUpdateMode(eStatementUpdateMode.ACCUMULATED);
+```
+
+- `mode`: `Constant.eStatementUpdateMode` - one of the values in `eStatementUpdateMode`.
+- In `ACCUMULATED` mode, `UpdateDelta` accumulates time and runs STEP / declarative transitions once per whole tick (>= 1).
+- In `PER_FRAME` mode, each `UpdateDelta` call behaves more like a single scaled `Update()` call without accumulation.
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `GetUpdateMode()`
+
+Get the current update mode for this machine.
+
+```js
+var mode = state_machine.GetUpdateMode();
+```
+
+- **Returns:** `Constant.eStatementUpdateMode`
 
 ---
 
@@ -1335,25 +1405,53 @@ var statementVisualiser = new StatementVisualiser();
 
 - **Returns:** `Struct.StatementVisualiser`
 
+
+#### `StatementLensInit()`
+
+Initialise the global Statement visualiser and debug registry.
+
+```js
+// For example, in a controller's Create event:
+StatementLensInit();
+```
+
+- Safe to call multiple times; only creates the visualiser once while `STATEMENT_DEBUG` is enabled.
+- Prepares the shared visualiser so you can use `StatementLensUpdate()` and `StatementLensDraw()`.
+
 ---
 
-#### `StatementDebugVisUpdate()`
+#### `StatementLensGet()`
+
+Get the shared Statement visualiser instance, if it exists.
+
+```js
+var vis = StatementLensGet();
+if (vis != undefined) {
+    vis.SetVisible(true);
+}
+```
+
+- **Returns:** `Struct.StatementVisualiser,Undefined`
+
+---
+
+#### `StatementLensUpdate()`
 
 Update hook for the Statement visualiser (call from a Step event when STATEMENT_DEBUG is enabled).
 
 ```js
-StatementDebugVisUpdate();
+StatementLensUpdate();
 ```
 
 
 ---
 
-#### `StatementDebugVisDraw()`
+#### `StatementLensDraw()`
 
 Draw hook for the Statement visualiser (call from a Draw GUI event when STATEMENT_DEBUG is enabled).
 
 ```js
-StatementDebugVisDraw();
+StatementLensDraw();
 ```
 
 
@@ -1385,482 +1483,3 @@ visualiser.SetVisible(visible);
 - **Returns:** `Struct.StatementVisualiser`
 
 ---
-
-### Debug UI theme
-
-#### `DebugUITheme()`
-
-Creates the shared debug UI theme container for Statement visuals.
-
-```js
-var debugUITheme = new DebugUITheme();
-```
-
-- **Returns:** `Struct.DebugUITheme`
-
----
-
-#### `RefreshMetrics()`
-
-Recompute row heights based on current fonts and padding.
-
-```js
-theme.RefreshMetrics();
-```
-
-- **Returns:** `Undefined`
-
----
-
-### Debug UI helpers (StatementDebugUI)
-
-#### `StatementDebugUI(theme)`
-
-UI helper used by the Statement visualiser (buttons, toggles, overlays).
-
-```js
-var statementDebugUI = new StatementDebugUI(theme);
-```
-
-- `theme`: `Struct.DebugUITheme` - Theme instance to drive styling.
-- **Returns:** `Struct.StatementDebugUI`
-
----
-
-#### `BeginFrame()`
-
-Begin a new UI frame: cache mouse state and clear consumption.
-
-```js
-ui.BeginFrame();
-```
-
-- **Returns:** `Undefined`
-
----
-
-#### `BlurTextInput()`
-
-Release text input focus, returning the final content.
-
-```js
-ui.BlurTextInput();
-```
-
-- **Returns:** `String`
-
----
-
-#### `Button(x1, y1, x2, y2, label, style_id, tooltip)`
-
-Simple button. Draws a rectangle with a label, returns true on click.
-
-```js
-ui.Button(x1, y1, x2, y2, label, style_id, tooltip);
-```
-
-- `x1`: `Real` - Left of the button in GUI space.
-- `y1`: `Real` - Top of the button in GUI space.
-- `x2`: `Real` - Right of the button in GUI space.
-- `y2`: `Real` - Bottom of the button in GUI space.
-- `label`: `String` - Button text.
-- `style_id` *(optional)*: `String` - Style id from the theme button styles.
-- `tooltip` *(optional)*: `String` - Tooltip text to show on hover.
-- **Returns:** `Bool` - True if the button was clicked this frame.
-
----
-
-#### `ConsumeOverlays()`
-
-Run the topmost overlay input handler (if any).
-
-```js
-ui.ConsumeOverlays();
-```
-
-- **Returns:** `Undefined`
-
----
-
-#### `DrawOverlays()`
-
-Draw any late UI overlays (e.g. dropdown popups) on top of everything.
-
-```js
-ui.DrawOverlays();
-```
-
-- **Returns:** `Undefined`
-
----
-
-#### `Dropdown(x1, y1, x2, y2, options, current_index, id, style_id, tooltip)`
-
-Simple dropdown with popup list. Returns new index.
-
-```js
-ui.Dropdown(x1, y1, x2, y2, options, current_index, id, style_id, tooltip);
-```
-
-- `x1`: `Real` - Left of the dropdown in GUI space.
-- `y1`: `Real` - Top of the dropdown in GUI space.
-- `x2`: `Real` - Right of the dropdown in GUI space.
-- `y2`: `Real` - Bottom of the dropdown in GUI space.
-- `options`: `Array<String>` - List of option labels.
-- `current_index`: `Real` - Current selection index.
-- `id`: `Any` - Stable id so we can track which dropdown is open.
-- `style_id` *(optional)*: `String` - Style id from the theme dropdown styles.
-- `tooltip` *(optional)*: `String` - Tooltip text to show on hover.
-- **Returns:** `Real` - New selection index.
-
----
-
-#### `FocusTextInput(id, content, placeholder)`
-
-Claim text input focus for a given id, seeding content and caret.
-
-```js
-ui.FocusTextInput(id, content, placeholder);
-```
-
-- `id`: `Any` - Unique identifier for the text input.
-- `content`: `String` - Initial content to place in the buffer.
-- `placeholder`: `String` - Placeholder text to render when empty.
-- **Returns:** `Undefined`
-
----
-
-#### `HeaderBar(x1, y1, x2, y2, title, style_id)`
-
-Draw a header bar with optional title text.
-
-```js
-ui.HeaderBar(x1, y1, x2, y2, title, style_id);
-```
-
-- `x1`: `Real` - Left of the header bar.
-- `y1`: `Real` - Top of the header bar.
-- `x2`: `Real` - Right of the header bar.
-- `y2`: `Real` - Bottom of the header bar.
-- `title` *(optional)*: `String` - Title text to draw.
-- `style_id` *(optional)*: `String` - Style key to resolve look.
-- **Returns:** `Undefined`
-
----
-
-#### `Label(x1, y1, x2, y2, text)`
-
-Draw a simple text label centered vertically in the given rect. No interaction, just drawing.
-
-```js
-ui.Label(x1, y1, x2, y2, text);
-```
-
-- `x1`: `Real` - Left of the rect in GUI space.
-- `y1`: `Real` - Top of the rect in GUI space.
-- `x2`: `Real` - Right of the rect in GUI space.
-- `y2`: `Real` - Bottom of the rect in GUI space.
-- `text`: `String` - Text to display.
-- **Returns:** `Undefined`
-
----
-
-#### `MenuToggles(x1, y1, x2, y2, items, id, style_id, label, tooltip)`
-
-Show a menu button that opens a toggle list. Returns toggles array if changed.
-
-```js
-ui.MenuToggles(x1, y1, x2, y2, items, id, style_id, label, tooltip);
-```
-
-- `x1`: `Real` - Left of the menu button in GUI space.
-- `y1`: `Real` - Top of the menu button in GUI space.
-- `x2`: `Real` - Right of the menu button in GUI space.
-- `y2`: `Real` - Bottom of the menu button in GUI space.
-- `items`: `Array<Struct>` - Array of structs with at least { label, value }.
-- `id`: `Any` - Stable id for tracking the open menu.
-- `style_id` *(optional)*: `String` - Style key to resolve look.
-- `label` *(optional)*: `String` - Text to show on the button (defaults to "Settings").
-- `tooltip` *(optional)*: `String` - Tooltip text to show on hover.
-- **Returns:** `Array<Struct>` - Updated items array (with toggled values).
-
----
-
-#### `MouseConsumed()`
-
-Returns whether some UI control has already claimed the mouse this frame.
-
-```js
-ui.MouseConsumed();
-```
-
-- **Returns:** `Bool`
-
----
-
-#### `OverlayPop(id)`
-
-Pop overlays with a matching id (if present).
-
-```js
-ui.OverlayPop(id);
-```
-
-- `id`: `Any` - Identifier for the overlay to remove.
-- **Returns:** `Undefined`
-
----
-
-#### `OverlayPush(id, fn)`
-
-Push an overlay input handler onto the stack (topmost handles input first).
-
-```js
-ui.OverlayPush(id, fn);
-```
-
-- `id`: `Any` - Identifier for the overlay.
-- `fn`: `Function` - Handler function to run for the overlay.
-- **Returns:** `Undefined`
-
----
-
-#### `Panel(x1, y1, x2, y2, with_border, style_id)`
-
-Panel helper for filled backgrounds. Optional border and style id.
-
-```js
-ui.Panel(x1, y1, x2, y2, with_border, style_id);
-```
-
-- `x1`: `Real` - Left of the panel.
-- `y1`: `Real` - Top of the panel.
-- `x2`: `Real` - Right of the panel.
-- `y2`: `Real` - Bottom of the panel.
-- `with_border` *(optional)*: `Bool` - Whether to draw the border.
-- `style_id` *(optional)*: `String` - Style key to resolve look.
-- **Returns:** `Undefined`
-
----
-
-#### `PopContext()`
-
-Restore the previous UI context (if any).
-
-```js
-ui.PopContext();
-```
-
-- **Returns:** `Undefined`
-
----
-
-#### `Popup(x1, y1, x2, y2, title, style_id)`
-
-Popup chrome (background, border, header). Returns body rect.
-
-```js
-ui.Popup(x1, y1, x2, y2, title, style_id);
-```
-
-- `x1`: `Real` - Left of the popup.
-- `y1`: `Real` - Top of the popup.
-- `x2`: `Real` - Right of the popup.
-- `y2`: `Real` - Bottom of the popup.
-- `title` *(optional)*: `String` - Header title.
-- `style_id` *(optional)*: `String` - Style key to resolve look.
-- **Returns:** `Struct` - { body_x1, body_y1, body_x2, body_y2, header_bottom }
-
----
-
-#### `PushContext(id)`
-
-Save current UI state and switch to a named context (for multiple windows).
-
-```js
-ui.PushContext(id);
-```
-
-- `id`: `Any` - Identifier for the context to push and switch to.
-- **Returns:** `Undefined`
-
----
-
-#### `ScrollVertical(x1, y1, x2, y2, value, speed, max)`
-
-Apply vertical scroll to a value if the wheel is used over this rect.
-
-```js
-ui.ScrollVertical(x1, y1, x2, y2, value, speed, max);
-```
-
-- `x1`: `Real` - Left of the scrollable rect (GUI space).
-- `y1`: `Real` - Top of the scrollable rect (GUI space).
-- `x2`: `Real` - Right of the scrollable rect (GUI space).
-- `y2`: `Real` - Bottom of the scrollable rect (GUI space).
-- `value`: `Real` - Current scroll value.
-- `speed`: `Real` - Pixels to scroll per wheel notch.
-- `max`: `Real` - Maximum scroll value (clamped 0.._max).
-- **Returns:** `Real` - Updated scroll value.
-
----
-
-#### `SetInputProvider(fn)`
-
-Override how mouse input is sampled each frame (supply mx,my,mouse_l_down,mouse_l_pressed,wheel).
-
-```js
-ui.SetInputProvider(fn);
-```
-
-- `fn`: `Function` - Function returning a struct with mouse data for this frame.
-- **Returns:** `Undefined`
-
----
-
-#### `SetTextInputSeed(fn)`
-
-Override how the text input seeds its buffer on focus (defaults to writing keyboard_string).
-
-```js
-ui.SetTextInputSeed(fn);
-```
-
-- `fn`: `Function` - Function that seeds the active text buffer.
-- **Returns:** `Undefined`
-
----
-
-#### `SetTextInputSource(fn)`
-
-Override the string source used while a text input is active (defaults to keyboard_string).
-
-```js
-ui.SetTextInputSource(fn);
-```
-
-- `fn`: `Function` - Provider returning the current text contents.
-- **Returns:** `Undefined`
-
----
-
-#### `Slider(x1, y1, x2, y2, value, min, max)`
-
-Basic horizontal slider returning a new value.
-
-```js
-ui.Slider(x1, y1, x2, y2, value, min, max);
-```
-
-- `x1`: `Real` - Left of the slider in GUI space.
-- `y1`: `Real` - Top of the slider in GUI space.
-- `x2`: `Real` - Right of the slider in GUI space.
-- `y2`: `Real` - Bottom of the slider in GUI space.
-- `value`: `Real` - Current slider value.
-- `min`: `Real` - Minimum slider value.
-- `max`: `Real` - Maximum slider value.
-- **Returns:** `Real` - New slider value after input.
-
----
-
-#### `TextInput(x1, y1, x2, y2, id, value, placeholder, style_id, tooltip)`
-
-Text input control with simple focus/blur and placeholder.
-
-```js
-ui.TextInput(x1, y1, x2, y2, id, value, placeholder, style_id, tooltip);
-```
-
-- `x1`: `Real` - Left of the input box in GUI space.
-- `y1`: `Real` - Top of the input box in GUI space.
-- `x2`: `Real` - Right of the input box in GUI space.
-- `y2`: `Real` - Bottom of the input box in GUI space.
-- `id`: `Any` - Stable id for focus tracking.
-- `value`: `String` - Current string value.
-- `placeholder` *(optional)*: `String` - Placeholder when empty.
-- `style_id` *(optional)*: `String` - Style key to resolve look.
-- `tooltip` *(optional)*: `String` - Tooltip text to show on hover.
-- **Returns:** `Struct` - Struct with { value, active }.
-
----
-
-#### `Toggle(x1, y1, x2, y2, label, value, style_id, tooltip)`
-
-Toggle with a checkbox-style box and label.
-
-```js
-ui.Toggle(x1, y1, x2, y2, label, value, style_id, tooltip);
-```
-
-- `x1`: `Real` - Left of the toggle row in GUI space.
-- `y1`: `Real` - Top of the toggle row in GUI space.
-- `x2`: `Real` - Right of the toggle row in GUI space.
-- `y2`: `Real` - Bottom of the toggle row in GUI space.
-- `label`: `String` - Text for the toggle.
-- `value`: `Bool` - Current value.
-- `style_id` *(optional)*: `String` - Style id from the theme toggle styles.
-- `tooltip` *(optional)*: `String` - Tooltip text to show on hover.
-- **Returns:** `Bool` - New value after this frame.
-
----
-
-#### `ToolbarSeparator(x, y, height)`
-
-Toolbar separator with consistent styling.
-
-```js
-ui.ToolbarSeparator(x, y, height);
-```
-
-- `x`: `Real` - X coordinate of the separator line.
-- `y`: `Real` - Top of the separator line.
-- `height`: `Real` - Height of the separator.
-- **Returns:** `Undefined`
-
----
-
-#### `TooltipRequest(text, anchor_x, anchor_y, delay_ms)`
-
-Request a tooltip to display after the default delay (unless another control replaces it).
-
-```js
-ui.TooltipRequest(text, anchor_x, anchor_y, delay_ms);
-```
-
-- `text`: `String` - Tooltip copy to show.
-- `anchor_x`: `Real` - X coordinate in GUI space.
-- `anchor_y`: `Real` - Y coordinate in GUI space.
-- `delay_ms` *(optional)*: `Real` - Delay before showing, in milliseconds.
-- **Returns:** `Undefined`
-
----
-
-#### `WheelConsumed()`
-
-Returns whether a scroll region has claimed the wheel this frame.
-
-```js
-ui.WheelConsumed();
-```
-
-- **Returns:** `Bool`
-
----
-
-#### `Window(x1, y1, x2, y2, style_id)`
-
-Draw the base window background + border using the theme palette.
-
-```js
-ui.Window(x1, y1, x2, y2, style_id);
-```
-
-- `x1`: `Real` - Left of the window.
-- `y1`: `Real` - Top of the window.
-- `x2`: `Real` - Right of the window.
-- `y2`: `Real` - Bottom of the window.
-- `style_id` *(optional)*: `String` - Style key to resolve look.
-- **Returns:** `Undefined`
-
----
-
