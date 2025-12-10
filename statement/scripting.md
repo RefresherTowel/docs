@@ -766,6 +766,24 @@ if (!idle.HasStateEvent(eStatementEvents.ANIMATION_END)) {
 
 ---
 
+#### `RunState(event)`
+
+**Statement method**. Run a specific `eStatementEvents` index on the current state. This is scoped to the state machine itself, unlike the other two which are scoped to the state, to keep parity with the other handlers, like `state_machine.Update()`, etc.
+
+**Animation End Event**
+```js
+if (state_machine.GetState().HasStateEvent(eStatementEvents.ANIMATION_END)) {
+    state_machine.RunState(eStatementEvents.ANIMATION_END);
+}
+```
+
+- `event`: `Real` (usually one of the `eStatementEvents` values)  
+- **Returns:** Any or `Undefined` if:
+  - There is no active state, or
+  - The chosen event is not implemented on the current state.
+
+---
+
 ### Exit Control & Declarative Transitions (StatementState)
 
 #### `SetCanExit(can_exit)` / `LockExit()` / `UnlockExit()`
@@ -826,24 +844,6 @@ var _tr = state.EvaluateTransitions();
 - **Returns:** `Struct` `{ target_name, condition, force }` or `Undefined`.
 
 Normally you do not call this directly; the machine calls `EvaluateTransitions()` after each `Update()` and then applies the transition via `ChangeState`. Use it manually only for custom control.
-
----
-
-#### `RunState(event)`
-
-**Statement method**. Run a specific `eStatementEvents` index on the current state. This is scoped to the state machine itself, unlike the other two which are scoped to the state, to keep parity with the other handlers, like `state_machine.Update()`, etc.
-
-**Animation End Event**
-```js
-if (state_machine.GetState().HasStateEvent(eStatementEvents.ANIMATION_END)) {
-    state_machine.RunState(eStatementEvents.ANIMATION_END);
-}
-```
-
-- `event`: `Real` (usually one of the `eStatementEvents` values)  
-- **Returns:** Any or `Undefined` if:
-  - There is no active state, or
-  - The chosen event is not implemented on the current state.
 
 ---
 
@@ -992,3 +992,875 @@ StatementStateKillTimers();
 Use this if you want a global "nuke all state timers" reset, e.g. when restarting a run or changing rooms.
 
 ---
+
+## Debug API (Machine & State)
+
+The following helpers are mainly intended for debugging and tooling. They are safe to use in shipping builds, but you will typically guard them behind `#if STATEMENT_DEBUG` checks.
+
+---
+
+### Machine debug controls
+
+#### `ClearDebugTransitionHistory()`
+
+Clear any recorded transition history entries.
+
+```js
+state_machine.ClearDebugTransitionHistory();
+```
+
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `DebugJumpToState(name, force)`
+
+Jump to a state from debug tooling, using that state's debug payload if set.
+
+```js
+state_machine.DebugJumpToState(name, force);
+```
+
+- `name`: `String`
+- `force` *(optional)*: `Bool`
+- **Returns:** `Struct.StatementState,Undefined`
+
+---
+
+#### `DebugPause()`
+
+Pause this machine for debug purposes.
+
+```js
+state_machine.DebugPause();
+```
+
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `DebugResume()`
+
+Resume this machine from a debug pause.
+
+```js
+state_machine.DebugResume();
+```
+
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `DebugSetErrorBehavior(behavior)`
+
+Set how the machine reacts to caught errors: PAUSE (default) or RETHROW.
+
+```js
+state_machine.DebugSetErrorBehavior(behavior);
+```
+
+- `behavior`: `Constant.eStatementErrorBehavior`
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `DebugSetLogErrorsToFile(log_to_file)`
+
+Control whether caught errors append to debug_statement_errors.log before optional rethrow.
+
+```js
+state_machine.DebugSetLogErrorsToFile(log_to_file);
+```
+
+- `log_to_file`: `Bool`
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `DebugStep()`
+
+Run exactly one Update tick while paused, then re-pause.
+
+```js
+state_machine.DebugStep();
+```
+
+- **Returns:** `Any,Undefined`
+
+---
+
+#### `DebugTag(tag)`
+
+Assign a tag (or comma-separated tags) for grouping/filtering in debug UIs.
+
+```js
+state_machine.DebugTag(tag);
+```
+
+- `tag`: `String`
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `GetDebugGraph()`
+
+Get a snapshot of this machine's debug graph: states + edges.
+
+```js
+state_machine.GetDebugGraph();
+```
+
+- **Returns:** `Struct,Undefined` - A struct { states, edges } or undefined if debug disabled.
+
+---
+
+#### `GetDebugName()`
+
+Get the friendly debug name, or a fallback based on the owner.
+
+```js
+state_machine.GetDebugName();
+```
+
+- **Returns:** `String,Undefined`
+
+---
+
+#### `GetDebugStateStats()`
+
+Get the per-state debug stats map.
+
+```js
+state_machine.GetDebugStateStats();
+```
+
+- **Returns:** `Struct,Undefined`
+
+---
+
+#### `GetDebugTag()`
+
+Get the debug tag string, if set.
+
+```js
+state_machine.GetDebugTag();
+```
+
+- **Returns:** `String,Undefined`
+
+---
+
+#### `GetDebugTransitionHistory()`
+
+Get the recent transition history records.
+
+```js
+state_machine.GetDebugTransitionHistory();
+```
+
+- **Returns:** `Array,Undefined`
+
+---
+
+#### `GetGlobalTimeScale()`
+
+Get global time scale.
+
+```js
+state_machine.GetGlobalTimeScale();
+```
+
+- **Returns:** `Real`
+
+---
+
+#### `GetTimeScale()`
+
+Get per-machine time scale.
+
+```js
+state_machine.GetTimeScale();
+```
+
+- **Returns:** `Real`
+
+---
+
+#### `IsDebugEnabled()`
+
+Returns whether debug tracking is enabled for this machine.
+
+```js
+state_machine.IsDebugEnabled();
+```
+
+- **Returns:** `Bool`
+
+---
+
+#### `SetDebugEnabled()`
+
+Enable or disable debug tracking for this machine.
+
+```js
+state_machine.SetDebugEnabled();
+```
+
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `SetDebugName(name)`
+
+Assign a friendly name for this machine in debug UIs.
+
+```js
+state_machine.SetDebugName(name);
+```
+
+- `name`: `String`
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `SetGlobalTimeScale(scale)`
+
+Set global time scale for all Statement machines (multiplies per-machine scale).
+
+```js
+state_machine.SetGlobalTimeScale(scale);
+```
+
+- `scale`: `Real`
+
+---
+
+#### `SetTimeScale(scale)`
+
+Set per-machine time scale (affects state age, timers, and debug stats).
+
+```js
+state_machine.SetTimeScale(scale);
+```
+
+- `scale`: `Real`
+- **Returns:** `Struct.Statement`
+
+---
+
+### State-level debug helpers
+
+#### `DebugBreakOnEnter(break_on_enter)`
+
+Enable or disable "break on enter" for this state in debug builds.
+
+```js
+state.DebugBreakOnEnter(break_on_enter);
+```
+
+- `break_on_enter` *(optional)*: `Bool` - Defaults to true.
+- **Returns:** `Struct.StatementState`
+
+---
+
+#### `DebugLinkTo(target_name)`
+
+Declare a debug-only link from this state to another state for the visualiser.
+
+```js
+state.DebugLinkTo(target_name);
+```
+
+- `target_name`: `String`
+- **Returns:** `Struct.StatementState`
+
+---
+
+#### `DebugPayload(payload)`
+
+Set a default payload used when jumping to this state via debug tools.
+
+```js
+state.DebugPayload(payload);
+```
+
+- `payload`: `Any`
+- **Returns:** `Struct.StatementState`
+
+---
+
+### Global debug helpers
+
+#### `StatementDebugFindMachinesForOwner(owner)`
+
+Finds Statement machines bound to a specific owner instance/struct.
+
+```js
+StatementDebugFindMachinesForOwner(owner);
+```
+
+- `owner`: `Id.Instance,Struct` - Owner to search for.
+- **Returns:** `Array<Struct.Statement>`
+
+---
+
+#### `StatementDebugGetMachines()`
+
+Returns the global list of Statement machines tracked for debugging.
+
+```js
+StatementDebugGetMachines();
+```
+
+- **Returns:** `Array<Struct.Statement>`
+
+---
+
+
+## Visual Debugger & Debug UI
+
+Statement ships with an in-game visual debugger and a small immediate-mode UI helper. You do not need to use these directly to benefit from Statement, but they are available if you want to build your own tooling.
+
+---
+
+### Visualiser entry points
+
+#### `StatementVisualiser()`
+
+Debug visualiser for Statement machines (drawn in GUI space).
+
+```js
+var statementVisualiser = new StatementVisualiser();
+```
+
+- **Returns:** `Struct.StatementVisualiser`
+
+---
+
+#### `StatementDebugVisUpdate()`
+
+Update hook for the Statement visualiser (call from a Step event when STATEMENT_DEBUG is enabled).
+
+```js
+StatementDebugVisUpdate();
+```
+
+
+---
+
+#### `StatementDebugVisDraw()`
+
+Draw hook for the Statement visualiser (call from a Draw GUI event when STATEMENT_DEBUG is enabled).
+
+```js
+StatementDebugVisDraw();
+```
+
+
+---
+
+### Visualiser instance helpers
+
+#### `IsVisible()`
+
+Whether the visualiser is visible.
+
+```js
+visualiser.IsVisible();
+```
+
+- **Returns:** `Bool`
+
+---
+
+#### `SetVisible(visible)`
+
+Set visibility of the visualiser.
+
+```js
+visualiser.SetVisible(visible);
+```
+
+- `visible`: `Bool` - True to show the visualiser, false to hide it.
+- **Returns:** `Struct.StatementVisualiser`
+
+---
+
+### Debug UI theme
+
+#### `DebugUITheme()`
+
+Creates the shared debug UI theme container for Statement visuals.
+
+```js
+var debugUITheme = new DebugUITheme();
+```
+
+- **Returns:** `Struct.DebugUITheme`
+
+---
+
+#### `RefreshMetrics()`
+
+Recompute row heights based on current fonts and padding.
+
+```js
+theme.RefreshMetrics();
+```
+
+- **Returns:** `Undefined`
+
+---
+
+### Debug UI helpers (StatementDebugUI)
+
+#### `StatementDebugUI(theme)`
+
+UI helper used by the Statement visualiser (buttons, toggles, overlays).
+
+```js
+var statementDebugUI = new StatementDebugUI(theme);
+```
+
+- `theme`: `Struct.DebugUITheme` - Theme instance to drive styling.
+- **Returns:** `Struct.StatementDebugUI`
+
+---
+
+#### `BeginFrame()`
+
+Begin a new UI frame: cache mouse state and clear consumption.
+
+```js
+ui.BeginFrame();
+```
+
+- **Returns:** `Undefined`
+
+---
+
+#### `BlurTextInput()`
+
+Release text input focus, returning the final content.
+
+```js
+ui.BlurTextInput();
+```
+
+- **Returns:** `String`
+
+---
+
+#### `Button(x1, y1, x2, y2, label, style_id, tooltip)`
+
+Simple button. Draws a rectangle with a label, returns true on click.
+
+```js
+ui.Button(x1, y1, x2, y2, label, style_id, tooltip);
+```
+
+- `x1`: `Real` - Left of the button in GUI space.
+- `y1`: `Real` - Top of the button in GUI space.
+- `x2`: `Real` - Right of the button in GUI space.
+- `y2`: `Real` - Bottom of the button in GUI space.
+- `label`: `String` - Button text.
+- `style_id` *(optional)*: `String` - Style id from the theme button styles.
+- `tooltip` *(optional)*: `String` - Tooltip text to show on hover.
+- **Returns:** `Bool` - True if the button was clicked this frame.
+
+---
+
+#### `ConsumeOverlays()`
+
+Run the topmost overlay input handler (if any).
+
+```js
+ui.ConsumeOverlays();
+```
+
+- **Returns:** `Undefined`
+
+---
+
+#### `DrawOverlays()`
+
+Draw any late UI overlays (e.g. dropdown popups) on top of everything.
+
+```js
+ui.DrawOverlays();
+```
+
+- **Returns:** `Undefined`
+
+---
+
+#### `Dropdown(x1, y1, x2, y2, options, current_index, id, style_id, tooltip)`
+
+Simple dropdown with popup list. Returns new index.
+
+```js
+ui.Dropdown(x1, y1, x2, y2, options, current_index, id, style_id, tooltip);
+```
+
+- `x1`: `Real` - Left of the dropdown in GUI space.
+- `y1`: `Real` - Top of the dropdown in GUI space.
+- `x2`: `Real` - Right of the dropdown in GUI space.
+- `y2`: `Real` - Bottom of the dropdown in GUI space.
+- `options`: `Array<String>` - List of option labels.
+- `current_index`: `Real` - Current selection index.
+- `id`: `Any` - Stable id so we can track which dropdown is open.
+- `style_id` *(optional)*: `String` - Style id from the theme dropdown styles.
+- `tooltip` *(optional)*: `String` - Tooltip text to show on hover.
+- **Returns:** `Real` - New selection index.
+
+---
+
+#### `FocusTextInput(id, content, placeholder)`
+
+Claim text input focus for a given id, seeding content and caret.
+
+```js
+ui.FocusTextInput(id, content, placeholder);
+```
+
+- `id`: `Any` - Unique identifier for the text input.
+- `content`: `String` - Initial content to place in the buffer.
+- `placeholder`: `String` - Placeholder text to render when empty.
+- **Returns:** `Undefined`
+
+---
+
+#### `HeaderBar(x1, y1, x2, y2, title, style_id)`
+
+Draw a header bar with optional title text.
+
+```js
+ui.HeaderBar(x1, y1, x2, y2, title, style_id);
+```
+
+- `x1`: `Real` - Left of the header bar.
+- `y1`: `Real` - Top of the header bar.
+- `x2`: `Real` - Right of the header bar.
+- `y2`: `Real` - Bottom of the header bar.
+- `title` *(optional)*: `String` - Title text to draw.
+- `style_id` *(optional)*: `String` - Style key to resolve look.
+- **Returns:** `Undefined`
+
+---
+
+#### `Label(x1, y1, x2, y2, text)`
+
+Draw a simple text label centered vertically in the given rect. No interaction, just drawing.
+
+```js
+ui.Label(x1, y1, x2, y2, text);
+```
+
+- `x1`: `Real` - Left of the rect in GUI space.
+- `y1`: `Real` - Top of the rect in GUI space.
+- `x2`: `Real` - Right of the rect in GUI space.
+- `y2`: `Real` - Bottom of the rect in GUI space.
+- `text`: `String` - Text to display.
+- **Returns:** `Undefined`
+
+---
+
+#### `MenuToggles(x1, y1, x2, y2, items, id, style_id, label, tooltip)`
+
+Show a menu button that opens a toggle list. Returns toggles array if changed.
+
+```js
+ui.MenuToggles(x1, y1, x2, y2, items, id, style_id, label, tooltip);
+```
+
+- `x1`: `Real` - Left of the menu button in GUI space.
+- `y1`: `Real` - Top of the menu button in GUI space.
+- `x2`: `Real` - Right of the menu button in GUI space.
+- `y2`: `Real` - Bottom of the menu button in GUI space.
+- `items`: `Array<Struct>` - Array of structs with at least { label, value }.
+- `id`: `Any` - Stable id for tracking the open menu.
+- `style_id` *(optional)*: `String` - Style key to resolve look.
+- `label` *(optional)*: `String` - Text to show on the button (defaults to "Settings").
+- `tooltip` *(optional)*: `String` - Tooltip text to show on hover.
+- **Returns:** `Array<Struct>` - Updated items array (with toggled values).
+
+---
+
+#### `MouseConsumed()`
+
+Returns whether some UI control has already claimed the mouse this frame.
+
+```js
+ui.MouseConsumed();
+```
+
+- **Returns:** `Bool`
+
+---
+
+#### `OverlayPop(id)`
+
+Pop overlays with a matching id (if present).
+
+```js
+ui.OverlayPop(id);
+```
+
+- `id`: `Any` - Identifier for the overlay to remove.
+- **Returns:** `Undefined`
+
+---
+
+#### `OverlayPush(id, fn)`
+
+Push an overlay input handler onto the stack (topmost handles input first).
+
+```js
+ui.OverlayPush(id, fn);
+```
+
+- `id`: `Any` - Identifier for the overlay.
+- `fn`: `Function` - Handler function to run for the overlay.
+- **Returns:** `Undefined`
+
+---
+
+#### `Panel(x1, y1, x2, y2, with_border, style_id)`
+
+Panel helper for filled backgrounds. Optional border and style id.
+
+```js
+ui.Panel(x1, y1, x2, y2, with_border, style_id);
+```
+
+- `x1`: `Real` - Left of the panel.
+- `y1`: `Real` - Top of the panel.
+- `x2`: `Real` - Right of the panel.
+- `y2`: `Real` - Bottom of the panel.
+- `with_border` *(optional)*: `Bool` - Whether to draw the border.
+- `style_id` *(optional)*: `String` - Style key to resolve look.
+- **Returns:** `Undefined`
+
+---
+
+#### `PopContext()`
+
+Restore the previous UI context (if any).
+
+```js
+ui.PopContext();
+```
+
+- **Returns:** `Undefined`
+
+---
+
+#### `Popup(x1, y1, x2, y2, title, style_id)`
+
+Popup chrome (background, border, header). Returns body rect.
+
+```js
+ui.Popup(x1, y1, x2, y2, title, style_id);
+```
+
+- `x1`: `Real` - Left of the popup.
+- `y1`: `Real` - Top of the popup.
+- `x2`: `Real` - Right of the popup.
+- `y2`: `Real` - Bottom of the popup.
+- `title` *(optional)*: `String` - Header title.
+- `style_id` *(optional)*: `String` - Style key to resolve look.
+- **Returns:** `Struct` - { body_x1, body_y1, body_x2, body_y2, header_bottom }
+
+---
+
+#### `PushContext(id)`
+
+Save current UI state and switch to a named context (for multiple windows).
+
+```js
+ui.PushContext(id);
+```
+
+- `id`: `Any` - Identifier for the context to push and switch to.
+- **Returns:** `Undefined`
+
+---
+
+#### `ScrollVertical(x1, y1, x2, y2, value, speed, max)`
+
+Apply vertical scroll to a value if the wheel is used over this rect.
+
+```js
+ui.ScrollVertical(x1, y1, x2, y2, value, speed, max);
+```
+
+- `x1`: `Real` - Left of the scrollable rect (GUI space).
+- `y1`: `Real` - Top of the scrollable rect (GUI space).
+- `x2`: `Real` - Right of the scrollable rect (GUI space).
+- `y2`: `Real` - Bottom of the scrollable rect (GUI space).
+- `value`: `Real` - Current scroll value.
+- `speed`: `Real` - Pixels to scroll per wheel notch.
+- `max`: `Real` - Maximum scroll value (clamped 0.._max).
+- **Returns:** `Real` - Updated scroll value.
+
+---
+
+#### `SetInputProvider(fn)`
+
+Override how mouse input is sampled each frame (supply mx,my,mouse_l_down,mouse_l_pressed,wheel).
+
+```js
+ui.SetInputProvider(fn);
+```
+
+- `fn`: `Function` - Function returning a struct with mouse data for this frame.
+- **Returns:** `Undefined`
+
+---
+
+#### `SetTextInputSeed(fn)`
+
+Override how the text input seeds its buffer on focus (defaults to writing keyboard_string).
+
+```js
+ui.SetTextInputSeed(fn);
+```
+
+- `fn`: `Function` - Function that seeds the active text buffer.
+- **Returns:** `Undefined`
+
+---
+
+#### `SetTextInputSource(fn)`
+
+Override the string source used while a text input is active (defaults to keyboard_string).
+
+```js
+ui.SetTextInputSource(fn);
+```
+
+- `fn`: `Function` - Provider returning the current text contents.
+- **Returns:** `Undefined`
+
+---
+
+#### `Slider(x1, y1, x2, y2, value, min, max)`
+
+Basic horizontal slider returning a new value.
+
+```js
+ui.Slider(x1, y1, x2, y2, value, min, max);
+```
+
+- `x1`: `Real` - Left of the slider in GUI space.
+- `y1`: `Real` - Top of the slider in GUI space.
+- `x2`: `Real` - Right of the slider in GUI space.
+- `y2`: `Real` - Bottom of the slider in GUI space.
+- `value`: `Real` - Current slider value.
+- `min`: `Real` - Minimum slider value.
+- `max`: `Real` - Maximum slider value.
+- **Returns:** `Real` - New slider value after input.
+
+---
+
+#### `TextInput(x1, y1, x2, y2, id, value, placeholder, style_id, tooltip)`
+
+Text input control with simple focus/blur and placeholder.
+
+```js
+ui.TextInput(x1, y1, x2, y2, id, value, placeholder, style_id, tooltip);
+```
+
+- `x1`: `Real` - Left of the input box in GUI space.
+- `y1`: `Real` - Top of the input box in GUI space.
+- `x2`: `Real` - Right of the input box in GUI space.
+- `y2`: `Real` - Bottom of the input box in GUI space.
+- `id`: `Any` - Stable id for focus tracking.
+- `value`: `String` - Current string value.
+- `placeholder` *(optional)*: `String` - Placeholder when empty.
+- `style_id` *(optional)*: `String` - Style key to resolve look.
+- `tooltip` *(optional)*: `String` - Tooltip text to show on hover.
+- **Returns:** `Struct` - Struct with { value, active }.
+
+---
+
+#### `Toggle(x1, y1, x2, y2, label, value, style_id, tooltip)`
+
+Toggle with a checkbox-style box and label.
+
+```js
+ui.Toggle(x1, y1, x2, y2, label, value, style_id, tooltip);
+```
+
+- `x1`: `Real` - Left of the toggle row in GUI space.
+- `y1`: `Real` - Top of the toggle row in GUI space.
+- `x2`: `Real` - Right of the toggle row in GUI space.
+- `y2`: `Real` - Bottom of the toggle row in GUI space.
+- `label`: `String` - Text for the toggle.
+- `value`: `Bool` - Current value.
+- `style_id` *(optional)*: `String` - Style id from the theme toggle styles.
+- `tooltip` *(optional)*: `String` - Tooltip text to show on hover.
+- **Returns:** `Bool` - New value after this frame.
+
+---
+
+#### `ToolbarSeparator(x, y, height)`
+
+Toolbar separator with consistent styling.
+
+```js
+ui.ToolbarSeparator(x, y, height);
+```
+
+- `x`: `Real` - X coordinate of the separator line.
+- `y`: `Real` - Top of the separator line.
+- `height`: `Real` - Height of the separator.
+- **Returns:** `Undefined`
+
+---
+
+#### `TooltipRequest(text, anchor_x, anchor_y, delay_ms)`
+
+Request a tooltip to display after the default delay (unless another control replaces it).
+
+```js
+ui.TooltipRequest(text, anchor_x, anchor_y, delay_ms);
+```
+
+- `text`: `String` - Tooltip copy to show.
+- `anchor_x`: `Real` - X coordinate in GUI space.
+- `anchor_y`: `Real` - Y coordinate in GUI space.
+- `delay_ms` *(optional)*: `Real` - Delay before showing, in milliseconds.
+- **Returns:** `Undefined`
+
+---
+
+#### `WheelConsumed()`
+
+Returns whether a scroll region has claimed the wheel this frame.
+
+```js
+ui.WheelConsumed();
+```
+
+- **Returns:** `Bool`
+
+---
+
+#### `Window(x1, y1, x2, y2, style_id)`
+
+Draw the base window background + border using the theme palette.
+
+```js
+ui.Window(x1, y1, x2, y2, style_id);
+```
+
+- `x1`: `Real` - Left of the window.
+- `y1`: `Real` - Top of the window.
+- `x2`: `Real` - Right of the window.
+- `y2`: `Real` - Bottom of the window.
+- `style_id` *(optional)*: `String` - Style key to resolve look.
+- **Returns:** `Undefined`
+
+---
+

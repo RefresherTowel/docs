@@ -31,6 +31,12 @@ Statement is part of the upcoming **RefresherTowel Games** suite of reusable fra
 
 Most GameMaker projects start with a simple `state` variable and end with a mess of switches, flags, and special cases. Statement cuts through that. You give each object a state machine, define a few named states, and let Statement handle the rest. The result is code that is easier to read, easier to debug, and much easier to grow. And when you are ready to go beyond the basics, Statement has enough power under the hood to handle complex state machine behavior without changing that simple workflow.
 
+> Statement v1.1 has dropped! Statement nows come with **Statement Lens**, an advanced visual debugger for your state machine!
+> ![Statement Visual Debugger in action!](../assets/visual_debugger_guide/visual_debugger_intro.gif)
+> Interact with your state machine in real-time while you play! Examine how states transition between each other, what states are most active, the past history of the state machine, and even control your state machine directly through the debugger
+> ![Statement Visual Debugger in action!](../assets/visual_debugger_guide/visual_debugger_interact.gif)
+{: .bonus}
+
 Statement gives you:
 
 - An easy to declare `Statement` state machine bound to an instance or struct.

@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Visual Debugger
+title: Statement Lens
 parent: Statement
 nav_order: 3
 ---
@@ -16,11 +16,13 @@ nav_order: 3
 </details>
 </div>
 
-# Statement Visual Debugger
+# Statement Lens
 
-So, you have a bunch of state machines running around your project causing trouble, and you would like to actually see what those little gremlins are doing rather than guess from a wall of `show_debug_message` calls. That is what the Statement visual debugger is for.
+![Statement Visual Debugger in action!](../assets/visual_debugger_guide/visual_debugger_intro.gif)
 
-Statement ships with a full visual debugger that draws your machines as clickable graphs, shows you where they are right now, where they have been, and what they are trying to do next. Think of it as a live map of your game logic.
+So, you have a bunch of state machines running around your project causing trouble, and you would like to actually see what those little gremlins are doing rather than guess from a wall of `show_debug_message` calls. That is what Statement Lens is for.
+
+**Statement Lens** is the centre-piece of the **Statement v1.1** update. It is a **fully visual debugger**(!) that draws your machines as clickable graphs, shows you where they are right now, where they have been, and what they are trying to do next. Think of it as a live map of your game logic.
 
 You do not need the visual debugger to use Statement. You can happily ship a game without ever opening it. But once your project grows past "one or two tiny machines in a jam game", the debugger becomes a big quality of life upgrade. It turns a lot of painful "why is this not doing what I think it is doing" moments into "oh, it is stuck in this state because of that edge right there".
 
@@ -31,6 +33,14 @@ On this page we will walk through the visualiser in three passes:
 - Power users: breakpoints, debug jumps, EGO mode, and some extra tricks for when your machines get spicy.
 
 You do not have to memorize everything at once. Treat it like a skill tree. Grab the beginner stuff first, then come back and unlock the intermediate and power toys when your machines level up enough to need them.
+
+> Statement Lens is currently in a BETA state. It should absolutely be functional enough to use and it can't harm anything about your game, so don't be hesitant to try it out. However, some parts of it may be a little janky and I'm still working on what's important to show vs what I should be gating behind drop down menus (plus any other ways to reduce visual noise while maintaining good information density).
+>
+> Please [**join the discord**](https://discord.gg/8spFZdyvkb) and offer suggestions or features, and detail any bugs you encounter!
+{: .warning}
+
+> Statement Lens is using a very early version of the **Echo Display UI**. This is a framework for easily building out interactable debugger tools, like Lens, and will be included as a part of the Echo framework when it is finished. All RefresherTowel Games frameworks will utilise this UI to build interesting, informative live debugging tools to help you move fast and fix things as easily as possible! Plus, you'll be able to get your own debugging windows set up quickly and easily, giving you maximum power to make your games!
+{: .bonus}
 
 ---
 
@@ -45,9 +55,9 @@ Once this is wired in, the rest of the page is just learning how to poke the UI.
 
 ### 1.1 Enabling the debug build
 
-All of the visual debugger code is wrapped behind the `STATEMENT_DEBUG` macro in `statement_macro.txt`:
+All of the visual debugger code is wrapped behind the `STATEMENT_DEBUG` macro in `scr_statement_macro`:
 
-```gml
+```js
 #macro STATEMENT_DEBUG 1
 ```
 
@@ -74,12 +84,12 @@ You do not need to manually register machines. If you are constructing your mach
 
 Next, we need to give the visualiser a chance to run every frame. There are two global helper functions that you drop into your game loop:
 
-```gml
+```js
 /// Step event of some always-present controller object
-StatementDebugVisUpdate();
+StatementLensUpdate();
 
 /// Draw GUI event of the same object
-StatementDebugVisDraw();
+StatementLensDraw();
 ```
 
 Both functions are safe to leave in permanently:
@@ -90,11 +100,13 @@ Both functions are safe to leave in permanently:
 A common pattern is:
 
 1. Create a little controller object, for example `obj_debug_statement`.
-2. Put `StatementDebugVisUpdate()` in its Step event.
-3. Put `StatementDebugVisDraw()` in its Draw GUI event.
+2. Put `StatementLensUpdate()` in its Step event.
+3. Put `StatementLensDraw()` in its Draw GUI event.
 4. Only place that object in rooms you care about, or only in your "debug" config.
 
 That is it. Run the game, and you should see the visual debugger appear over the top of your game window, usually tucked into the corner by default.
+
+![Visual Debugger interface](../assets/visual_debugger_guide/visual_debugger.png)
 
 If you do not see anything:
 
@@ -111,7 +123,7 @@ By default, machines are displayed using a description of their owner, for examp
 
 This is technically correct, but it gets old quickly when you have a lot of machines. You can give each machine a friendlier label using `SetDebugName` and `DebugTag`:
 
-```gml
+```js
 player_sm
     .SetDebugName("Player movement")
     .DebugTag("player, movement, core");
@@ -140,7 +152,14 @@ With the setup done, let us take a gentle first pass through the visualiser. The
 
 Once that feels normal, we can start layering on the fancy bits.
 
-### 2.1 Picking a machine
+### 2.1 The Visual Debugger window
+
+Just a few tips about the debugger window:
+
+- You can drag it by clicking and dragging the "DEBUG VISUALISER" header area.
+- You can resize the window by clicking and dragging the bottom right corner of the window.
+
+### 2.2 Picking a machine
 
 At the top left of the visualiser you will see a machine picker bar. It will show something like:
 
@@ -151,6 +170,8 @@ or, if you used `SetDebugName`, something like:
 > `Player movement`
 
 Click this bar and you will get a searchable dropdown of all known machines.
+
+![Machine dropdown](../assets/visual_debugger_guide/machine_dropdown.png)
 
 Things you can do here:
 
@@ -167,7 +188,7 @@ If you do not see a machine that you definitely know should exist:
 - Make sure you actually created the machine before the visualiser update runs.
 - Double check that you are not filtering it out with the toggles.
 
-### 2.2 Panning and zooming
+### 2.3 Panning and zooming
 
 The main graph view is fully interactive. You are not stuck with whatever layout it gives you the first time.
 
@@ -187,7 +208,9 @@ Typical pattern:
 
 If you lose the machine off screen (it happens), hit `Center` again. That button is your "stop being lost" teleporter.
 
-### 2.3 Reading the right-hand panel
+### 2.4 Reading the right-hand panel
+
+![Inspector panel](../assets/visual_debugger_guide/righthand_panel.png)
 
 The panel on the right is your "at a glance" summary for the selected machine. It will show things like:
 
@@ -209,9 +232,11 @@ As a beginner, you can get a surprising amount of value just from this panel alo
 
 Instead of guessing from code or adding more logs, you can look at what the machine thinks is happening right now.
 
-### 2.4 Hovering and clicking nodes
+### 2.5 Hovering and clicking nodes
 
 States are drawn as circular nodes on the graph. Edges between them represent transitions or debug links.
+
+![Nodes and edges](../assets/visual_debugger_guide/nodes_and_edges.png)
 
 Rough idea:
 
@@ -220,11 +245,14 @@ Rough idea:
 
 Basic interactions:
 
-- Hover a node to highlight its edges and see a quick tooltip.
+- Hover a node to highlight its edges and deaccentuate other nodes.
 - Left click a node to select it (so the state info shows up in the panels).
-- Right click a node to bring up a context panel at the bottom of the screen with more detailed info.
+- Right click a node to bring up a context panel with more detailed info about that state.
+- Right click an edge to bring up a context panel with more detailed infor about that transition.
 
-If the `Click to jump` toggle (under `General Settings`) is enabled, then left clicking a node does one more thing: it asks the machine to jump straight to that state for you. This is extremely handy for "put me into this state right now so I can test it" workflows.
+One of the coolest elements of Statement Lens is the ability to control the state machine directly by the debugger. If you have the `Click to jump` toggle (under `General Settings`) enabled (it is enabled by default), then left clicking a node does a special thing: it asks the machine to jump straight to that state for you! This "put me into this state right now so I can test it" workflow is extremely handy for all sorts of situations. Explore and test your whole state machine just by clicking through the nodes on the screen.
+
+![Controlling states](../assets/visual_debugger_guide/visual_debugger_interact.gif)
 
 The state context panel can show, among other things:
 
@@ -236,7 +264,7 @@ The state context panel can show, among other things:
 
 You are allowed to poke these. They are debug-only flags, they do not change your saved game state or your shipped code. Use them as temporary switches while you investigate.
 
-### 2.5 Toggling labels and edges
+### 2.6 Toggling labels and edges
 
 Along the top toolbar there are some simple, but very helpful, visibility toggles:
 
@@ -244,12 +272,12 @@ Along the top toolbar there are some simple, but very helpful, visibility toggle
 - `Edges Shown`: choose which types of edges are drawn (structural, debug-only, history, etc).
 - `Edge History`: limit edges to "all time" or "only edges that were active in the last N ticks".
 
-When your graph starts to look like a bowl of noodles, do not suffer through it. Hide some labels or restrict to "Last 50" edges and you will usually get a much clearer picture of the recent behavior.
+When your graph starts to look like a bowl of noodles, do not suffer through it. Master the pasta by hiding labels or restrict to "Last 50" edges and you will usually get a much clearer picture of the recent behavior.
 
 For a very quick sanity check:
 
 1. Turn on an overlay (for example heat by time, see later).
-2. Set `Edge History` to "Last 50".
+2. Set `Edge History` to "Last 500".
 3. Run around in game for a bit.
 4. Pause and look. The hot nodes and edges will show you exactly where the action has been.
 
@@ -285,7 +313,7 @@ When you click the machine picker, the first entry in the dropdown is a text box
 
 The list below will filter as you type.
 
-> There is also a state search palette that you can open with the keyboard shortcut defined in `statement_macro.txt` (by default `Ctrl + F`). This searches the states attached to the currently selected machine, and will match both state names and any tags you have added via `DebugTag()` or in the state inspector popup in the visual debugger.
+> There is also a state search palette that you can open with the keyboard shortcut defined in `scr_statement_macro` (by default `Ctrl + F`). This searches the states attached to the currently selected machine, and will match both state names and any tags you have added via `DebugTag()` or in the state inspector popup in the visual debugger.
 {: .note}
 
 The idea is that you should never need to scroll miles of list to find "that one boss machine". Combine good `SetDebugName` / `DebugTag` usage with the filters and you can jump around the whole project very quickly.
@@ -355,6 +383,7 @@ Some practical ways to use this:
 - Freeze the entire world and then step one frame at a time to see when a wrong transition fires.
 - Pause only one machine while everything else is still running. For example, pause an enemy AI machine while the player keeps moving, so you can focus on the AI behavior in isolation.
 - Pause as soon as a breakpoint triggers (see below), inspect the machine, and only resume when you are ready.
+- If you have a very quick transition between a few different states (such as multiple states cycling through in a single frame) set a breakpoint trigger in the first frame and then step through the state chain one by one.
 
 Once you get comfortable with pausing and stepping, you can debug state logic without spamming logs all over the place.
 
@@ -397,7 +426,7 @@ Once you are in the habit of nudging these filters around instead of fighting th
 
 ---
 
-## 4. Power users: breakpoints, jumps, EGO mode, and extra tools
+## 4. Power users: breakpoints, jumps, layouts, and extra tools
 
 If you are comfortable with everything above, this section is about leaning on the visual debugger as a serious day to day weapon. These are the features you reach for when you want to surgically poke a machine, not just watch it.
 
@@ -432,7 +461,7 @@ Sometimes you do not want to wait for the machine to naturally walk into a state
 
 From code, you can jump straight to a state by name:
 
-```gml
+```js
 player_sm.DebugJumpToState("Combat.Idle");
 ```
 
@@ -444,7 +473,7 @@ player_sm.DebugJumpToState("Combat.Idle");
 
 States can also define a default debug payload:
 
-```gml
+```js
 attack_state
     .DebugPayload({
         debug_spawn_position: 0,
@@ -469,7 +498,7 @@ Use this for things like:
 
 Not every relationship between states is a "real" transition. Sometimes events, queues, or external triggers move your machine around in ways that do not show up as direct edges. The visualiser lets you draw additional "debug-only" links just for clarity:
 
-```gml
+```js
 phase1.DebugLinkTo("Phase2");
 phase1.DebugLinkTo("Phase3");
 ```
@@ -484,7 +513,7 @@ You can use these to:
 
 Think of debug links as labeling strings between states in your design doc, but directly in the tool.
 
-### 4.4 EGO mode
+### 4.4 Layouts
 
 The visualiser has several layout modes, controlled by its internal `mode` and `full_layout_mode` flags:
 
@@ -493,22 +522,27 @@ The visualiser has several layout modes, controlled by its internal `mode` and `
 - `CLOUD`: looser network-style layout.
 - `EGO`: focus mode where you only care about one state and its neighbors.
 
-You can cycle layout modes using the keyboard shortcut defined in `statement_macro.txt` (by default `V`).
+You can cycle layout modes using the keyboard shortcut defined in `scr_statement_macro` (by default `V`).
 
-EGO mode in particular is designed for "graph spelunking". In EGO:
+The FULL mode builds a simple BFS tree, laying out your nodes in order from the currently selected nodes, to the nodes connected to that, then the nodes connected to those nodes, and so on in expanding columns. This gives a clean overall visual of your state machine.
 
-- One state is centered.
-- Its neighbors are fanned out around it.
-- You move between neighbors with the EGO movement keys (arrow keys or WASD, by default).
-- Space or Enter selects the current state.
+![Layout Full mode](../assets/visual_debugger_guide/layout_full_mode.png)
 
-Instead of staring at the whole dungeon map, you move from room to room. This is great for:
+RADIAL mode is designed to show the interconnectedness of the state machines graph. This is great for getting a direct visual of how many transitions there are that flow across the states. The circular layout means that all transitions cross across the center, creating a focal point for you to examine.
 
-- Walking through a chain of states one hop at a time.
-- Exploring unfamiliar machines without constantly zooming and panning.
-- Teaching someone else how a machine works, step by step.
+![Layout Radial mode](../assets/visual_debugger_guide/layout_radial_mode.png)
 
-If FULL mode feels like too much visual noise at times, EGO mode is your quieter, more guided view.
+CLOUD mode is designed to show how states are "grouped". You might have state machines that have a few different tight groupings of states, with sparse transitions between these groups. CLOUD mode builds a dynamic map of your states, with each transition acting as a "spring" that pulls connected states together. The more connections, the tighter the grouping will be. 
+
+![Layout Cloud mode](../assets/visual_debugger_guide/layout_cloud_mode.png)
+
+EGO mode in particular is designed for "graph spelunking". In EGO mode, the currently selected state is centered, states that can transition to it are on the left and states it can transition to are on the right. Other states are ignored, so this gives you a very clean visual to reason about for the exact state you have selected. You can move between neighbors with the EGO movement keys (arrow keys or WASD, by default, editable in the macros). Space or Enter selects the selected state.
+
+![Layout Ego mode](../assets/visual_debugger_guide/layout_ego_mode.png)
+
+This is like exploring a dungeon room by room instead of staring at the whole dungeon map. This is great for exploring unfamiliar machines without constantly zooming and panning, reasoning about a particular state and ONLY that state, or even teaching someone else how a machine works, step by step.
+
+If the other layout modes feel like too much visual noise at times, EGO mode is your quieter, more guided view.
 
 ### 4.5 Error handling and logging
 
@@ -519,7 +553,7 @@ Sometimes it is not your transitions that are broken, it is the code inside a st
 
 You control this via:
 
-```gml
+```js
 sm.DebugSetErrorBehavior(eStatementErrorBehavior.RETHROW);
 sm.DebugSetLogErrorsToFile(true);
 ```
@@ -584,7 +618,7 @@ You absolutely do not have to master everything on this page in one sitting. A n
 
 1. **Beginner**  
    - Turn `STATEMENT_DEBUG` on.  
-   - Drop `StatementDebugVisUpdate()` and `StatementDebugVisDraw()` into a debug controller object.  
+   - Drop `StatementLensUpdate()` and `StatementLensDraw()` into a debug controller object.  
    - Pick a machine, hit `Center`, and just watch the current state as you play.
 
 2. **Intermediate**  
