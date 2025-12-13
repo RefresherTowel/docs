@@ -17,19 +17,33 @@ Each framework is built to solve a specific pain point, with a clean API, full F
 
 ---
 
+- **Statement** decides what the game is doing.
+- **Pulse** describes what just happened to anything listening.
+- **Echo** tells you, in plain text, what all of the above actually did.
+
+---
+
 [![Statement icon](./assets/statement_icon.png){: style="max-width: 256px;"}](/docs/statement/)
 {: .text-center }
 ## [**STATEMENT**](/docs/statement/)
 {: .text-center }
 > #### *Turn your states into a Statement!*
 
-Tired of giant `if` chains and switch blocks trying to keep your player or enemies in the right state?
+Sick of juggling `if` chains, tangled transitions, and forgetting which `state ==` means what?
 
-**Statement** is a lightweight but feature rich state machine framework for GameMaker. It gives each object a clear set of states with `Enter`, `Update`, `Exit`, and optional `Draw` handlers.
+**Statement** is a clean, powerful state machine framework for GameMaker that makes your game logic *not suck*. It gives each object (or struct!) its own brain—with clearly named states that handle `Enter`, `Update`, `Exit`, and optional `Draw` logic, all in one tidy place.
 
-- Clean, named states instead of scattered `state == ...` checks.
-- Simple to start: one machine, a couple of states, and a single `Update()` call.
-- Opt in extras when you need them: queued transitions, state stacks, history, transition payloads, non interruptible states, and more.
+* **Built-in visual debugger:** Statement Lens lets you *see* your state machines live in-game—inspect flow, watch transitions, set breakpoints, step frame by frame, even drive them manually. It’s wild.
+* **Simple to start:** one machine, a few named states, one `Update()` call in Step. That’s it.
+* **Scales when you need it:** opt into advanced features like queued transitions, state stacks, history, transition payloads, per-state timers, and non-interruptible states.
+* **Debug-friendly by design:** full API introspection, transition history, heatmaps, and logging (via the included Echo debug console).
+* **Works with structs or instances**, so it plays nice with all your systems.
+
+Use it for players, AI, UI, abilities, cutscenes—anywhere things need to behave like... well, states.
+
+Statement handles the boilerplate so you can focus on the behavior.
+It’s the state machine I wanted, so I built it. Hope you like it.
+
 
 <iframe frameborder="0" src="https://itch.io/embed/4088827?linkback=true&amp;border_width=2&amp;bg_color=132f4b&amp;fg_color=ffffff&amp;link_color=007992&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/statement">Statement by RefresherTowel</a></iframe>
 
@@ -44,13 +58,27 @@ Tired of giant `if` chains and switch blocks trying to keep your player or enemi
 {: .text-center }
 > #### *The beating heart of your game*
 
-Want damage events to update your health bar, play a sound, and trigger screen shake, without wiring everything together by hand?
+Want your damage event to update the health bar, play a sound, spawn some particles, and poke the AI... without wiring a dozen scripts / instances together by hand?
 
-**Pulse** is a lightweight signals and events framework for GameMaker. It gives you a clean way to broadcast events and let any number of listeners react.
+**Pulse** is a signals / events layer for GameMaker that lets your game shout out "something happened" and lets anything that cares listen in.
 
-- Subscribe listeners once and decouple them from the sender.
-- Fire a signal and let UI, audio, VFX, and gameplay all respond.
-- Advanced tools for later: consumable signals, priorities, deferred processing, tags, and sender filters.
+For small projects, it is dead simple:
+
+* Subscribe once and stop passing instance ids all over your code.
+* Fire a signal and let UI, audio, VFX, and gameplay all react in their own space.
+* Keep things decoupled so you can swap or remove systems without a hunt-and-replace session.
+
+For bigger, messier projects, Pulse quietly scales up with you:
+
+* Priorities and consumable signals so the right listener wins and can cancel the rest.
+* Optional queued dispatch so you can post events now and flush them at a safe time later.
+* A query API so you can ask the game a question ("who wants this target?") and collect structured answers.
+* Subscription groups so entire states, rooms, or UI panels can clean up their listeners in one call.
+* Multiple buses so gameplay, UI, and debug tools can each live on their own event channels.
+* Safety features like weak refs, automatic pruning, and result enums so you can detect and debug weird cases instead of guessing.
+
+If all you want is "emit event, something happens", Pulse does that in a couple of lines.
+If you want your whole project to sit on a clean, debuggable event layer, Pulse is built for that too.
 
 > Note: Pulse is not released yet. These docs are here as a preview and may change before launch. Right now, only **Statement** is available on itch.
 {: .note}

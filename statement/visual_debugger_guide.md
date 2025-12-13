@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Statement Lens
+title: Statement Lens (Visual Debugger Guide)
 parent: Statement
 nav_order: 3
 ---
@@ -78,7 +78,7 @@ Nothing in your game code needs to change. When `STATEMENT_DEBUG` is `0`, the de
 > If the visualiser is not showing up at all, the very first thing to check is that `STATEMENT_DEBUG` is set to `1` in the build you are actually running.
 {: .note}
 
-You do not need to manually register machines. If you are constructing your machines through the usual `new StatementMachine()` constructor calls, they will quietly register themselves while debug is on.
+You do not need to manually register machines. If you are constructing your machines through the usual `new Statement()` constructor calls, they will quietly register themselves while debug is on.
 
 ### 1.2 Hooking the visualiser into your game
 

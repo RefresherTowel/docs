@@ -154,3 +154,11 @@
 .highlighter-rouge .highlight pre {
   border-radius: 0; // or whatever you like
 }
+
+.framework-icon-small {
+  width: 40px;             /* tweak as needed */
+  height: 40px;            /* optional; omit to keep natural aspect ratio */
+  vertical-align: middle;
+  margin-right: 0.5rem;    /* space between icon and text */
+  border-radius: 8px;      /* optional */
+}
