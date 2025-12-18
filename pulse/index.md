@@ -96,7 +96,7 @@ Check out the other frameworks currently available:
 - [![Statement icon]({{ '/assets/statement_icon.png' | relative_url }}){: .framework-icon-small } **Statement**](https://refreshertowel.itch.io/statement) - An advanced state machine handler, easy to use for beginners, flexible enough for advanced users, with a fully interactive live visual debugger!
 - [![Echo icon]({{ '/assets/echo_icon.png' | relative_url }}){: .framework-icon-small } **Echo**](https://refreshertowel.itch.io/echo) - A lightweight debug logging tool, allowing you to prioritise and filter debug messages, alongside dumping them to file easily.
 
-These frameworks are designed specifically to work together easily, to allow you to focus on actually making your games, rather than inventing tooling! [See how you might use them with Pulse here!](/integration.md})
+These frameworks are designed specifically to work together easily, to allow you to focus on actually making your games, rather than inventing tooling! [See how you might use them with Pulse here!](/integration.md)
 
 > Pulse ships with [**Echo**](../echo/) (a minimalist, yet powerful, debug logging framework) for free!
 {: .important}
