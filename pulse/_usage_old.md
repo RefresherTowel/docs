@@ -112,7 +112,7 @@ if (player_just_leveled_up) {
 }
 ```
 
-The callback will run only for the first `SIG_LEVEL_UP` that matches the subscription’s `from` filter (or any sender if you used the default).
+The callback will run only for the first `SIG_LEVEL_UP` that matches the subscription's `from` filter (or any sender if you used the default).
 
 ---
 
@@ -301,7 +301,7 @@ Pulse will still prune dead weakrefs automatically, but groups keep explicit cle
 
 ### 8. Cleanup and unsubscribe patterns
 
-Make sure listeners don’t linger longer than intended:
+Make sure listeners don't linger longer than intended:
 
 ```js
 /// Destroy Event of an object that subscribes to signals

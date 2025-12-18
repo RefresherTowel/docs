@@ -24,7 +24,7 @@ So, you have a bunch of state machines running around your project causing troub
 
 **Statement Lens** is the centre-piece of the **Statement v1.1** update. It is a **fully visual debugger**(!) that draws your machines as clickable graphs, shows you where they are right now, where they have been, and what they are trying to do next. Think of it as a live map of your game logic.
 
-You do not need the visual debugger to use Statement. You can happily ship a game without ever opening it. But once your project grows past "one or two tiny machines in a jam game", the debugger becomes a big quality of life upgrade. It turns a lot of painful "why is this not doing what I think it is doing" moments into "oh, it is stuck in this state because of that edge right there".
+You do not need Lens to use Statement. You can happily ship a game without ever opening it. But once your project grows past "one or two tiny machines in a jam game", Lens becomes a big quality of life upgrade. It turns a lot of painful "why is this not doing what I think it is doing" moments into "oh, it is stuck in this state because of that edge right there".
 
 On this page we will walk through the visualiser in three passes:
 

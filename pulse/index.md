@@ -24,7 +24,7 @@ has_children: true
 
 You know that feeling when you change one tiny thing, and then 14 unrelated objects across your project suddenly need updates, or you get a brand new bug in a room you have not opened in three weeks?
 
-Yeah. That sucks. Luckily Pulse is here to save you from yourself!
+Yeah. That sucks. Luckily Pulse is here to save you from that pain!
 
 **Pulse** is a signal and event system for GameMaker. It lets you broadcast "something happened" and have anything that cares react to it, without everything needing to know about everything else.
 
@@ -123,7 +123,7 @@ These frameworks are designed specifically to work together easily, to allow you
   Remove one subscription, or wipe an id from every signal it is on (hello, Destroy event).
 
 * **Callbacks run in the listener's context**
-  Callbacks run inside a `with (id)` for the subscriber, so `self` and scope behaves how you intuitively expect.
+  Callbacks run inside a `with (id)` for the subscriber, so `self` and scope behave how you intuitively expect.
 
 * **Weak references for listeners**
   Pulse uses weak references so dead listeners can be pruned as you dispatch, instead of being kept alive forever because you forgot to unsubscribe.
@@ -141,10 +141,10 @@ These are optional, but they are where Pulse stops being "just a signal script" 
   Higher priority listeners run first. Great for "gameplay first, UI second, VFX last".
 
 * **Tags**
-  Tag subscriptions so you can remove a specific group later (UI, debug, rune procs, tutorial, etc).
+  Tag subscriptions so you can identify/filter them later (UI, debug, rune procs, tutorial, etc). For precise cleanup, prefer tracking subscription handles (or `PulseGroup()`) and unsubscribing those.
 
 * **Cancellation / consumption**
-  A listener can stop propagation (either by returning `true`, or by setting `data.consumed = true` on a struct payload).
+  A listener can stop propagation (either by returning `true`, or by using a struct payload that includes a `consumed` flag and setting it to `true`).
 
 * **Queued dispatch (post now, process later)**
   Use `PulsePost()` to enqueue events, then process them later with `PulseFlushQueue()`.
@@ -257,22 +257,24 @@ The builder exists to make advanced cases (tags, priorities, one-shots, filters)
 
 Every listener stores a `from` filter:
 
-- `noone` (the default) means “accept events from any sender”.  
-- A specific id (for example `other.id` or `enemy_id`) means “only accept events when that id is passed as the `from` argument to `PulseSend` / `PulsePost`”.
+- `noone` (the default) means "accept events from any sender".  
+- A specific id (for example `other.id` or `enemy_id`) means "only accept events when that id is passed as the `from` argument to `PulseSend` / `PulsePost`".
 
-This is helpful when you only want to react to events coming from a specific source (for example, “only take damage from this boss, not from every enemy”).
+This is helpful when you only want to react to events coming from a specific source (for example, "only take damage from this boss, not from every enemy").
 
 ---
 
 ### What value does `PulseSubscribe` return?
 
-Subscription, unsubscription, removal, and immediate send operations return a value from the `ePulseResult` enum, for example:
+`PulseSubscribe` (and `PulseSubscribeOnce`, `PulseSubscribeConfig`, `listener.Subscribe()`) returns a **subscription handle struct**, not an enum value.
+
+That handle includes an `Unsubscribe()` method and metadata like `id`, `signal`, `from`, etc. The result of the subscribe attempt is available on the handle as `handle.result` (an `ePulseResult` value), for example:
 
 - `ePulseResult.LST_ADDED`
-- `ePulseResult.LST_REMOVED_COMPLETELY`
-- `ePulseResult.SGL_SENT`
 
-If you add a duplicate listener tuple (same id + signal + from + tag), Pulse logs a warning in debug builds but still returns `LST_ADDED`.
+Other operations like `PulseUnsubscribe`, `PulseRemove`, and `PulseSend` return an `ePulseResult` value directly.
+
+In the current Pulse codebase, subscribing always reports `handle.result == ePulseResult.LST_ADDED` (including duplicates). If you add a duplicate listener tuple (same id + signal + from + tag), Pulse logs a warning in debug builds but still adds the subscription.
 
 For simple usage you can ignore these, but they become handy in tools, debug builds, or when you want to assert particular outcomes.
 
@@ -299,7 +301,7 @@ A common pattern is:
 var _processed = PulseFlushQueue(128); // process up to 128 events per step
 ```
 
-and use `PulsePost` elsewhere for “next-frame” style work.
+and use `PulsePost` elsewhere for "next-frame" style work.
 
 ---
 
@@ -334,7 +336,7 @@ Inside a listener callback you can stop further propagation in two ways:
 
 After each callback, Pulse checks both:
 
-- the callback’s return value, and  
+- the callback's return value, and  
 - the `consumed` field (for struct payloads).
 
 If either indicates consumption, Pulse stops notifying remaining listeners for that signal send.
@@ -353,7 +355,7 @@ This means:
 - If a listener unsubscribes itself during a callback, it still receives the current event, but not future ones.
 - If a listener unsubscribes a different listener, that other listener will still run once for the current event, but not future ones.
 
-This behaviour is predictable and avoids “modified the list I am iterating” crashes.
+This behaviour is predictable and avoids "modified the list I am iterating" crashes.
 
 ---
 

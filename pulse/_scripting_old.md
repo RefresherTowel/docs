@@ -75,7 +75,7 @@ The `result` field in the returned struct contains the appropriate `ePulseResult
 
 **Callback context:** callbacks are invoked inside a `with (id)` block, so `self` behaves as that listener instance. The payload is passed as the first argument.
 
-**Auto-cleanup:** weak references mean Pulse will prune listeners whose targets are collected/destroyed. It is still good practice to unsubscribe when you’re done, but Pulse will attempt to keep things tidy.
+**Auto-cleanup:** weak references mean Pulse will prune listeners whose targets are collected/destroyed. It is still good practice to unsubscribe when you're done, but Pulse will attempt to keep things tidy.
 
 ---
 
@@ -308,7 +308,7 @@ Tags are useful for grouping and selective removal via `PulseUnsubscribe`.
 
 #### `listener.Priority(priority)`
 
-Set the listener’s priority.
+Set the listener's priority.
 
 ```js
 listener.Priority(10);

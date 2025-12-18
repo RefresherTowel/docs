@@ -116,9 +116,9 @@ only the matching player will run their callback. Everyone else subscribed to `S
 
 ### 5. Multiple listeners and ordering
 
-Signals can have many listeners. By default, they run in the order they were added. You can treat this as "good enough" in the beginner layer.
+Signals can have many listeners. They run in **descending priority** order (higher runs earlier), and the default priority is `0`.
 
-If you start thinking "this one should run before that one", that's your cue to head into the Intermediate section where priorities and cancellation live.
+If you start thinking "this one should run before that one", that's your cue to head into the Intermediate section where priorities and cancellation live. In general, do not rely on tie ordering when multiple listeners share the same priority - set explicit priorities when ordering matters.
 
 ---
 
@@ -163,11 +163,19 @@ var _cfg = PulseListener(id, SIG_DAMAGE_TAKEN, function(_data) {
 var _handle = PulseSubscribeConfig(_cfg);
 ```
 
-Later, you can surgically remove just this slice of listeners:
+Later, if you kept the handle, you can unsubscribe that exact subscription:
+
+```js
+_handle.Unsubscribe();
+```
+
+You can also remove by filters:
 
 ```js
 PulseUnsubscribe(id, SIG_DAMAGE_TAKEN, enemy_id, TAG_COMBAT_TEMPORARY);
 ```
+
+Note: when you provide `from` and/or `tag`, `PulseUnsubscribe` removes the first matching subscription only. If you expect multiple matches, track handles (for example in a `PulseGroup()`) and unsubscribe them explicitly.
 
 For broad cleanup, `PulseRemove(id)` removes all subscriptions for an id across every signal on the default bus. A good pattern is to call this in a parent `Destroy` event:
 
@@ -248,7 +256,7 @@ PulseSubscribe(id, SIG_INPUT_CLICK, function(_ev) {
 Pulse treats the event as "consumed" if:
 
 - The callback returns `true`, or
-- The payload is a struct and you set `payload.consumed = true`.
+- The payload is a struct with a `consumed` field (for example `{ ..., consumed: false }`) and you set `payload.consumed = true`.
 
 Once consumed, lower-priority listeners for that signal will be skipped.
 
@@ -407,12 +415,14 @@ Listener side:
 
 ```js
 /// obj_shopkeeper Create
-PulseSubscribe(id, SIG_SHOP_GET_OFFERS, function(ctx) {
-    // ctx.payload is whatever the caller passed in
-    var _item_id = ctx.payload.item_id;
+PulseSubscribe(id, SIG_SHOP_GET_OFFERS, function(_q) {
+    // Query listeners receive a query context (not the raw payload).
+    // `_q.payload` is whatever the caller passed into PulseQuery / PulseQueryAll / PulseQueryFirst.
+    var _item_id = _q.payload.item_id;
 
     if (has_offer_for(_item_id)) {
-        ctx.Add({
+        // Add one response into the query result set.
+        _q.Add({
             item_id: _item_id,
             price: get_price_for(_item_id),
             source: id
@@ -425,24 +435,26 @@ Caller side:
 
 ```js
 var _payload = { item_id: ITEM_POTION };
-var _ctx     = PulseQuery(SIG_SHOP_GET_OFFERS, _payload);
+var _collector = PulseQuery(SIG_SHOP_GET_OFFERS, _payload);
 
-if (_ctx.Count() > 0) {
-    var _offers = _ctx.ToArray();
+// PulseQuery returns a collector (the accumulated responses).
+if (_collector.Count() > 0) {
+    var _offers = _collector.ToArray();
     _offers = sort_offers_by_price(_offers);
     var _best = _offers[0];
 }
 ```
 
-Key pieces of the context (as exposed by the collector):
+Key pieces you interact with:
 
-- `ctx.payload` -> whatever you passed into the query.
-- `ctx.Add(value)` -> add a single response.
-- `ctx.AddMany(array)` -> add multiple responses.
-- `ctx.Count()` -> number of responses so far.
-- `ctx.ToArray()` -> responses as an array.
-- `ctx.First(default)` -> first response or `default`.
-- `ctx.Single(default)` -> only response or `default` if there is not exactly one.
+- **Listener query context** (argument to the query listener callback):
+  - `_q.payload` -> whatever you passed into the query.
+  - `_q.Add(value)` / `_q.AddMany(array)` -> add responses.
+- **Collector** (returned by `PulseQuery`):
+  - `Count()` -> number of responses collected.
+  - `ToArray()` -> responses as an array.
+  - `First(default)` -> first response or `default`.
+  - `Single(default)` -> only response or `default` if there is not exactly one.
 
 Convenience wrappers:
 

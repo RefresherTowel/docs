@@ -104,7 +104,7 @@ The UI, audio, and other systems stay decoupled from the state machine.
 Pulse traffic can be invisible when something goes wrong. Echo makes it
 visible again.
 
-### Pattern 7 - Log specific signals (Core)
+### Pattern 1 - Log specific signals (Core)
 
 Subscribe a small debug listener:
 
@@ -121,7 +121,7 @@ PulseSubscribe(id, "stat_changed", function(_data) {
 You can leave this in your debug builds and disable it in release by
 wrapping the subscription in a macro check.
 
-### Pattern 8 - Wrap PulseSend with logging (Advanced)
+### Pattern 2 - Wrap PulseSend with logging (Advanced)
 
 Create a helper to log calls before dispatching:
 
@@ -137,7 +137,7 @@ function PulseSendLogged(_signal, _data, _from) {
 ```
 
 Replace calls to `PulseSend` in the systems you are diagnosing. Combined
-with Echo’s configurable debug level, this gives you a clear picture of
+with Echo's configurable debug level, this gives you a clear picture of
 which signals fired and in what order.
 
 ---

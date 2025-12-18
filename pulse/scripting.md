@@ -22,8 +22,8 @@ This page documents the public API of Pulse - Signals & Events for GameMaker.
 
 It is split into:
 
-- **Core API** – recommended reading for everyone.
-- **Advanced API** – optional tools for more complex behaviour, debugging, or tooling.
+- **Core API** - recommended reading for everyone.
+- **Advanced API** - optional tools for more complex behaviour, debugging, or tooling.
 
 ---
 
@@ -43,11 +43,13 @@ Values include:
 - `ePulseResult.LST_DOES_NOT_EXIST_IN_SIGNAL`  
 - `ePulseResult.LST_DOES_NOT_EXIST`  
 - `ePulseResult.SGL_DOES_NOT_EXIST`  
-- `ePulseResult.SGL_NOT_SENT_NO_SGL`  – the signal has no entry in the controller yet.  
-- `ePulseResult.SGL_NOT_SENT_NO_LST`  – the signal exists but currently has zero listeners.  
+- `ePulseResult.SGL_NOT_SENT_NO_SGL`  - the signal has no entry in the controller yet.  
+- `ePulseResult.SGL_NOT_SENT_NO_LST`  - the signal exists but currently has zero listeners.  
 - `ePulseResult.SGL_SENT`  
 
-You will see these returned from functions like `PulseSubscribe`, `PulseUnsubscribe`, `PulseRemove`, and `PulseSend`.
+You will see these returned from functions like `PulseUnsubscribe`, `PulseRemove`, and `PulseSend`.
+
+Subscribe functions like `PulseSubscribe` return a subscription handle struct; the `ePulseResult` for the subscribe attempt is available on that handle as `handle.result`.
 
 ---
 
@@ -63,19 +65,19 @@ PulseSubscribe(id, SIG_DAMAGE_TAKEN, function(_data) {
 });
 ```
 
-- `id`: `Id.Instance or Struct` – receiver; structs are weak-ref wrapped for GC.  
-- `signal`: `Any` – the signal identifier (usually a macro or enum).  
-- `callback`: `Function` – the function to invoke when the signal is dispatched.  
-- `from` *(optional)*: `Id.Instance or Struct` – sender filter; `noone` (default) means “accept from any sender”.  
-- **Returns:** `Struct` – a subscription handle with:
-  - fields: `controller`, `id`, `signal`, `from`, `once`, `tag`, `priority`, `active`, `result`
+- `id`: `Id.Instance or Struct` - receiver; structs are weak-ref wrapped for GC.  
+- `signal`: `Any` - the signal identifier (usually a macro or enum).  
+- `callback`: `Function` - the function to invoke when the signal is dispatched.  
+- `from` *(optional)*: `Id.Instance or Struct` - sender filter; `noone` (default) means "accept from any sender".  
+- **Returns:** `Struct` - a subscription handle with:
+  - fields: `controller`, `uid`, `id`, `signal`, `from`, `once`, `tag`, `priority`, `enabled`, `active`, `result`
   - method: `Unsubscribe()`
 
-The `result` field in the returned struct contains the appropriate `ePulseResult` enum entry to allow you to inspect for errors or failures.
+The `result` field in the returned struct contains an `ePulseResult` enum entry for the subscribe attempt. In the current Pulse codebase, subscribing always reports `ePulseResult.LST_ADDED` (duplicates log a warning in debug builds, but are still added).
 
 **Callback context:** callbacks are invoked inside a `with (id)` block, so `self` behaves as that listener instance. The payload is passed as the first argument.
 
-**Auto-cleanup:** weak references mean Pulse will prune listeners whose targets are collected/destroyed. It is still good practice to unsubscribe when you’re done, but Pulse will attempt to keep things tidy.
+**Auto-cleanup:** weak references mean Pulse will prune listeners whose targets are collected/destroyed. It is still good practice to unsubscribe when you're done, but Pulse will attempt to keep things tidy.
 
 ---
 
@@ -91,7 +93,7 @@ PulseSubscribeOnce(id, SIG_LEVEL_UP, function(_data) {
 ```
 
 - Parameters are the same as `PulseSubscribe`.  
-- **Returns:** `Struct` – subscription handle (same shape as `PulseSubscribe`).
+- **Returns:** `Struct` - subscription handle (same shape as `PulseSubscribe`).
 
 The listener is removed after the first time it receives a signal that matches both the `signal` and `from` filter.
 
@@ -112,16 +114,18 @@ PulseUnsubscribe(id, SIG_DAMAGE_TAKEN, boss_id);
 PulseUnsubscribe(id, SIG_DAMAGE_TAKEN, undefined, TAG_BOSS_INTRO);
 ```
 
-- `id`: `Id.Instance or Struct` – listener id/struct to remove.  
-- `signal`: `Any` – signal identifier.  
-- `from` *(optional)*: `Id.Instance or Struct` – if provided, only listeners bound to this sender are removed.  
-- `tag` *(optional)*: `Any` – if provided, only listeners with this tag are removed.  
-- **Returns:** `ePulseResult` – for example:
-  - `LST_REMOVED_FROM_SIGNAL` – one or more listeners removed.
-  - `SGL_DOES_NOT_EXIST` – no such signal exists.
-  - `LST_DOES_NOT_EXIST_IN_SIGNAL` – signal exists, but no matching listeners for that id/filter.
+- `id`: `Id.Instance or Struct` - listener id/struct to remove.  
+- `signal`: `Any` - signal identifier.  
+- `from` *(optional)*: `Id.Instance or Struct` - if provided, only listeners bound to this sender are removed.  
+- `tag` *(optional)*: `Any` - if provided, only listeners with this tag are removed.  
+- **Returns:** `ePulseResult` - for example:
+  - `LST_REMOVED_FROM_SIGNAL` - removed at least one matching listener.
+  - `SGL_DOES_NOT_EXIST` - no such signal exists.
+  - `LST_DOES_NOT_EXIST_IN_SIGNAL` - signal exists, but no matching listeners for that id/filter.
 
 If both `from` and `tag` are `undefined`, all subscriptions for `id` on that signal are removed.
+
+If you provide either `from` or `tag`, Pulse removes the first matching subscription only (so duplicates are not all removed in one call). If you need exact or repeatable cleanup, prefer calling `handle.Unsubscribe()` on the subscription handle returned from `PulseSubscribe`/`PulseSubscribeOnce`/`PulseSubscribeConfig`, or track multiple handles in a `PulseGroup()`.
 
 ---
 
@@ -134,10 +138,10 @@ Completely remove an instance id from all signals it is currently listening to.
 PulseRemove(id);
 ```
 
-- `id`: `Id.Instance or Struct` – listener id/struct to remove.  
-- **Returns:** `ePulseResult` – either:
-  - `LST_REMOVED_COMPLETELY` – at least one listener was removed, or  
-  - `LST_DOES_NOT_EXIST` – this id was not subscribed to any signal.
+- `id`: `Id.Instance or Struct` - listener id/struct to remove.  
+- **Returns:** `ePulseResult` - either:
+  - `LST_REMOVED_COMPLETELY` - at least one listener was removed, or  
+  - `LST_DOES_NOT_EXIST` - this id was not subscribed to any signal.
 
 Recommended for use in Destroy events of parent objects to avoid dangling listeners. Pulse will prune dead weak references automatically, but explicit cleanup keeps things predictable.
 
@@ -154,19 +158,19 @@ var _payload = { amount: 10 };
 PulseSend(SIG_DAMAGE_TAKEN, _payload, id);
 ```
 
-- `signal`: `Any` – signal identifier.  
-- `data` *(optional)*: `Any` – payload passed to listeners.  
-- `from` *(optional)*: `Id.Instance or Struct` – sender id/struct used for `from` filtering; default `noone`.  
-- **Returns:** `ePulseResult` – for example:
-  - `SGL_SENT` – at least one listener ran.  
-  - `SGL_NOT_SENT_NO_SGL` – no such signal exists.  
-  - `SGL_NOT_SENT_NO_LST` – signal exists, but has no listeners.
+- `signal`: `Any` - signal identifier.  
+- `data` *(optional)*: `Any` - payload passed to listeners.  
+- `from` *(optional)*: `Id.Instance or Struct` - sender id/struct used for `from` filtering; default `noone`.  
+- **Returns:** `ePulseResult` - for example:
+  - `SGL_SENT` - at least one listener ran.  
+  - `SGL_NOT_SENT_NO_SGL` - no such signal exists.  
+  - `SGL_NOT_SENT_NO_LST` - signal exists, but has no listeners.
 
 **Dispatch rules:**
 
 - Listeners are run in **descending priority** order (higher `priority` first).  
 - Each listener sees the same `signal`, `data`, and `from` values.  
-- If a listener returns `true`, or if a struct payload has `consumed == true`, remaining listeners are not invoked (cancellation).  
+- If a listener returns `true`, or if a struct payload has `consumed == true`, remaining listeners are not invoked (cancellation). For the payload method, make sure the payload already includes a `consumed` field when you send it (for example `{ ..., consumed: false }`).  
 - Subscriptions changed during dispatch take effect on the **next** send, not the current one.
 
 ---
@@ -201,8 +205,8 @@ Process queued signals in FIFO order, using the same rules as `PulseSend`.
 var _processed = PulseFlushQueue(128);
 ```
 
-- `max_events` *(optional)*: `Real` – maximum number of queued events to process this call; negative values (the default `-1`) process **all** pending events.  
-- **Returns:** `Real` – the number of events actually processed.
+- `max_events` *(optional)*: `Real` - maximum number of queued events to process this call; negative values (the default `-1`) process **all** pending events.  
+- **Returns:** `Real` - the number of events actually processed.
 
 Events posted during `PulseFlushQueue` are appended to the queue and will also be processed in the same call, as long as you have not hit `max_events`.
 
@@ -230,7 +234,7 @@ Return the number of events currently queued for deferred dispatch.
 var _pending = PulseQueueCount();
 ```
 
-- **Returns:** `Real` – the number of queued events remaining.
+- **Returns:** `Real` - the number of queued events remaining.
 
 ---
 
@@ -248,18 +252,19 @@ var _l = PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
     .Priority(5);
 ```
 
-- `id`: `Id.Instance or Struct` – listener target; structs are weak-ref wrapped.  
-- `signal`: `Any` – signal identifier.  
-- `callback`: `Function` – function to invoke when the signal is dispatched.  
-- **Returns:** `Struct` – a listener configuration object with fields:
+- `id`: `Id.Instance or Struct` - listener target; structs are weak-ref wrapped.  
+- `signal`: `Any` - signal identifier.  
+- `callback`: `Function` - function to invoke when the signal is dispatched.  
+- **Returns:** `Struct` - a listener configuration object with fields:
   - `ident`, `signal`, `callback`  
-  - `from`, `once`, `tag`, `priority`  
+  - `from`, `once`, `tag`, `priority`, `enabled`  
   and methods:
   - `.From(from_id)`  
   - `.Once()`  
   - `.Tag(tag)`  
   - `.Priority(priority)`  
-  - `.Bus(bus)` – target a specific `PulseController`
+  - `.Enabled(enabled)` / `.Enable()` / `.Disable()`  
+  - `.Bus(bus)` - target a specific `PulseController`
   - `.Subscribe()`
 
 This struct is a **builder / config object only**. The signal system copies its values when you subscribe; mutating the struct later does not change already-registered listeners.
@@ -275,7 +280,7 @@ listener.From(boss_id);
 ```
 
 - `from_id`: `Id.Instance or Struct`.  
-- **Returns:** `Struct` – the same listener config (for chaining).
+- **Returns:** `Struct` - the same listener config (for chaining).
 
 ---
 
@@ -287,7 +292,7 @@ Mark the listener configuration as one-shot.
 listener.Once();
 ```
 
-- **Returns:** `Struct` – the same listener config.
+- **Returns:** `Struct` - the same listener config.
 
 ---
 
@@ -300,7 +305,7 @@ listener.Tag(TAG_UI);
 ```
 
 - `tag`: `Any`.  
-- **Returns:** `Struct` – the same listener config.
+- **Returns:** `Struct` - the same listener config.
 
 Tags are useful for grouping and selective removal via `PulseUnsubscribe`.
 
@@ -308,14 +313,14 @@ Tags are useful for grouping and selective removal via `PulseUnsubscribe`.
 
 #### `listener.Priority(priority)`
 
-Set the listener’s priority.
+Set the listener's priority.
 
 ```js
 listener.Priority(10);
 ```
 
-- `priority`: `Real` – higher values run earlier.  
-- **Returns:** `Struct` – the same listener config.
+- `priority`: `Real` - higher values run earlier.  
+- **Returns:** `Struct` - the same listener config.
 
 ---
 
@@ -331,8 +336,8 @@ var _cfg = PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
     .Bus(my_bus);
 ```
 
-- `bus`: `Struct.PulseController` – the bus that this listener should subscribe on.
-- **Returns:** `Struct` – the same listener config (for chaining).
+- `bus`: `Struct.PulseController` - the bus that this listener should subscribe on.
+- **Returns:** `Struct` - the same listener config (for chaining).
 
 You can then call `listener.Subscribe()` or pass the config to `PulseSubscribeConfig` to register it.
 
@@ -349,7 +354,7 @@ PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
     .Subscribe();
 ```
 
-- **Returns:** `Struct` – subscription handle (same as `PulseSubscribe`) with `Unsubscribe()`, metadata, and `result` telling you the ePulseResult outcome.
+- **Returns:** `Struct` - subscription handle (same as `PulseSubscribe`) with `Unsubscribe()`, metadata, and `result` telling you the ePulseResult outcome.
 
 Internally calls `PulseSubscribeConfig(listener)`.
 
@@ -367,8 +372,8 @@ var _cfg = PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
 PulseSubscribeConfig(_cfg);
 ```
 
-- `listener`: `Struct` – configuration from `PulseListener`.  
-- **Returns:** `Struct` – subscription handle (same as `PulseSubscribe`) with `Unsubscribe()`, metadata, and `result`.
+- `listener`: `Struct` - configuration from `PulseListener`.  
+- **Returns:** `Struct` - subscription handle (same as `PulseSubscribe`) with `Unsubscribe()`, metadata, and `result`.
 
 This is the more explicit form of `listener.Subscribe()` and can be useful when you want to keep a config around for later use.
 
@@ -378,37 +383,39 @@ This is the more explicit form of `listener.Subscribe()` and can be useful when 
 
 The query API lets you broadcast a signal and collect structured responses from listeners instead of just firing callbacks.
 
-Unlike `PulseSend`, query callbacks receive a **query context struct** rather than the raw payload. Inside a query callback you usually:
+There are two different structs involved:
 
-- Read the incoming payload via `ctx.payload`.
-- Optionally call `ctx.Add(value)` or `ctx.AddMany(values)` to record responses.
-- Let Pulse aggregate those responses for you.
+- **Query context (listener side):** query callbacks receive a context struct (not the raw payload). It includes fields like `payload`, plus methods like `Add()` for submitting responses.
+- **Collector (caller side):** `PulseQuery` returns a collector struct that stores the responses and exposes helper methods like `Count()` and `ToArray()`.
 
-The return value of your callback is ignored; only values you add to the context are collected.
+The return value of your query callback is ignored; only values you add via the context are collected.
 
 #### `PulseQuery(signal, [payload], [from])`
 
 Run a synchronous query on the default `PULSE` bus and return a collector struct that tracks all listener responses.
 
 ```js
-var ctx = PulseQuery(SIG_GET_OFFERS, { item_id: item_id });
+var _collector = PulseQuery(SIG_GET_OFFERS, { item_id: item_id });
 
-if (ctx.Count() > 0) {
-    var offers = ctx.ToArray();
+if (_collector.Count() > 0) {
+    var offers = _collector.ToArray();
     // do something with the offers
 }
 ```
 
-- `signal`: `Any` – signal identifier.
-- `payload` (optional): `Any` – payload attached to the query.
-- `from` (optional): `Id.Instance or Struct` – sender filter; default `noone` (accept from any sender).
-- **Returns:** `Struct` – a query collector with helpers such as:
-  - `Count()` – number of responses collected.
-  - `ToArray()` – all response values as an array.
-  - `First(default)` – first response or `default` if none.
-  - `Single(default)` – single response or `default` if none, ignoring multi-response cases.
+- `signal`: `Any` - signal identifier.
+- `payload` (optional): `Any` - payload attached to the query.
+- `from` (optional): `Id.Instance or Struct` - sender filter; default `noone` (accept from any sender).
+- **Returns:** `Struct` - a query collector with helpers such as:
+  - `Count()` - number of responses collected.
+  - `ToArray()` - all response values as an array.
+  - `First(default)` - first response or `default` if none.
+  - `Single(default)` - single response if exactly one exists; otherwise `default`.
 
-Each listener that wants to participate in a query should expect a single `ctx` argument and call `ctx.Add(...)` or `ctx.AddMany(...)` to contribute results.
+Each listener that wants to participate in a query should expect a single query-context argument and call `ctx.Add(...)` or `ctx.AddMany(...)` to contribute results. The query context struct includes:
+
+- `ctx.bus`, `ctx.signal`, `ctx.from`, `ctx.payload`
+- `ctx.Add(value)`, `ctx.AddMany(array)`, `ctx.HasAny()`, `ctx.Count()`
 
 #### `PulseQueryAll(signal, [payload], [from])`
 
@@ -422,10 +429,10 @@ if (array_length(offers) > 0) {
 }
 ```
 
-- `signal`: `Any` – signal identifier.
-- `payload` (optional): `Any` – payload attached to the query.
-- `from` (optional): `Id.Instance or Struct` – sender filter; default `noone`.
-- **Returns:** `Array<Any>` – array of all response values in listener priority order.
+- `signal`: `Any` - signal identifier.
+- `payload` (optional): `Any` - payload attached to the query.
+- `from` (optional): `Id.Instance or Struct` - sender filter; default `noone`.
+- **Returns:** `Array<Any>` - array of all response values in listener priority order.
 
 Internally this calls `PulseQuery` and then `ToArray()` on the collector.
 
@@ -437,11 +444,11 @@ Run a synchronous query and return only the first response by listener priority,
 var target = PulseQueryFirst(SIG_AI_PICK_TARGET, undefined, noone, player_id);
 ```
 
-- `signal`: `Any` – signal identifier.
-- `payload` (optional): `Any` – payload attached to the query.
-- `from` (optional): `Id.Instance or Struct` – sender filter; default `noone`.
-- `default` (optional): `Any` – value returned when there are no responses.
-- **Returns:** `Any` – first response value or `default`.
+- `signal`: `Any` - signal identifier.
+- `payload` (optional): `Any` - payload attached to the query.
+- `from` (optional): `Id.Instance or Struct` - sender filter; default `noone`.
+- `default` (optional): `Any` - value returned when there are no responses.
+- **Returns:** `Any` - first response value or `default`.
 
 
 ### Introspection & Debugging
@@ -455,7 +462,7 @@ var _damage_count = PulseCount(SIG_DAMAGE_TAKEN);
 ```
 
 - `signal`: `Any`.  
-- **Returns:** `Real` – number of listeners for that signal.
+- **Returns:** `Real` - number of listeners for that signal.
 
 ---
 
@@ -468,7 +475,7 @@ var _my_subscriptions = PulseCountFor(id);
 ```
 
 - `id`: `Id.Instance or Struct`.  
-- **Returns:** `Real` – number of subscriptions for that id.
+- **Returns:** `Real` - number of subscriptions for that id.
 
 ---
 
@@ -503,7 +510,9 @@ PulseDumpSignal(SIG_DAMAGE_TAKEN);
 
 #### `PulseGroup()`
 
-Create a group for tracking multiple subscription handles so you can clean them up together. Handles are the structs returned by `PulseSubscribe`, `PulseSubscribeOnce`, `listener.Subscribe()`, or `PulseSubscribeConfig()`.
+Create a group for tracking multiple subscription handles so you can clean them up together, and (optionally) act as a managed subscription "factory" with shared defaults.
+
+Handles are the structs returned by `PulseSubscribe`, `PulseSubscribeOnce`, `listener.Subscribe()`, or `PulseSubscribeConfig()`.
 
 ```js
 group = PulseGroup();
@@ -514,11 +523,14 @@ group.Add([
 ]);
 ```
 
-- **Returns:** `Struct` – group object with methods:
-  - `Add(handle_or_array)` / `Track(handle_or_array)` – add one handle or an array of handles.
-  - `UnsubscribeAll()` – call `Unsubscribe()` on every tracked handle (safe even if already inactive).
-  - `Clear()` – forget tracked handles without unsubscribing them.
-  - `Destroy()` – `UnsubscribeAll()` then `Clear()`.
+- **Returns:** `Struct` - group object with methods:
+  - Tracking: `Add(handle_or_array)` / `Track(handle_or_array)`
+  - Cleanup: `UnsubscribeAll()`, `Clear()`, `Destroy()`, `Prune()`
+  - Defaults / factory: `Bus(bus)`, `Name(name)`, `From(from)`, `Tag(tag)`, `Priority(prio)`, `PriorityOffset(delta)`, `Phase(name)`, `PhaseBase(base)`
+  - Enable/disable: `IsEnabled()`, `SetEnabled(bool)`, `Enable()`, `Disable()`
+  - Subscribe via group: `Listener(id, signal, callback)`, `Subscribe(...)`, `SubscribeOnce(...)`, `SubscribeConfig(listener)`
+  - Bus passthrough: `Send(...)`, `Post(...)`, `FlushQueue(...)`, `ClearQueue()`, `QueueCount()`, `Query(...)`, `QueryAll(...)`, `QueryFirst(...)`
+  - Debug: `Dump()`, `DumpManaged()`, counts (`Count()`, `CountActive()`, `CountEnabled()`)
 
 Groups are handy for bundling subscriptions per state/room. Pulse prunes dead weakrefs automatically, but groups make intentional cleanup straightforward.
 
@@ -568,7 +580,7 @@ Create a new independent Pulse bus. Each bus is a separate `PulseController` wit
 var my_bus = PulseBusCreate();
 ```
 
-- **Returns:** `Struct.PulseController` – a new, empty controller instance.
+- **Returns:** `Struct.PulseController` - a new, empty controller instance.
 
 This is equivalent to calling `new PulseController()` directly, but keeps your code aligned with the Pulse API.
 
@@ -578,37 +590,66 @@ When you have a custom bus (for example `my_bus` from above), you can call metho
 
 Listener management:
 
-- `Subscribe(id, signal, callback, [from])` – subscribe a persistent listener.
-- `SubscribeOnce(id, signal, callback, [from])` – subscribe a one-shot listener.
-- `Listener(id, signal, callback)` – create a listener builder already bound to this bus (advanced; same idea as `PulseListener` but scoped to the bus).
+- `Subscribe(id, signal, callback, [from])` - subscribe a persistent listener.
+- `SubscribeOnce(id, signal, callback, [from])` - subscribe a one-shot listener.
+- `Listener(id, signal, callback)` - create a listener builder already bound to this bus (advanced; same idea as `PulseListener` but scoped to the bus).
 
 Unsubscription:
 
-- `Unsubscribe(id, signal, [from], [tag])` – remove listeners for a signal, with optional sender and tag filters.
-- `Remove(id)` – remove all listeners for an id across all signals on this bus.
+- `Unsubscribe(id, signal, [from], [tag])` - remove listeners for a signal, with optional sender and tag filters.
+- `Remove(id)` - remove all listeners for an id across all signals on this bus.
 
 Dispatch and queue:
 
-- `Send(signal, [data], [from])` – dispatch immediately on this bus (same rules as `PulseSend`).
-- `Post(signal, [data], [from])` – enqueue an event on this bus (same idea as `PulsePost`).
-- `FlushQueue([max_events])` – process queued events for this bus (same as `PulseFlushQueue` but scoped to the bus).
-- `ClearQueue()` – clear this bus queue without dispatching.
-- `QueueCount()` – number of events currently queued on this bus.
+- `Send(signal, [data], [from])` - dispatch immediately on this bus (same rules as `PulseSend`).
+- `Post(signal, [data], [from])` - enqueue an event on this bus (same idea as `PulsePost`).
+- `FlushQueue([max_events])` - process queued events for this bus (same as `PulseFlushQueue` but scoped to the bus).
+- `ClearQueue()` - clear this bus queue without dispatching.
+- `QueueCount()` - number of events currently queued on this bus.
 
 Query API:
 
-- `Query(signal, [payload], [from])` – run a synchronous query on this bus and return a collector struct (same shape as `PulseQuery`).
-- `QueryAll(signal, [payload], [from])` – run a query and return responses as an array.
-- `QueryFirst(signal, [payload], [from], [default])` – run a query and return only the first response (or `default`).
+- `Query(signal, [payload], [from])` - run a synchronous query on this bus and return a collector struct (same shape as `PulseQuery`).
+- `QueryAll(signal, [payload], [from])` - run a query and return responses as an array.
+- `QueryFirst(signal, [payload], [from], [default])` - run a query and return only the first response (or `default`).
 
 Introspection:
 
-- `Count(signal)` – number of listeners registered for a particular signal on this bus.
-- `CountFor(id)` – total number of subscriptions held by an id on this bus.
-- `Dump()` – log all signals and their listeners for this bus (debug use only).
-- `DumpSignal(signal)` – log listeners for a single signal on this bus.
+- `Count(signal)` - number of listeners registered for a particular signal on this bus.
+- `CountFor(id)` - total number of subscriptions held by an id on this bus.
+- `Dump()` - log all signals and their listeners for this bus (debug use only).
+- `DumpSignal(signal)` - log listeners for a single signal on this bus.
 
+Phase lanes (optional priority tooling):
+
+- `AddPhase(name, base_priority)` - add/replace a named phase lane (case-insensitive).
+- `RemovePhase(name)` - remove a phase lane.
+- `HasPhase(name)` - check if a phase lane exists.
+- `GetPhaseBase(name)` - get a phase lane base priority (returns `0` if missing).
+- `DumpPhases()` - dump all phase lanes via Echo.
+
+Phase lanes are used by `PulseGroup().Phase(name)` and exist to give you a consistent "priority band" per system (for example `GAMEPLAY` higher than `UI`), while still letting you set smaller per-listener priorities inside that band.
+
+Debug / tooling helpers:
+
+- `SetBusName(name)` - set a human-friendly name used in visualisers/taps.
+- `GetSnapshot()` - returns a struct snapshot (phases, queue size, subscriptions) intended for debug visualisers.
+- `AddTap(fn)` / `RemoveTap(fn)` - add/remove a callback invoked with an event struct describing bus activity (subscribe, send, query, flush, etc).
 
 Each `PulseController` is independent: counts, queue, and listeners are per-bus. Choose this only when you need strict isolation (for example, UI vs gameplay events), otherwise the global bus is simpler.
 
 Pulse uses weak references for struct/instance subscribers and prunes dead listeners whenever it dispatches or cleans up a signal. Manual cleanup (for example, `PulseRemove` in Destroy events) remains a good habit, but Pulse will try to keep the bus tidy even if you forget occasionally.
+
+---
+<!--
+#### `PulseVisualiserOpen(ui_root)`
+
+Open or create the Pulse Visualiser window inside the Echo Debug UI desktop.
+
+```js
+PulseVisualiserOpen(global.EchoDesktop);
+```
+
+- `ui_root`: `Struct` - the Echo Chamber root / desktop struct.
+- **Returns:** `Struct` - the created window, or `undefined` if `ui_root` is not a struct.
+-- >
