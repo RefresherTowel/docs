@@ -2,7 +2,7 @@
 layout: default
 title: Scripting Reference
 parent: Echo
-nav_order: 2
+nav_order: 1
 ---
 
 <div class="sticky-toc" markdown="block">
