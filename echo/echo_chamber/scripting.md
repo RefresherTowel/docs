@@ -22,7 +22,7 @@ has_children: false
 </details>
 </div>
 
-## Echo Chamber Scripting Reference
+# Echo Chamber Scripting Reference
 
 Echo Chamber is the in-game debug UI builder. It is a set of constructors that output structs (Root, Window, Panel, Controls).
 

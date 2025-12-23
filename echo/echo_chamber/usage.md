@@ -23,7 +23,7 @@ has_children: false
 </details>
 </div>
 
-# Usage & Examples
+# Echo Chamber Usage & Examples
 
 > I'm writing these examples in a bit more of an informal way than the rest of my documentation, mostly because I want to get it out quickly and not be as structured. Let me know if you prefer this style or the "more professional" style of the other usage and examples pages I have for the other frameworks!
 {: .note}
