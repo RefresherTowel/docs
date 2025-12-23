@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Echo Chamber
-nav_order: 3
+nav_order: 1
 parent: Echo
 has_children: true
 ---

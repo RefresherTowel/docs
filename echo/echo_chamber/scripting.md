@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Scripting Reference
-nav_order: 1
+nav_order: 2
 parent: Echo Chamber
 has_children: false
 ---
