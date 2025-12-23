@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Echo Chamber Scripting Reference
+title: Scripting Reference
 nav_order: 1
 parent: Echo Chamber
 has_children: false

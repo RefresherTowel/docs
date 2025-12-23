@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Echo Chamber Usage & Examples
+title: Usage & Examples
 nav_order: 2
 parent: Echo Chamber
 has_children: false

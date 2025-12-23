@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Echo Scripting Reference
+title: Scripting Reference
 parent: Echo
 nav_order: 2
 ---
