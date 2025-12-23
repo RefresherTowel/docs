@@ -24,10 +24,7 @@ has_children: true
 
 You know the `show_debug_message` spiral:
 
-- You've been working on a feature for a week and you keep running into problems.
-- You begin sprinkling debug messages throughout your code.
-- More and more begin to pile up as you valiantly strive to find the problem.
-- Then suddenly your output is a wall of nonsense and the one line you actually need is almost impossible to see.
+You've been working on a feature for a week and you keep running into problems. You begin sprinkling debug messages throughout your code. More and more begin to pile up as you valiantly strive to find the problem. Then suddenly your output is a wall of text spam and the one line you actually need is lost amongst the noise...
 
 Echo is my attempt to fix that problem without turning logging into a whole second job. It's a lightweight debug logger for GameMaker. It gives you:
 
@@ -52,7 +49,7 @@ You log a message. Echo decides if it should be shown (based on your current set
 
 So instead of "I hope I spot the right line in the output" you get "I can filter this and dump it to a file when things get busy".
 
-> Echo comes packed with Echo Chamber, a UI framework specifically built to allow quick and easy development of complex UI's aimed at allowing you to create your own debug tools. Have a look at how quickly you can build a simple UI:
+> Echo comes packed with **Echo Chamber**, a UI framework specifically built to allow quick and easy development of complex UI's aimed at allowing you to create your own debug tools. Have a look at how quickly you can build a simple UI:
 > [!Echo Chamber UI development](../assets/echo_chamber_promo.gif)
 > And here is the implementation of [**Statements**](../statement/index.md) Lens visual debugger, written entirely with Echo Chamber:
 > [!Statement Lens debugger](../assets/statement_lens_marketing.gif)
