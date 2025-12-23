@@ -5,6 +5,11 @@ parent: Pulse
 nav_order: 4
 ---
 
+<!--
+/// usage.md - Changelog:
+/// - 23-12-2025: Updated Pulse API references and requirements.
+-->
+
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
@@ -169,6 +174,8 @@ Later, if you kept the handle, you can unsubscribe that exact subscription:
 _handle.Unsubscribe();
 ```
 
+Handles created via `PulseSubscribeConfig` or `PulseGroup.SubscribeConfig` also include `SetEnabled(enabled)`, `Enable()`, `Disable()`, and `IsEnabled()` for listener gating.
+
 You can also remove by filters:
 
 ```js
@@ -304,6 +311,8 @@ global.BusUI   = PulseBusCreate();
 global.BusGame = PulseBusCreate();
 ```
 
+You can also create a bus with `new PulseController()` if you prefer using the constructor directly.
+
 You then subscribe and send on those busses instead of the global functions:
 
 ```js
@@ -338,6 +347,18 @@ Every `PulseController` instance has methods that mirror the global API, but onl
 - `QueryAll(signal, [payload], [from])`
 - `QueryFirst(signal, [payload], [from], [default])`
 
+Additional controller-only helpers include:
+
+- `AddPhase(name, base_priority)`
+- `RemovePhase(name)`
+- `HasPhase(name)`
+- `GetPhaseBase(name)`
+- `DumpPhases()`
+- `SetBusName(name)`
+- `GetSnapshot()`
+- `AddTap(fn)`
+- `RemoveTap(fn)`
+
 Using custom busses is entirely optional, but very handy for:
 
 - Keeping debug tooling separate from gameplay.
@@ -359,6 +380,10 @@ var _handle = PulseSubscribeConfig(_cfg);
 ```
 
 `.Bus(bus)` binds the builder to a specific `PulseController`. Under the hood this is what `bus.Listener(...)` uses too.
+
+Builder configs also support `.Enabled(enabled)`, `.Enable()`, and `.Disable()` to control the initial enabled state.
+`PulseSubscribeConfig` requires a listener config struct built from `PulseListener`.
+`.Bus(bus)` requires a Pulse controller struct built from `PulseController` or `PulseBusCreate`.
 
 Builder configs are nice when you want to:
 
@@ -398,6 +423,21 @@ Methods (high level):
 - `UnsubscribeAll()` -> call `Unsubscribe()` on every tracked handle.
 - `Clear()` -> forget the handles without unsubscribing (rare, but there if you need it).
 - `Destroy()` -> `UnsubscribeAll()` then `Clear()`.
+
+Additional group helpers (advanced):
+
+- Defaults and setup: `Bus(bus)`, `Name(name)`, `From(from)`, `Tag(tag)`, `Priority(priority)`, `PriorityOffset(delta)`, `Phase(name)`, `PhaseBase(base_priority)`
+- Enable and disable: `IsEnabled()`, `SetEnabled(enabled)`, `Enable()`, `Disable()`
+- Subscribe helpers: `Listener(id, signal, callback)`, `Subscribe(id, signal, callback, [from])`, `SubscribeOnce(id, signal, callback, [from])`, `SubscribeConfig(listener)`
+- Cleanup: `Prune()`
+- Counts: `Count()`, `CountActive()`, `CountEnabled()`
+- Debug: `Dump()`, `DumpManaged()`
+- Bus passthrough: `Send(signal, [data], [from])`, `Post(signal, [data], [from])`, `FlushQueue([max_events])`, `ClearQueue()`, `QueueCount()`
+- Query passthrough: `Query(signal, [payload], [from])`, `QueryAll(signal, [payload], [from])`, `QueryFirst(signal, [payload], [from], [default])`
+
+`Add(handle_or_array)` and `Track(handle_or_array)` require subscription handle structs built from `PulseSubscribe`, `PulseSubscribeOnce`, `PulseSubscribeConfig`, or `listener.Subscribe`.
+`SubscribeConfig(listener)` requires a listener config struct built from `PulseListener`.
+`Bus(bus)` requires a Pulse controller struct built from `PulseController` or `PulseBusCreate`.
 
 Groups go very well with state machines, menus, and temporary game modes where you want "everything this mode subscribed to" to disappear at once.
 

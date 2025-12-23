@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Echo
-nav_order: 4
+nav_order: 1
 has_children: true
 ---
 
@@ -29,9 +29,7 @@ You know the `show_debug_message` spiral:
 - More and more begin to pile up as you valiantly strive to find the problem.
 - Then suddenly your output is a wall of nonsense and the one line you actually need is almost impossible to see.
 
-Echo is my attempt to fix that problem without turning logging into a whole second job.
-
-Echo is a lightweight debug logger for GameMaker. It gives you:
+Echo is my attempt to fix that problem without turning logging into a whole second job. It's a lightweight debug logger for GameMaker. It gives you:
 
 - Urgency levels (INFO, WARNING, SEVERE)
 - A debug level switch (log nothing, log only severe, log most things, or log everything)
@@ -41,21 +39,24 @@ Echo is a lightweight debug logger for GameMaker. It gives you:
 
 If you want the itch page: [Echo on itch.io](https://refreshertowel.itch.io/echo)
 
-> Both of my other frameworks, [![Statement icon]({{ '/assets/statement_icon.png' | relative_url }}){: .framework-icon-small } **Statement**](https://refreshertowel.itch.io/statement) and [![Pulse icon]({{ '/assets/pulse_icon.png' | relative_url }}){: .framework-icon-small } **Pulse**](https://refreshertowel.itch.io/pulse) ship with [**Echo**](../echo/) for free! So if either of them sounds interesting and you're thinking of buying Echo, grab them instead and get Echo bundled with them!
+> Both of my other frameworks, [![Statement icon]({{ '/assets/statement_icon.png' | relative_url }}){: .framework-icon-small } **Statement**](https://refreshertowel.itch.io/statement) and [![Pulse icon]({{ '/assets/pulse_icon.png' | relative_url }}){: .framework-icon-small } **Pulse**](https://refreshertowel.itch.io/pulse) ship with **Echo** for free! So if either of them sounds interesting and you're thinking of buying Echo, grab them instead and get Echo bundled with them!
 {: .important}
 
 ---
 
-## What Echo is (in human terms)
+## What Echo is (in simple terms)
 
 Echo is essentially just a smarter `show_debug_message`:
 
-- You log a message.
-- Echo decides if it should be shown (based on your current settings).
-- If it is shown, Echo also stores it in a history list for you.
+You log a message. Echo decides if it should be shown (based on your current settings). If it is shown, Echo also stores it in a history list for you.
 
-So instead of "I hope I spot the right line in the output" you get "I can filter this and dump it to a file when things get cursed".
+So instead of "I hope I spot the right line in the output" you get "I can filter this and dump it to a file when things get busy".
 
+> Echo comes packed with Echo Chamber, a UI framework specifically built to allow quick and easy development of complex UI's aimed at allowing you to create your own debug tools. Have a look at how quickly you can build a simple UI:
+> [!Echo Chamber UI development](../assets/echo_chamber_promo.gif)
+> And here is the implementation of [**Statements**](../statement/index.md) Lens visual debugger, written entirely with Echo Chamber:
+> [!Statement Lens debugger](../assets/statement_lens_marketing.gif)
+{: .bonus}
 ---
 
 ## The 30 second API
@@ -87,7 +88,7 @@ Check out the other frameworks currently available:
 - [![Statement icon]({{ '/assets/statement_icon.png' | relative_url }}){: .framework-icon-small } **Statement**](https://refreshertowel.itch.io/statement) - An advanced state machine handler, easy to use for beginners, flexible enough for advanced users, with a fully interactive live visual debugger!
 - [![Pulse icon]({{ '/assets/pulse_icon.png' | relative_url }}){: .framework-icon-small } **Pulse**](https://refreshertowel.itch.io/pulse) - A signals and events framework. Broadcast "what happened", let any number of listeners react. Includes queries (ask your game a question, anything that might want to answer responds!), tags, priorities, sender filters, queued dispatch, groups, and solid debug/introspection.
 
-These frameworks are designed specifically to work together easily, to allow you to focus on actually making your games, rather than inventing tooling! [See how you might use them with Echo here!](../echo/integration.md)
+These frameworks are designed specifically to work together easily, to allow you to focus on actually making your games, rather than inventing tooling! [See how you might use them with Echo here!]({% link echo/integration.md %})
 
 ---
 
@@ -121,10 +122,7 @@ var _lvl_name = EchoDebugGetLevel(true);
 
 ## Tags (filter the noise)
 
-You can tag individual logs:
-
-- Pass a single tag as a string: "UI"
-- Or pass multiple tags as an array: ["UI", "Input"]
+You can tag individual logs by either passing a single tag as a string: `"UI"`, or pass multiple tags as an array: `["UI", "Input"]`.
 
 Then you can tell Echo "only show logs that overlap these tags":
 
@@ -147,9 +145,9 @@ EchoDebugClearTags();
 
 Echo stores a history buffer while debugging is enabled:
 
-- Plain history lines: `EchoDebugGetHistory()`
-- Structured history entries (for UI): `EchoDebugGetStructuredHistory()`
-- A revision counter that increments when history changes: `EchoDebugGetRevision()`
+- `EchoDebugGetHistory()`: Plain history lines.
+- `EchoDebugGetStructuredHistory()`: Structured history entries (for UI).
+- `EchoDebugGetRevision()`: A revision counter that increments when history changes.
 
 You can cap history size (0 means unlimited):
 
@@ -163,13 +161,13 @@ And when you need to ship a bug report to your future self:
 EchoDebugDumpLog();
 ```
 
-That writes a text file using file_text_open_write with a timestamped name.
+That writes a text file using `file_text_open_write` with a timestamped name.
 
 ---
 
 ## Echo Chamber (included)
 
-Echo ships with Echo Chamber, which is a full in-game debug UI builder.
+Echo ships with Echo Chamber, which is a full in-game debug UI builder, learn more about it here: [Echo Chamber](/echo_chamber/echo_chamber.md).
 
 If all you want is logging, you can ignore it. If you want to build real tooling (log consoles, inspectors, debug panels, whatever) Echo Chamber is where things get fun.
 
@@ -192,7 +190,7 @@ I have used it to build debugging visualisers for all my frameworks, such as [St
 EchoDebugWarn("Player took damage", TAG_COMBAT);
 
 if (hp <= 0) {
-	EchoDebugSevere("Player died with hp <= 0", TAG_COMBAT);
+	EchoDebugInfo("Player died with hp <= 0", TAG_COMBAT);
 }
 ```
 

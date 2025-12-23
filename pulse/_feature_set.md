@@ -5,6 +5,11 @@ parent: Pulse
 nav_order: 2
 ---
 
+<!--
+/// _feature_set.md - Changelog:
+/// - 23-12-2025: Updated Pulse API coverage for builders, handles, groups, and controllers.
+-->
+
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
@@ -84,9 +89,10 @@ These show up in:
 * Optional `from` filter to only accept events from a specific sender.
 * Returns a **subscription handle struct** with:
 
-  * Fields: `controller`, `id`, `signal`, `from`, `once`, `tag`, `priority`, `active`, `result`.
+  * Fields: `controller`, `uid`, `id`, `signal`, `from`, `once`, `tag`, `priority`, `enabled`, `active`, `result`.
   * Method: `Unsubscribe()`.
 * `result` is an `ePulseResult` describing the outcome.
+* Handles created via `PulseSubscribeConfig` or `PulseGroup.SubscribeConfig` also include `SetEnabled(enabled)`, `Enable()`, `Disable()`, and `IsEnabled()`.
 
 ### One-shot listeners: `PulseSubscribeOnce`
 
@@ -231,17 +237,18 @@ These show up in:
 
 * Returns a **configuration struct** you can chain and then subscribe:
 
-  * Fields: `ident`, `signal`, `callback`, `from`, `once`, `tag`, `priority`.
+  * Fields: `ident`, `signal`, `callback`, `from`, `once`, `tag`, `priority`, `enabled`.
   * Methods:
 
     * `.From(from_id)`
     * `.Once()`
     * `.Tag(tag)`
     * `.Priority(priority)`
+    * `.Enabled(enabled)` / `.Enable()` / `.Disable()`
     * `.Bus(bus)`     (bind to a specific controller)
     * `.Subscribe()`  (subscribe on its chosen bus)
 
-* Builder is “write-once”:
+* Builder is write-once:
 
   * Pulse copies the configuration when you subscribe.
   * Changing the builder struct later does not mutate active listeners.
@@ -268,10 +275,26 @@ These show up in:
   * Sets listener priority (higher runs first).
   * Returns the builder.
 
+* `listener.Enabled(enabled)`:
+
+  * Sets whether this listener should be enabled when subscribed.
+  * Returns the builder.
+
+* `listener.Enable()`:
+
+  * Convenience alias for `listener.Enabled(true)`.
+  * Returns the builder.
+
+* `listener.Disable()`:
+
+  * Convenience alias for `listener.Enabled(false)`.
+  * Returns the builder.
+
 * `listener.Bus(bus)`:
 
   * Binds the config to a specific `PulseController` instance.
   * Returns the builder.
+  * Requires a Pulse controller struct built from `PulseController` or `PulseBusCreate`.
 
 ### Subscribing from a builder
 
@@ -284,6 +307,7 @@ These show up in:
 
   * Alternate explicit subscribe call for a builder.
   * Also returns a subscription handle.
+  * Requires a listener config struct built from `PulseListener`.
 
 ---
 
@@ -384,6 +408,21 @@ These show up in:
 
     * Calls `UnsubscribeAll()` then `Clear()`.
 
+* Additional group helpers (advanced):
+
+  * Defaults and setup: `Bus(bus)`, `Name(name)`, `From(from)`, `Tag(tag)`, `Priority(priority)`, `PriorityOffset(delta)`, `Phase(name)`, `PhaseBase(base_priority)`
+  * Enable and disable: `IsEnabled()`, `SetEnabled(enabled)`, `Enable()`, `Disable()`
+  * Subscribe helpers: `Listener(id, signal, callback)`, `Subscribe(id, signal, callback, [from])`, `SubscribeOnce(id, signal, callback, [from])`, `SubscribeConfig(listener)`
+  * Cleanup: `Prune()`
+  * Counts: `Count()`, `CountActive()`, `CountEnabled()`
+  * Debug: `Dump()`, `DumpManaged()`
+  * Bus passthrough: `Send(signal, [data], [from])`, `Post(signal, [data], [from])`, `FlushQueue([max_events])`, `ClearQueue()`, `QueueCount()`
+  * Query passthrough: `Query(signal, [payload], [from])`, `QueryAll(signal, [payload], [from])`, `QueryFirst(signal, [payload], [from], [default])`
+
+* `Add(handle_or_array)` and `Track(handle_or_array)` require subscription handle structs built from `PulseSubscribe`, `PulseSubscribeOnce`, `PulseSubscribeConfig`, or `listener.Subscribe`.
+* `SubscribeConfig(listener)` requires a listener config struct built from `PulseListener`.
+* `Bus(bus)` requires a Pulse controller struct built from `PulseController` or `PulseBusCreate`.
+
 * Ideal for:
 
   * Room-specific subscriptions.
@@ -410,6 +449,7 @@ These show up in:
 
   * Returns a new `PulseController` instance.
   * Independent of the default bus and other controllers.
+  * Equivalent to `new PulseController()`.
 
 * Use cases:
 
@@ -454,6 +494,21 @@ For any controller (default or custom), the API mirrors the global functions but
 * `CountFor(id)`
 * `Dump()`
 * `DumpSignal(signal)`
+
+**Phase lanes**
+
+* `AddPhase(name, base_priority)`
+* `RemovePhase(name)`
+* `HasPhase(name)`
+* `GetPhaseBase(name)`
+* `DumpPhases()`
+
+**Debug and tooling**
+
+* `SetBusName(name)`
+* `GetSnapshot()`
+* `AddTap(fn)`
+* `RemoveTap(fn)`
 
 Each `PulseController`:
 

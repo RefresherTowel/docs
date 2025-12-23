@@ -5,6 +5,11 @@ parent: Statement
 nav_order: 2
 ---
 
+<!--
+/// usage.md - Changelog:
+/// - 23-12-2025: Updated examples and notes for current Statement transition and timing behavior.
+-->
+
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
@@ -129,7 +134,7 @@ var _attack = new StatementState(self, "Attack")
         image_index = 0;
     })
     .AddUpdate(function() {
-        // Stay in Attack for 20 frames
+        // Stay in Attack for 20 Update ticks (scaled by time scale)
         if (state_machine.GetStateTime() >= 20) {
             state_machine.ChangeState("Idle");
         }
@@ -278,7 +283,7 @@ charge = new StatementState(self, "Charge")
         charge.TimerStart(); // per-state timer
     })
     .AddUpdate(function() {
-        // Charge for at least 60 frames, regardless of how often Update runs
+        // Charge for at least 60 time units, regardless of how often Update runs
         if (charge.TimerGet() >= 60) {
             state_machine.ChangeState("Release");
         }
@@ -351,7 +356,7 @@ var _run = new StatementState(self, "Run")
 ```
 
 - Transitions are checked in the order they were added; the first that returns `true` fires.
-- You can attach a payload via `ChangeState` or `EvaluateTransitions(payload)`, then read it in the next state's `Enter` via `GetLastTransitionData()`.
+- You can attach a payload via `ChangeState` or by providing `data` in `AddTransition`, then read it in the next state's `Enter` via `GetLastTransitionData()`.
 - If you need to disable automatic evaluation (for custom ordering), set `SetQueueAutoProcessing(false)` and call `EvaluateTransitions()` manually.
 
 ---

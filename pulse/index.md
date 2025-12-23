@@ -5,6 +5,11 @@ nav_order: 3
 has_children: true
 ---
 
+<!--
+/// index.md - Changelog:
+/// - 23-12-2025: Updated Pulse API notes for builders and handles.
+-->
+
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
@@ -96,7 +101,7 @@ Check out the other frameworks currently available:
 - [![Statement icon]({{ '/assets/statement_icon.png' | relative_url }}){: .framework-icon-small } **Statement**](https://refreshertowel.itch.io/statement) - An advanced state machine handler, easy to use for beginners, flexible enough for advanced users, with a fully interactive live visual debugger!
 - [![Echo icon]({{ '/assets/echo_icon.png' | relative_url }}){: .framework-icon-small } **Echo**](https://refreshertowel.itch.io/echo) - A lightweight debug logging tool, allowing you to prioritise and filter debug messages, alongside dumping them to file easily.
 
-These frameworks are designed specifically to work together easily, to allow you to focus on actually making your games, rather than inventing tooling! [See how you might use them with Pulse here!](/integration.md)
+These frameworks are designed specifically to work together easily, to allow you to focus on actually making your games, rather than inventing tooling! [See how you might use them with Pulse here!]({% link pulse/integration.md %})
 
 > Pulse ships with [**Echo**](../echo/) (a minimalist, yet powerful, debug logging framework) for free!
 {: .important}
@@ -152,7 +157,8 @@ These are optional, but they are where Pulse stops being "just a signal script" 
 
 * **Listener builder (for readability)**
   `PulseListener(id, signal, callback)` gives you a config struct you can chain:
-  `.From()`, `.Once()`, `.Tag()`, `.Priority()`, and even `.Bus()` for custom controllers, then `.Subscribe()`.
+  `.From()`, `.Once()`, `.Tag()`, `.Priority()`, `.Enabled()`, and `.Bus()` for custom controllers, then `.Subscribe()` or `PulseSubscribeConfig(listener)`.
+  `PulseSubscribeConfig` requires a config struct built from `PulseListener`.
 
 * **Subscription handles and groups**
   Subscribe calls return handles with an `Unsubscribe()` method.
@@ -278,6 +284,8 @@ In the current Pulse codebase, subscribing always reports `handle.result == ePul
 
 For simple usage you can ignore these, but they become handy in tools, debug builds, or when you want to assert particular outcomes.
 
+Handles created via `PulseSubscribeConfig` or `PulseGroup.SubscribeConfig` also include `SetEnabled(enabled)`, `Enable()`, `Disable()`, and `IsEnabled()` for listener gating.
+
 ---
 
 ## FAQ (Advanced)
@@ -368,8 +376,8 @@ This behaviour is predictable and avoids "modified the list I am iterating" cras
 
 ## Where to next?
 
-* If you just want to start using it: read the [Usage & Examples](/usage.md}) page, check out the examples included with the tool, and go build something.
-* If you want every public function documented: the [Scripting Reference](/scripting.md) page has the full API list, including queue, queries, builders, groups, custom buses, and introspection. 
+* If you just want to start using it: read the [Usage & Examples]({% link pulse/usage.md %}) page, check out the examples included with the tool, and go build something.
+* If you want every public function documented: the [Scripting Reference]({% link pulse/scripting.md %}) page has the full API list, including queue, queries, builders, groups, custom buses, and introspection. 
 
 ---
 

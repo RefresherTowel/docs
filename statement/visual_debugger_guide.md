@@ -5,6 +5,12 @@ parent: Statement
 nav_order: 3
 ---
 
+<!--
+/// visual_debugger_guide.md - Changelog:
+/// - 23-12-2025: Updated Statement Lens setup details and input notes to match current APIs.
+/// - 23-12-2025: Corrected debug jump wording and time unit references.
+-->
+
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
@@ -39,7 +45,7 @@ You do not have to memorize everything at once. Treat it like a skill tree. Grab
 > Please [**join the discord**](https://discord.gg/8spFZdyvkb) and offer suggestions or features, and detail any bugs you encounter!
 {: .warning}
 
-> Statement Lens is using a very early version of the **Echo Display UI**. This is a framework for easily building out interactable debugger tools, like Lens, and will be included as a part of the Echo framework when it is finished. All RefresherTowel Games frameworks will utilise this UI to build interesting, informative live debugging tools to help you move fast and fix things as easily as possible! Plus, you'll be able to get your own debugging windows set up quickly and easily, giving you maximum power to make your games!
+> Statement Lens is using a very early version of the **Echo Chamber UI**. This is a framework for building interactable debugger tools like Lens, and will be included as part of the Echo framework when it is finished. All RefresherTowel Games frameworks will use this UI to build live debugging tools that help you move fast and fix things easily. You will also be able to set up your own debugging windows quickly, giving you more power to debug your games.
 {: .bonus}
 
 ---
@@ -65,7 +71,7 @@ While you are in development, leave this as `1`. That switches on:
 
 - Extra debug info on machines and states (graph edges, history, timers, etc).
 - A global list of machines that the visualiser can see.
-- A single global visualiser struct sitting in `global.__statement_visualiser`.
+- A single global Statement Lens struct sitting in `global.__statement_lens`.
 
 For your final release builds, you can (and usually should) set `STATEMENT_DEBUG` to `0`. That strips out:
 
@@ -156,7 +162,7 @@ Once that feels normal, we can start layering on the fancy bits.
 
 Just a few tips about the debugger window:
 
-- You can drag it by clicking and dragging the "DEBUG VISUALISER" header area.
+- You can drag it by clicking and dragging the window header.
 - You can resize the window by clicking and dragging the bottom right corner of the window.
 
 ### 2.2 Picking a machine
@@ -216,10 +222,10 @@ The panel on the right is your "at a glance" summary for the selected machine. I
 
 - Owner (`obj_player`, some enemy, a struct, etc).
 - Current state, previous state, and queued state (if any).
-- How many frames have been spent in the current state.
+- How much scaled time has been spent in the current state.
 - Stack depth and history counts (if you are using stacks or history).
 - A short list of recent transitions.
-- A little table of per-state stats (entries and total frames per state).
+- A little table of per-state stats (entries and total time per state).
 
 As a beginner, you can get a surprising amount of value just from this panel alone. A few example questions it answers very quickly:
 
@@ -258,7 +264,7 @@ The state context panel can show, among other things:
 
 - Whether the state is currently active or has been active in the past.
 - How many times it has been entered.
-- How many frames total it has been active.
+- How much scaled time it has been active.
 - Any debug tag or default payload set on that state.
 - Per-state options like `Break on enter` and `Can exit` that you can toggle live.
 
@@ -336,7 +342,7 @@ The mental model here is:
 This is useful for:
 
 - Spotting states you thought were important but that never actually trigger.
-- Finding rare edge cases that do run, but only once every thousand frames.
+- Finding rare edge cases that do run, but only once every thousand time units.
 - Identifying hot loops where you might want to optimize or restructure your design.
 
 Example workflow:
@@ -469,7 +475,7 @@ player_sm.DebugJumpToState("Combat.Idle");
 
 `DebugJumpToState(name, [force])` will:
 
-- Look up a state by its debug name.
+- Look up a state by its name.
 - Request a jump to that state.
 - Optionally force the jump even if exit conditions would normally block it (depending on your debug flags).
 
@@ -538,7 +544,7 @@ CLOUD mode is designed to show how states are "grouped". You might have state ma
 
 ![Layout Cloud mode](../assets/visual_debugger_guide/layout_cloud_mode.png)
 
-EGO mode in particular is designed for "graph spelunking". In EGO mode, the currently selected state is centered, states that can transition to it are on the left and states it can transition to are on the right. Other states are ignored, so this gives you a very clean visual to reason about for the exact state you have selected. You can move between neighbors with the EGO movement keys (arrow keys or WASD, by default, editable in the macros). Space or Enter selects the selected state.
+EGO mode in particular is designed for "graph spelunking". In EGO mode, the currently selected state is centered, states that can transition to it are on the left and states it can transition to are on the right. Other states are ignored, so this gives you a very clean visual to reason about for the exact state you have selected. You can move between neighbors with the EGO movement bindings (defaults to arrow keys, editable in `scr_statement_macro`). Use the select binding defined by `STATEMENT_LENS_BIND_EGO_MODE_SELECT_STATE` (default `O`) to choose the current state.
 
 ![Layout Ego mode](../assets/visual_debugger_guide/layout_ego_mode.png)
 
@@ -575,7 +581,8 @@ This is particularly handy when:
 
 Statement supports time scaling both globally and per-machine:
 
-- `SetGlobalTimeScale` / `GetGlobalTimeScale`.
+- `StatementSetGlobalTimeScale` to set the global scale.
+- `GetGlobalTimeScale` on a machine to read the global scale.
 - `SetTimeScale` / `GetTimeScale` on individual machines.
 
 The visual debugger plays nicely with these:
@@ -598,19 +605,7 @@ You will get a very strong visual impression of which parts of the graph are doi
 
 ### 4.7 Working with multiple machines
 
-Under the hood, when `STATEMENT_DEBUG` is enabled, Statement keeps track of all machines in a global list.
-
-There are a couple of helper functions you can use if you want to build your own tools on top of that:
-
-- `StatementDebugGetMachines()` returns the raw array of machines.
-- `StatementDebugFindMachinesForOwner(owner)` filters that list down to machines owned by a specific instance or struct.
-
-You do not need these for normal visualiser usage, but they unlock some fun possibilities, for example:
-
-- A custom debug panel on your player that lists "all machines attached to this thing" and lets you pause or inspect them quickly.
-- Automated tests that create a scene, run some ticks, and then assert that certain machines exist or are in a specific state.
-
-If you like making your own debug utilities, the visual debugger plays nicely with that style of workflow.
+Under the hood, when `STATEMENT_DEBUG` is enabled, Statement keeps track of machines in a global registry used by Statement Lens. If you are building your own tools, the public helper is `StatementDebugPruneRegistry([prune_destroyed_owners])`, which removes stale entries from that registry. For everything else, keep direct references to your machines rather than relying on the registry.
 
 ---
 

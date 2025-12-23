@@ -5,6 +5,11 @@ nav_order: 2              # order among top-level items
 has_children: true        # marks this as a section (still supported)
 ---
 
+<!--
+/// index.md - Changelog:
+/// - 23-12-2025: Updated feature notes to match current Statement timing and transitions.
+-->
+
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
@@ -153,7 +158,7 @@ These are the features most people will use every day:
   * `Draw` for visuals (optional)
 
 * **Simple timing**
-  The machine tracks how long the current state has been active (frames):
+  The machine tracks how long the current state has been active (scaled time units):
 
   * `GetStateTime()` / `SetStateTime()`
 
@@ -189,7 +194,7 @@ These are the knobs and levers for when your project starts getting spicy:
 * **Declarative transitions**
   Attach conditions to a state and let the machine decide when to switch:
 
-  * `AddTransition(target_name, condition, [force])`
+  * `AddTransition(target_name, condition, [data], [force])`
 
 * **State stack (Push / Pop)**
   Temporary overlays like pause menus, cutscenes, modals:

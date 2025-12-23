@@ -5,6 +5,11 @@ parent: Pulse
 nav_order: 2
 ---
 
+<!--
+/// _usage_old.md - Changelog:
+/// - 23-12-2025: Marked this page as archived and pointed to the current usage guide.
+-->
+
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
@@ -19,6 +24,9 @@ nav_order: 2
 # Usage & Examples
 
 This page shows how to use Pulse in practice, split into:
+
+Note: this page is archived and may not reflect the current Pulse API. Use the main [Usage and Examples]({% link pulse/usage.md %}) page for up to date guidance.
+{: .note}
 
 - **Core usage** – basic patterns.
 - **Advanced usage** – optional patterns for more complex behaviour.

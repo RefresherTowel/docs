@@ -5,6 +5,11 @@ parent: Pulse
 nav_order: 1
 ---
 
+<!--
+/// _scripting_old.md - Changelog:
+/// - 23-12-2025: Marked this page as archived and pointed to the current reference.
+-->
+
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
@@ -19,6 +24,9 @@ nav_order: 1
 # Scripting Reference
 
 This page documents the public API of Pulse - Signals & Events for GameMaker.
+
+Note: this page is archived and may not reflect the current Pulse API. Use the main [Scripting Reference]({% link pulse/scripting.md %}) for up to date coverage.
+{: .note}
 
 It is split into:
 

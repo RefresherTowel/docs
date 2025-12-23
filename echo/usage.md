@@ -2,7 +2,7 @@
 layout: default
 title: Usage and Examples
 parent: Echo
-nav_order: 10
+nav_order: 3
 ---
 
 # Usage and Examples

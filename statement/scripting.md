@@ -5,6 +5,11 @@ parent: Statement
 nav_order: 1
 ---
 
+<!--
+/// scripting.md - Changelog:
+/// - 23-12-2025: Updated Statement public API coverage and requirements.
+-->
+
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
@@ -42,7 +47,7 @@ Create a state machine bound to the given owner instance or struct.
 state_machine = new Statement(self);
 ```
 
-- `owner`: `ID.Instance` or `Struct`  
+- `owner`: `Id.Instance` or `Struct`  
 - **Returns:** `Struct.Statement`
 
 ---
@@ -55,11 +60,133 @@ Create a new state bound to the given owner.
 idle = new StatementState(self, "Idle");
 ```
 
-- `owner`: `ID.Instance` or `Struct`  
+- `owner`: `Id.Instance` or `Struct`  
 - `name`: `String`  
 - **Returns:** `Struct.StatementState`
 
 If `owner` is neither an existing instance nor a struct, the constructor logs a severe debug message and returns `undefined`.
+
+---
+
+#### `eStatementEvents`
+
+Event slots used by states.
+
+Values include:
+
+- `eStatementEvents.ENTER`
+- `eStatementEvents.EXIT`
+- `eStatementEvents.STEP`
+- `eStatementEvents.DRAW`
+- `eStatementEvents.NUM` - sentinel for internal sizing.
+
+---
+
+#### `eStatementUpdateMode`
+
+Controls how `UpdateDelta` processes accumulated time.
+
+Values include:
+
+- `eStatementUpdateMode.ACCUMULATED`
+- `eStatementUpdateMode.PER_FRAME`
+
+---
+
+#### `eStatementResetMode`
+
+Controls how a submachine is reset or paused when its host state exits or enters.
+
+Values include:
+
+- `eStatementResetMode.RESET_ON_EXIT`
+- `eStatementResetMode.REMEMBER`
+- `eStatementResetMode.RESET_ON_ENTER`
+
+---
+
+#### `eStatementErrorBehavior`
+
+Controls how caught errors are handled in debug mode.
+
+Values include:
+
+- `eStatementErrorBehavior.PAUSE`
+- `eStatementErrorBehavior.RETHROW`
+
+---
+
+#### `eStatementLensMode`
+
+Lens layout modes.
+
+Values include:
+
+- `eStatementLensMode.FULL`
+- `eStatementLensMode.EGO`
+- `eStatementLensMode.RADIAL`
+- `eStatementLensMode.CLOUD`
+
+---
+
+#### `eStatementLensOverlay`
+
+Lens overlay modes.
+
+Values include:
+
+- `eStatementLensOverlay.NONE`
+- `eStatementLensOverlay.HEATMAP`
+
+---
+
+#### `eStatementHeatMetric`
+
+Heatmap metrics used by the Lens overlay.
+
+Values include:
+
+- `eStatementHeatMetric.TIME`
+- `eStatementHeatMetric.VISITS`
+
+---
+
+#### `eStatementDebugEdgeKind`
+
+Edge types used in debug graphs.
+
+Values include:
+
+- `eStatementDebugEdgeKind.DECLARATIVE`
+- `eStatementDebugEdgeKind.OBSERVED`
+- `eStatementDebugEdgeKind.MANUAL`
+
+---
+
+#### `eStatementDebugEdgeStyle`
+
+Edge style categories used by the Lens renderer.
+
+Values include:
+
+- `eStatementDebugEdgeStyle.STRUCTURAL`
+- `eStatementDebugEdgeStyle.LAST_TRANSITION`
+- `eStatementDebugEdgeStyle.QUEUED`
+- `eStatementDebugEdgeStyle.HISTORY`
+
+---
+
+#### `STATEMENT_DEBUG`
+
+Global toggle for Statement debug features.
+
+Set to 0 to compile without debug tracking.
+
+---
+
+#### `STATEMENT_TIME_GLOBAL_SCALE`
+
+Global time scale applied to all Statement machines. This is used by `StatementSetGlobalTimeScale`.
 
 ---
 
@@ -76,9 +203,79 @@ state_machine.AddState(idle);
 - `state`: `Struct.StatementState`  
 - **Returns:** `Struct.Statement`
 
-The **first** state added becomes the active state and runs its `Enter` handler (if defined).
+The first state added becomes the default initial state. If `auto_enter_first_state` is true (default) and there is no active state yet, the machine enters it immediately and runs its `Enter` handler if defined.
+Set `auto_enter_first_state` to false if you want to delay entry until you call `ChangeState` or `SetInitialState`.
 
 If a state with the same name already exists, it is replaced (with a warning).
+
+Requires a state struct built from `StatementState`.
+
+---
+
+#### `SetInitialState(name)`
+
+Set which state name should be treated as the initial state when the machine starts.
+
+```js
+state_machine.SetInitialState("Idle");
+```
+
+- `name`: `String`
+- **Returns:** `Struct.Statement`
+
+If you do not call this, the first state added becomes the default initial state.
+If the named state does not exist yet, it will be used when it is added.
+
+---
+
+#### `SetResetMode(mode)`
+
+Set how this machine behaves when it is hosted as a submachine and the parent state exits or enters.
+
+```js
+state_machine.SetResetMode(eStatementResetMode.RESET_ON_EXIT);
+```
+
+- `mode`: `Constant.eStatementResetMode`
+- **Returns:** `Struct.Statement`
+
+Modes:
+
+- `RESET_ON_EXIT`: stop the submachine when the host exits.
+- `REMEMBER`: pause the submachine when the host exits and resume on enter.
+- `RESET_ON_ENTER`: stop the submachine and restart fresh when the host enters.
+
+Default is `RESET_ON_EXIT`.
+
+---
+
+#### `SetInheritPause(enabled)`
+
+Control whether a submachine inherits pause state from its parent machine.
+
+```js
+state_machine.SetInheritPause(true);
+```
+
+- `enabled`: `Bool`
+- **Returns:** `Struct.Statement`
+
+Default is true.
+
+---
+
+#### `SetInheritTimeScale(enabled)`
+
+Control whether a submachine inherits time scaling from its parent machine.
+
+```js
+state_machine.SetInheritTimeScale(false);
+```
+
+- `enabled`: `Bool`
+- **Returns:** `Struct.Statement`
+
+Default is false.
 
 ---
 
@@ -93,6 +290,8 @@ var _idle    = state_machine.GetState("Idle");
 
 - `name` *(optional)*: `String`  
 - **Returns:** `Struct.StatementState` or `Undefined` if not found / no current state.
+
+Logs a warning if a named lookup fails.
 
 ---
 
@@ -127,6 +326,75 @@ if (state_machine.IsInState(my_attack_state)) {
 - **Returns:** `Bool`
 
 Accepts either a state name or a `StatementState` struct. If called with an unsupported type or when there is no active state, it returns `false` (and logs a warning for unsupported types).
+If you pass a struct, it must be built from `StatementState`.
+
+---
+
+#### `GetChildMachine()`
+
+Return the active submachine hosted by the current state, if any.
+
+```js
+var _child = state_machine.GetChildMachine();
+```
+
+- **Returns:** `Struct.Statement` or `Undefined`.
+
+---
+
+#### `GetChildState()`
+
+Return the active state of the current state's submachine, if any.
+
+```js
+var _child_state = state_machine.GetChildState();
+```
+
+- **Returns:** `Struct.StatementState` or `Undefined`.
+
+---
+
+#### `IsInPath(path)`
+
+Check whether the machine is in a nested state path such as `Idle/Move/Run`.
+
+```js
+if (state_machine.IsInPath("Combat/Attack")) {
+    // Host in Combat and submachine in Attack
+}
+```
+
+- `path`: `String`
+- **Returns:** `Bool`
+
+The path is split on `/` and compared against the current state and any nested submachines in order.
+
+---
+
+#### `IsIn(name_or_state)`
+
+Alias for `IsInState`.
+
+```js
+if (state_machine.IsIn("Hurt")) {
+    // same as IsInState
+}
+```
+
+- `name_or_state`: `String` or `Struct.StatementState`
+- **Returns:** `Bool`
+
+---
+
+#### `GetCurrentStateName()`
+
+Alias for `GetStateName`.
+
+```js
+var _name = state_machine.GetCurrentStateName();
+```
+
+- **Returns:** `String` or `Undefined`.
 
 ---
 
@@ -149,6 +417,7 @@ state_machine.EnsureState("Hurt", { damage: _damage });
 
 Internally this is equivalent to checking the current state's name and only calling `ChangeState` when different, which avoids redundant transitions and Exit/Enter calls.
 
+---
 
 #### `ChangeState(name, [data], [force])`
 
@@ -166,10 +435,11 @@ state_machine.ChangeState("Hitstun", { damage: 5 }, true); // payload + force
 
 Behaviour:
 
-- If target doesn't exist: logs a warning and returns `undefined`.
+- If target does not exist: logs a severe debug message and returns `undefined`.
 - If target is already active: does nothing and returns current state.
 - If current state has `can_exit == false` and `force == false`: refuses to change and returns current state.
-- A manual `ChangeState` clears any queued transition.
+- If the current state hosts a submachine with an exit gate (see `LockExitUntilSubIn` and `LockExitWhileSubNot`) and `force == false`, the change is blocked.
+- A manual `ChangeState` clears any queued transition before switching.
 - Otherwise:
   - Runs old state `Exit` (if present).
   - Updates history (`previous_state`, `previous_states`).
@@ -182,6 +452,22 @@ If an `Exit` handler changes state itself, the outer `ChangeState` respects that
 
 ---
 
+#### `UpdateDelta([dt])`
+
+Drive the state machine using a delta value. The delta is scaled by the machine time scale and the global time scale.
+
+```js
+// Step Event with a real delta source
+state_machine.UpdateDelta(delta_time / 1000000);
+```
+
+- `dt` *(optional)*: `Real` - unscaled delta to apply. Defaults to 1.
+- **Returns:** whatever the state's Update handler returns, or `Undefined` if no Step ran or there is no active state.
+
+When update mode is `eStatementUpdateMode.ACCUMULATED`, the machine runs Step once per whole accumulated tick and advances state age by fractional time. When update mode is `eStatementUpdateMode.PER_FRAME`, the machine runs Step once per call. Use `SetUpdateMode` to control this.
+
+---
+
 #### `Update()`
 
 Drive the state machine for one Step.
@@ -191,12 +477,7 @@ Drive the state machine for one Step.
 state_machine.Update();
 ```
 
-- Skips processing when `IsPaused()` is true.
-- Processes any queued state (if auto-processing enabled).
-- Runs the current state's `Update` handler (if present).
-- Evaluates declarative transitions defined on the current state.
-- Increments `state_age` (if there's an active state).
-- **Returns:** whatever the state's Update handler returns, or `Undefined`.
+This is a legacy convenience wrapper for `UpdateDelta(1)`.
 
 ---
 
@@ -217,7 +498,7 @@ Use only if you want per-state drawing.
 
 #### `GetStateTime()`
 
-Get how long (in frames) the current state has been active.
+Get the scaled time since the current state was entered. This value is advanced by `UpdateDelta` and respects time scaling.
 
 ```js
 if (state_machine.GetStateTime() > game_get_speed(gamespeed_fps) * 0.5) {
@@ -233,7 +514,7 @@ Automatically reset on each state change.
 
 #### `SetStateTime(time)`
 
-Manually set the current state's age.
+Manually set the current state's age in scaled time units.
 
 ```js
 state_machine.SetStateTime(0);
@@ -259,6 +540,8 @@ Clears:
 - `state_stack`
 - any queued state
 - `state_age`
+- `initial_state_name`
+- `last_transition_data`
 
 Returns the machine for chaining.
 
@@ -291,6 +574,7 @@ idle.AddUpdate(function() {
 });
 ```
 
+- `fn`: `Function` - automatically `method(owner, fn)` bound.
 - **Returns:** `Struct.StatementState`
 
 ---
@@ -305,6 +589,7 @@ idle.AddExit(function() {
 });
 ```
 
+- `fn`: `Function` - automatically `method(owner, fn)` bound.
 - **Returns:** `Struct.StatementState`
 
 ---
@@ -319,6 +604,7 @@ idle.AddDraw(function() {
 });
 ```
 
+- `fn`: `Function` - automatically `method(owner, fn)` bound.
 - **Returns:** `Struct.StatementState`
 
 ---
@@ -357,6 +643,117 @@ if (state_machine.IsPaused()) { /* skip logic */ }
 
 ---
 
+### Update Modes and Time Scaling
+
+#### `SetUpdateMode(mode)`
+
+Set how `UpdateDelta` processes the machine.
+
+```js
+state_machine.SetUpdateMode(eStatementUpdateMode.ACCUMULATED);
+```
+
+- `mode`: `Constant.eStatementUpdateMode`
+- **Returns:** `Struct.Statement`
+
+Modes:
+
+- `ACCUMULATED`: accumulate time and run Step once per whole tick.
+- `PER_FRAME`: run Step once per call to `UpdateDelta`.
+
+---
+
+#### `GetUpdateMode()`
+
+Get the current update mode for this machine.
+
+```js
+var _mode = state_machine.GetUpdateMode();
+```
+
+- **Returns:** `Constant.eStatementUpdateMode`
+
+---
+
+#### `StatementSetDefaultUpdateMode(mode)`
+
+Set the global default update mode used by newly created machines.
+
+```js
+StatementSetDefaultUpdateMode(eStatementUpdateMode.PER_FRAME);
+```
+
+- `mode`: `Constant.eStatementUpdateMode`
+- **Returns:** `Undefined`
+
+---
+
+#### `StatementGetDefaultUpdateMode()`
+
+Get the global default update mode that future machines will use.
+
+```js
+var _default_mode = StatementGetDefaultUpdateMode();
+```
+
+- **Returns:** `Constant.eStatementUpdateMode`
+
+---
+
+#### `SetTimeScale(scale)`
+
+Set per-machine time scale. This multiplies the delta used by `UpdateDelta`.
+
+```js
+state_machine.SetTimeScale(0.5);
+```
+
+- `scale`: `Real`
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `GetTimeScale()`
+
+Get per-machine time scale.
+
+```js
+var _scale = state_machine.GetTimeScale();
+```
+
+- **Returns:** `Real`
+
+If no global scale is set, this returns 1.
+
+---
+
+#### `StatementSetGlobalTimeScale(scale)`
+
+Set the global time scale for all Statement machines. This multiplies each machine's time scale.
+
+```js
+StatementSetGlobalTimeScale(1);
+```
+
+- `scale`: `Real`
+- **Returns:** `Undefined`
+
+You can also set `STATEMENT_TIME_GLOBAL_SCALE` directly.
+
+---
+
+#### `GetGlobalTimeScale()`
+
+Get the global time scale applied to all machines.
+
+```js
+var _global = state_machine.GetGlobalTimeScale();
+```
+
+- **Returns:** `Real`
+
+---
+
 ### Queueing
 
 #### `SetQueueAutoProcessing(enabled)`
@@ -387,6 +784,8 @@ state_machine.QueueState("Attack");
 - `force` *(optional)*: `Bool`  
 - **Returns:** `Struct.Statement`
 
+Logs a warning and does not queue anything if the state name does not exist.
+
 ---
 
 #### `ProcessQueuedState()`
@@ -399,7 +798,7 @@ state_machine.ProcessQueuedState();
 
 - **Returns:** `Struct.StatementState` or `Undefined`
 
-If the current state cannot exit (and `force` was not set when queuing), the queued transition remains pending. Otherwise the queue entry is cleared before calling `ChangeState()`.
+If there is no queued state, this returns the current state. If the current state cannot exit (and `force` was not set when queuing), the queued transition remains pending and the current state is returned. Otherwise the queue entry is cleared before calling `ChangeState()`.
 
 ---
 
@@ -488,8 +887,10 @@ Get a previous state by history index.
 var _st = state_machine.GetHistoryAt(0);
 ```
 
-- `index`: `Real`  
+- `index`: `Real`
 - **Returns:** `Struct.StatementState` or `Undefined` if the index is invalid.
+
+Index 0 is the oldest entry. The most recent entry is at `GetHistoryCount() - 1`.
 
 ---
 
@@ -594,13 +995,13 @@ state_machine.PrintStateNames();
 
 #### `DebugDescribe()`
 
-Return a one-line debug description of this state machine, including owner, current state, previous state, age, queued state (if any), state stack depth, and history count.
+Print a one-line debug description of this state machine, including owner, current state, previous state, age, queued state, state stack depth, and history count.
 
 ```js
-EchoDebugInfo(state_machine.DebugDescribe());
+state_machine.DebugDescribe();
 ```
 
-- **Returns:** `String`
+- **Returns:** `Undefined`
 
 Useful for quick logging of state machine status without having to inspect multiple values manually.
 
@@ -626,7 +1027,7 @@ By default the method prints a short summary (similar to `DebugDescribe()`) and 
 
 ### State Stack (Push / Pop)
 
-#### `PushState(name, [force])`
+#### `PushState(name, [data], [force])`
 
 Push current state onto a stack and change to `name`.
 
@@ -635,6 +1036,7 @@ state_machine.PushState("Pause");
 ```
 
 - `name`: `String`  
+- `data` *(optional)*: `Any` - payload attached to the transition.
 - `force` *(optional)*: `Bool`  
 - **Returns:** `Struct.StatementState` or `Undefined`.
 
@@ -654,7 +1056,7 @@ state_machine.PopState();
 - `force` *(optional)*: `Bool`  
 - **Returns:** `Struct.StatementState` or `Undefined`.
 
-Handles empty stacks and invalid entries safely.
+Returns the current state if the stack is empty or if the target state no longer exists.
 
 ---
 
@@ -694,6 +1096,111 @@ state_machine.ClearStateStack();
 
 ---
 
+### Submachines (StatementState)
+
+Statement supports nested state machines. A state can host a submachine and optionally control when the host can exit.
+
+#### `CreateSubMachine([name])`
+
+Create and attach a submachine to this state (making it a host state).
+
+```js
+var _sub = state.CreateSubMachine("CombatSub");
+```
+
+- `name` *(optional)*: `String` - friendly name for debug tools. Defaults to the host state name.
+- **Returns:** `Struct.Statement`
+
+If a submachine already exists, this returns the existing submachine.
+
+---
+
+#### `HasSubMachine()`
+
+Check whether this state currently hosts a submachine.
+
+```js
+if (state.HasSubMachine()) {
+    // has a child machine
+}
+```
+
+- **Returns:** `Bool`
+
+---
+
+#### `GetSubMachine()`
+
+Get the hosted submachine, if any.
+
+```js
+var _sub = state.GetSubMachine();
+```
+
+- **Returns:** `Struct.Statement` or `Undefined`
+
+---
+
+#### `OnSubmachineEnter(fn)`
+
+Set a callback that runs when this host state enters and its submachine is started or resumed.
+
+```js
+state.OnSubmachineEnter(method(self, function(_sub) {
+    EchoDebugInfo("Submachine started");
+}));
+```
+
+- `fn`: `Function` - called as `fn(submachine)`. This is not auto-bound, so use `method(owner, fn)` if you need scope binding.
+- **Returns:** `Struct.StatementState`
+
+---
+
+#### `OnSubmachineExit(fn)`
+
+Set a callback that runs when this host state exits and its submachine is suspended or stopped.
+
+```js
+state.OnSubmachineExit(method(self, function(_sub) {
+    EchoDebugInfo("Submachine stopped");
+}));
+```
+
+- `fn`: `Function` - called as `fn(submachine)`. This is not auto-bound, so use `method(owner, fn)` if you need scope binding.
+- **Returns:** `Struct.StatementState`
+
+---
+
+#### `LockExitUntilSubIn(state_name)`
+
+Prevent this host state from exiting (unless forced) until the submachine is in the given state.
+
+```js
+state.LockExitUntilSubIn("Ready");
+```
+
+- `state_name`: `String`
+- **Returns:** `Struct.StatementState`
+
+---
+
+#### `LockExitWhileSubNot(fn)`
+
+Prevent this host state from exiting (unless forced) while a predicate returns false for the submachine.
+
+```js
+state.LockExitWhileSubNot(function(_sub) {
+    return _sub.IsInState("Ready");
+});
+```
+
+- `fn`: `Function` - called as `fn(submachine)` and should return `Bool`.
+- **Returns:** `Struct.StatementState`
+
+Exit locks are respected by `ChangeState`, `QueueState`, `PushState`, and `PopState` unless `force` is true.
+
+---
+
 ### State Change Hook
 
 #### `SetStateChangeBehaviour(fn)`
@@ -706,8 +1213,8 @@ state_machine.SetStateChangeBehaviour(method(self, function() {
 }));
 ```
 
-- `fn`: `Function` - called as `fn(previous_state, transition_data)`; both may be `undefined`.  
-- **Returns:** `Struct.Statement`
+- `fn`: `Function` - called as `fn(previous_state, transition_data)`; both may be `undefined`. This function is not auto-bound, so use `method(owner, fn)` if you need scope binding.
+- **Returns:** `Undefined`
 
 Called after the old state's `Exit`, after `state` is updated, and before new state `Enter`.
 
@@ -722,6 +1229,7 @@ However, if you're confident editing Statement itself, you can extend `eStatemen
 > `eStatementEvents` is an enum defined inside the Statement framework (in `scr_statement_macro`) that maps the built-in handler types:
 > 
 > - `eStatementEvents.ENTER`
+> - `eStatementEvents.DRAW`
 > - `eStatementEvents.STEP`
 > - `eStatementEvents.EXIT`
 > - `eStatementEvents.NUM` - a sentinel used internally as a "one past the end" value when looping over event types. It is **not** a real event and should not be passed to `RunState`.
@@ -802,7 +1310,7 @@ When `can_exit == false`, `ChangeState`/queued transitions will only leave this 
 
 ---
 
-#### `AddTransition(target_name, condition, [force])`
+#### `AddTransition(target_name, condition, [data], [force])`
 
 Add a declarative transition that will be evaluated each `Update()` while the state is active. When the condition returns true, the machine changes to `target_name`.
 
@@ -814,10 +1322,12 @@ idle.AddTransition("Run", function() {
 
 - `target_name`: `String`
 - `condition`: `Function` - automatically bound to the owner via `method(owner, fn)`.
+- `data` *(optional)*: `Any` - payload attached to the transition if it fires.
 - `force` *(optional)*: `Bool` - ignore `can_exit` when firing.
 - **Returns:** `Struct.StatementState`
 
 Transitions are checked in the order they were added; the first condition returning true will fire.
+When a transition fires, its `data` payload is passed into `ChangeState`.
 
 ---
 
@@ -841,28 +1351,26 @@ Evaluate this state's declarative transitions and return the first matching reco
 var _tr = state.EvaluateTransitions();
 ```
 
-- **Returns:** `Struct` `{ target_name, condition, force }` or `Undefined`.
+- **Returns:** `Struct` `{ target_name, condition, force, data }` or `Undefined`.
 
 Normally you do not call this directly; the machine calls `EvaluateTransitions()` after each `Update()` and then applies the transition via `ChangeState`. Use it manually only for custom control.
 
 ---
 
-#### `EvaluateTransitions([data])` (machine)
+#### `EvaluateTransitions()` (machine)
 
 Force evaluation of declarative transitions on the current state and apply the first passing transition.
 
 ```js
 state_machine.EvaluateTransitions();          // after custom update loop
-state_machine.EvaluateTransitions(payload);   // attach payload if a transition fires
 ```
 
-- `data` *(optional)*: `Any` - payload attached to the transition if one fires.
 - **Returns:** `Struct.StatementState` or `Undefined` if no transition fired or no active state.
 
 This is normally called automatically at the end of `Update()`. Use it manually if you disable auto-processing or run custom update ordering.
 
-> This is not the same as `state.EvaluateTransitions();`, as this method actually changes state if a transition fires. This is version of the `EvaluateTransitions()` method, attached to the state machine, is the one that you are most likely to want to use.
-{. :warning}
+> This is not the same as `state.EvaluateTransitions()`, as this method actually changes state if a transition fires. This version attached to the state machine is the one you most likely want to use.
+{: .warning}
 
 ---
 
@@ -875,7 +1383,7 @@ Per-state timers are backed by GameMaker **time sources** and tick independently
 - Because they use time sources internally, they can continue advancing even if the instance is deactivated or you temporarily stop calling `Update()`.
 
 By contrast, `GetStateTime()` / `SetStateTime()` live on the **Statement** itself:
-- Represent "how long the current state has been active (in frames)".
+- Represent "how long the current state has been active (scaled time units)".
 - Reset automatically on state change.
 - Only increment when you call `Update()` on the machine.
 
@@ -890,6 +1398,8 @@ state.TimerStart();
 ```
 
 - **Returns:** `Struct.StatementState`
+
+Requires this state to be added to a `Statement` machine.
 
 ---
 
@@ -1162,30 +1672,6 @@ state_machine.GetDebugTransitionHistory();
 
 ---
 
-#### `GetGlobalTimeScale()`
-
-Get global time scale.
-
-```js
-state_machine.GetGlobalTimeScale();
-```
-
-- **Returns:** `Real`
-
----
-
-#### `GetTimeScale()`
-
-Get per-machine time scale.
-
-```js
-state_machine.GetTimeScale();
-```
-
-- **Returns:** `Real`
-
----
-
 #### `IsDebugEnabled()`
 
 Returns whether debug tracking is enabled for this machine.
@@ -1198,15 +1684,18 @@ state_machine.IsDebugEnabled();
 
 ---
 
-#### `SetDebugEnabled()`
+#### `SetDebugEnabled(enabled)`
 
 Enable or disable debug tracking for this machine.
 
 ```js
-state_machine.SetDebugEnabled();
+state_machine.SetDebugEnabled(true);
 ```
 
+- `enabled`: `Bool`
 - **Returns:** `Struct.Statement`
+
+Default is true when STATEMENT_DEBUG is enabled.
 
 ---
 
@@ -1219,31 +1708,6 @@ state_machine.SetDebugName(name);
 ```
 
 - `name`: `String`
-- **Returns:** `Struct.Statement`
-
----
-
-#### `SetGlobalTimeScale(scale)`
-
-Set global time scale for all Statement machines (multiplies per-machine scale).
-
-```js
-state_machine.SetGlobalTimeScale(scale);
-```
-
-- `scale`: `Real`
-
----
-
-#### `SetTimeScale(scale)`
-
-Set per-machine time scale (affects state age, timers, and debug stats).
-
-```js
-state_machine.SetTimeScale(scale);
-```
-
-- `scale`: `Real`
 - **Returns:** `Struct.Statement`
 
 ---
@@ -1289,30 +1753,33 @@ state.DebugPayload(payload);
 
 ---
 
-### Global debug helpers
+#### `DebugTag(tag)`
 
-#### `StatementDebugFindMachinesForOwner(owner)`
-
-Finds Statement machines bound to a specific owner instance/struct.
+Assign a tag (or comma-separated tags) for grouping/filtering in debug UIs.
 
 ```js
-StatementDebugFindMachinesForOwner(owner);
+state.DebugTag(tag);
 ```
 
-- `owner`: `Id.Instance,Struct` - Owner to search for.
-- **Returns:** `Array<Struct.Statement>`
+- `tag`: `String`
+- **Returns:** `Struct.StatementState`
 
 ---
 
-#### `StatementDebugGetMachines()`
+### Global debug helpers
 
-Returns the global list of Statement machines tracked for debugging.
+#### `StatementDebugPruneRegistry([prune_destroyed_owners])`
+
+Remove dead entries from the global Statement debug registry.
 
 ```js
-StatementDebugGetMachines();
+var _removed = StatementDebugPruneRegistry();
 ```
 
-- **Returns:** `Array<Struct.Statement>`
+- `prune_destroyed_owners` *(optional)*: `Bool` - when true, also removes machines whose owner instances are destroyed.
+- **Returns:** `Real` - number of entries removed.
+
+Returns 0 if STATEMENT_DEBUG is false.
 
 ---
 
@@ -1323,50 +1790,111 @@ Statement ships with an in-game visual debugger known as Lens. You do not need t
 
 ---
 
-### Visualiser entry points
+### Lens entry points
 
-#### `StatementVisualiser()`
+#### `StatementLens()`
 
 Debug visualiser for Statement machines (drawn in GUI space).
 
 ```js
-var statementVisualiser = new StatementVisualiser();
+var statement_lens = new StatementLens();
 ```
 
-- **Returns:** `Struct.StatementVisualiser`
+- **Returns:** `Struct.StatementLens`
+
+---
+
+#### `StatementLensGet()`
+
+Get the global Statement Lens instance when STATEMENT_DEBUG is enabled.
+
+```js
+var _lens = StatementLensGet();
+```
+
+- **Returns:** `Struct.StatementLens` or `Undefined`
+
+---
+
+#### `StatementLensInit()`
+
+Ensure the Lens globals exist and refresh the active machine list.
+
+```js
+StatementLensInit();
+```
+
+- **Returns:** `Undefined`
 
 ---
 
 #### `StatementLensUpdate()`
 
-Update hook for the Statement visualiser (call from a Step event when STATEMENT_DEBUG is enabled).
+Update hook for the Statement Lens (call from a Step event when STATEMENT_DEBUG is enabled).
 
 ```js
 StatementLensUpdate();
 ```
 
+- **Returns:** `Undefined`
+
+---
+
+#### `StatementLensInputPressed(action_id)`
+
+Return true if a Statement Lens action is pressed in the active Echo Chamber input context.
+
+```js
+if (StatementLensInputPressed(STATEMENT_LENS_ACTION_NEXT_MACHINE)) {
+    // next machine
+}
+```
+
+- `action_id`: `String`
+- **Returns:** `Bool`
+
+Action ids are defined as `STATEMENT_LENS_ACTION_*` macros in `scr_statement_macro`.
+Returns false if no active Echo Chamber root is available.
+Default bindings are provided by `STATEMENT_LENS_BIND_*` macros and use input binding structs built from `EchoChamberInputBindingKey`.
 
 ---
 
 #### `StatementLensDraw()`
 
-Draw hook for the Statement visualiser (call from a Draw GUI event when STATEMENT_DEBUG is enabled).
+Draw hook for the Statement Lens (call from a Draw GUI event when STATEMENT_DEBUG is enabled).
 
 ```js
 StatementLensDraw();
 ```
 
+- **Returns:** `Undefined`
 
 ---
 
-### Visualiser instance helpers
+#### `StatementLensOpen(ui_root)`
+
+Open or create the Statement Lens window inside the Echo Debug UI desktop.
+
+```js
+StatementLensOpen(global.EchoDesktop);
+```
+
+- `ui_root`: `Struct.EchoChamberRoot`
+- **Returns:** `Struct.EchoChamberWindow` or `Undefined`
+
+Requires an Echo Chamber root struct built from `EchoChamberRoot`.
+Returns `Undefined` if STATEMENT_DEBUG is false or `ui_root` is invalid.
+
+---
+
+### Lens instance helpers
 
 #### `IsVisible()`
 
-Whether the visualiser is visible.
+Whether the lens is visible.
 
 ```js
-visualiser.IsVisible();
+statement_lens.IsVisible();
 ```
 
 - **Returns:** `Bool`
@@ -1375,13 +1903,13 @@ visualiser.IsVisible();
 
 #### `SetVisible(visible)`
 
-Set visibility of the visualiser.
+Set visibility of the lens.
 
 ```js
-visualiser.SetVisible(visible);
+statement_lens.SetVisible(visible);
 ```
 
-- `visible`: `Bool` - True to show the visualiser, false to hide it.
-- **Returns:** `Struct.StatementVisualiser`
+- `visible`: `Bool` - true to show the lens, false to hide it.
+- **Returns:** `Struct.StatementLens`
 
 ---
