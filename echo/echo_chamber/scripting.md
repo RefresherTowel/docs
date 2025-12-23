@@ -11,6 +11,17 @@ has_children: false
 /// - 23-12-2025: Updated public API coverage for Echo Chamber scripting.
 -->
 
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
+
+1. TOC
+{:toc}
+
+</details>
+</div>
+
 ## Echo Chamber Scripting Reference
 
 Echo Chamber is the in-game debug UI builder. It is a set of constructors that output structs (Root, Window, Panel, Controls).
