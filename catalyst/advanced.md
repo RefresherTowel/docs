@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Catalyst Advanced Topics
+title: Advanced Topics
 parent: Catalyst
 nav_order: 2
 ---
@@ -39,7 +39,7 @@ Catalyst lets you pass a **context** struct into `GetValue` and into all the
 callback functions you define (conditions, stack functions, base functions,
 post-process functions).
 
-```gml
+```js
 // Build a context for this hit
 var _ctx = {
     burning_enemy_count : 3,
@@ -51,13 +51,13 @@ var _ctx = {
 var _dmg = stats.damage.GetValue(_ctx);
 ```
 
-Internally, that context is passed to any callbacks you’ve registered on the
+Internally, that context is passed to any callbacks you've registered on the
 stat or its modifiers:
 
-- `base_func(stat, context)` – see section 5.
-- `post_process(stat, raw_value, context)` – see section 6.
-- `condition(stat, context)` on modifiers – see section 3.
-- `stack_func(stat, context)` on modifiers – see section 2.
+- `base_func(stat, context)` - see section 5.
+- `post_process(stat, raw_value, context)` - see section 6.
+- `condition(stat, context)` on modifiers - see section 3.
+- `stack_func(stat, context)` on modifiers - see section 2.
 
 If you call `GetValue()` with **no argument** (or with `undefined`), Catalyst:
 
@@ -72,10 +72,10 @@ If you call `GetValue(context)` **with a context**, Catalyst:
 - Does **not** fire on-change callbacks.
 
 This makes it safe to use contexts for previews, AI evaluation, tooltips, and
-anything else where you want “what would this be *right now*?” without
+anything else where you want "what would this be *right now*?" without
 changing the underlying stat.
 
-> Please note: Providing a context to `GetValue()` forces it to skip its default optimisation of only recalculating the value when something has changed.
+> Providing a context to `GetValue()` forces it to skip its default optimisation of only recalculating the value when something has changed.
 > While this isn't something to stress over, it's something you should consider when using it and only provide a context when it is necessary for the
 > situation.
 {: .note}
@@ -86,20 +86,21 @@ changing the underlying stat.
 
 Sometimes stacks are purely event-driven:
 
-- “On crit, gain a stack of +5% damage for 5 seconds, up to 5 stacks.”
+- "On crit, gain a stack of +5% damage for 5 seconds, up to 5 stacks."
 
 For those, you usually use `SetStacks`, `AddStacks`, and `SetMaxStacks` on
 the modifier and let your own game logic manage when stacks increase or
-decrease.
+decrease. Stacks are unlimited by default (`max_stacks = infinity`), so only
+set a max when you want a cap.
 
 Sometimes stacks are driven by **environmental state** instead:
 
-- “+5% damage for every burning enemy nearby, up to 10 enemies.”
-- “+2% move speed for each ally within 5 tiles.”
+- "+5% damage for every burning enemy nearby, up to 10 enemies."
+- "+2% move speed for each ally within 5 tiles."
 
 For those, Catalyst provides `stack_func`:
 
-```gml
+```js
 // +5% damage per burning enemy, up to 10 enemies
 var _burn_power = new CatalystModifier(0.05, eCatMathOps.MULTIPLY)
     .SetLayer(eCatStatLayer.AUGMENTS)
@@ -114,27 +115,28 @@ stats.damage.AddModifier(_burn_power);
 
 When evaluating the stat with a context:
 
-```gml
+```js
 var _ctx = { burning_enemy_count : 7 };
 var _dmg = stats.damage.GetValue(_ctx);
 ```
 
 Catalyst will:
 
-1. Start from the modifier’s `stacks` field (defaulting to 1).
+1. Start from the modifier's `stacks` field (defaulting to 1).
 2. If a `stack_func` is defined, call it as `stack_func(stat, context)`.
-3. Clamp the returned value to `>= 0` and to `max_stacks` if set.
+3. Clamp the returned value to `>= 0` and to `max_stacks` (defaults to
+   `infinity`).
 4. Apply the modifier using that effective stack count.
 
-> **Important:** If a modifier has a `stack_func` **and** you call
+> If a modifier has a `stack_func` **and** you call
 > `GetValue()` without a context, Catalyst treats environment-driven stacks
-> as **0** (the function isn’t called).  
-> This is by design: context-free evaluation shouldn’t guess about
+> as **0** (the function isn't called).  
+> This is by design: context-free evaluation shouldn't guess about
 > environment state. If you rely on `stack_func`, make sure you pass an
 > appropriate context when you care about its effect.
 {: .important}
 
-You can mix event-driven stacks and context-driven stacks if you want – for
+You can mix event-driven stacks and context-driven stacks if you want - for
 example, use `stacks` as a base (from crit events) and have `stack_func`
 add extra stacks based on nearby enemies.
 
@@ -144,16 +146,16 @@ add extra stacks based on nearby enemies.
 
 Sometimes a modifier only applies in certain situations:
 
-- “+50% damage against frozen targets.”
-- “Take 25% less damage while below 20% HP.”
-- “Extra move speed inside the ‘Sanctuary’ zone only.”
+- "+50% damage against frozen targets."
+- "Take 25% less damage while below 20% HP."
+- "Extra move speed inside the 'Sanctuary' zone only."
 
 For these, you can attach a **condition** function to a modifier using
 `SetCondition`:
 
-```gml
+```js
 // +50% damage if the target is frozen
-var _frozen_bonus = new CatalystModifier(1.5, eCatMathOps.MULTIPLY)
+var _frozen_bonus = new CatalystModifier(0.50, eCatMathOps.MULTIPLY)
     .SetLayer(eCatStatLayer.AUGMENTS)
     .SetSourceLabel("Frost Hunter Rune")
     .SetCondition(function(_stat, _ctx) {
@@ -182,7 +184,7 @@ You can freely combine `condition` and `stack_func`:
 
 ## 4. Modifier families & stacking rules
 
-Some effects of the “same family” should **not** stack:
+Some effects of the "same family" should **not** stack:
 
 - Two haste auras where only the strongest should apply.
 - Several overlapping damage-reduction effects where only the lowest
@@ -192,7 +194,7 @@ Some effects of the “same family” should **not** stack:
 Catalyst groups modifiers into **families** by a `family` key (string,
 enum, etc.) and a **family stacking mode**:
 
-```gml
+```js
 enum eCatFamilyStackMode {
     STACK_ALL,  // default: all apply
     HIGHEST,    // only the strongest effect applies
@@ -202,13 +204,13 @@ enum eCatFamilyStackMode {
 
 You set these on a modifier using `SetFamily`:
 
-```gml
-// Movement auras – only the fastest wins
-var _walk_aura = new CatalystModifier(1.10, eCatMathOps.MULTIPLY)
+```js
+// Movement auras - only the fastest wins
+var _walk_aura = new CatalystModifier(0.10, eCatMathOps.MULTIPLY)
     .SetLayer(eCatStatLayer.TEMP)
     .SetFamily("movement_aura", eCatFamilyStackMode.HIGHEST);
 
-var _sprint_aura = new CatalystModifier(1.25, eCatMathOps.MULTIPLY)
+var _sprint_aura = new CatalystModifier(0.25, eCatMathOps.MULTIPLY)
     .SetLayer(eCatStatLayer.TEMP)
     .SetFamily("movement_aura", eCatFamilyStackMode.HIGHEST);
 
@@ -221,19 +223,19 @@ When evaluating the stat, Catalyst:
 1. Groups modifiers by `family` key within a layer.
 2. For each family:
    - If the mode is `STACK_ALL`, all modifiers in the family contribute.
-   - If the mode is `HIGHEST`, only the most “powerful” effect
+   - If the mode is `HIGHEST`, only the most "powerful" effect
      contributes.
    - If the mode is `LOWEST`, only the weakest effect contributes.
 3. Applies remaining modifiers in layer order as usual.
 
-The “power” of a modifier depends on its operation and value
+The "power" of a modifier depends on its operation and value
 (e.g. bigger multipliers and bigger additive bonuses win), and takes into
 account:
 
 - Current stacks (including `stack_func` if a context is provided).
-- The modifier’s condition, if any.
+- The modifier's condition, if any.
 
-> **Note:** `FORCE_MIN` modifiers are excluded from family comparisons.
+> **Note:** `FORCE_MIN` and `FORCE_MAX` modifiers are excluded from family comparisons.
 > They are applied later as a final floor, regardless of family stacking,
 > so you can safely combine them with regular additive/multiplicative
 > families.
@@ -245,25 +247,28 @@ You can also change the family mode after the fact with
 
 ## 5. Derived base values (`base_func`)
 
-Sometimes a stat’s “base” is itself a function of other stats or fields:
+Sometimes a stat's "base" is itself a function of other stats or fields:
 
 - Max HP from vitality + level.
 - Evasion from agility and equipment weight.
 - Spell damage from intelligence and weapon power.
 
 Instead of manually recomputing and assigning `base_value`, you can
-configure a **base function** on the stat:
+configure a **base function** on the stat. Because GameMaker functions
+do not capture local scope, bind the owning instance if you need to
+reach its stats inside the callback:
 
-```gml
+```js
 // Max HP derived from vitality and level
 stats.max_hp = new CatalystStatistic(100).SetName("Max HP");
 
 // If not set, base_value would just stay at 100. Instead:
-stats.max_hp.SetBaseFunc(function(_stat, _ctx) {
-    var _vit   = stats.vitality.GetValue();  // canonical value
-    var _level = stats.level.GetValue();     // canonical value
-    return 50 + vit * 10 + level * 5;
-});
+var _owner = self;
+stats.max_hp.SetBaseFunc(method({ owner: _owner }, function(_stat, _ctx) {
+    var _vit   = owner.stats.vitality.GetValue();  // canonical value
+    var _level = owner.stats.level.GetValue();     // canonical value
+    return 50 + _vit * 10 + _level * 5;
+}));
 ```
 
 When evaluating the stat:
@@ -276,12 +281,11 @@ When evaluating the stat:
 If you pass a context into `GetValue(ctx)`, the same context is passed
 into `base_func(stat, ctx)`. This makes it possible to do things like:
 
-- “Max HP scales differently inside certain zones.”
-- “Base damage uses a different formula when a special mode is active.”
+- "Max HP scales differently inside certain zones."
+- "Base damage uses a different formula when a special mode is active."
 
-If you clear the base function (via `SetBaseFunc(noone)` or a dedicated
-clear helper if you add one), the stat falls back to the stored
-`base_value`.
+If you clear the base function (via `ClearBaseFunc()`), the stat falls back to
+the stored `base_value`.
 
 ---
 
@@ -289,14 +293,14 @@ clear helper if you add one), the stat falls back to the stored
 
 Hard caps (min/max) are useful, but many games want **diminishing returns**:
 
-- “Armor gives less damage reduction as it increases.”
-- “Movement speed bonuses taper off near the cap.”
-- “Critical chance above 60% grows slower.”
+- "Armor gives less damage reduction as it increases."
+- "Movement speed bonuses taper off near the cap."
+- "Critical chance above 60% grows slower."
 
 Catalyst lets you plug in a **post-process** function that runs after all
 modifiers and families are applied, but before clamping/rounding:
 
-```gml
+```js
 // Example: diminishing returns on armor
 stats.armor = new CatalystStatistic(0).SetName("Armor");
 
@@ -306,7 +310,7 @@ stats.armor.SetPostProcess(function(_stat, _raw, _ctx) {
     var _dr = _raw / (_raw + _K);
     // Convert back into an equivalent "effective armor" if you want,
     // or just return DR directly and use this stat as a percentage.
-    return dr * 100; // treat this stat as "damage reduction %"
+    return _dr * 100; // treat this stat as "damage reduction %"
 });
 ```
 
@@ -337,7 +341,7 @@ Common examples:
 
 Stats support a small tag API:
 
-```gml
+```js
 stats.damage
     .AddTag("offense")
     .AddTag("fire");
@@ -354,20 +358,20 @@ On `CatalystStatistic`:
 - `HasTag(tag)`
 - `ClearTags()`
 
-These don’t affect the math; they’re for your own logic and UI.
+These don't affect the math; they're for your own logic and UI.
 
 ### 7.2. Modifier tags
 
 Modifiers also have tags, which are especially useful for cleanup and
 filtering:
 
-```gml
+```js
 var _burn_debuff = new CatalystModifier(-0.20, eCatMathOps.MULTIPLY)
     .SetLayer(eCatStatLayer.TEMP)
     .AddTag("debuff")
     .AddTag("fire");
 
-stats.damage.AddModifier(burn_debuff);
+stats.damage.AddModifier(_burn_debuff);
 ```
 
 On `CatalystModifier`:
@@ -381,16 +385,16 @@ On `CatalystModifier`:
 
 Putting tags on modifiers makes it easy to remove whole groups at once:
 
-```gml
+```js
 /// In CatalystStatistic:
 static RemoveModifiersByTag = function(_tag) {
-    // (Implementation provided by Catalyst – shown here conceptually)
+    // (Implementation provided by Catalyst - shown here conceptually)
 };
 ```
 
 Usage:
 
-```gml
+```js
 // Cleanse all debuffs on this stat
 stats.damage.RemoveModifiersByTag("debuff");
 
@@ -398,7 +402,7 @@ stats.damage.RemoveModifiersByTag("debuff");
 stats.damage.RemoveModifiersByTag("fire");
 ```
 
-Tags are purely for your game logic – Catalyst itself doesn’t interpret
-them – but many patterns (dispels, “only fire buffs”, “remove all movement
-effects”) become much easier when you have them wired into stats and
+Tags are purely for your game logic - Catalyst itself doesn't interpret
+them - but many patterns (dispels, "only fire buffs", "remove all movement
+effects") become much easier when you have them wired into stats and
 modifiers.

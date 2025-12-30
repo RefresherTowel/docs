@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Catalyst Patterns & Recipes
+title: Patterns & Recipes
 parent: Catalyst
 nav_order: 4
 ---
@@ -8,7 +8,9 @@ nav_order: 4
 # Catalyst Patterns & Recipes
 
 This page shows some common patterns built with Catalyst, focusing on
-"rune-like" effects for an action / roguelike / ARPG style game.
+"rune-like" effects for an action / roguelike / ARPG style game. Of course,
+that's not the only style of game that Catalyst is good for. Literally **any**
+game that uses stats is a good use case for Catalyst.
 
 - Burning enemies increase move speed
 - Low HP damage boost
@@ -39,9 +41,9 @@ This is a **context-driven stacks** pattern:
 
 ### Setup
 
-In the player’s `Create` event:
+In the player's `Create` event:
 
-```gml
+```js
 // Base move speed
 stats.speed = new CatalystStatistic(4).SetName("Move Speed");
 
@@ -64,12 +66,12 @@ stats.speed.AddModifier(_burn_speed);
 
 ### Using it
 
-Wherever you actually *use* the move speed (for example, the player’s `Step`
+Wherever you actually *use* the move speed (for example, the player's `Step`
 event), build a context and pass it into `GetValue`:
 
-```gml
+```js
 // Count nearby burning enemies (implementation is up to your game)
-var _burning_count = scr_CountBurningEnemiesNear(id);
+var _burning_count = CountBurningEnemiesNear(id);
 
 // Build a context and query the stat
 var _ctx = { burning_enemy_count : _burning_count };
@@ -80,7 +82,7 @@ x += lengthdir_x(_move_speed, direction);
 y += lengthdir_y(_move_speed, direction);
 ```
 
-If you call `stats.speed.GetValue()` **without** a context, this modifier’s
+If you call `stats.speed.GetValue()` **without** a context, this modifier's
 `stack_func` will effectively contribute 0 stacks (environment-driven effects
 need context to know what is happening).
 
@@ -88,7 +90,7 @@ need context to know what is happening).
 
 ## Pattern 2: Low HP damage boost
 
-> "Deal more damage when you’re on low health."
+> "Deal more damage when you're on low health."
 
 This is a **conditional modifier** pattern:
 
@@ -98,9 +100,9 @@ This is a **conditional modifier** pattern:
 
 ### Setup
 
-In the player’s `Create` event:
+In the player's `Create` event:
 
-```gml
+```js
 stats.damage = new CatalystStatistic(10).SetName("Damage");
 
 var _low_hp_boost = new CatalystModifier(0.50, eCatMathOps.MULTIPLY)
@@ -121,7 +123,7 @@ stats.damage.AddModifier(_low_hp_boost);
 
 Whenever you compute outgoing damage, pass a context containing HP:
 
-```gml
+```js
 var _ctx = {
     hp     : hp,
     hp_max : max_hp
@@ -130,7 +132,7 @@ var _ctx = {
 var _dmg = stats.damage.GetValue(_ctx);
 ```
 
-If HP is above 30%, the `low_hp_boost` modifier is skipped; if it’s 30% or
+If HP is above 30%, the `low_hp_boost` modifier is skipped; if it's 30% or
 lower, the 1.5x multiplier is applied.
 
 ---
@@ -147,9 +149,9 @@ This pattern uses **event-driven stacks** plus **duration**:
 
 ### Setup
 
-In the player’s `Create` event:
+In the player's `Create` event:
 
-```gml
+```js
 stats.damage = new CatalystStatistic(10).SetName("Damage");
 
 // Crit buff: +10% damage per stack, up to 5 stacks, lasting 5 ticks
@@ -166,7 +168,7 @@ stats.damage.AddModifier(crit_buff);
 
 In a global controller (or similar), make sure you are calling the countdown:
 
-```gml
+```js
 // obj_game_controller Step event
 CatalystModCountdown();
 ```
@@ -175,7 +177,7 @@ CatalystModCountdown();
 
 Wherever you handle crits (for example in a hit resolution script):
 
-```gml
+```js
 /// @desc Called whenever this player lands a critical hit.
 function Player_OnCrit(_attacker, _target, _damage_ctx) {
     // Add a stack and refresh the duration to 5 ticks
@@ -207,13 +209,13 @@ This is a **family stacking** pattern:
 
 Assume you have a movement speed stat:
 
-```gml
+```js
 stats.speed = new CatalystStatistic(4).SetName("Move Speed");
 ```
 
 Define two global auras in the GLOBAL layer:
 
-```gml
+```js
 var _haste_minor = new CatalystModifier(0.10, eCatMathOps.MULTIPLY)
     .SetLayer(eCatStatLayer.GLOBAL)
     .SetFamily("movement_aura", eCatFamilyStackMode.HIGHEST)
@@ -236,7 +238,7 @@ stats.speed.AddModifier(_haste_major);
 
 Even though both auras are attached:
 
-- Only the **stronger** `1.25` multiplier is applied.
+- Only the **stronger** 25% multiplier is applied (1.25x total).
 - If the major aura is removed, the minor one automatically becomes active.
 
 You can model things like:
@@ -250,14 +252,14 @@ You can model things like:
 
 > "Remove all debuffs on this stat" or "cleanse all fire effects".
 
-Tags let you convert many “cleanse” style abilities into simple calls on a
+Tags let you convert many "cleanse" style abilities into simple calls on a
 stat, using `RemoveModifiersByTag`.
 
 ### Setup
 
 First, make sure your modifiers are tagged appropriately:
 
-```gml
+```js
 // A burning debuff that reduces movement temporarily
 var _burn_slow = new CatalystModifier(-0.20, eCatMathOps.MULTIPLY, 3)
     .SetLayer(eCatStatLayer.TEMP)
@@ -271,7 +273,7 @@ stats.speed.AddModifier(_burn_slow);
 
 Now you can create simple dispel helpers:
 
-```gml
+```js
 /// Remove all debuffs from this actor's movement-related stats
 function ClearMovementDebuffs(_actor) {
     with (_actor) {
@@ -285,7 +287,7 @@ function ClearMovementDebuffs(_actor) {
 
 You can also have more specific cleanses, like `"fire"` or `"curse"`:
 
-```gml
+```js
 /// Remove all fire-related effects from this actor
 function ClearFireEffects(_actor) {
     with (_actor) {
@@ -319,21 +321,23 @@ or a wrapper around Catalyst that matches *your* game's vocabulary.
 
 > "Max HP scales off other stats and updates automatically."
 
-Use a `base_func` so the stat’s base value is derived from other stats, instead of manually reassigning `base_value` everywhere.
+Use a `base_func` so the stat's base value is derived from other stats, instead of manually reassigning `base_value` everywhere.
 
 ### Setup
 
-```gml
+```js
 // In Create
 stats.vitality = new CatalystStatistic(10).SetName("Vitality");
 stats.level    = new CatalystStatistic(1).SetName("Level");
 
+// Bind the owning instance so the callback can reach its stats
+var _owner = self;
 stats.max_hp = new CatalystStatistic(100).SetName("Max HP")
-    .SetBaseFunc(function(_stat, _ctx) {
+    .SetBaseFunc(method(_owner, function(_stat, _ctx) {
         var _vit   = stats.vitality.GetValue();
         var _level = stats.level.GetValue();
         return 50 + _vit * 10 + _level * 5;
-    });
+    }));
 ```
 
 ### Using it
@@ -350,7 +354,7 @@ Attach a `post_process` function to shape the final value after all modifiers.
 
 ### Setup
 
-```gml
+```js
 // In Create
 stats.speed = new CatalystStatistic(6).SetName("Move Speed")
     .SetPostProcess(function(_stat, _raw, _ctx) {
@@ -364,23 +368,23 @@ stats.speed = new CatalystStatistic(6).SetName("Move Speed")
 
 Modifiers can push `stats.speed` above 12, but the post-process applies diminishing returns. Queries stay the same:
 
-```gml
+```js
 var _speed_final = stats.speed.GetValue();
 ```
 
-Centralising the cap here keeps the rule in one place instead of scattering “clamp” logic across your code.
+Centralising the cap here keeps the rule in one place instead of scattering "clamp" logic across your code.
 
 ---
 
 ## Pattern 8: Item previews (what-if equip/swap)
 
-> "Show current → previewed stats when hovering or comparing items."
+> "Show current -> previewed stats when hovering or comparing items."
 
-Store the modifiers that an item would apply when equipped. On hover, map those modifiers into `PreviewChanges` to simulate equipping without touching the actual stat. The stat’s current value is read normally, and the preview value is computed with the extra ops layered on. This respects layers, families, conditions, and stack rules, so the preview matches real equip behaviour. The UI then shows current → preview. Use this version when adding an item into an empty slot (or where nothing conflicting is equipped).
+Store the modifiers that an item would apply when equipped. On hover, map those modifiers into `PreviewChanges` to simulate equipping without touching the actual stat. The stat's current value is read normally, and the preview value is computed with the extra ops layered on. This respects layers, families, conditions, and stack rules, so the preview matches real equip behaviour. The UI then shows current -> preview. Use this version when adding an item into an empty slot (or where nothing conflicting is equipped).
 
 ### Single item preview (hover)
 
-```gml
+```js
 // Item definition (e.g., when generating loot)
 var _item_sword = {
     name      : "Rusty Sword",
@@ -413,18 +417,29 @@ var _preview_ops = array_map(_item_sword.modifiers, function(_m) {
 
 var _preview = _dmg_stat.PreviewChanges(_preview_ops);
 
-draw_text(x, y, "Damage: " + string(_current) + " → " + string(_preview));
+draw_text(x, y, "Damage: " + string(_current) + " -> " + string(_preview));
 ```
 
 ### Gear swap preview (remove old, add new)
 
-To compare a new item against the currently equipped one (involving multiple modifiers being added and removed), simulate the swap in the `PreviewChanges` call: first invert the currently equipped item’s modifiers (as if removing them), then append the new item’s modifiers (as if equipping). Build a small helper (not included in Catalyst, since each game will handle this differently) that converts a `CatalystModifier` to an extra-op struct and, when invert is true, negates additive deltas and multiplicative deltas. The resulting ops array models the net change and `PreviewChanges` returns the would-be value without mutating the stat. This lets you show current → new item changes even for complex items with multiple modifiers, layers, or family rules.
+To compare a new item against the currently equipped one (involving multiple modifiers being added and removed), simulate the swap in the `PreviewChanges` call: first invert the currently equipped item's modifiers (as if removing them), then append the new item's modifiers (as if equipping). Build a small helper (not included in Catalyst, since each game might handle this differently, although you can use this code here as a starting point) that converts a `CatalystModifier` to an extra-op struct and, when invert is true, negates additive deltas and inverts multiplicative deltas by using the reciprocal. `FORCE_MIN`/`FORCE_MAX` do not have a clean inverse, so skip those in the "remove" pass (or handle them separately based on your rules). The resulting ops array models the net change and `PreviewChanges` returns the would-be value without mutating the stat.
 
-```gml
+```js
 function ModToPreviewOp(_m, _invert = false) {
     var _val = _m.value;
     if (_invert) {
-        _val = -_val;
+        if (_m.operation == eCatMathOps.ADD) {
+            _val = -_val;
+        }
+        else if (_m.operation == eCatMathOps.MULTIPLY) {
+            if (_val <= -1) {
+                return undefined;
+            }
+            _val = (1 / (1 + _val)) - 1;
+        }
+        else {
+            return undefined;
+        }
     }
     return {
         value      : _val,
@@ -444,18 +459,24 @@ var _ops = [];
 
 // Remove current item
 for (var i = 0; i < array_length(equipped.sword.modifiers); i++) {
-    array_push(_ops, ModToPreviewOp(equipped.sword.modifiers[i], true));
+    var _op = ModToPreviewOp(equipped.sword.modifiers[i], true);
+    if (!is_undefined(_op)) {
+        array_push(_ops, _op);
+    }
 }
 
 // Add new item
 for (var j = 0; j < array_length(loot_hovered.modifiers); j++) {
-    array_push(_ops, ModToPreviewOp(loot_hovered.modifiers[j], false));
+    var _op = ModToPreviewOp(loot_hovered.modifiers[j], false);
+    if (!is_undefined(_op)) {
+        array_push(_ops, _op);
+    }
 }
 
 var _current = stats.damage.GetValue();
 var _preview = stats.damage.PreviewChanges(_ops);
 
-draw_text(x, y, "Damage: " + string(_current) + " → " + string(_preview));
+draw_text(x, y, "Damage: " + string(_current) + " -> " + string(_preview));
 ```
 
 Previews do **not** mutate the stat and respect layers/families/conditions just like real modifiers.
@@ -480,34 +501,34 @@ Catalyst lets you tag modifiers with `source_label`, `source_id`, and `source_me
 
 ### Remove by source_id (e.g., boss aura ends)
 
-```gml
+```js
 // Remove all modifiers added by a specific source instance
 var _removed = stats.damage.RemoveModifierBySourceId(boss_aura_id);
 ```
 
 ### Remove by source_label (e.g., unequip an item)
 
-```gml
+```js
 // Unequipping "Bronze Wand" — strip its modifiers from relevant stats
 stats.damage.RemoveModifierBySourceLabel("Bronze Wand");
 stats.speed.RemoveModifierBySourceLabel("Bronze Wand");
 ```
-(This is the kind of situation where having all the stats stored in an array instead of a struct is useful, as you can just loop over them all easily and run the modifier removal function)
+(This is the kind of situation where having all the stats stored in an array instead of a struct is useful, as you can just loop over them all easily and run the modifier removal function, although obviously you can do the same for a struct, it's just a slower operation).
 
 ### Remove by source_meta (using a predicate function)
 
 `source_meta` can hold arbitrary data (often a struct). Supply a "predicate" function (a function that returns a yes/no answer) that will be provided with the `source_meta` as an argument and makes a determination based on the `source_meta` data as to whether the modifier should be removed. The modifier gets removed if the predicate function returns `true`.
 
-```gml
+```js
 // Remove modifiers whose source_meta.slot == "ring"
 var _count = stats.damage.RemoveModifierBySourceMeta(function(_meta) {
-    return is_struct(_meta) && _meta.slot == "ring";
+    return is_struct(_meta) && _meta[$ "slot"] == "ring";
 });
 ```
 
 ### Find modifiers by source_id (inspect active effects)
 
-```gml
+```js
 var _mods_from_pet = stats.speed.FindModifiersBySourceId(pet_id);
 if (array_length(_mods_from_pet) > 0) {
     EchoDebugInfo("Pet buffs on speed: " + string(array_length(_mods_from_pet)));
@@ -518,23 +539,27 @@ if (array_length(_mods_from_pet) > 0) {
 
 ## Pattern 10: On-change callbacks
 
-> "Run code when a stat’s canonical value changes."
+> "Run code when a stat's canonical value changes."
 
 On-change callbacks fire when you call `GetValue()` with no context and the numeric value changes. Use them to keep UI or related stats in sync.
 
+Because callbacks run with the stat as `self`, bind the owning instance if you
+need to touch instance variables inside the callback.
+
 ### Update UI when a stat changes
 
-```gml
+```js
 stats.damage = new CatalystStatistic(10).SetName("Damage");
 
-stats.damage.AddOnChangeFunction(function(_stat, _old, _new) {
+var _owner = self;
+stats.damage.AddOnChangeFunction(method( _owner, function(_stat, _old, _new) {
     ui_damage_text = "Damage: " + string(_new);
-});
+}));
 ```
 
 ### Keep a dependent stat in sync (max speed vs. current speed)
 
-```gml
+```js
 // Max speed can be modified; current speed is clamped to max speed
 stats.max_spd = new CatalystStatistic(6)
     .SetName("Max Speed")
@@ -547,10 +572,11 @@ stats.spd = new CatalystStatistic(6)
     .SetMinValue(0);
 
 // Whenever max_spd changes, clamp current spd to the new max
-stats.max_spd.AddOnChangeFunction(function(_stat, _old, _new) {
-    stats.spd.SetMaxValue(_new);
-    stats.spd.GetValue(); // recompute/clamp
-});
+var _owner = self;
+stats.max_spd.AddOnChangeFunction(method({ owner: _owner }, function(_stat, _old, _new) {
+    owner.stats.spd.SetMaxValue(_new);
+    owner.stats.spd.GetValue(); // recompute/clamp
+}));
 ```
 
 Use on-change callbacks to react in one place instead of scattering sync logic around your codebase.

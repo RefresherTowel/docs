@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Catalyst Quickstart
+title: Quickstart
 parent: Catalyst
 nav_order: 1
 ---
@@ -24,7 +24,7 @@ For more complex features (context, families, soft caps, etc.) see the **Advance
 The most common pattern is to store your `CatalystStatistic` instances in a struct, or array (indexed via enums for readability) on your actor,
 we'll use a struct for this example in the player object's `Create` event:
 
-```gml
+```js
 // obj_player Create event
 
 stats = {
@@ -41,12 +41,12 @@ By default:
 
 You can read values anywhere you have a reference to the stat:
 
-```gml
+```js
 var _dmg   = stats.damage.GetValue(); // canonical, cached value
 var _speed = stats.speed.GetValue();
 ```
 
-> **Please note:** I usually store my stats in an enum indexed array, as opposed to a struct, to allow for ease of looping through
+> I usually store my stats in an enum indexed array, as opposed to a struct, to allow for ease of looping through
 > all stats, and for slightly better retrieval speed. However, I will use a struct for these examples, since it is easier to
 > read. Either way is almost always fine though, so choose whichever method you prefer.
 {: .note}
@@ -59,10 +59,10 @@ To change a stat, you create one or more `CatalystModifier` instances and attach
 
 A modifier needs at least:
 
-- `_value` – how much to change the stat by.
-- `_math_operation` – how to apply that value.
+- `_value` - how much to change the stat by.
+- `_math_operation` - how to apply that value.
 
-```gml
+```js
 // A flat +5 damage bonus
 var _flat_bonus = new CatalystModifier(5, eCatMathOps.ADD);
 
@@ -78,13 +78,16 @@ Note how the MULTIPLY modifier works. To get a 20% increase, you provide 0.20 as
 
 Now when you query the stat:
 
-```gml
+```js
 var _dmg = stats.damage.GetValue(); // (10 + 5) * 1.20 = 18
 ```
 
-> **Note:** `FORCE_MIN` is also available via `eCatMathOps.FORCE_MIN`, which clamps the
+> `FORCE_MIN` is also available via `eCatMathOps.FORCE_MIN`, which clamps the
 > final value to at least the modifier's `value`. You typically use this for floor effects
-> such as "always do at least 1 damage".
+> such as "always do at least 1 damage".  
+> `FORCE_MAX` is available via `eCatMathOps.FORCE_MAX`, which caps the final value
+> to at most the modifier's `value`, useful for hard ceilings.
+{: .note}
 
 ---
 
@@ -103,7 +106,7 @@ The `eCatStatLayer` enum defines the available layers:
 
 For example, you might treat weapons as **EQUIPMENT** and runes as **AUGMENTS**:
 
-```gml
+```js
 // Weapon adds +3 damage as equipment
 var _weapon_mod = new CatalystModifier(3, eCatMathOps.ADD)
     .SetLayer(eCatStatLayer.EQUIPMENT)
@@ -125,7 +128,7 @@ Layers make it easy to reason about the order of operations and to group similar
 
 ## 4. Duration-based modifiers
 
-Catalyst ships with a global `CatalystModifierTracker` instance:
+Catalyst ships with a global `CatalystModifierTracker` struct:
 
 - It is created automatically as `global.__catalyst_modifier_tracker`.
 - The macro `CATALYST_COUNTDOWN` points at this instance.
@@ -135,14 +138,14 @@ Any modifier with a positive `duration` will automatically register with the tra
 Call `CatalystModCountdown()` once per "tick" (step, turn, second, or whatever makes
 sense for your game) to advance all durations:
 
-```gml
+```js
 // obj_game_controller Step event (or wherever your game tick lives)
 CatalystModCountdown();
 ```
 
 Creating a timed buff looks like this:
 
-```gml
+```js
 // +50% damage buff for 5 ticks
 var _buff = new CatalystModifier(0.50, eCatMathOps.MULTIPLY, 5)
     .SetLayer(eCatStatLayer.TEMP)
@@ -158,6 +161,9 @@ stats.damage.AddModifier(_buff);
 Setting `duration` to `-1` (the default) makes a modifier permanent
 (it will not be tracked or counted down).
 
+> If you want to "precreate" duration based modifiers (maybe during your level load or something) and then apply them at some later point in time, make sure you **don't** give them a duration until they are actually applied (using `.SetDuration()`). This is because a modifier gets automatically added to the countdown if it's created with a duration, and it will tick down and destroy itself before it ever gets applied. So just remember the rule: Precreated modifiers get their duration given during their application, not their creation.
+{: .important}
+
 ---
 
 ## 5. A simple item preview
@@ -167,7 +173,7 @@ A common use case is "hover an item and see what it would do to my stats".
 You can use `PreviewChanges` to simulate modifiers as if they were applied,
 without actually attaching them to the stat.
 
-```gml
+```js
 // Suppose the player currently has a damage stat:
 var _dmg_stat = stats.damage;
 
@@ -185,18 +191,20 @@ var _preview_ops = [
         family_mode: eCatFamilyStackMode.STACK_ALL
     }
 ];
+// Usually you would be fetching the modifiers from the weapon and copying them here, instead of simply hard-coding values.
+// There is an example of this in the Patterns & Recipes page
 
 // Get the current and previewed values
 var _current = _dmg_stat.GetValue();
 var _preview = _dmg_stat.PreviewChanges(_preview_ops);
 
-// Draw something like: "Damage: 18 → 22"
-draw_text(x, y, "Damage: " + string(_current) + " → " + string(_preview));
+// Draw something like: "Damage: 18 -> 22"
+draw_text(x, y, "Damage: " + string(_current) + " -> " + string(_preview));
 ```
 
 For a single hypothetical modifier, you can use `PreviewChange` instead:
 
-```gml
+```js
 var _preview = _dmg_stat.PreviewChange(
     0.15,
     eCatMathOps.MULTIPLY,
