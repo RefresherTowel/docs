@@ -1,24 +1,13 @@
 ---
 layout: default
-title: Scripting Reference
+title: Echo Scripting Reference
 parent: Echo
-nav_order: 1
+nav_order: 2
 ---
-
-<div class="sticky-toc" markdown="block">
-<details open markdown="block">
-  <summary>On this page</summary>
-  {: .text-delta }
-
-1. TOC
-{:toc}
-
-</details>
-</div>
 
 # Reference
 
-This is the full public API for Echo + Echo Chamber.
+This page covers the public API for Echo. Echo Chamber has its own scripting reference under `docs/echo_chamber/scripting.md`.
 
 Private rule: anything starting with `__` and/or marked with `/// @ignore` is considered internal and is intentionally not documented here.
 
@@ -120,4 +109,3 @@ Clears any tag filter so all tags are allowed.
 ### `EchoDebugGetTags()`
 Gets the current allowed tags array (empty means "allow all").
 **Returns**: `Array<String>,Boolean`
-

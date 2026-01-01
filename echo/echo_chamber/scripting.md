@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Scripting Reference
-nav_order: 1
+title: Echo Chamber Scripting Reference
+nav_order: 2
 parent: Echo Chamber
 has_children: false
 ---
@@ -11,18 +11,7 @@ has_children: false
 /// - 23-12-2025: Updated public API coverage for Echo Chamber scripting.
 -->
 
-<div class="sticky-toc" markdown="block">
-<details open markdown="block">
-  <summary>On this page</summary>
-  {: .text-delta }
-
-1. TOC
-{:toc}
-
-</details>
-</div>
-
-# Echo Chamber Scripting Reference
+## Echo Chamber Scripting Reference
 
 Echo Chamber is the in-game debug UI builder. It is a set of constructors that output structs (Root, Window, Panel, Controls).
 
@@ -114,6 +103,7 @@ Root container for debug UI panels and controls.
 - `BindCoreInputAction(_action_id, _binding)`: Bind a core Echo Chamber action in the default context. Requires an input binding struct built from `EchoChamberInputBinding`.
 - `GetInputContext(_id)`: Get an input context by id.
 - `CreateInputContext(_id, _parent_id)`: Create or return an input context by id. If parent is omitted, it inherits from the default context.
+- `RemoveInputContext(_id)`: Remove an input context by id (only if unused by any window).
 - `InputPressed(_action_id, _window)`: Check whether an action is pressed in the active input context.
 - `InputDown(_action_id, _window)`: Check whether an action is held in the active input context.
 - `InputReleased(_action_id, _window)`: Check whether an action is released in the active input context.
@@ -121,7 +111,16 @@ Root container for debug UI panels and controls.
 - `CreateWindow(_id)`: Create and register a floating debug window.
 - `RegisterWindow(_window)`: Register an externally created window instance. Requires a window struct built from `EchoChamberWindow`.
 - `FindWindow(_id)`: Find a registered window by id.
-- `BringWindowToFront(_window)`: Bring a window to the front of the z-order.
+- `FindControl(_id)`: Find a control by id across all windows.
+- `DumpUI()`: Dump the current UI tree and focus/overlay state to the debug log.
+- `RemoveWindow(_window_or_id)`: Remove a registered window and detach its panels/controls.
+- `BringWindowToFront(_window_or_id)`: Bring a window (or id) to the front of the z-order.
+- `BringWindowToFrontById(_id)`: Bring a window to the front by id.
+- `SendWindowToBack(_window_or_id)`: Send a window (or id) to the back of the z-order.
+- `SetWindowZIndex(_window_or_id, _index)`: Set a window z-order index (0 = back, last = front).
+- `SetModalWindow(_window_or_id)`: Set the modal window (blocks input to other windows).
+- `ClearModalWindow()`: Clear the current modal window.
+- `GetModalWindow()`: Get the current modal window (if any).
 - `SetPersistenceFile(_filename)`: Set the INI filename used for saving and loading UI layout state.
 - `SetPersistenceSection(_section)`: Set the INI section prefix used for saving and loading UI layout state.
 - `SaveLayout()`: Save window layout, z-order, and panel state to an INI file.
@@ -172,9 +171,12 @@ Floating debug window that owns a collection of docked panels.
 **Public methods**
 - `SetTitle(_title)`: Set the window title text.
 - `SetInputContext(_context_id, _parent_id)`: Set the input context id used for this window.
+- `SwapInputContext(_context_id, _parent_id)`: Swap the input context and remove the old one if unused.
 - `SetWindowStyleKey(_key)`: Set the window style key (for theme.window_styles).
 - `SetHeaderStyleKey(_key)`: Set the header style key (for theme.header_styles).
 - `SetChromeButtonStyleKey(_key)`: Set the chrome button style key (for theme.button_styles).
+- `ApplyTheme(_theme)`: Apply a theme override to this window and its children.
+- `ClearThemeOverride()`: Clear the window theme override (reverts to the root theme).
 - `SetPadding(_value)`: Set the content padding for this window.
 - `SetTitlebarHeight(_value)`: Set the titlebar height for this window.
 - `SetTitlebarAuto(_flag)`: Set whether the titlebar height is driven by the current theme.
@@ -182,6 +184,14 @@ Floating debug window that owns a collection of docked panels.
 - `SetVisible(_flag)`: Show or hide this window.
 - `SetShowChromeButtons(_show_close, _show_minimize, _show_pin)`: Configure which chrome buttons are shown in the window header.
 - `OnClose(_fn)`: Set a callback that runs when the window is closed via the close button.
+- `OnMove(_fn)`: Set a callback that runs when the window moves.
+- `OnResize(_fn)`: Set a callback that runs when the window resizes.
+- `OnShow(_fn)`: Set a callback that runs when the window becomes visible.
+- `OnHide(_fn)`: Set a callback that runs when the window is hidden.
+- `OnFocus(_fn)`: Set a callback that runs when the window gains focus.
+- `OnBlur(_fn)`: Set a callback that runs when the window loses focus.
+- `OnMinimize(_fn)`: Set a callback that runs when the window is minimized.
+- `OnRestore(_fn)`: Set a callback that runs when the window is restored.
 - `Close()`: Close the window (sets visible to false). If an on_close callback exists, it is called.
 - `SetPinned(_flag)`: Set whether the window is pinned (disables dragging and resizing).
 - `TogglePinned()`: Toggle pinned state.
@@ -189,13 +199,20 @@ Floating debug window that owns a collection of docked panels.
 - `ToggleMinimized()`: Toggle minimized state.
 - `SetRect(_x1, _y1, _x2, _y2)`: Set the window rectangle in GUI-space. Size is clamped to min_width/min_height.
 - `SetPosition(_x, _y)`: Set the window position in GUI-space (size is unchanged).
+- `GetWidth()`: Get the current window width (in GUI-space).
+- `GetHeight()`: Get the current window height (in GUI-space).
 - `SetMinSize(_w, _h)`: Set minimum width and height for this window.
 - `SetMaxSize(_w, _h)`: Set maximum width and height for this window.
-- `FitToContent()`: Automatically resizes the window to fit the content. Please note: If you have set a rectangle size (`SetRect()`) or a minimum / maximum window size (`SetMinSize()` / `SetMaxSize()`) those will override the autofit.
+- `FitToContent([_root])`: Automatically resizes the window to fit the content. Please note: If you have set a rectangle size (`SetRect()`) or a minimum / maximum window size (`SetMinSize()` / `SetMaxSize()`) those will override the autofit.
 - `AddPanel(_panel)`: Add a top-level panel to this window. Requires a panel built from `EchoChamberPanel`.
+- `RemovePanel(_panel_or_id)`: Remove a panel from this window (top-level or nested).
 - `ClearPanels()`: Remove all panels from this window.
 - `FindPanel(_id)`: Find a panel in this window by id (searches nested container panels too).
+- `FindControl(_id)`: Find a control in this window by id (searches nested panels too).
+- `MoveControlToPanel(_control_or_id, _panel_or_id, [_index])`: Move a control to another panel in this window.
 - `ContainsPoint(_x, _y)`: Returns true if a point is inside this window's current rectangle (and the window is visible).
+- `BeginLayoutBatch()`: Begin a layout batch (layout changes defer FitToContent until EndLayoutBatch).
+- `EndLayoutBatch()`: End a layout batch and apply a single FitToContent if any layout changes occurred.
 - `LayoutPanels(_root)`: Layout this window's panels into the current content rect.
 - `ProcessWindowInteractions(_root)`: Handle mouse interactions for dragging/resizing and chrome button clicks.
 - `Draw(_root)`: Draw the window chrome and all owned panels.
@@ -209,11 +226,21 @@ Layout panel docked to an edge or fill.
 
 **Public methods**
 - `AddControl(_control)`: Add a control to this panel. Requires a control struct that inherits from `EchoChamberControlBase`.
+- `InsertControl(_control, _index)`: Insert a control at a specific index (clamped).
+- `MoveControl(_control_or_id, _index)`: Reorder a direct control to a specific index (clamped).
+- `MoveControlToPanel(_control_or_id, _target_panel, [_index])`: Move a control to another panel.
+- `SetControlOrder(_ids)`: Reorder direct controls using a list of ids (unlisted items keep order at the end).
+- `RemoveControl(_control_or_id)`: Remove a control from this panel (direct or nested).
+- `ClearControls()`: Remove all direct controls from this panel.
 - `AddChildPanel(_panel)`: Add a child panel (for panel container usage). Requires a panel built from `EchoChamberPanel`.
+- `RemoveChildPanel(_panel_or_id)`: Remove a child panel from this panel (direct or nested).
+- `ClearChildPanels()`: Remove all child panels from this panel.
 - `FindControl(_id)`: Find a direct or nested control within this panel by id.
 - `SetSizeMode(_mode)`: Configure how this panel resolves its dock size.
 - `SetSize(_value)`: Set dock thickness when using fixed sizing.
 - `SetFlowMode(_flow_mode)`: Set how child controls flow within the panel.
+- `SetScrollable(_flag)`: Enable or disable vertical scrolling for this panel.
+- `SetScrollState(_state)`: Assign a scroll state for this panel (used when scrollable).
 - `SetPadding(_value)`: Set panel content padding.
 - `SetGap(_value)`: Set panel control gap spacing.
 - `SetRowHeight(_value)`: Set panel row height for controls.
@@ -266,6 +293,7 @@ Non-interactive text label.
 
 **Public methods**
 - `SetText(_text)`: Set the label text.
+- `BindText(_source, [_key_or_fn])`: Bind the label text to a struct field or getter function.
 - `SetAlign(_align)`: Set text alignment ("left", "center", "right").
 - `UseSmallFont(_flag)`: Use the smaller theme font.
 
@@ -300,7 +328,7 @@ Horizontal slider control.
 **Public methods**
 - `SetRange(_min, _max)`: Set the slider value range.
 - `SetStep(_step)`: Set snap step size (0 for no snapping).
-- `BindValue(_struct, _key)`: Bind the slider value to a struct field.
+- `BindValue(_source, [_key_or_fn])`: Bind the slider value to a struct field or getter/setter functions.
 - `OnChange(_fn)`: Set a callback that runs when the value changes.
 
 ### `EchoChamberToggle(_id)`
@@ -310,7 +338,8 @@ Checkbox-style toggle.
 **Returns**: `Struct.EchoChamberToggle`
 
 **Public methods**
-- `BindBool(_struct, _key)`: Bind the toggle value to a struct field.
+- `BindBool(_source, [_key_or_fn])`: Bind the toggle value to a struct field or getter/setter functions.
+- `BindValue(_source, [_key_or_fn])`: Bind the toggle value (alias of BindBool).
 - `OnChange(_fn)`: Set a callback that runs when the value changes.
 
 ### `EchoChamberTextInput(_id)`
@@ -447,10 +476,13 @@ It outputs a struct with fields in roughly these buckets (names below are from t
 - `col_menu_hover`
 - `col_label_hover_bg`
 - `col_checkbox_off`
+- `col_checkbox_on`
 
 #### DEFAULT
 - `default_control_width`
+- `default_control_max_width`
 - `default_padding`
+- `default_row_height`
 
 #### DROPDOWN
 - `dropdown_styles`

@@ -2,19 +2,8 @@
 layout: default
 title: Usage and Examples
 parent: Echo
-nav_order: 2
+nav_order: 3
 ---
-
-<div class="sticky-toc" markdown="block">
-<details open markdown="block">
-  <summary>On this page</summary>
-  {: .text-delta }
-
-1. TOC
-{:toc}
-
-</details>
-</div>
 
 # Usage and Examples
 
@@ -104,7 +93,6 @@ Create a root once, then run it every frame.
 global.echo_ui = new EchoChamberRoot(new EchoChamberThemeMidnightNeon());
 
 // Draw GUI Event
-global.echo_ui.BeginFrame();
 global.echo_ui.RunDesktop();
 ```
 
@@ -176,9 +164,10 @@ _panel.AddControl(new EchoChamberButton("btn_ping")
 
 A couple of important notes:
 
-- Binding (like `BindBool`, `BindValue`, `BindText`) is intentionally **struct-only**.
-	- This is on purpose: structs are stable; instances can disappear.
-	- If you want to affect an instance, use `OnChange` and do your own instance checks.
+- Binding can target a struct field, and some controls also accept getter/setter functions.
+	- Sliders, toggles, and labels support method-bound getters/setters.
+	- Text inputs and dropdowns still bind to struct fields.
+	- If you want to affect instances, use method-bound callbacks or getters/setters with your own checks.
 - Most setters return `self`, so you can chain them.
 
 ### Layout persistence (save window positions between runs)
@@ -212,8 +201,13 @@ You have a few built-in themes:
 - `new EchoChamberTheme()` (base theme)
 - `new EchoChamberThemeMidnightNeon()`
 - `new EchoChamberThemeAmberForest()`
-- `new EchoChamberThemeGraphiteSunrise()`
-- `new EchoChamberThemePlasmaCandy()`
+- `new EchoChamberThemeSakuraPunch()`
+- `new EchoChamberThemeArcadeWave()`
+- `new EchoChamberThemeCircuitCandy()`
+- `new EchoChamberThemeToxicTerminal()`
+- `new EchoChamberThemeSunsetGlitch()`
+- `new EchoChamberThemeBubblegumTerminal()`
+- `new EchoChamberThemeMangoMint()`
 
 #### Option A: tweak an existing theme
 
@@ -240,15 +234,13 @@ global.echo_ui = new EchoChamberRoot(_theme);
 This is basically "theme as a constructor".
 
 ```js
-function EchoChamberThemeMyTheme() {
-	var _t = new EchoChamberTheme();
-
-	_t.col_window_bg = make_color_rgb(18, 18, 22);
-	_t.col_panel_bg  = make_color_rgb(24, 24, 30);
-	_t.col_accent    = make_color_rgb(120, 200, 255);
+function EchoChamberThemeMyTheme() : EchoChamberTheme() constructor {
+	col_window_bg = make_color_rgb(18, 18, 22);
+	col_panel_bg  = make_color_rgb(24, 24, 30);
+	col_accent    = make_color_rgb(120, 200, 255);
 
 	// Add a custom button style variant
-	_t.button_styles[$ "danger"] = {
+	button_styles[$ "danger"] = {
 		bg			: make_color_rgb(60, 20, 20),
 		border		: make_color_rgb(255, 80, 80),
 		bg_alpha	: 1,
@@ -256,15 +248,14 @@ function EchoChamberThemeMyTheme() {
 		align		: "center"
 	};
 
-	_t.RefreshMetrics();
-	return _t;
+	RefreshMetrics();
 }
 ```
 
 Then use it like:
 
 ```js
-global.echo_ui = new EchoChamberRoot(EchoChamberThemeMyTheme());
+global.echo_ui = new EchoChamberRoot(new EchoChamberThemeMyTheme());
 ```
 
 And apply the style on a button:
@@ -272,7 +263,7 @@ And apply the style on a button:
 ```js
 _panel.AddControl(new EchoChamberButton("btn_delete")
 	.SetLabel("Delete Everything")
-	.SetStyle("danger")
+	.SetControlStyleKey("danger")
 	.OnClick(function() {
 		EchoDebugWarn("You almost clicked it.", "UI");
 	})

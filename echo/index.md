@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Echo
-nav_order: 4
+nav_order: 1
 has_children: true
 ---
 
@@ -24,7 +24,10 @@ has_children: true
 
 You know the `show_debug_message` spiral:
 
-You've been working on a feature for a week and you keep running into problems. You begin sprinkling debug messages throughout your code. More and more begin to pile up as you valiantly strive to find the problem. Then suddenly your output is a wall of text spam and the one line you actually need is lost amongst the noise...
+- You've been working on a feature for a week and you keep running into problems.
+- You begin sprinkling debug messages throughout your code.
+- More and more begin to pile up as you valiantly strive to find the problem.
+- Then suddenly your output is a wall of nonsense and the one line you actually need is almost impossible to see.
 
 Echo is my attempt to fix that problem without turning logging into a whole second job. It's a lightweight debug logger for GameMaker. It gives you:
 
@@ -49,7 +52,7 @@ You log a message. Echo decides if it should be shown (based on your current set
 
 So instead of "I hope I spot the right line in the output" you get "I can filter this and dump it to a file when things get busy".
 
-> Echo comes packed with **Echo Chamber**, a UI framework specifically built to allow quick and easy development of complex UI's aimed at allowing you to create your own debug tools. Have a look at how quickly you can build a simple UI:
+> Echo comes packed with Echo Chamber, a UI framework specifically built to allow quick and easy development of complex UI's aimed at allowing you to create your own debug tools. Have a look at how quickly you can build a simple UI:
 > [!Echo Chamber UI development](../assets/echo_chamber_promo.gif)
 > And here is the implementation of [**Statements**](../statement/index.md) Lens visual debugger, written entirely with Echo Chamber:
 > [!Statement Lens debugger](../assets/statement_lens_marketing.gif)
@@ -85,7 +88,7 @@ Check out the other frameworks currently available:
 - [![Statement icon]({{ '/assets/statement_icon.png' | relative_url }}){: .framework-icon-small } **Statement**](https://refreshertowel.itch.io/statement) - An advanced state machine handler, easy to use for beginners, flexible enough for advanced users, with a fully interactive live visual debugger!
 - [![Pulse icon]({{ '/assets/pulse_icon.png' | relative_url }}){: .framework-icon-small } **Pulse**](https://refreshertowel.itch.io/pulse) - A signals and events framework. Broadcast "what happened", let any number of listeners react. Includes queries (ask your game a question, anything that might want to answer responds!), tags, priorities, sender filters, queued dispatch, groups, and solid debug/introspection.
 
-These frameworks are designed specifically to work together easily, to allow you to focus on actually making your games, rather than inventing tooling!
+These frameworks are designed specifically to work together easily, to allow you to focus on actually making your games, rather than inventing tooling! [See how you might use them with Echo here!]({% link echo/integration.md %})
 
 ---
 

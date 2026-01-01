@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Usage & Examples
-nav_order: 2
+title: Echo Chamber Usage & Examples
+nav_order: 3
 parent: Echo Chamber
 has_children: false
 ---
@@ -12,18 +12,7 @@ has_children: false
 /// - 23-12-2025: Ensure example variables are created in Create before use.
 -->
 
-<div class="sticky-toc" markdown="block">
-<details open markdown="block">
-  <summary>On this page</summary>
-  {: .text-delta }
-
-1. TOC
-{:toc}
-
-</details>
-</div>
-
-# Echo Chamber Usage & Examples
+# Usage & Examples
 
 > I'm writing these examples in a bit more of an informal way than the rest of my documentation, mostly because I want to get it out quickly and not be as structured. Let me know if you prefer this style or the "more professional" style of the other usage and examples pages I have for the other frameworks!
 {: .note}
@@ -149,9 +138,9 @@ Echo Chamber controls are little structs. You create them, configure them, then 
 var _owner = self;
 var _btn_console = new EchoChamberButton("btn_console");
 _btn_console.SetLabel("Console");
-_btn_console.OnClick(method({ owner: _owner }, function() {
-	EchoChamberOpenConsole(owner.ui_root);
-	owner.ui_root.ShowToast("Console opened", 1200);
+_btn_console.OnClick(method(_owner, function() {
+	EchoChamberOpenConsole(ui_root);
+	ui_root.ShowToast("Console opened", 1200);
 }));
 _panel_top.AddControl(_btn_console);
 ```
@@ -202,6 +191,9 @@ Echo Chamber's tooltip system is request based. Controls that support hovering w
 
 So you just set the tooltip text on the control and move on with your life.
 
+> If you are using `FitToContent()` while adding lots of controls, wrap the adds in `BeginLayoutBatch()`/`EndLayoutBatch()` to avoid repeated size calculations. EndLayoutBatch will refit once if anything changed.
+{: .note}
+
 ---
 
 ## Making the main panel do something useful
@@ -212,31 +204,9 @@ But wait a minute. Debug UI isn't just knobs, it's visibility. You want to see w
 
 Let's make a simple "stats" panel that reads from your own data.
 
-For this example, we'll fake some data in the object.
+For this example, we'll bind a few labels to live getters instead of pushing text in Step.
 
 Add this in Create:
-
-```js
-ui_stats = {
-	fps: 0,
-	room: "",
-	pos_x: 0,
-	pos_y: 0,
-};
-```
-
-Then update it in Step:
-
-```js
-// obj_debug_controller: Step
-
-ui_stats.fps = fps_real;
-ui_stats.room = room_get_name(room);
-ui_stats.pos_x = mouse_x;
-ui_stats.pos_y = mouse_y;
-```
-
-Now show it in the main panel:
 
 ```js
 var _lbl_main = new EchoChamberLabel("lbl_main");
@@ -245,28 +215,26 @@ _panel_main.AddControl(_lbl_main);
 
 _panel_main.AddControl(new EchoChamberSeparator("sep_main").SetOrientation("horizontal"));
 
-var _box = new EchoChamberTextBox("box_stats");
-_box.SetFillWidth(true);
-_box.SetPadding(10, 8);
-_box.SetText("(stats will appear here)");
-_panel_main.AddControl(_box);
+_panel_main.AddControl(new EchoChamberLabel("lbl_fps").BindText(function() {
+	return "FPS: " + string(fps_real);
+}));
 
-// Keep a reference so we can update it in Step.
-ui_stats_box = _box;
-```
+_panel_main.AddControl(new EchoChamberLabel("lbl_room").BindText(function() {
+	return "Room: " + room_get_name(room);
+}));
 
-Then update the textbox in Step (after you update the numbers):
+_panel_main.AddControl(new EchoChamberLabel("lbl_mouse").BindText(function() {
+	return "Mouse: (" + string(mouse_x) + ", " + string(mouse_y) + ")";
+}));
 
-```js
-// Update the stats textbox
-var _t = "";
-_t += "FPS: " + string(ui_stats.fps) + "\n";
-_t += "Room: " + ui_stats.room + "\n";
-_t += "Mouse: (" + string(ui_stats.pos_x) + ", " + string(ui_stats.pos_y) + ")\n";
-_t += "Speed setting: " + string(ui_settings.speed) + "\n";
-_t += "God mode: " + string(ui_settings.god_mode);
+var _owner = self;
+_panel_main.AddControl(new EchoChamberLabel("lbl_speed").BindText(method(_owner, function() {
+	return "Speed setting: " + string(ui_settings.speed);
+})));
 
-ui_stats_box.SetText(_t);
+_panel_main.AddControl(new EchoChamberLabel("lbl_god").BindText(method(_owner, function() {
+	return "God mode: " + string(ui_settings.god_mode);
+})));
 ```
 
 Is this the fanciest inspector on the planet? Nah.
@@ -274,7 +242,7 @@ Is this the fanciest inspector on the planet? Nah.
 But it's honest. It's the exact pattern you'll use in a real tool:
 
 - bind controls to your settings struct
-- feed output text from your runtime state
+- bind labels to live getters so you don't need a sync Step loop
 
 ---
 
@@ -312,7 +280,7 @@ if (keyboard_check_pressed(vk_f9)) {
 
 ---
 
-## Theme swapping (because pretty matters)
+## Theme swapping (because why ugly when can pretty?)
 
 Echo Chamber themes are just structs. They aren't magic. They are a big bag of settings.
 
@@ -326,15 +294,10 @@ Add a field:
 ui_settings.theme_index = 0;
 ```
 
-And setup a marker to know what the last theme index was in your Create Event:
-
-```js
-ui_last_theme_index = -1;
-```
-
 Add this control to the top bar (after the console button):
 
 ```js
+var _owner = self;
 var _dd_theme = new EchoChamberDropdownSelect("dd_theme");
 _dd_theme.SetLabel("Theme");
 _dd_theme.SetOptions([
@@ -344,17 +307,9 @@ _dd_theme.SetOptions([
 	"ToxicTerminal",
 ]);
 _dd_theme.BindIndex(ui_settings, "theme_index");
-_panel_top.AddControl(_dd_theme);
-```
-
-Then in Step, apply the theme if the selection changed.
-
-```js
-if (ui_settings.theme_index != ui_last_theme_index) {
-	ui_last_theme_index = ui_settings.theme_index;
-
+_dd_theme.OnChange(method(_owner, function(_index, _value) {
 	var _new_theme;
-	switch (ui_settings.theme_index) {
+	switch (_index) {
 		case 0: _new_theme = new EchoChamberThemeMidnightNeon(); break;
 		case 1: _new_theme = new EchoChamberThemeMangoMint(); break;
 		case 2: _new_theme = new EchoChamberThemeSakuraPunch(); break;
@@ -364,7 +319,8 @@ if (ui_settings.theme_index != ui_last_theme_index) {
 
 	ui_root.ApplyTheme(_new_theme);
 	ui_root.ShowToast("Theme applied", 1000);
-}
+}));
+_panel_top.AddControl(_dd_theme);
 ```
 
 ---
@@ -416,6 +372,67 @@ Nice. You can keep adding tool actions without turning your Step event into a ke
 
 ---
 
+## Batch layout updates (FitToContent without churn)
+
+If you're adding or moving lots of controls, you can batch the layout work so `FitToContent()` only runs once at the end.
+
+```js
+ui_win.FitToContent(); // size to the current content
+ui_win.BeginLayoutBatch();
+
+_panel_main.ClearControls();
+_panel_main.AddControl(new EchoChamberLabel("lbl_a").SetText("A"));
+_panel_main.AddControl(new EchoChamberLabel("lbl_b").SetText("B"));
+_panel_main.AddControl(new EchoChamberLabel("lbl_c").SetText("C"));
+
+ui_win.EndLayoutBatch(); // fits once after the batch
+```
+
+This keeps large UI rebuilds snappy while still giving you the convenience of auto-sizing.
+
+---
+
+## Reordering and moving controls
+
+You can insert, reorder, and move controls between panels without rebuilding the whole UI.
+
+```js
+// Insert at a specific index
+_panel_top.InsertControl(new EchoChamberButton("btn_new").SetLabel("New"), 0);
+
+// Reorder a direct child
+_panel_top.MoveControl("btn_console", 2);
+
+// Set explicit order (unlisted items keep their order at the end)
+_panel_top.SetControlOrder(["btn_console", "dd_theme"]);
+
+// Move a control between panels
+_panel_left.MoveControlToPanel("sld_speed", _panel_main);
+ui_win.MoveControlToPanel("tgl_god", "main", 1);
+```
+
+These work on direct controls unless otherwise noted (nested panels are handled where supported).
+
+---
+
+## Modal windows
+
+If you want a single window to temporarily own all input, set it as modal:
+
+```js
+ui_root.SetModalWindow(ui_win); // all other windows ignore input
+```
+
+When you're done:
+
+```js
+ui_root.ClearModalWindow();
+```
+
+Modal windows always stay on top and block input to other windows.
+
+---
+
 ## A quick word on overlays, dropdowns, and context menus
 
 If you've ever built dropdown menus in GM by hand, you already know the vibe:
@@ -457,18 +474,18 @@ Add a list view to the main panel:
 var _owner = self;
 var _list = new EchoChamberListView("list_log");
 _list.SetRowHeight(18);
-_list.SetCountGetter(method({ owner: _owner }, function() {
-	return array_length(owner.ui_log);
+_list.SetCountGetter(method(_owner, function() {
+	return array_length(ui_log);
 }));
 
-_list.SetRowDrawer(method({ owner: _owner }, function(_row_index, _row_rect, _is_selected, _is_hover) {
+_list.SetRowDrawer(method(_owner, function(_row_index, _row_rect, _is_selected, _is_hover) {
 	var _x = _row_rect.x1;
 	var _y = _row_rect.y1;
-	draw_text(_x + 6, _y + 2, owner.ui_log[_row_index]);
+	draw_text(_x + 6, _y + 2, ui_log[_row_index]);
 }));
 
-_list.SetOnSelect(method({ owner: _owner }, function(_index) {
-	owner.ui_root.ShowToast("Selected row " + string(_index), 800);
+_list.SetOnSelect(method(_owner, function(_index) {
+	ui_root.ShowToast("Selected row " + string(_index), 800);
 }));
 
 _panel_main.AddControl(_list);
@@ -494,8 +511,6 @@ ui_settings = {
 	difficulty_index: 1,
 	theme_index: 0,
 };
-
-ui_stats = { fps: 0, room: "", pos_x: 0, pos_y: 0 };
 
 var _theme = new EchoChamberThemeMidnightNeon();
 ui_root = new EchoChamberRoot(_theme);
@@ -527,9 +542,9 @@ ui_win.AddPanel(_panel_main);
 var _owner = self;
 var _btn_console = new EchoChamberButton("btn_console");
 _btn_console.SetLabel("Console");
-_btn_console.OnClick(method({ owner: _owner }, function() {
-	EchoChamberOpenConsole(owner.ui_root);
-	owner.ui_root.ShowToast("Console opened", 1200);
+_btn_console.OnClick(method(_owner, function() {
+	EchoChamberOpenConsole(ui_root);
+	ui_root.ShowToast("Console opened", 1200);
 }));
 _panel_top.AddControl(_btn_console);
 
@@ -537,6 +552,18 @@ var _dd_theme = new EchoChamberDropdownSelect("dd_theme");
 _dd_theme.SetLabel("Theme");
 _dd_theme.SetOptions(["MidnightNeon", "MangoMint", "SakuraPunch", "ToxicTerminal"]);
 _dd_theme.BindIndex(ui_settings, "theme_index");
+_dd_theme.OnChange(method(_owner, function(_index, _value) {
+	var _new_theme;
+	switch (_index) {
+		case 0: _new_theme = new EchoChamberThemeMidnightNeon(); break;
+		case 1: _new_theme = new EchoChamberThemeMangoMint(); break;
+		case 2: _new_theme = new EchoChamberThemeSakuraPunch(); break;
+		case 3: _new_theme = new EchoChamberThemeToxicTerminal(); break;
+		default: _new_theme = new EchoChamberThemeMidnightNeon(); break;
+	}
+	ui_root.ApplyTheme(_new_theme);
+	ui_root.ShowToast("Theme applied", 1000);
+}));
 _panel_top.AddControl(_dd_theme);
 
 _panel_left.AddControl(new EchoChamberLabel("lbl_left").SetText("Quick settings"));
@@ -569,33 +596,34 @@ _panel_left.AddControl(_dd_diff);
 _panel_main.AddControl(new EchoChamberLabel("lbl_main").SetText("Live stats"));
 _panel_main.AddControl(new EchoChamberSeparator("sep_main").SetOrientation("horizontal"));
 
-ui_stats_box = new EchoChamberTextBox("box_stats");
-ui_stats_box.SetFillWidth(true);
-ui_stats_box.SetPadding(10, 8);
-_panel_main.AddControl(ui_stats_box);
+_panel_main.AddControl(new EchoChamberLabel("lbl_fps").BindText(function() {
+	return "FPS: " + string(fps_real);
+}));
+
+_panel_main.AddControl(new EchoChamberLabel("lbl_room").BindText(function() {
+	return "Room: " + room_get_name(room);
+}));
+
+_panel_main.AddControl(new EchoChamberLabel("lbl_mouse").BindText(function() {
+	return "Mouse: (" + string(mouse_x) + ", " + string(mouse_y) + ")";
+}));
+
+_panel_main.AddControl(new EchoChamberLabel("lbl_speed").BindText(method(_owner, function() {
+	return "Speed setting: " + string(ui_settings.speed);
+})));
+
+_panel_main.AddControl(new EchoChamberLabel("lbl_god").BindText(method(_owner, function() {
+	return "God mode: " + string(ui_settings.god_mode);
+})));
 
 ui_root.LoadLayout();
 ui_visible = true;
-ui_last_theme_index = -1;
 
 // Optional input binding toggle
 ui_root.BindCoreInputAction("toggle_debug", new EchoChamberInputBindingKey(vk_f1));
 
 
 // obj_debug_controller: Step
-ui_stats.fps = fps_real;
-ui_stats.room = room_get_name(room);
-ui_stats.pos_x = mouse_x;
-ui_stats.pos_y = mouse_y;
-
-var _t = "";
-_t += "FPS: " + string(ui_stats.fps) + "\n";
-_t += "Room: " + ui_stats.room + "\n";
-_t += "Mouse: (" + string(ui_stats.pos_x) + ", " + string(ui_stats.pos_y) + ")\n";
-_t += "Speed setting: " + string(ui_settings.speed) + "\n";
-_t += "God mode: " + string(ui_settings.god_mode);
-ui_stats_box.SetText(_t);
-
 if (ui_root.InputPressed("toggle_debug")) {
 	ui_visible = !ui_visible;
 	ui_win.SetVisible(ui_visible);
@@ -609,19 +637,6 @@ if (keyboard_check_pressed(vk_f5)) {
 if (keyboard_check_pressed(vk_f9)) {
 	ui_root.LoadLayout();
 	ui_root.ShowToast("Layout loaded", 1200);
-}
-
-if (ui_settings.theme_index != ui_last_theme_index) {
-	ui_last_theme_index = ui_settings.theme_index;
-	var _new_theme;
-	switch (ui_settings.theme_index) {
-		case 0: _new_theme = new EchoChamberThemeMidnightNeon(); break;
-		case 1: _new_theme = new EchoChamberThemeMangoMint(); break;
-		case 2: _new_theme = new EchoChamberThemeSakuraPunch(); break;
-		case 3: _new_theme = new EchoChamberThemeToxicTerminal(); break;
-		default: _new_theme = new EchoChamberThemeMidnightNeon(); break;
-	}
-	ui_root.ApplyTheme(_new_theme);
 }
 
 
