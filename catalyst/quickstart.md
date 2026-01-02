@@ -5,6 +5,18 @@ parent: Catalyst
 nav_order: 1
 ---
 
+
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
+
+1. TOC
+{:toc}
+
+</details>
+</div>
+
 # Catalyst Quickstart
 
 This page walks through the typical steps for using **Catalyst** in a GameMaker project:

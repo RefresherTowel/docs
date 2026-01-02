@@ -5,6 +5,18 @@ parent: Catalyst
 nav_order: 2
 ---
 
+
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
+
+1. TOC
+{:toc}
+
+</details>
+</div>
+
 # Catalyst Advanced Topics
 
 This page covers the more powerful features of **Catalyst**.
@@ -264,9 +276,9 @@ stats.max_hp = new CatalystStatistic(100).SetName("Max HP");
 
 // If not set, base_value would just stay at 100. Instead:
 var _owner = self;
-stats.max_hp.SetBaseFunc(method({ owner: _owner }, function(_stat, _ctx) {
-    var _vit   = owner.stats.vitality.GetValue();  // canonical value
-    var _level = owner.stats.level.GetValue();     // canonical value
+stats.max_hp.SetBaseFunc(method(_owner, function(_stat, _ctx) {
+    var _vit   = stats.vitality.GetValue();  // canonical value
+    var _level = stats.level.GetValue();     // canonical value
     return 50 + _vit * 10 + _level * 5;
 }));
 ```

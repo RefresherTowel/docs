@@ -5,6 +5,18 @@ parent: Catalyst
 nav_order: 4
 ---
 
+
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
+
+1. TOC
+{:toc}
+
+</details>
+</div>
+
 # Catalyst Patterns & Recipes
 
 This page shows some common patterns built with Catalyst, focusing on
@@ -552,7 +564,7 @@ need to touch instance variables inside the callback.
 stats.damage = new CatalystStatistic(10).SetName("Damage");
 
 var _owner = self;
-stats.damage.AddOnChangeFunction(method( _owner, function(_stat, _old, _new) {
+stats.damage.AddOnChangeFunction(method(_owner, function(_stat, _old, _new) {
     ui_damage_text = "Damage: " + string(_new);
 }));
 ```
@@ -573,9 +585,9 @@ stats.spd = new CatalystStatistic(6)
 
 // Whenever max_spd changes, clamp current spd to the new max
 var _owner = self;
-stats.max_spd.AddOnChangeFunction(method({ owner: _owner }, function(_stat, _old, _new) {
-    owner.stats.spd.SetMaxValue(_new);
-    owner.stats.spd.GetValue(); // recompute/clamp
+stats.max_spd.AddOnChangeFunction(method(_owner, function(_stat, _old, _new) {
+    stats.spd.SetMaxValue(_new);
+    stats.spd.GetValue(); // recompute/clamp
 }));
 ```
 

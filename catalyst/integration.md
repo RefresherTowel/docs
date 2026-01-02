@@ -5,6 +5,18 @@ parent: Catalyst
 nav_order: 5
 ---
 
+
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
+
+1. TOC
+{:toc}
+
+</details>
+</div>
+
 # Using Catalyst with Other Frameworks
 
 Catalyst keeps your numbers consistent - stats, modifiers, layers, and

@@ -5,7 +5,22 @@ nav_order: 4              # order among top-level items
 has_children: true        # marks this as a section (still supported)
 ---
 
-# Catalyst - Stats & Modifiers for GameMaker
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
+
+1. TOC
+{:toc}
+
+</details>
+</div>
+
+![Catalyst icon](../assets/catalyst_icon.png)
+{: .text-center}
+
+*Make your stats react*
+{: .text-center}
 
 **Catalyst** is a flexible statistics and modifier engine for GameMaker.
 

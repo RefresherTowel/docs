@@ -5,6 +5,18 @@ parent: Catalyst
 nav_order: 3
 ---
 
+
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
+
+1. TOC
+{:toc}
+
+</details>
+</div>
+
 # Catalyst API Reference
 
 This page lists the main types, enums, and methods provided by **Catalyst**.
