@@ -29,10 +29,7 @@ has_children: true        # marks this as a section (still supported)
 
 Most GameMaker projects start with a humble little `state` variable.
 
-And then, slowly, you add a few flags.
-Then a switch.
-Then a second switch "just for the special case".
-And by the end you have a two-storey high switch block full of special edge cases and workarounds, and now you've got a bug that only appears when you roll into a ladder on Tuesday with 22.5% health exactly and you have to try to disentangle the frankenstein'd code...
+And then, slowly, you add a few flags. Then a switch. Then a second switch "just for the special case". And by the end you have a two-storey high switch block full of special edge cases and workarounds, and now you've got a bug that only appears when you roll into a ladder on Tuesday with 22.5% health exactly and you have to try to disentangle the frankenstein'd code...
 
 Yeah, that's what Statement is here to help with.
 
@@ -44,9 +41,7 @@ You give an object (or a struct) a state machine, define a handful of named stat
 
 ---
 
-> **Statement v1.1 has dropped!**
->
-> Statement now comes with **Statement Lens**, an advanced visual debugger for your state machine!
+> Statement comes with **Statement Lens**, an advanced visual debugger for your state machine!
 >
 > ![Statement Visual Debugger in action!](../assets/visual_debugger_guide/statement_visual_debugger_showoff.gif)
 >
@@ -63,10 +58,10 @@ You give an object (or a struct) a state machine, define a handful of named stat
 
 If you only remember the "shape" of Statement, remember this:
 
-1. Make a machine: `new Statement(self)`
-2. Make states: `new StatementState(self, "Name")`
-3. Add handlers: `AddEnter`, `AddUpdate`, `AddExit`, optional `AddDraw`
-4. Register states: `AddState(state)`
+1. Make a machine: `state_machine = new Statement(self)`
+2. Make states: `state = new StatementState(self, "Name")`
+3. Add handlers: `state.AddEnter`, `state.AddUpdate`, `state.AddExit`, optional `state.AddDraw`
+4. Register states: `state_machine.AddState(state)`
 5. Run it: `state_machine.Update()` (and `state_machine.Draw()` if you want Draw handlers)
 
 That is enough to ship a lot of games.
@@ -77,24 +72,23 @@ That is enough to ship a lot of games.
 
 Statement gives you:
 
-* An easy to declare `Statement` state machine bound to an instance or struct.
-* Named `StatementState` states with inbuilt **Enter / Update / Exit / Draw** handlers (and it is easy to add more handlers if you want).
-* **Chainable methods** so your state setup reads cleanly:
+An easy to declare `Statement` state machine bound to an instance or struct. Named `StatementState` states with inbuilt **Enter / Update / Exit / Draw** handlers (and it is easy to add more handlers if you want). And **Chainable methods** so your state setup reads cleanly:
 
 ```js
 idle_state = new StatementState(self, "Idle")
-    .AddEnter(_enter_func)
-    .AddUpdate(_update_func)
-    .AddExit(_exit_func);
+	.AddEnter(_enter_func)
+	.AddUpdate(_update_func)
+	.AddExit(_exit_func);
 ```
 
-* Built-in **timing** (how long the current state has been active).
-* A pile of optional "only when you need them" features:
+And a pile of optional "only when you need them" features:
 
   * Queued transitions
   * Declarative transitions (conditions that auto-switch)
   * State stacks (Push/Pop)
+  * Nested submachines (host states with child machines)
   * State history
+  * State templates (reuse handlers and transitions)
   * Transition payloads
   * Non interruptible states
   * Pause support
@@ -231,6 +225,9 @@ These are the knobs and levers for when your project starts getting spicy:
 * **State change hook**
   Run a callback whenever the machine changes state (logging, analytics, signals, whatever).
 
+* **Global transition hooks**
+  Listen for any-enter / any-exit / any-transition events on a machine.
+
 * **Custom handlers**
   Add extra handler types beyond Enter/Update/Exit/Draw if you want to integrate with other events.
 
@@ -271,12 +268,12 @@ Minimal example: one machine, one state.
 state_machine = new Statement(self);
 
 var _idle = new StatementState(self, "Idle")
-    .AddEnter(function() {
-        EchoDebugInfo("Entered Idle");
-    })
-    .AddUpdate(function() {
-        image_angle += 1;
-    });
+	.AddEnter(function() {
+		EchoDebugInfo("Entered Idle");
+	})
+	.AddUpdate(function() {
+		image_angle += 1;
+	});
 
 state_machine.AddState(_idle);
 ```
@@ -310,26 +307,26 @@ Two states (`Idle` and `Hurt`), change with payload, read it on enter.
 state_machine = new Statement(self);
 
 var _idle = new StatementState(self, "Idle")
-    .AddUpdate(function() {
-        // Idle code
-    });
+	.AddUpdate(function() {
+		// Idle code
+	});
 
 var _hurt = new StatementState(self, "Hurt")
-    .AddEnter(function() {
-        var _data = state_machine.GetLastTransitionData();
-        if (is_struct(_data)) {
-            EchoDebugInfo("Entered Hurt with damage: " + string(_data.damage_taken));
-        }
-    })
-    .AddUpdate(function() {
-        if (hurt_anim_finished) {
-            state_machine.ChangeState("Idle");
-        }
-    });
+	.AddEnter(function() {
+		var _data = state_machine.GetLastTransitionData();
+		if (is_struct(_data)) {
+			EchoDebugInfo("Entered Hurt with damage: " + string(_data.damage_taken));
+		}
+	})
+	.AddUpdate(function() {
+		if (hurt_anim_finished) {
+			state_machine.ChangeState("Idle");
+		}
+	});
 
 state_machine
-    .AddState(_idle)
-    .AddState(_hurt);
+	.AddState(_idle)
+	.AddState(_hurt);
 ```
 
 **On collision with enemy bullet**

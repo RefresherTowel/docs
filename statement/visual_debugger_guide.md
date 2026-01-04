@@ -28,7 +28,7 @@ nav_order: 3
 
 So, you have a bunch of state machines running around your project causing trouble, and you would like to actually see what those little gremlins are doing rather than guess from a wall of `show_debug_message` calls. That is what Statement Lens is for.
 
-**Statement Lens** is the centre-piece of the **Statement v1.1** update. It is a **fully visual debugger**(!) that draws your machines as clickable graphs, shows you where they are right now, where they have been, and what they are trying to do next. Think of it as a live map of your game logic.
+**Statement Lens** is the centre-piece of the **Statement v1.2** update. It is a **fully visual debugger**(!) that draws your machines as clickable graphs, shows you where they are right now, where they have been, and what they are trying to do next. Think of it as a live map of your game logic.
 
 You do not need Lens to use Statement. You can happily ship a game without ever opening it. But once your project grows past "one or two tiny machines in a jam game", Lens becomes a big quality of life upgrade. It turns a lot of painful "why is this not doing what I think it is doing" moments into "oh, it is stuck in this state because of that edge right there".
 
@@ -45,7 +45,7 @@ You do not have to memorize everything at once. Treat it like a skill tree. Grab
 > Please [**join the discord**](https://discord.gg/8spFZdyvkb) and offer suggestions or features, and detail any bugs you encounter!
 {: .warning}
 
-> Statement Lens is using a very early version of the **Echo Chamber UI**. This is a framework for building interactable debugger tools like Lens, and will be included as part of the Echo framework when it is finished. All RefresherTowel Games frameworks will use this UI to build live debugging tools that help you move fast and fix things easily. You will also be able to set up your own debugging windows quickly, giving you more power to debug your games.
+> Statement Lens ships with its own internal debug UI layer. You do not need to install anything extra; enable `STATEMENT_DEBUG` and wire the Lens update/draw hooks and you are good to go.
 {: .bonus}
 
 ---
@@ -131,8 +131,8 @@ This is technically correct, but it gets old quickly when you have a lot of mach
 
 ```js
 player_sm
-    .SetDebugName("Player movement")
-    .DebugTag("player, movement, core");
+	.SetDebugName("Player movement")
+	.DebugTag("player, movement, core");
 ```
 
 - `SetDebugName(name)` sets the big label used in the machine picker.
@@ -470,7 +470,7 @@ Sometimes you do not want to wait for the machine to naturally walk into a state
 From code, you can jump straight to a state by name:
 
 ```js
-player_sm.DebugJumpToState("Combat.Idle");
+player_sm.DebugJumpToState("CombatIdle");
 ```
 
 `DebugJumpToState(name, [force])` will:
@@ -483,10 +483,10 @@ States can also define a default debug payload:
 
 ```js
 attack_state
-    .DebugPayload({
-        debug_spawn_position: 0,
-        debug_damage_override: 999
-    });
+	.DebugPayload({
+		debug_spawn_position: 0,
+		debug_damage_override: 999
+	});
 ```
 
 If you define a default payload like that, the visualiser will use it when you jump to this state from the UI. That lets you set up a "debug default context" without bolting on special case code.

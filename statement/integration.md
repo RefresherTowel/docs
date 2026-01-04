@@ -58,10 +58,12 @@ In a controller or in the object that owns the machine:
 /// obj_player Create
 state_machine = new Statement(self);
 
-PulseSubscribe(id, SIG_ENTER_COMBAT, function(_data) {
-    state_machine.ChangeState("Combat");
-});
+PulseSubscribe(id, SIG_ENTER_COMBAT, method(self, function(_data) {
+	state_machine.ChangeState("Combat", _data);
+}));
 ```
+
+`PulseSubscribe` callbacks are not auto-bound, so `method(self, ...)` keeps the handler scoped to the owning instance.
 
 Elsewhere in the game:
 
@@ -87,20 +89,20 @@ For example, broadcasting an event whenever a new state is entered:
 state_machine = new Statement(self);
 
 var _idle = new StatementState(self, "Idle")
-    .AddEnter(function() {
-        PulseSend(SIG_STATE_CHANGED, {
-            owner          : id,
-            new_state_name : "Idle"
-        });
-    });
+	.AddEnter(function() {
+		PulseSend(SIG_STATE_CHANGED, {
+			owner          : id,
+			new_state_name : "Idle"
+		});
+	});
 
 var _combat = new StatementState(self, "Combat")
-    .AddEnter(function() {
-        PulseSend(SIG_STATE_CHANGED, {
-            owner          : id,
-            new_state_name : "Combat"
-        });
-    });
+	.AddEnter(function() {
+		PulseSend(SIG_STATE_CHANGED, {
+			owner          : id,
+			new_state_name : "Combat"
+		});
+	});
 
 state_machine.AddState(_idle);
 state_machine.AddState(_combat);
@@ -129,8 +131,8 @@ Or build it into a helper:
 
 ```js
 function StateChangeLogged(_sm, _name) {
-    EchoDebugInfo("State change -> " + _name, ["Statement"]);
-    _sm.ChangeState(_name);
+	EchoDebugInfo("State change -> " + _name, ["Statement"]);
+	_sm.ChangeState(_name);
 }
 ```
 
@@ -143,13 +145,13 @@ Use `EchoDebugInfo` inside `AddEnter` and `AddUpdate` callbacks:
 
 ```js
 var _combat = new StatementState(self, "Combat")
-    .AddEnter(function() {
-        EchoDebugInfo("Entered Combat", ["Statement"]);
-    })
-    .AddUpdate(function() {
-        EchoDebugInfo("Combat.Update - hp=" + string(stats.hp.GetValue()), ["Statement"]);
-        // combat logic here
-    });
+	.AddEnter(function() {
+		EchoDebugInfo("Entered Combat", ["Statement"]);
+	})
+	.AddUpdate(function() {
+		EchoDebugInfo("Combat.Update - hp=" + string(stats.hp.GetValue()), ["Statement"]);
+		// combat logic here
+	});
 ```
 
 Combined with `EchoDebugSetLevel(__ECHO_eDebugLevel.COMPLETE);` in your

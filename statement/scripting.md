@@ -68,6 +68,21 @@ If `owner` is neither an existing instance nor a struct, the constructor logs a 
 
 ---
 
+#### `StatementStateTemplate(name)`
+
+Create a reusable template for building `StatementState` instances.
+
+```js
+var idle_template = new StatementStateTemplate("Idle");
+```
+
+- `name`: `String`  
+- **Returns:** `Struct.StatementStateTemplate`
+
+Templates store handlers, transitions, and debug metadata that can be applied to multiple states. Build states with `template.Build(owner, [config], [name], [clone])` or `Statement.AddStateTemplate(...)`.
+
+---
+
 #### `eStatementEvents`
 
 Event slots used by states.
@@ -209,6 +224,25 @@ Set `auto_enter_first_state` to false if you want to delay entry until you call 
 If a state with the same name already exists, it is replaced (with a warning).
 
 Requires a state struct built from `StatementState`.
+
+---
+
+#### `AddStateTemplate(template, [config], [name], [clone])`
+
+Build a state from a `StatementStateTemplate` and add it to this machine.
+
+```js
+state_machine.AddStateTemplate(idle_template);
+state_machine.AddStateTemplate(idle_template, { speed: 2 }, "IdleFast");
+```
+
+- `template`: `Struct.StatementStateTemplate`  
+- `config` *(optional)*: `Any` - config payload for the built state.  
+- `name` *(optional)*: `String` - override the template's state name.  
+- `clone` *(optional)*: `Bool` - override the template's config cloning.  
+- **Returns:** `Struct.Statement`
+
+Uses this machine's `owner` when building the state. Logs a severe debug message if the template is invalid.
 
 ---
 
@@ -606,6 +640,35 @@ idle.AddDraw(function() {
 
 - `fn`: `Function` - automatically `method(owner, fn)` bound.
 - **Returns:** `Struct.StatementState`
+
+---
+
+#### `SetConfig(config, [clone])`
+
+Assign configuration data to this state, optionally cloning the input.
+
+```js
+state.SetConfig({ speed: 2 });
+state.SetConfig(config, false); // keep reference (no clone)
+```
+
+- `config`: `Any`  
+- `clone` *(optional)*: `Bool` - override this state's config clone setting.  
+- **Returns:** `Struct.StatementState`
+
+By default, state config is cloned when assigned. Use `StatementStateTemplate.SetConfigClone` to change the default for template-built states.
+
+---
+
+#### `GetConfig()`
+
+Get the current config data for this state.
+
+```js
+var _cfg = state.GetConfig();
+```
+
+- **Returns:** `Any` or `Undefined`
 
 ---
 
@@ -1220,6 +1283,102 @@ Called after the old state's `Exit`, after `state` is updated, and before new st
 
 ---
 
+#### `AddAnyExitHook(fn)`
+
+Register a hook that runs whenever any state exits.
+
+```js
+state_machine.AddAnyExitHook(function(_from, _to, _data, _force, _meta) {
+    // ...
+});
+```
+
+- `fn`: `Function` - automatically `method(owner, fn)` bound.  
+- **Returns:** `Struct.Statement`
+
+Hook signature: `fn(from_state, to_state, data, force, meta)`.  
+`meta` is a struct `{ via_queue, via_push, via_pop, via_debug }`.
+
+Runs after the old state's `Exit` and before the machine switches to the new state.
+
+---
+
+#### `AddAnyEnterHook(fn)`
+
+Register a hook that runs whenever any state enters.
+
+```js
+state_machine.AddAnyEnterHook(function(_to, _from, _data, _force, _meta) {
+    // ...
+});
+```
+
+- `fn`: `Function` - automatically `method(owner, fn)` bound.  
+- **Returns:** `Struct.Statement`
+
+Hook signature: `fn(to_state, from_state, data, force, meta)`.  
+`meta` is a struct `{ via_queue, via_push, via_pop, via_debug }`.
+
+Runs after the machine switches to the new state and before the new state's `Enter` handler.
+
+---
+
+#### `AddAnyTransitionHook(fn)`
+
+Register a hook that runs whenever a transition completes.
+
+```js
+state_machine.AddAnyTransitionHook(function(_from, _to, _data, _force, _meta) {
+    // ...
+});
+```
+
+- `fn`: `Function` - automatically `method(owner, fn)` bound.  
+- **Returns:** `Struct.Statement`
+
+Hook signature: `fn(from_state, to_state, data, force, meta)`.  
+`meta` is a struct `{ via_queue, via_push, via_pop, via_debug }`.
+
+Runs after the machine switches to the new state and before the new state's `Enter` handler.
+
+---
+
+#### `ClearAnyExitHooks()`
+
+Clear all any-exit hooks on this machine.
+
+```js
+state_machine.ClearAnyExitHooks();
+```
+
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `ClearAnyEnterHooks()`
+
+Clear all any-enter hooks on this machine.
+
+```js
+state_machine.ClearAnyEnterHooks();
+```
+
+- **Returns:** `Struct.Statement`
+
+---
+
+#### `ClearAnyTransitionHooks()`
+
+Clear all any-transition hooks on this machine.
+
+```js
+state_machine.ClearAnyTransitionHooks();
+```
+
+- **Returns:** `Struct.Statement`
+
+---
+
 ### Low-Level Event Running
 
 Behind the scenes, each Statement state uses an array indexed with enums to decide what handler to run. For instance, `Update()`, runs the handler stored in the array position indexed by `eStatementEvents.STEP`. In most circumstances, you don't need to worry about this stuff, simply use `Update()` / `Draw()` and it will be handled automatically.
@@ -1269,7 +1428,7 @@ if (!idle.HasStateEvent(eStatementEvents.ANIMATION_END)) {
 }
 ```
 
-- `event`: `Real` - one of the `eStatementEvents` values (`ENTER`, `EXIT`, `STEP`, `DRAW`).
+- `event`: `Real` - one of the `eStatementEvents` values (including custom entries you add).
 - **Returns:** `Bool`
 
 ---
@@ -1280,7 +1439,8 @@ if (!idle.HasStateEvent(eStatementEvents.ANIMATION_END)) {
 
 **Animation End Event**
 ```js
-if (state_machine.GetState().HasStateEvent(eStatementEvents.ANIMATION_END)) {
+var _state = state_machine.GetState();
+if (!is_undefined(_state) && _state.HasStateEvent(eStatementEvents.ANIMATION_END)) {
     state_machine.RunState(eStatementEvents.ANIMATION_END);
 }
 ```
@@ -1461,6 +1621,205 @@ state.TimerKill();
 ```
 
 - **Returns:** `Struct.StatementState`
+
+---
+
+### State Templates (Advanced)
+
+State templates let you define reusable state logic (events, transitions, debug metadata) and then build multiple `StatementState` instances from that template.
+
+---
+
+#### `SetConfigClone(enabled)`
+
+Control whether config is deep-cloned when building states from this template.
+
+```js
+template.SetConfigClone(true);
+```
+
+- `enabled`: `Bool`
+- **Returns:** `Struct.StatementStateTemplate`
+
+Default is true.
+
+---
+
+#### `AddStateEvent(event, fn)`
+
+Bind a handler to a template event slot.
+
+```js
+template.AddStateEvent(eStatementEvents.ENTER, function() {
+    // ...
+});
+```
+
+- `event`: `Real` - one of the `eStatementEvents` values (including custom entries you add).  
+- `fn`: `Function`  
+- **Returns:** `Struct.StatementStateTemplate`
+
+Handlers are stored unbound; when you call `Build`, they are attached to the new state and bound to the owner.
+
+---
+
+#### `AddEnter(fn)`
+
+Bind an Enter handler to this template.
+
+```js
+template.AddEnter(function() {
+    // ...
+});
+```
+
+- `fn`: `Function`  
+- **Returns:** `Struct.StatementStateTemplate`
+
+---
+
+#### `AddUpdate(fn)`
+
+Bind an Update/Step handler to this template.
+
+```js
+template.AddUpdate(function() {
+    // ...
+});
+```
+
+- `fn`: `Function`  
+- **Returns:** `Struct.StatementStateTemplate`
+
+---
+
+#### `AddExit(fn)`
+
+Bind an Exit handler to this template.
+
+```js
+template.AddExit(function() {
+    // ...
+});
+```
+
+- `fn`: `Function`  
+- **Returns:** `Struct.StatementStateTemplate`
+
+---
+
+#### `AddDraw(fn)`
+
+Bind a Draw handler to this template.
+
+```js
+template.AddDraw(function() {
+    // ...
+});
+```
+
+- `fn`: `Function`  
+- **Returns:** `Struct.StatementStateTemplate`
+
+---
+
+#### `AddTransition(target_name, condition, [data], [force])`
+
+Add a declarative transition to this template.
+
+```js
+template.AddTransition("Run", function() {
+    return abs(hsp) > 0.1;
+});
+```
+
+- `target_name`: `String`  
+- `condition`: `Function` - stored unbound and later bound to the owner when built.  
+- `data` *(optional)*: `Any`  
+- `force` *(optional)*: `Bool`  
+- **Returns:** `Struct.StatementStateTemplate`
+
+---
+
+#### `ClearTransitions()`
+
+Clear all declarative transitions defined on this template.
+
+```js
+template.ClearTransitions();
+```
+
+- **Returns:** `Struct.StatementStateTemplate`
+
+---
+
+#### `DebugLinkTo(target_name)`
+
+Declare a debug-only link from this template to another state for the visualiser.
+
+```js
+template.DebugLinkTo("Attack");
+```
+
+- `target_name`: `String`  
+- **Returns:** `Struct.StatementStateTemplate`
+
+---
+
+#### `DebugPayload(payload)`
+
+Set a default payload used when jumping to this state via debug tools.
+
+```js
+template.DebugPayload({ damage: 10 });
+```
+
+- `payload`: `Any`  
+- **Returns:** `Struct.StatementStateTemplate`
+
+---
+
+#### `DebugBreakOnEnter([break_on_enter])`
+
+Enable or disable "break on enter" for this template in debug builds.
+
+```js
+template.DebugBreakOnEnter();
+```
+
+- `break_on_enter` *(optional)*: `Bool` - Defaults to true.  
+- **Returns:** `Struct.StatementStateTemplate`
+
+---
+
+#### `DebugTag(tag)`
+
+Assign a tag (or comma-separated tags) for grouping/filtering in debug UIs.
+
+```js
+template.DebugTag("Combat");
+```
+
+- `tag`: `String`  
+- **Returns:** `Struct.StatementStateTemplate`
+
+---
+
+#### `Build(owner, [config], [name], [clone])`
+
+Build a new `StatementState` instance from this template.
+
+```js
+var _state = template.Build(self, { speed: 2 }, "IdleFast");
+```
+
+- `owner`: `Id.Instance` or `Struct`  
+- `config` *(optional)*: `Any`  
+- `name` *(optional)*: `String` - override the template's state name.  
+- `clone` *(optional)*: `Bool` - override the template's config cloning.  
+- **Returns:** `Struct.StatementState` or `Undefined`
+
+When built, all template handlers/transitions are applied to the state and bound to the owner. Use `Statement.AddStateTemplate(...)` to build-and-add in one step.
 
 ---
 
@@ -1842,7 +2201,7 @@ StatementLensUpdate();
 
 #### `StatementLensInputPressed(action_id)`
 
-Return true if a Statement Lens action is pressed in the active Echo Chamber input context.
+Return true if a Statement Lens action is pressed in the active input context.
 
 ```js
 if (StatementLensInputPressed(STATEMENT_LENS_ACTION_NEXT_MACHINE)) {
@@ -1854,8 +2213,8 @@ if (StatementLensInputPressed(STATEMENT_LENS_ACTION_NEXT_MACHINE)) {
 - **Returns:** `Bool`
 
 Action ids are defined as `STATEMENT_LENS_ACTION_*` macros in `scr_statement_macro`.
-Returns false if no active Echo Chamber root is available.
-Default bindings are provided by `STATEMENT_LENS_BIND_*` macros and use input binding structs built from `EchoChamberInputBindingKey`.
+Returns false if no active input root is available.
+Default bindings are provided by `STATEMENT_LENS_BIND_*` macros and use the matching input binding structs they define.
 
 ---
 
@@ -1873,16 +2232,17 @@ StatementLensDraw();
 
 #### `StatementLensOpen(ui_root)`
 
-Open or create the Statement Lens window inside the Echo Debug UI desktop.
+Open or create the Statement Lens window inside the debug UI root.
 
 ```js
-StatementLensOpen(global.EchoDesktop);
+var _ui_root = global.__statement_lens_root;
+StatementLensOpen(_ui_root);
 ```
 
-- `ui_root`: `Struct.EchoChamberRoot`
-- **Returns:** `Struct.EchoChamberWindow` or `Undefined`
+- `ui_root`: `Struct` - your debug UI root struct.
+- **Returns:** `Struct` or `Undefined`
 
-Requires an Echo Chamber root struct built from `EchoChamberRoot`.
+Requires a compatible UI root struct from your debug UI host.
 Returns `Undefined` if STATEMENT_DEBUG is false or `ui_root` is invalid.
 
 ---

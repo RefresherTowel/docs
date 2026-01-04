@@ -40,12 +40,12 @@ This page shows how to use Statement in practice, split into:
 state_machine = new Statement(self);
 
 var _idle = new StatementState(self, "Idle")
-    .AddEnter(function() {
-        EchoDebugInfo("Entered Idle");
-    })
-    .AddUpdate(function() {
-        image_angle += 1;
-    });
+	.AddEnter(function() {
+		EchoDebugInfo("Entered Idle");
+	})
+	.AddUpdate(function() {
+		image_angle += 1;
+	});
 
 state_machine.AddState(_idle);
 ```
@@ -76,39 +76,40 @@ state_machine = new Statement(self);
 
 // Idle
 var _idle = new StatementState(self, "Idle")
-    .AddEnter(function() {
-        sprite_index = spr_player_idle;
-        hsp = vsp = 0;
-    })
-    .AddUpdate(function() {
-        if (keyboard_check_pressed(vk_anykey)) {
-            state_machine.ChangeState("Move");
-        }
-    });
+	.AddEnter(function() {
+		sprite_index = spr_player_idle;
+		hsp = 0;
+		vsp = 0;
+	})
+	.AddUpdate(function() {
+		if (keyboard_check_pressed(vk_anykey)) {
+			state_machine.ChangeState("Move");
+		}
+	});
 
 // Move
 var _move = new StatementState(self, "Move")
-    .AddEnter(function() {
-        sprite_index = spr_player_move;
-    })
-    .AddUpdate(function() {
-        var _dx = keyboard_check(ord("D")) - keyboard_check(ord("A"));
-        var _dy = keyboard_check(ord("S")) - keyboard_check(ord("W"));
+	.AddEnter(function() {
+		sprite_index = spr_player_move;
+	})
+	.AddUpdate(function() {
+		var _dx = keyboard_check(ord("D")) - keyboard_check(ord("A"));
+		var _dy = keyboard_check(ord("S")) - keyboard_check(ord("W"));
 
-        hsp = _dx * 4;
-        vsp = _dy * 4;
+		hsp = _dx * 4;
+		vsp = _dy * 4;
 
-        x += hsp;
-        y += vsp;
+		x += hsp;
+		y += vsp;
 
-        if (_dx == 0 && _dy == 0) {
-            state_machine.ChangeState("Idle");
-        }
-    });
+		if (_dx == 0 && _dy == 0) {
+			state_machine.ChangeState("Idle");
+		}
+	});
 
 state_machine
-    .AddState(_idle)
-    .AddState(_move);
+	.AddState(_idle)
+	.AddState(_move);
 ```
 
 **Step Event**
@@ -129,16 +130,16 @@ Now if you press any key while in the Idle state, it will transition to the Move
 
 ```js
 var _attack = new StatementState(self, "Attack")
-    .AddEnter(function() {
-        sprite_index = spr_player_attack;
-        image_index = 0;
-    })
-    .AddUpdate(function() {
-        // Stay in Attack for 20 Update ticks (scaled by time scale)
-        if (state_machine.GetStateTime() >= 20) {
-            state_machine.ChangeState("Idle");
-        }
-    });
+	.AddEnter(function() {
+		sprite_index = spr_player_attack;
+		image_index = 0;
+	})
+	.AddUpdate(function() {
+		// Stay in Attack for 20 Update ticks (scaled by time scale)
+		if (state_machine.GetStateTime() >= 20) {
+			state_machine.ChangeState("Idle");
+		}
+	});
 
 state_machine.AddState(_attack);
 ```
@@ -153,29 +154,29 @@ Because `state_machine` resets `state_age` automatically on state change, you do
 
 ```js
 var _move = new StatementState(self, "Move")
-    .AddUpdate(function() {
-        // movement logic...
+	.AddUpdate(function() {
+		// movement logic...
 
-        if (mouse_check_button_pressed(mb_left)) {
-            // Queue an attack; actual change happens at next Update
-            state_machine.QueueState("Attack");
-        }
-    });
+		if (mouse_check_button_pressed(mb_left)) {
+			// Queue an attack; actual change happens at next Update
+			state_machine.QueueState("Attack");
+		}
+	});
 
 var _attack = new StatementState(self, "Attack")
-    .AddEnter(function() {
-        sprite_index = spr_player_attack;
-        image_index = 0;
-    })
-    .AddUpdate(function() {
-        if (image_index >= image_number - 1) {
-            state_machine.ChangeState("Idle");
-        }
-    });
+	.AddEnter(function() {
+		sprite_index = spr_player_attack;
+		image_index = 0;
+	})
+	.AddUpdate(function() {
+		if (image_index >= image_number - 1) {
+			state_machine.ChangeState("Idle");
+		}
+	});
 
 state_machine
-    .AddState(_move)
-    .AddState(_attack);
+	.AddState(_move)
+	.AddState(_attack);
 ```
 
 Because transitions are queued, the rest of the current event runs with the **old** state, and `Attack` starts cleanly next frame.
@@ -189,7 +190,7 @@ If you want explicit control over when queued transitions happen:
 **Create Event**
 ```js
 state_machine = new Statement(self)
-    .SetQueueAutoProcessing(false);
+	.SetQueueAutoProcessing(false);
 ```
 
 **Step Event**
@@ -211,9 +212,10 @@ You can pause automatic processing (Update/queue/declarative transitions) while 
 ```js
 // e.g., global pause toggle
 if (game_paused) {
-    state_machine.SetPaused(true);
-} else {
-    state_machine.SetPaused(false);
+	state_machine.SetPaused(true);
+}
+else {
+	state_machine.SetPaused(false);
 }
 
 // Step Event
@@ -235,35 +237,36 @@ state_machine = new Statement(self);
 
 // Pause overlay
 var _pause = new StatementState(self, "Pause")
-    .AddEnter(function() {
-        hsp = vsp = 0;
-    })
-    .AddUpdate(function() {
-        if (keyboard_check_pressed(vk_escape)) {
-            state_machine.PopState();
-        }
-    })
-    .AddDraw(function() {
-        draw_set_alpha(0.5);
-        draw_rectangle(0, 0, display_get_gui_width(), display_get_gui_height(), false);
-        draw_set_alpha(1);
-        draw_text(32, 32, "PAUSED");
-    });
+	.AddEnter(function() {
+		hsp = 0;
+		vsp = 0;
+	})
+	.AddDraw(function() {
+		draw_set_alpha(0.5);
+		draw_rectangle(0, 0, display_get_gui_width(), display_get_gui_height(), false);
+		draw_set_alpha(1);
+		draw_text(32, 32, "PAUSED");
+	});
 
 state_machine.AddState(_pause);
 ```
 
 **Step Event**
 ```js
-if (keyboard_check_released(vk_escape)
-&& state_machine.GetStateName() != "Pause") {
-    state_machine.PushState("Pause");
+if (keyboard_check_pressed(vk_escape)) {
+	if (state_machine.GetStateName() == "Pause") {
+		state_machine.PopState();
+	}
+	else {
+		state_machine.PushState("Pause");
+	}
 }
 
 state_machine.Update();
+```
 
-
-/// Draw
+**Draw Event**
+```js
 state_machine.Draw();
 ```
 
@@ -279,36 +282,37 @@ state_machine.Draw();
 state_machine = new Statement(self);
 
 charge = new StatementState(self, "Charge")
-    .AddEnter(function() {
-        charge.TimerStart(); // per-state timer
-    })
-    .AddUpdate(function() {
-        // Charge for at least 60 time units, regardless of how often Update runs
-        if (charge.TimerGet() >= 60) {
-            state_machine.ChangeState("Release");
-        }
-    });
+	.AddEnter(function() {
+		charge.TimerStart(); // per-state timer
+	})
+	.AddUpdate(function() {
+		// Charge for at least 60 time units, regardless of how often Update runs
+		if (charge.TimerGet() >= 60) {
+			state_machine.ChangeState("Release");
+		}
+	});
 
 release = new StatementState(self, "Release")
-    .AddEnter(function() {
-        // some effect...
-    })
-    .AddUpdate(function() {
-        // ...
-    });
+	.AddEnter(function() {
+		// some effect...
+	})
+	.AddUpdate(function() {
+		// ...
+	});
 
 state_machine
-    .AddState(charge)
-    .AddState(release);
+	.AddState(charge)
+	.AddState(release);
 ```
 
 You can pause and restart the per-state timer:
 
 ```js
 if (game_is_paused) {
-    charge.TimerPause();
-} else {
-    charge.TimerRestart();
+	charge.TimerPause();
+}
+else {
+	charge.TimerRestart();
 }
 ```
 
@@ -321,9 +325,15 @@ Almost all of the time you can rely on `GetStateTime()` on the machine instead a
 ### 9. State Change Hook for Logging & Signals
 
 ```js
-state_machine.SetStateChangeBehaviour(method(self, function() {
-    EchoDebugInfo("State changed to: " + string(state_machine.GetStateName()));
-    // You could also emit a signal here, update UI, etc.
+state_machine.SetStateChangeBehaviour(method(self, function(_from_state, _data) {
+	var _from_name = "none";
+	if (is_struct(_from_state)) {
+		_from_name = _from_state.name;
+	}
+
+	var _to_name = state_machine.GetStateName();
+	EchoDebugInfo("State change: " + _from_name + " -> " + string(_to_name));
+	// You could also emit a signal here, update UI, etc.
 }));
 ```
 
@@ -344,20 +354,20 @@ Add transitions to a state that fire automatically when conditions pass. They ar
 
 ```js
 var _run = new StatementState(self, "Run")
-    .AddUpdate(function() {
-        // run logic...
-    })
-    .AddTransition("Idle", function() {
-        return abs(hsp) < 0.05; // condition bound to owner via method()
-    })
-    .AddTransition("Jump", function() {
-        return keyboard_check_pressed(vk_space);
-    });
+	.AddUpdate(function() {
+		// run logic...
+	})
+	.AddTransition("Idle", function() {
+		return abs(hsp) < 0.05; // condition bound to owner via method()
+	})
+	.AddTransition("Jump", function() {
+		return keyboard_check_pressed(vk_space);
+	});
 ```
 
 - Transitions are checked in the order they were added; the first that returns `true` fires.
 - You can attach a payload via `ChangeState` or by providing `data` in `AddTransition`, then read it in the next state's `Enter` via `GetLastTransitionData()`.
-- If you need to disable automatic evaluation (for custom ordering), set `SetQueueAutoProcessing(false)` and call `EvaluateTransitions()` manually.
+- Declarative transitions always evaluate at the end of `Update()`. If you need a different ordering, move the condition into your `AddUpdate` logic and call `ChangeState` directly.
 
 ---
 
@@ -366,21 +376,25 @@ var _run = new StatementState(self, "Run")
 Carry data across transitions and avoid redundant changes.
 
 ```js
+var _hitstun = new StatementState(self, "Hitstun")
+	.AddEnter(function() {
+		var _payload = state_machine.GetLastTransitionData();
+		if (is_struct(_payload)) {
+			hp -= _payload.damage;
+		}
+	});
+
+state_machine.AddState(_hitstun);
+
 // When taking damage, carry a payload into the new state.
 state_machine.ChangeState("Hitstun", { damage: last_damage });
 
-// In the Hitstun state's Enter
-hitstun.AddEnter(function() {
-    var _payload = state_machine.GetLastTransitionData();
-    if (is_struct(_payload)) hp -= _payload.damage;
-});
-
-// Only change if not already in Idle
+// Only change if not already in Idle (assuming Idle is registered)
 state_machine.EnsureState("Idle");
 
 // Quick checks
 if (state_machine.IsInState("Attack")) {
-    // do something
+	// do something
 }
 ```
 
@@ -395,12 +409,12 @@ You can define your own event index and bind/run it manually. For example, add a
 **`scr_statement_macro` Script**
 ```js
 enum eStatementEvents {
-    ENTER,
-    EXIT,
-    STEP,
-    DRAW,
-    ANIMATION_END, // custom
-    NUM            // keep NUM last
+	ENTER,
+	EXIT,
+	STEP,
+	DRAW,
+	ANIMATION_END, // custom
+	NUM            // keep NUM last
 }
 ```
 
@@ -411,14 +425,14 @@ In Create, bind a handler for that event:
 state_machine = new Statement(self);
 
 var _attack = new StatementState(self, "Attack")
-    .AddEnter(function() {
-        sprite_index = spr_player_attack;
-        image_index = 0;
-    })
-    .AddStateEvent(eStatementEvents.ANIMATION_END, function() {
-        // Transition when the attack animation finishes
-        state_machine.ChangeState("Idle");
-    });
+	.AddEnter(function() {
+		sprite_index = spr_player_attack;
+		image_index = 0;
+	})
+	.AddStateEvent(eStatementEvents.ANIMATION_END, function() {
+		// Transition when the attack animation finishes
+		state_machine.ChangeState("Idle");
+	});
 
 state_machine.AddState(_attack);
 ```
@@ -427,8 +441,9 @@ In the Animation End event of the object, run the custom event if present:
 
 **Animation End Event**
 ```js
-if (state_machine.GetState().HasStateEvent(eStatementEvents.ANIMATION_END)) {
-    state_machine.RunState(eStatementEvents.ANIMATION_END);
+var _state = state_machine.GetState();
+if (!is_undefined(_state) && _state.HasStateEvent(eStatementEvents.ANIMATION_END)) {
+	state_machine.RunState(eStatementEvents.ANIMATION_END);
 }
 ```
 
@@ -443,8 +458,8 @@ If you're queuing transitions manually, you can inspect or clear the pending cha
 ```js
 /// Debug overlay
 if (state_machine.HasQueuedState()) {
-    var _queued = state_machine.GetQueuedStateName();
-    draw_text(16, 16, "Queued state: " + string(_queued));
+	var _queued = state_machine.GetQueuedStateName();
+	draw_text(16, 16, "Queued state: " + string(_queued));
 }
 
 /// Cancel a queued change (e.g., input cancelled)
@@ -464,10 +479,10 @@ var _prev = state_machine.GetPreviousStateName();
 // All history entries
 var _count = state_machine.GetHistoryCount();
 for (var i = 0; i < _count; ++i) {
-    var _st = state_machine.GetHistoryAt(i);
-    if (!is_undefined(_st)) {
-        draw_text(16, 48 + i * 16, "History " + string(i) + ": " + _st.name);
-    }
+	var _st = state_machine.GetHistoryAt(i);
+	if (!is_undefined(_st)) {
+		draw_text(16, 48 + i * 16, "History " + string(i) + ": " + _st.name);
+	}
 }
 
 // Quick debug dump
@@ -492,6 +507,29 @@ state_machine.Destroy();
 // Global nuke of all state timers across machines (e.g., when reloading a run)
 StatementStateKillTimers();
 ```
+
+---
+
+### 16. State templates for reuse
+
+State templates let you define handlers and transitions once, then build multiple states from the same blueprint.
+
+```js
+var _attack_template = new StatementStateTemplate("Attack")
+	.AddEnter(function() {
+		image_index = 0;
+	})
+	.AddUpdate(function() {
+		if (image_index >= image_number - 1) {
+			state_machine.ChangeState("Idle");
+		}
+	});
+
+state_machine.AddStateTemplate(_attack_template, { damage: 4 }, "AttackLight");
+state_machine.AddStateTemplate(_attack_template, { damage: 8 }, "AttackHeavy");
+```
+
+Inside a handler, read the current state's config with `state_machine.GetState().GetConfig()` if you need template-specific data.
 
 ---
 
