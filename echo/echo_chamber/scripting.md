@@ -117,6 +117,7 @@ Root container for debug UI panels and controls.
 - `BringWindowToFront(_window_or_id)`: Bring a window (or id) to the front of the z-order.
 - `BringWindowToFrontById(_id)`: Bring a window to the front by id.
 - `SendWindowToBack(_window_or_id)`: Send a window (or id) to the back of the z-order.
+- `BringWindowsBack()`: Bring all windows back into view so their title bars remain accessible.
 - `SetWindowZIndex(_window_or_id, _index)`: Set a window z-order index (0 = back, last = front).
 - `SetModalWindow(_window_or_id)`: Set the modal window (blocks input to other windows).
 - `ClearModalWindow()`: Clear the current modal window.
@@ -152,7 +153,7 @@ Root container for debug UI panels and controls.
 - `DrawPanelCollapseHandle(_panel)`: Draw a collapse handle for a panel (if it supports collapsing).
 - `SetTextInputSource(_fn)`: Set a function that returns the current active text input string. If not set, keyboard_string is used.
 - `SetTextInputSeed(_fn)`: Set a function that seeds the active text input string when focusing. If not set, keyboard_string is used.
-- `FocusTextInput(_id, _initial_text, _placeholder, _commit_fn)`: Focus a text input by id and seed its initial content. Optional _commit_fn is called with the final string on blur.
+- `FocusTextInput(_id, _initial_text, _placeholder, _commit_fn, _config)`: Focus a text input by id and seed its initial content. Optional _commit_fn is called with the final string on blur.
 - `BlurTextInput(_id)`: Blur a focused text input by id. Returns the final string (after syncing from the text source).
 - `IsActiveTextInput(_id)`: Returns true if the given id is the currently focused text input.
 - `GetActiveText()`: Return the current active text string while a text input is focused.
@@ -178,6 +179,7 @@ Floating debug window that owns a collection of docked panels.
 - `ApplyTheme(_theme)`: Apply a theme override to this window and its children.
 - `ClearThemeOverride()`: Clear the window theme override (reverts to the root theme).
 - `SetPadding(_value)`: Set the content padding for this window.
+- `SetMargin(_x, [_y])`: Set the outer margin for this window in GUI-space.
 - `SetTitlebarHeight(_value)`: Set the titlebar height for this window.
 - `SetTitlebarAuto(_flag)`: Set whether the titlebar height is driven by the current theme.
 - `SetResizeGripSize(_value)`: Set the resize grip size for this window.
@@ -203,7 +205,8 @@ Floating debug window that owns a collection of docked panels.
 - `GetHeight()`: Get the current window height (in GUI-space).
 - `SetMinSize(_w, _h)`: Set minimum width and height for this window.
 - `SetMaxSize(_w, _h)`: Set maximum width and height for this window.
-- `FitToContent([_root])`: Automatically resizes the window to fit the content. Please note: If you have set a rectangle size (`SetRect()`) or a minimum / maximum window size (`SetMinSize()` / `SetMaxSize()`) those will override the autofit.
+- `FitToContent([_root])`: Resize the window once to fit current content. Please note: If you have set a rectangle size (`SetRect()`) or a minimum / maximum window size (`SetMinSize()` / `SetMaxSize()`) those will override the autofit.
+- `SetAutoFit(_flag)`: When enabled, future layout changes auto-fit the window (batches defer until EndLayoutBatch).
 - `AddPanel(_panel)`: Add a top-level panel to this window. Requires a panel built from `EchoChamberPanel`.
 - `RemovePanel(_panel_or_id)`: Remove a panel from this window (top-level or nested).
 - `ClearPanels()`: Remove all panels from this window.
@@ -242,6 +245,7 @@ Layout panel docked to an edge or fill.
 - `SetScrollable(_flag)`: Enable or disable vertical scrolling for this panel.
 - `SetScrollState(_state)`: Assign a scroll state for this panel (used when scrollable).
 - `SetPadding(_value)`: Set panel content padding.
+- `SetMargin(_x, [_y])`: Set panel outer margin in GUI-space.
 - `SetGap(_value)`: Set panel control gap spacing.
 - `SetRowHeight(_value)`: Set panel row height for controls.
 - `SetCollapsedSize(_value)`: Set collapsed dock thickness for this panel.
@@ -277,6 +281,8 @@ Base type for all debug UI controls.
 - `GetWindow()`: Get the owning window for this control (if attached).
 - `GetPanel()`: Get the owning panel for this control (if attached).
 - `SetPreferredWidth(_width)`: Set a preferred pixel width for this control when arranged in a row panel.
+- `SetPadding(_x, [_y])`: Set inner padding for this control.
+- `SetMargin(_x, [_y])`: Set outer margin for this control.
 - `SetLabel(_text)`: Set the control's display label (used by controls that render a label).
 - `SetTooltip(_text)`: Set the control tooltip (shown on hover where supported).
 - `SetControlStyleKey(_style)`: Set the theme style key for this control (e.g. button/toggle/dropdown styles).
@@ -305,9 +311,10 @@ Non-interactive text box that wraps text to its width.
 
 **Public methods**
 - `SetText(_text)`: Set the text content for this box.
+- `BindText(_source, [_key_or_fn])`: Bind the text content to a struct field or getter function.
 - `SetAlign(_align)`: Set text alignment ("left", "center", "right").
 - `UseSmallFont(_flag)`: Use the smaller theme font.
-- `SetPadding(_x, _y)`: Set inner padding for the text box.
+- `SetPadding(_x, [_y])`: Set inner padding for the text box.
 - `SetFillWidth(_flag)`: Set whether this box fills the available row width.
 
 ### `EchoChamberButton(_id)`
@@ -318,6 +325,7 @@ Clickable button.
 
 **Public methods**
 - `OnClick(_fn)`: Set a callback to run when the button is activated.
+- `BindLabel(_source, [_key_or_fn])`: Bind the button label to a struct field or getter function.
 
 ### `EchoChamberSlider(_id)`
 Horizontal slider control.
@@ -352,6 +360,14 @@ Single-line text input.
 - `BindText(_struct, _key)`: Bind the text input to a struct field.
 - `SetPlaceholder(_text)`: Set placeholder text shown when empty.
 - `OnChange(_fn)`: Set a callback that runs when text is committed.
+- `SetReadOnly(_flag)`: Toggle read-only mode.
+- `SetMaxLength(_len)`: Set the maximum number of characters (0 for unlimited).
+- `SetAllowedChars(_chars)`: Restrict input to a specific set of characters.
+- `SetDeniedChars(_chars)`: Reject characters in the given set.
+- `SetNumericOnly(_flag, [_allow_decimal], [_allow_negative])`: Restrict input to numeric characters.
+- `SetSelectAllOnFocus(_flag)`: Select all text when the input gains focus.
+- `SetFilter(_fn)`: Provide a filter function for inserted text.
+- `SetInvalid(_flag)`: Toggle invalid styling.
 
 ### `EchoChamberSeparator(_id)`
 Non-interactive separator line.
@@ -370,8 +386,15 @@ Virtualized list view control for very large row counts. Draws and hit-tests onl
 
 **Public methods**
 - `SetRowHeight(_h)`: Set row height in pixels.
+- `SetVisibleRows(_rows)`: Set a visible row count (auto height from row height).
+- `SetAutoHeightFromCount(_max_rows)`: Auto-size to row count up to a maximum.
+- `SetAutoWidthFromContent(_max_rows)`: Auto-size width from row content (sample limit).
+- `SetFillWidth(_flag)`: Toggle fill width for row layouts.
+- `SetPreferredHeight(_h)`: Set the preferred height for FitToContent.
+- `SetPreferredWidth(_w)`: Set the preferred width for FitToContent.
 - `SetCountGetter(_fn)`: Set a function that returns the row count.
 - `SetRowDrawer(_fn)`: Set a function that draws a row.
+- `SetRowMeasure(_fn)`: Set a function that returns row text/width for auto width.
 - `SetOnSelect(_fn)`: Set a callback that runs when selection changes.
 - `SetOnActivate(_fn)`: Set a callback that runs when a row is activated.
 - `SetOnDoubleClick(_fn)`: Set a callback for double click on a row.

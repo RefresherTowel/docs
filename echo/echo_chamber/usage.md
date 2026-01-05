@@ -33,23 +33,15 @@ And yes, it is debug-first. That doesn't mean you can't use it for a pause menu 
 
 ---
 
-## The tiniest possible setup
+## A small setup
 
-Let's start with the absolute minimum:
-
-1) Make a root.
-2) Make a window.
-3) Call `RunDesktop()` every frame in Draw GUI.
-
-Why Draw GUI? Because Echo Chamber is GUI-space UI. You want it to behave like UI, not like a world-space object that accidentally scales with your camera or gets clipped by the room.
+Let's build up a little window that allows you to do some simple things:
 
 Create a controller object (I usually call it something like `obj_debug_controller`) and drop it into your room.
 
 ### Create event
 
 ```js
-// obj_debug_controller: Create
-
 // We'll bind controls to this struct, because binding is lovely and callbacks are optional.
 ui_settings = {
 	speed: 4,
@@ -58,27 +50,16 @@ ui_settings = {
 	difficulty_index: 1,
 };
 
-// Theme -> Root
-var _theme = new EchoChamberThemeMidnightNeon();
-ui_root = new EchoChamberRoot(_theme);
-// Note: if you have ECHO_DEBUG_ENABLED set to true in the scr_echo script file, you do not need to create a root. Echo automatically creates a root and saves it in global.__echo_chamber_root
-// so you can just simply go: ui_root = global.__echo_chamber_root;
+ui_root = global.__echo_chamber_root;
+// Note: if you have ECHO_DEBUG_ENABLED set to false in the scr_echo script file, you will need to create a root like this:
+// ui_root = new EchoChamberRoot(_theme);
+// And then manually draw it in the Draw GUI Event like this:
+// ui_root.RunDesktop();
 
-// Optional, but you'll thank yourself later.
-ui_root.SetPersistenceFile("echo_chamber_demo.ini");
-ui_root.SetPersistenceSection("demo");
-
-// Root -> Window
-ui_win = ui_root.CreateWindow("demo_main");
-ui_win.SetTitle("Echo Chamber Demo");
-ui_win.SetRect(40, 40, 560, 540);
-```
-
-### Draw GUI event
-
-```js
-// obj_debug_controller: Draw GUI
-ui_root.RunDesktop();
+// First we create a window from the root
+ui_win = ui_root.CreateWindow("demo_main")
+	.SetTitle("Echo Chamber Demo")
+	.SetAutoFit(true);
 ```
 
 Done and dusted. If you run the game now you won't see much (because we haven't added panels or controls yet), but the desktop runner is alive.
@@ -101,22 +82,23 @@ Add this after the `ui_win` creation in the Create event.
 
 ```js
 // Panels
-var _panel_top = new EchoChamberPanel("top_bar", eEchoChamberDock.TOP);
-_panel_top.SetSizeMode(eEchoChamberPanelSizeMode.FIXED);
-_panel_top.SetSize(32);
-_panel_top.SetFlowMode(eEchoChamberPanelFlow.ROW);
-_panel_top.SetGap(6);
+var _panel_top = new EchoChamberPanel("top_bar", eEchoChamberDock.TOP)
+	.SetSizeMode(eEchoChamberPanelSizeMode.FIXED)
+	.SetSize(32)
+	.SetFlowMode(eEchoChamberPanelFlow.ROW)
+	.SetGap(6);
+// Each panel needs to be added to the window we created
 ui_win.AddPanel(_panel_top);
 
-var _panel_left = new EchoChamberPanel("left", eEchoChamberDock.LEFT);
-_panel_left.SetSizeMode(eEchoChamberPanelSizeMode.FIXED);
-_panel_left.SetSize(200);
-_panel_left.SetFlowMode(eEchoChamberPanelFlow.COLUMN);
-_panel_left.SetCollapseMode(eEchoChamberCollapse.TO_LEFT);
+var _panel_left = new EchoChamberPanel("left", eEchoChamberDock.LEFT)
+	.SetSizeMode(eEchoChamberPanelSizeMode.FIXED)
+	.SetSize(200)
+	.SetFlowMode(eEchoChamberPanelFlow.COLUMN)
+	.SetCollapseMode(eEchoChamberCollapse.TO_LEFT);
 ui_win.AddPanel(_panel_left);
 
-var _panel_main = new EchoChamberPanel("main", eEchoChamberDock.FILL);
-_panel_main.SetFlowMode(eEchoChamberPanelFlow.COLUMN);
+var _panel_main = new EchoChamberPanel("main", eEchoChamberDock.FILL)
+	.SetFlowMode(eEchoChamberPanelFlow.COLUMN);
 ui_win.AddPanel(_panel_main);
 ```
 
@@ -135,13 +117,17 @@ Echo Chamber controls are little structs. You create them, configure them, then 
 ### A toolbar button
 
 ```js
-var _owner = self;
-var _btn_console = new EchoChamberButton("btn_console");
-_btn_console.SetLabel("Console");
-_btn_console.OnClick(method(_owner, function() {
-	EchoChamberOpenConsole(ui_root);
-	ui_root.ShowToast("Console opened", 1200);
-}));
+// We create a button, give it some text (the label) and then provide it with a function it will
+// run when it is clicked
+var _btn_console = new EchoChamberButton("btn_console")
+	.SetLabel("Console")
+	.OnClick(method(self, function() {
+		EchoChamberOpenConsole(ui_root);
+		// ShowToast is a nice little feature on the root, that creates a little popup in the bottom right corner briefly
+		ui_root.ShowToast("Console opened", 1200);
+	}));
+
+// And like with adding the panels to the window, we need to add the button to a panel
 _panel_top.AddControl(_btn_console);
 ```
 
@@ -152,46 +138,57 @@ This is where the real action happens.
 Binding means the control writes straight into a struct field for you. No custom Step code, no "did I forget to sync the slider" nonsense.
 
 ```js
-var _lbl_left = new EchoChamberLabel("lbl_left");
-_lbl_left.SetText("Quick settings");
-_lbl_left.UseSmallFont(false);
+// A label is just a little bit of text
+var _lbl_left = new EchoChamberLabel("lbl_left")
+	.SetText("Quick settings")
+	.UseSmallFont(false);
 _panel_left.AddControl(_lbl_left);
 
-_panel_left.AddControl(new EchoChamberSeparator("sep_left").SetOrientation("horizontal"));
+// We'll add a separater after the label
+var _sep = new EchoChamberSeparator("sep_left")
+	.SetOrientation("horizontal");
+_panel_left.AddControl(_sep);
 
-var _sld_speed = new EchoChamberSlider("sld_speed");
-_sld_speed.SetLabel("Speed");
-_sld_speed.SetRange(0, 12);
-_sld_speed.SetStep(1);
-_sld_speed.BindValue(ui_settings, "speed");
-_sld_speed.SetTooltip("Tweak movement speed without recompiling your brain");
+// Now we get to something meaty, we want to create a slider, give it a range and how much each "tick" of
+// slider movement is (an change of 1) in this case, and finally, we want to "bind" it to the struct we setup
+// at the very start of this example. ui_settings is the name of the struct, and "speed" is the name of the
+// variable inside the struct that we want the slider to change. The ui_settings.speed is now bound to this
+// slider, and changing the value of the slider automatically changes the value of ui_settings.speed, so in-game
+// we can just read ui_settings.speed when we move the player, and the players movement speed will change
+// when we change the sliders value.
+var _sld_speed = new EchoChamberSlider("sld_speed")
+	.SetLabel("Speed")
+	.SetRange(0, 12)
+	.SetStep(1)
+	.BindValue(ui_settings, "speed")
+	.SetTooltip("Tweak movement speed without recompiling your brain");
 _panel_left.AddControl(_sld_speed);
 
-var _tgl_god = new EchoChamberToggle("tgl_god");
-_tgl_god.SetLabel("God mode");
-_tgl_god.BindBool(ui_settings, "god_mode");
+// Same goes for the rest of these settings, we bind them to one of the variables stored in ui_settings, and
+// they become linked.
+var _tgl_god = new EchoChamberToggle("tgl_god")
+	.SetLabel("God mode")
+	.BindBool(ui_settings, "god_mode");
 _panel_left.AddControl(_tgl_god);
 
-var _txt_name = new EchoChamberTextInput("txt_name");
-_txt_name.SetLabel("Player name");
-_txt_name.SetPlaceholder("Type a name...");
-_txt_name.BindText(ui_settings, "player_name");
+var _txt_name = new EchoChamberTextInput("txt_name")
+	.SetLabel("Player name")
+	.SetPlaceholder("Type a name...")
+	.BindText(ui_settings, "player_name");
 _panel_left.AddControl(_txt_name);
 
-var _dd_diff = new EchoChamberDropdownSelect("dd_diff");
-_dd_diff.SetLabel("Difficulty");
-_dd_diff.SetOptions(["Easy", "Normal", "Hard", "Nightmare"]);
-_dd_diff.BindIndex(ui_settings, "difficulty_index");
+var _dd_diff = new EchoChamberDropdownSelect("dd_diff")
+	.SetLabel("Difficulty")
+	.SetOptions(["Easy", "Normal", "Hard", "Nightmare"])
+	.BindIndex(ui_settings, "difficulty_index");
 _panel_left.AddControl(_dd_diff);
 ```
 
 A small note on tooltips:
 
-Echo Chamber's tooltip system is request based. Controls that support hovering will ask the root for a tooltip, and the root will handle the delay and drawing.
+Echo Chamber's tooltip system is request based. Controls that support hovering will ask the root for a tooltip, and the root will handle the delay and drawing. So you just set the tooltip text on the control and move on with your life.
 
-So you just set the tooltip text on the control and move on with your life.
-
-> If you are using `FitToContent()` while adding lots of controls, wrap the adds in `BeginLayoutBatch()`/`EndLayoutBatch()` to avoid repeated size calculations. EndLayoutBatch will refit once if anything changed.
+> If you are using `SetAutoFit(true)` while adding lots of controls, wrap the adds in `BeginLayoutBatch()`/`EndLayoutBatch()` to avoid repeated size calculations. EndLayoutBatch will refit once if anything changed.
 {: .note}
 
 ---
@@ -204,42 +201,60 @@ But wait a minute. Debug UI isn't just knobs, it's visibility. You want to see w
 
 Let's make a simple "stats" panel that reads from your own data.
 
-For this example, we'll bind a few labels to live getters instead of pushing text in Step.
+For this example, we'll bind a few labels to live getters instead of pushing text in Step (which might be what you naively want to do).
 
 Add this in Create:
 
 ```js
-var _lbl_main = new EchoChamberLabel("lbl_main");
-_lbl_main.SetText("Live stats");
+// Again, just a label and a separator to begin with
+var _lbl_main = new EchoChamberLabel("lbl_main")
+	.SetText("Live stats");
 _panel_main.AddControl(_lbl_main);
 
-_panel_main.AddControl(new EchoChamberSeparator("sep_main").SetOrientation("horizontal"));
+var _sep = new EchoChamberSeparator("sep_main")
+	.SetOrientation("horizontal");
+_panel_main.AddControl();
 
-_panel_main.AddControl(new EchoChamberLabel("lbl_fps").BindText(function() {
-	return "FPS: " + string(fps_real);
-}));
+// Now we create a label, but this time, we "bind" its text to a function. Whatever that function
+// returns is what the label will show. We return an fps string here.
+var _lbl_fps = new EchoChamberLabel("lbl_fps")
+	.BindText(function() {
+		return "FPS: " + string(fps_real);
+	});
+_panel_main.AddControl(_lbl_fps);
 
-_panel_main.AddControl(new EchoChamberLabel("lbl_room").BindText(function() {
-	return "Room: " + room_get_name(room);
-}));
+// Here we return the name of the current room
+var _lbl_rm = new EchoChamberLabel("lbl_room")
+	.BindText(function() {
+		return "Room: " + room_get_name(room);
+	})
+_panel_main.AddControl(_lbl_rm);
 
-_panel_main.AddControl(new EchoChamberLabel("lbl_mouse").BindText(function() {
-	return "Mouse: (" + string(mouse_x) + ", " + string(mouse_y) + ")";
-}));
+// Mouse position
+var _lbl_mouse = new EchoChamberLabel("lbl_mouse")
+	.BindText(function() {
+		return "Mouse: (" + string(mouse_x) + ", " + string(mouse_y) + ")";
+	});
+_panel_main.AddControl(_lbl_mouse);
 
-var _owner = self;
-_panel_main.AddControl(new EchoChamberLabel("lbl_speed").BindText(method(_owner, function() {
-	return "Speed setting: " + string(ui_settings.speed);
-})));
+// And in this label, we read the speed vairable from the ui_settings struct we have.
+var _lbl_spd = new EchoChamberLabel("lbl_speed")
+	.BindText(method(self, function() {
+		return "Speed setting: " + string(ui_settings.speed);
+	}));
+_panel_main.AddControl(_lbl_spd);
 
-_panel_main.AddControl(new EchoChamberLabel("lbl_god").BindText(method(_owner, function() {
-	return "God mode: " + string(ui_settings.god_mode);
-})));
+// And here we read god mode
+var _lbl_god = new EchoChamberLabel("lbl_god")
+	.BindText(method(self, function() {
+		return "God mode: " + string(ui_settings.god_mode);
+	}));
+_panel_main.AddControl(_lbl_god);
 ```
 
 Is this the fanciest inspector on the planet? Nah.
 
-But it's honest. It's the exact pattern you'll use in a real tool:
+But it's useful and it's the exact pattern you'll use in a real tool:
 
 - bind controls to your settings struct
 - bind labels to live getters so you don't need a sync Step loop
@@ -252,9 +267,16 @@ Ah, here we go. Persistence.
 
 Echo Chamber can save and load window layout, z-order, and panel state to an INI file. The only catch is important:
 
-You must create/register your windows and panels first, then call `LoadLayout()`.
+You must create/register all your windows and panels first, and only THEN call `LoadLayout()`.
 
-So, at the end of your Create event, do this:
+So, at the start of the Create event, after you have set the `ui_root` variable, add this:
+
+```js
+ui_root.SetPersistenceFile("echo_chamber_demo.ini");
+ui_root.SetPersistenceSection("demo");
+```
+
+And then at the very end of your Create event, after you've added all the windows, panels, buttons, labels, etc, add this:
 
 ```js
 ui_root.LoadLayout();
@@ -288,38 +310,40 @@ That means theme swapping is extremely straightforward: `ApplyTheme()`.
 
 Here's a cheeky little way to do it with a dropdown.
 
-Add a field:
+Add this to our Create Event:
 
 ```js
+// We need a variable to track what theme we are currently using
 ui_settings.theme_index = 0;
-```
 
-Add this control to the top bar (after the console button):
+// And we want a dropdown list that we can use to change the theme
+var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
+	.SetLabel("Theme")
+	// We give it an array of options to display
+	.SetOptions([
+		"MidnightNeon",
+		"MangoMint",
+		"SakuraPunch",
+		"ToxicTerminal",
+	])
+	// Again, bind the dropdown to our ui_settings struct
+	.BindIndex(ui_settings, "theme_index")
+	// And when one of the options from the dropdown is selected, we want to apply the new theme to the root
+	.OnChange(method(self, function(_index, _value) {
+		// The function is always provided with _index and _value, so we'll always want to
+		// base our functions around those.
+		var _new_theme;
+		switch (_index) {
+			case 0: _new_theme = new EchoChamberThemeMidnightNeon(); break;
+			case 1: _new_theme = new EchoChamberThemeMangoMint(); break;
+			case 2: _new_theme = new EchoChamberThemeSakuraPunch(); break;
+			case 3: _new_theme = new EchoChamberThemeToxicTerminal(); break;
+			default: _new_theme = new EchoChamberThemeMidnightNeon(); break;
+		}	
 
-```js
-var _owner = self;
-var _dd_theme = new EchoChamberDropdownSelect("dd_theme");
-_dd_theme.SetLabel("Theme");
-_dd_theme.SetOptions([
-	"MidnightNeon",
-	"MangoMint",
-	"SakuraPunch",
-	"ToxicTerminal",
-]);
-_dd_theme.BindIndex(ui_settings, "theme_index");
-_dd_theme.OnChange(method(_owner, function(_index, _value) {
-	var _new_theme;
-	switch (_index) {
-		case 0: _new_theme = new EchoChamberThemeMidnightNeon(); break;
-		case 1: _new_theme = new EchoChamberThemeMangoMint(); break;
-		case 2: _new_theme = new EchoChamberThemeSakuraPunch(); break;
-		case 3: _new_theme = new EchoChamberThemeToxicTerminal(); break;
-		default: _new_theme = new EchoChamberThemeMidnightNeon(); break;
-	}
-
-	ui_root.ApplyTheme(_new_theme);
-	ui_root.ShowToast("Theme applied", 1000);
-}));
+		ui_root.ApplyTheme(_new_theme);
+		ui_root.ShowToast("Theme applied", 1000);
+	}))
 _panel_top.AddControl(_dd_theme);
 ```
 
@@ -333,10 +357,13 @@ Ok, so how do you toggle your debugger on and off?
 
 This is totally fine for most projects:
 
+### Create Event
+
 ```js
-// obj_debug_controller: Create
 ui_visible = true;
 ```
+
+### Step Event
 
 ```js
 if (keyboard_check_pressed(vk_f1)) {
@@ -356,10 +383,12 @@ Echo Chamber has input contexts with inheritance. This is a fancy way of saying:
 Bind a default action in Create:
 
 ```js
+// We create a new input binding, so we can toggle the debug window with F2
+// The actual toggle happens in the step event
 ui_root.BindCoreInputAction("toggle_debug", new EchoChamberInputBindingKey(vk_f1));
 ```
 
-Then check it somewhere you run every frame (Step is fine):
+Then check it in the Step Event:
 
 ```js
 if (ui_root.InputPressed("toggle_debug")) {
@@ -368,19 +397,21 @@ if (ui_root.InputPressed("toggle_debug")) {
 }
 ```
 
-Nice. You can keep adding tool actions without turning your Step event into a keybinding spaghetti festival. If you need per-window overrides, create a context with `CreateInputContext` and assign it with `SetInputContext`, then call `InputPressed` with the window to enforce focus.
+Nice. You can keep adding tool actions without turning your Step event into a keybinding spaghetti festival. If you need per-window overrides, create a context with `CreateInputContext` and assign it with `SetInputContext`, then call `InputPressed` with the window, instead of the root, to enforce focus.
 
 ---
 
-## Batch layout updates (FitToContent without churn)
+## Batch layout updates (SetAutoFit without churn)
 
-If you're adding or moving lots of controls, you can batch the layout work so `FitToContent()` only runs once at the end.
+If you're adding or moving lots of controls, you can batch the layout work so that the autofitting that occurs for each addition when `SetAutoFit()` is true for a window gets deferred and only runs once at the end of the batch.
 
 ```js
-ui_win.FitToContent(); // size to the current content
-ui_win.BeginLayoutBatch();
+// This is just reinforcing that we have SetAutoFit set to true
+ui_win.SetAutoFit(true);
 
-_panel_main.ClearControls();
+ui_win.BeginLayoutBatch();
+// I'm just condensing the creation of the labels here, so we don't have to define a new local variable each time, mainly
+// for speed of typing, lol
 _panel_main.AddControl(new EchoChamberLabel("lbl_a").SetText("A"));
 _panel_main.AddControl(new EchoChamberLabel("lbl_b").SetText("B"));
 _panel_main.AddControl(new EchoChamberLabel("lbl_c").SetText("C"));
@@ -417,7 +448,7 @@ These work on direct controls unless otherwise noted (nested panels are handled 
 
 ## Modal windows
 
-If you want a single window to temporarily own all input, set it as modal:
+If you want a single window to temporarily own all input, set it as modal (this would live in some "action" like a keypress or whatever):
 
 ```js
 ui_root.SetModalWindow(ui_win); // all other windows ignore input
@@ -435,12 +466,11 @@ Modal windows always stay on top and block input to other windows.
 
 ## A quick word on overlays, dropdowns, and context menus
 
-If you've ever built dropdown menus in GM by hand, you already know the vibe:
+If you've ever built dropdown menus in GM by hand, you already know the pains:
 
-- "where do I draw it"
-- "how do I close it"
-- "why is it appearing behind other things"
-- "why does it eat input even after I click away"
+- "how do I keep it on top of everything else?"
+- "how do I close it properly"
+- "why do clicks bleed through to stuff underneath"
 
 Echo Chamber handles all that with the root overlay system.
 
@@ -462,6 +492,7 @@ This control uses callbacks, so bind them with `method` and carry any instance d
 Add a little fake log to your object:
 
 ```js
+// We want a lot of log lines to show in this list, so we'll generate some dummy data
 ui_log = [];
 for (var _i = 0; _i < 2000; _i++) {
 	ui_log[_i] = "Log line " + string(_i);
@@ -471,20 +502,22 @@ for (var _i = 0; _i < 2000; _i++) {
 Add a list view to the main panel:
 
 ```js
-var _owner = self;
-var _list = new EchoChamberListView("list_log");
-_list.SetRowHeight(18);
-_list.SetCountGetter(method(_owner, function() {
-	return array_length(ui_log);
-}));
+// Create a list view control, give it a default row height and a function that lets us count how many rows there are
+var _list = new EchoChamberListView("list_log")
+	.SetRowHeight(18)
+	.SetCountGetter(method(self, function() {
+		return array_length(ui_log);
+	}));
 
-_list.SetRowDrawer(method(_owner, function(_row_index, _row_rect, _is_selected, _is_hover) {
+// We need to draw the rows manually (this is so that the list can virtualise rows that are offscreen)
+_list.SetRowDrawer(method(self, function(_row_index, _row_rect, _is_selected, _is_hover) {
 	var _x = _row_rect.x1;
 	var _y = _row_rect.y1;
 	draw_text(_x + 6, _y + 2, ui_log[_row_index]);
 }));
 
-_list.SetOnSelect(method(_owner, function(_index) {
+// And we can also provide a function that is called when a row is selected
+_list.SetOnSelect(method(self, function(_index) {
 	ui_root.ShowToast("Selected row " + string(_index), 800);
 }));
 
@@ -495,140 +528,254 @@ Even if you don't use this directly, it's worth knowing it exists because it pow
 
 ---
 
-## The whole thing (one object, three events)
+## The whole thing (one object, two events)
 
 If you just want the complete demo lump so you can paste it, here's a compact version.
 
 > This is demo code. Rename ids, split things up, and make it nice for your actual project.
 {: .note}
 
+### Create Event
+
 ```js
-// obj_debug_controller: Create
+// We'll bind controls to this struct, because binding is lovely and callbacks are optional.
 ui_settings = {
 	speed: 4,
 	god_mode: false,
 	player_name: "Drew",
 	difficulty_index: 1,
-	theme_index: 0,
 };
 
-var _theme = new EchoChamberThemeMidnightNeon();
-ui_root = new EchoChamberRoot(_theme);
+ui_root = global.__echo_chamber_root;
+// Note: if you have ECHO_DEBUG_ENABLED set to false in the scr_echo script file, you will need to create a root like this:
+// ui_root = new EchoChamberRoot(_theme);
+
+// Setup persistence (saving/loading layout)
 ui_root.SetPersistenceFile("echo_chamber_demo.ini");
 ui_root.SetPersistenceSection("demo");
 
-ui_win = ui_root.CreateWindow("demo_main");
-ui_win.SetTitle("Echo Chamber Demo");
-ui_win.SetRect(40, 40, 560, 540);
+// First we create a window from the root
+ui_win = ui_root.CreateWindow("demo_main")
+	.SetTitle("Echo Chamber Demo")
+	.SetAutoFit(true);
 
-var _panel_top = new EchoChamberPanel("top_bar", eEchoChamberDock.TOP);
-_panel_top.SetSizeMode(eEchoChamberPanelSizeMode.FIXED);
-_panel_top.SetSize(32);
-_panel_top.SetFlowMode(eEchoChamberPanelFlow.ROW);
-_panel_top.SetGap(6);
+// Panels
+var _panel_top = new EchoChamberPanel("top_bar", eEchoChamberDock.TOP)
+	.SetSizeMode(eEchoChamberPanelSizeMode.FIXED)
+	.SetSize(32)
+	.SetFlowMode(eEchoChamberPanelFlow.ROW)
+	.SetGap(6);
+// Each panel needs to be added to the window we created
 ui_win.AddPanel(_panel_top);
 
-var _panel_left = new EchoChamberPanel("left", eEchoChamberDock.LEFT);
-_panel_left.SetSizeMode(eEchoChamberPanelSizeMode.FIXED);
-_panel_left.SetSize(200);
-_panel_left.SetFlowMode(eEchoChamberPanelFlow.COLUMN);
-_panel_left.SetCollapseMode(eEchoChamberCollapse.TO_LEFT);
+var _panel_left = new EchoChamberPanel("left", eEchoChamberDock.LEFT)
+	.SetSizeMode(eEchoChamberPanelSizeMode.FIXED)
+	.SetSize(200)
+	.SetFlowMode(eEchoChamberPanelFlow.COLUMN)
+	.SetCollapseMode(eEchoChamberCollapse.TO_LEFT);
 ui_win.AddPanel(_panel_left);
 
 var _panel_main = new EchoChamberPanel("main", eEchoChamberDock.FILL);
-_panel_main.SetFlowMode(eEchoChamberPanelFlow.COLUMN);
+	.SetFlowMode(eEchoChamberPanelFlow.COLUMN);
 ui_win.AddPanel(_panel_main);
 
-var _owner = self;
-var _btn_console = new EchoChamberButton("btn_console");
-_btn_console.SetLabel("Console");
-_btn_console.OnClick(method(_owner, function() {
-	EchoChamberOpenConsole(ui_root);
-	ui_root.ShowToast("Console opened", 1200);
-}));
+// We create a button, give it some text (the label) and then provide it with a function it will
+// run when it is clicked
+var _btn_console = new EchoChamberButton("btn_console")
+	.SetLabel("Console")
+	.OnClick(method(self, function() {
+		EchoChamberOpenConsole(ui_root);
+		// ShowToast is a nice little feature on the root, that creates a little popup in the bottom right corner briefly
+		ui_root.ShowToast("Console opened", 1200);
+	}));
+
+// And like with adding the panels to the window, we need to add the button to a panel
 _panel_top.AddControl(_btn_console);
 
-var _dd_theme = new EchoChamberDropdownSelect("dd_theme");
-_dd_theme.SetLabel("Theme");
-_dd_theme.SetOptions(["MidnightNeon", "MangoMint", "SakuraPunch", "ToxicTerminal"]);
-_dd_theme.BindIndex(ui_settings, "theme_index");
-_dd_theme.OnChange(method(_owner, function(_index, _value) {
-	var _new_theme;
-	switch (_index) {
-		case 0: _new_theme = new EchoChamberThemeMidnightNeon(); break;
-		case 1: _new_theme = new EchoChamberThemeMangoMint(); break;
-		case 2: _new_theme = new EchoChamberThemeSakuraPunch(); break;
-		case 3: _new_theme = new EchoChamberThemeToxicTerminal(); break;
-		default: _new_theme = new EchoChamberThemeMidnightNeon(); break;
-	}
-	ui_root.ApplyTheme(_new_theme);
-	ui_root.ShowToast("Theme applied", 1000);
-}));
-_panel_top.AddControl(_dd_theme);
+// A label is just a little bit of text
+var _lbl_left = new EchoChamberLabel("lbl_left")
+	.SetText("Quick settings")
+	.UseSmallFont(false);
+_panel_left.AddControl(_lbl_left);
 
-_panel_left.AddControl(new EchoChamberLabel("lbl_left").SetText("Quick settings"));
-_panel_left.AddControl(new EchoChamberSeparator("sep_left").SetOrientation("horizontal"));
+// We'll add a separater after the label
+var _sep = new EchoChamberSeparator("sep_left")
+	.SetOrientation("horizontal");
+_panel_left.AddControl(_sep);
 
-var _sld_speed = new EchoChamberSlider("sld_speed");
-_sld_speed.SetLabel("Speed");
-_sld_speed.SetRange(0, 12);
-_sld_speed.SetStep(1);
-_sld_speed.BindValue(ui_settings, "speed");
+// Now we get to something meaty, we want to create a slider, give it a range and how much each "tick" of
+// slider movement is (an change of 1) in this case, and finally, we want to "bind" it to the struct we setup
+// at the very start of this example. ui_settings is the name of the struct, and "speed" is the name of the
+// variable inside the struct that we want the slider to change. The ui_settings.speed is now bound to this
+// slider, and changing the value of the slider automatically changes the value of ui_settings.speed, so in-game
+// we can just read ui_settings.speed when we move the player, and the players movement speed will change
+// when we change the sliders value.
+var _sld_speed = new EchoChamberSlider("sld_speed")
+	.SetLabel("Speed")
+	.SetRange(0, 12)
+	.SetStep(1)
+	.BindValue(ui_settings, "speed")
+	.SetTooltip("Tweak movement speed without recompiling your brain");
 _panel_left.AddControl(_sld_speed);
 
-var _tgl_god = new EchoChamberToggle("tgl_god");
-_tgl_god.SetLabel("God mode");
-_tgl_god.BindBool(ui_settings, "god_mode");
+// Same goes for the rest of these settings, we bind them to one of the variables stored in ui_settings, and
+// they become linked.
+var _tgl_god = new EchoChamberToggle("tgl_god")
+	.SetLabel("God mode")
+	.BindBool(ui_settings, "god_mode");
 _panel_left.AddControl(_tgl_god);
 
-var _txt_name = new EchoChamberTextInput("txt_name");
-_txt_name.SetLabel("Player name");
-_txt_name.SetPlaceholder("Type a name...");
-_txt_name.BindText(ui_settings, "player_name");
+var _txt_name = new EchoChamberTextInput("txt_name")
+	.SetLabel("Player name")
+	.SetPlaceholder("Type a name...")
+	.BindText(ui_settings, "player_name");
 _panel_left.AddControl(_txt_name);
 
-var _dd_diff = new EchoChamberDropdownSelect("dd_diff");
-_dd_diff.SetLabel("Difficulty");
-_dd_diff.SetOptions(["Easy", "Normal", "Hard", "Nightmare"]);
-_dd_diff.BindIndex(ui_settings, "difficulty_index");
+var _dd_diff = new EchoChamberDropdownSelect("dd_diff")
+	.SetLabel("Difficulty")
+	.SetOptions(["Easy", "Normal", "Hard", "Nightmare"])
+	.BindIndex(ui_settings, "difficulty_index");
 _panel_left.AddControl(_dd_diff);
 
-_panel_main.AddControl(new EchoChamberLabel("lbl_main").SetText("Live stats"));
-_panel_main.AddControl(new EchoChamberSeparator("sep_main").SetOrientation("horizontal"));
+// Again, just a label and a separator to begin with
+var _lbl_main = new EchoChamberLabel("lbl_main")
+	.SetText("Live stats");
+_panel_main.AddControl(_lbl_main);
 
-_panel_main.AddControl(new EchoChamberLabel("lbl_fps").BindText(function() {
-	return "FPS: " + string(fps_real);
-}));
+var _sep = new EchoChamberSeparator("sep_main")
+	.SetOrientation("horizontal");
+_panel_main.AddControl();
 
-_panel_main.AddControl(new EchoChamberLabel("lbl_room").BindText(function() {
-	return "Room: " + room_get_name(room);
-}));
+// Now we create a label, but this time, we "bind" its text to a function. Whatever that function
+// returns is what the label will show. We return an fps string here.
+var _lbl_fps = new EchoChamberLabel("lbl_fps")
+	.BindText(function() {
+		return "FPS: " + string(fps_real);
+	});
+_panel_main.AddControl(_lbl_fps);
 
-_panel_main.AddControl(new EchoChamberLabel("lbl_mouse").BindText(function() {
-	return "Mouse: (" + string(mouse_x) + ", " + string(mouse_y) + ")";
-}));
+// Here we return the name of the current room
+var _lbl_rm = new EchoChamberLabel("lbl_room")
+	.BindText(function() {
+		return "Room: " + room_get_name(room);
+	})
+_panel_main.AddControl(_lbl_rm);
 
-_panel_main.AddControl(new EchoChamberLabel("lbl_speed").BindText(method(_owner, function() {
-	return "Speed setting: " + string(ui_settings.speed);
-})));
+// Mouse position
+var _lbl_mouse = new EchoChamberLabel("lbl_mouse")
+	.BindText(function() {
+		return "Mouse: (" + string(mouse_x) + ", " + string(mouse_y) + ")";
+	});
+_panel_main.AddControl(_lbl_mouse);
 
-_panel_main.AddControl(new EchoChamberLabel("lbl_god").BindText(method(_owner, function() {
-	return "God mode: " + string(ui_settings.god_mode);
-})));
+// And in this label, we read the speed vairable from the ui_settings struct we have.
+var _lbl_spd = new EchoChamberLabel("lbl_speed")
+	.BindText(method(self, function() {
+		return "Speed setting: " + string(ui_settings.speed);
+	}));
+_panel_main.AddControl(_lbl_spd);
 
-ui_root.LoadLayout();
+// And here we read god mode
+var _lbl_god = new EchoChamberLabel("lbl_god")
+	.BindText(method(self, function() {
+		return "God mode: " + string(ui_settings.god_mode);
+	}));
+_panel_main.AddControl(_lbl_god);
+
+// We need a variable to track what theme we are currently using
+ui_settings.theme_index = 0;
+
+// And we want a dropdown list that we can use to change the theme
+var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
+	.SetLabel("Theme")
+	// We give it an array of options to display
+	.SetOptions([
+		"MidnightNeon",
+		"MangoMint",
+		"SakuraPunch",
+		"ToxicTerminal",
+	])
+	// Again, bind the dropdown to our ui_settings struct
+	.BindIndex(ui_settings, "theme_index")
+	// And when one of the options from the dropdown is selected, we want to apply the new theme to the root
+	.OnChange(method(self, function(_index, _value) {
+		// The function is always provided with _index and _value, so we'll always want to
+		// base our functions around those.
+		var _new_theme;
+		switch (_index) {
+			case 0: _new_theme = new EchoChamberThemeMidnightNeon(); break;
+			case 1: _new_theme = new EchoChamberThemeMangoMint(); break;
+			case 2: _new_theme = new EchoChamberThemeSakuraPunch(); break;
+			case 3: _new_theme = new EchoChamberThemeToxicTerminal(); break;
+			default: _new_theme = new EchoChamberThemeMidnightNeon(); break;
+		}	
+
+		ui_root.ApplyTheme(_new_theme);
+		ui_root.ShowToast("Theme applied", 1000);
+	}))
+_panel_top.AddControl(_dd_theme);
+
 ui_visible = true;
 
-// Optional input binding toggle
-ui_root.BindCoreInputAction("toggle_debug", new EchoChamberInputBindingKey(vk_f1));
+// We create a new input binding, so we can toggle the debug window with F2
+// The actual toggle happens in the step event
+ui_root.BindCoreInputAction("toggle_debug", new EchoChamberInputBindingKey(vk_f2));
 
+// A batch add, which skips autofitting until the batch is ended
+ui_win.BeginLayoutBatch();
+// I'm just condensing the creation of the labels here, so we don't have to define a new local variable each time, mainly
+// for speed of typing, lol
+_panel_main.AddControl(new EchoChamberLabel("lbl_a").SetText("A"));
+_panel_main.AddControl(new EchoChamberLabel("lbl_b").SetText("B"));
+_panel_main.AddControl(new EchoChamberLabel("lbl_c").SetText("C"));
 
-// obj_debug_controller: Step
-if (ui_root.InputPressed("toggle_debug")) {
-	ui_visible = !ui_visible;
-	ui_win.SetVisible(ui_visible);
+ui_win.EndLayoutBatch(); // fits once after the batch
+
+// Insert at a specific index
+_panel_top.InsertControl(new EchoChamberButton("btn_new").SetLabel("New"), 0);
+
+// Reorder a direct child
+_panel_top.MoveControl("btn_console", 2);
+
+// Set explicit order (unlisted items keep their order at the end)
+_panel_top.SetControlOrder(["btn_console", "dd_theme"]);
+
+// Move a control between panels
+_panel_left.MoveControlToPanel("sld_speed", _panel_main);
+ui_win.MoveControlToPanel("tgl_god", "main", 1);
+
+// We want a lot of log lines to show in this list, so we'll generate some dummy data
+ui_log = [];
+for (var _i = 0; _i < 2000; _i++) {
+	ui_log[_i] = "Log line " + string(_i);
 }
 
+// Create a list view control, give it a default row height and a function that lets us count how many rows there are
+var _list = new EchoChamberListView("list_log")
+	.SetRowHeight(18)
+	.SetCountGetter(method(self, function() {
+		return array_length(ui_log);
+	}));
+
+// We need to draw the rows manually (this is so that the list can virtualise rows that are offscreen)
+_list.SetRowDrawer(method(self, function(_row_index, _row_rect, _is_selected, _is_hover) {
+	var _x = _row_rect.x1;
+	var _y = _row_rect.y1;
+	draw_text(_x + 6, _y + 2, ui_log[_row_index]);
+}));
+
+// And we can also provide a function that is called when a row is selected
+_list.SetOnSelect(method(self, function(_index) {
+	ui_root.ShowToast("Selected row " + string(_index), 800);
+}));
+
+_panel_main.AddControl(_list);
+
+ui_root.LoadLayout();
+```
+
+### Step Event
+```js
 if (keyboard_check_pressed(vk_f5)) {
 	ui_root.SaveLayout();
 	ui_root.ShowToast("Layout saved", 1200);
@@ -639,9 +786,10 @@ if (keyboard_check_pressed(vk_f9)) {
 	ui_root.ShowToast("Layout loaded", 1200);
 }
 
-
-// obj_debug_controller: Draw GUI
-ui_root.RunDesktop();
+if (ui_root.InputPressed("toggle_debug")) {
+	ui_visible = !ui_visible;
+	ui_win.SetVisible(ui_visible);
+}
 ```
 
 ---
@@ -650,9 +798,9 @@ ui_root.RunDesktop();
 
 At this point you've got:
 
-- a root running a desktop every frame
+- a root "desktop"
 - a window with docked panels
-- a pile of controls bound to a struct
+- a pile of controls bound to a settings struct
 - persistence for your layout
 - theme swapping
 
