@@ -322,9 +322,11 @@ var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
 	// We give it an array of options to display
 	.SetOptions([
 		"MidnightNeon",
+		"Amber Forest",
 		"MangoMint",
 		"SakuraPunch",
 		"ToxicTerminal",
+		"Echo Chamber"
 	])
 	// Again, bind the dropdown to our ui_settings struct
 	.BindIndex(ui_settings, "theme_index")
@@ -340,10 +342,11 @@ var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
 		var _new_theme;
 		switch (_index) {
 			case 0: _new_theme = new EchoChamberThemeMidnightNeon(); break;
-			case 1: _new_theme = new EchoChamberThemeMangoMint(); break;
-			case 2: _new_theme = new EchoChamberThemeSakuraPunch(); break;
-			case 3: _new_theme = new EchoChamberThemeToxicTerminal(); break;
-			default: _new_theme = new EchoChamberThemeMidnightNeon(); break;
+			case 1: _new_theme = new EchoChamberThemeAmberForest(); break;
+			case 2: _new_theme = new EchoChamberThemeMangoMint(); break;
+			case 3: _new_theme = new EchoChamberThemeSakuraPunch(); break;
+			case 4: _new_theme = new EchoChamberThemeToxicTerminal(); break;
+			default: _new_theme = new EchoChamberTheme(); break;
 		}
 
 		// Then we apply the theme, and do a toast. We can even use _value here to display the value
@@ -511,7 +514,9 @@ Add a list view to the main panel:
 ```js
 // Create a list view control, give it a default row height and a function that lets us count how many rows there are
 var _list = new EchoChamberListView("list_log")
-	.SetRowHeight(18)
+	.SetRowHeight(25)
+	.SetVisibleRows(12)
+	.SetFillWidth(true)
 	.SetCountGetter(method(self, function() {
 		return array_length(ui_log);
 	}));
@@ -698,9 +703,11 @@ var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
 	// We give it an array of options to display
 	.SetOptions([
 		"MidnightNeon",
+		"Amber Forest",
 		"MangoMint",
 		"SakuraPunch",
 		"ToxicTerminal",
+		"Echo Chamber"
 	])
 	// Again, bind the dropdown to our ui_settings struct
 	.BindIndex(ui_settings, "theme_index")
@@ -716,10 +723,11 @@ var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
 		var _new_theme;
 		switch (_index) {
 			case 0: _new_theme = new EchoChamberThemeMidnightNeon(); break;
-			case 1: _new_theme = new EchoChamberThemeMangoMint(); break;
-			case 2: _new_theme = new EchoChamberThemeSakuraPunch(); break;
-			case 3: _new_theme = new EchoChamberThemeToxicTerminal(); break;
-			default: _new_theme = new EchoChamberThemeMidnightNeon(); break;
+			case 1: _new_theme = new EchoChamberThemeAmberForest(); break;
+			case 2: _new_theme = new EchoChamberThemeMangoMint(); break;
+			case 3: _new_theme = new EchoChamberThemeSakuraPunch(); break;
+			case 4: _new_theme = new EchoChamberThemeToxicTerminal(); break;
+			default: _new_theme = new EchoChamberTheme(); break;
 		}
 
 		// Then we apply the theme, and do a toast. We can even use _value here to display the value
@@ -766,7 +774,9 @@ for (var _i = 0; _i < 2000; _i++) {
 
 // Create a list view control, give it a default row height and a function that lets us count how many rows there are
 var _list = new EchoChamberListView("list_log")
-	.SetRowHeight(18)
+	.SetRowHeight(25)
+	.SetVisibleRows(12)
+	.SetFillWidth(true)
 	.SetCountGetter(method(self, function() {
 		return array_length(ui_log);
 	}));
