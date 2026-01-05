@@ -321,11 +321,15 @@ var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
 	.SetLabel("Theme")
 	// We give it an array of options to display
 	.SetOptions([
-		"MidnightNeon",
+		"Midnight Neon",
 		"Amber Forest",
-		"MangoMint",
-		"SakuraPunch",
-		"ToxicTerminal",
+		"Mango Mint",
+		"Sakura Punch",
+		"Toxic Terminal",
+		"Arcade Wave",
+		"Circuit Candy",
+		"Sunset Glitch",
+		"Bubblegum Terminal",
 		"Echo Chamber"
 	])
 	// Again, bind the dropdown to our ui_settings struct
@@ -346,6 +350,10 @@ var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
 			case 2: _new_theme = new EchoChamberThemeMangoMint(); break;
 			case 3: _new_theme = new EchoChamberThemeSakuraPunch(); break;
 			case 4: _new_theme = new EchoChamberThemeToxicTerminal(); break;
+			case 5: _new_theme = new EchoChamberThemeArcadeWave(); break;
+			case 6: _new_theme = new EchoChamberThemeCircuitCandy(); break;
+			case 7: _new_theme = new EchoChamberThemeSunsetGlitch(); break;
+			case 8: _new_theme = new EchoChamberThemeBubblegumTerminal(); break;
 			default: _new_theme = new EchoChamberTheme(); break;
 		}
 
@@ -702,11 +710,15 @@ var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
 	.SetLabel("Theme")
 	// We give it an array of options to display
 	.SetOptions([
-		"MidnightNeon",
+		"Midnight Neon",
 		"Amber Forest",
-		"MangoMint",
-		"SakuraPunch",
-		"ToxicTerminal",
+		"Mango Mint",
+		"Sakura Punch",
+		"Toxic Terminal",
+		"Arcade Wave",
+		"Circuit Candy",
+		"Sunset Glitch",
+		"Bubblegum Terminal",
 		"Echo Chamber"
 	])
 	// Again, bind the dropdown to our ui_settings struct
@@ -727,6 +739,10 @@ var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
 			case 2: _new_theme = new EchoChamberThemeMangoMint(); break;
 			case 3: _new_theme = new EchoChamberThemeSakuraPunch(); break;
 			case 4: _new_theme = new EchoChamberThemeToxicTerminal(); break;
+			case 5: _new_theme = new EchoChamberThemeArcadeWave(); break;
+			case 6: _new_theme = new EchoChamberThemeCircuitCandy(); break;
+			case 7: _new_theme = new EchoChamberThemeSunsetGlitch(); break;
+			case 8: _new_theme = new EchoChamberThemeBubblegumTerminal(); break;
 			default: _new_theme = new EchoChamberTheme(); break;
 		}
 
