@@ -304,7 +304,7 @@ if (keyboard_check_pressed(vk_f9)) {
 
 ## Theme swapping (because why ugly when can pretty?)
 
-Echo Chamber themes are just structs. They aren't magic. They are a big bag of settings.
+Echo Chamber themes aren't magic. They are just structs. Essentially big bags of settings.
 
 That means theme swapping is extremely straightforward: `ApplyTheme()`.
 
@@ -331,7 +331,12 @@ var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
 	// And when one of the options from the dropdown is selected, we want to apply the new theme to the root
 	.OnChange(method(self, function(_index, _value) {
 		// The function is always provided with _index and _value, so we'll always want to
-		// base our functions around those.
+		// base our functions around one of those.
+
+		// If we look at the options array we gave before, we know that index 0 reads "MidnightNeon",
+		// index 1 reads "MangoMint", and so on, so we just take the _index argument of the function
+		// (which Echo Chamber automatically sets to the selected index from the dropdown)
+		// and pick the appropriate theme for the index.
 		var _new_theme;
 		switch (_index) {
 			case 0: _new_theme = new EchoChamberThemeMidnightNeon(); break;
@@ -339,10 +344,12 @@ var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
 			case 2: _new_theme = new EchoChamberThemeSakuraPunch(); break;
 			case 3: _new_theme = new EchoChamberThemeToxicTerminal(); break;
 			default: _new_theme = new EchoChamberThemeMidnightNeon(); break;
-		}	
+		}
 
+		// Then we apply the theme, and do a toast. We can even use _value here to display the value
+		// of the options array that was picked (the theme name as a string, in this case)
 		ui_root.ApplyTheme(_new_theme);
-		ui_root.ShowToast("Theme applied", 1000);
+		ui_root.ShowToast($"{_value} theme applied", 1000);
 	}))
 _panel_top.AddControl(_dd_theme);
 ```
@@ -575,7 +582,7 @@ var _panel_left = new EchoChamberPanel("left", eEchoChamberDock.LEFT)
 	.SetCollapseMode(eEchoChamberCollapse.TO_LEFT);
 ui_win.AddPanel(_panel_left);
 
-var _panel_main = new EchoChamberPanel("main", eEchoChamberDock.FILL);
+var _panel_main = new EchoChamberPanel("main", eEchoChamberDock.FILL)
 	.SetFlowMode(eEchoChamberPanelFlow.COLUMN);
 ui_win.AddPanel(_panel_main);
 
@@ -700,7 +707,12 @@ var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
 	// And when one of the options from the dropdown is selected, we want to apply the new theme to the root
 	.OnChange(method(self, function(_index, _value) {
 		// The function is always provided with _index and _value, so we'll always want to
-		// base our functions around those.
+		// base our functions around one of those.
+
+		// If we look at the options array we gave before, we know that index 0 reads "MidnightNeon",
+		// index 1 reads "MangoMint", and so on, so we just take the _index argument of the function
+		// (which Echo Chamber automatically sets to the selected index from the dropdown)
+		// and pick the appropriate theme for the index.
 		var _new_theme;
 		switch (_index) {
 			case 0: _new_theme = new EchoChamberThemeMidnightNeon(); break;
@@ -708,10 +720,12 @@ var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
 			case 2: _new_theme = new EchoChamberThemeSakuraPunch(); break;
 			case 3: _new_theme = new EchoChamberThemeToxicTerminal(); break;
 			default: _new_theme = new EchoChamberThemeMidnightNeon(); break;
-		}	
+		}
 
+		// Then we apply the theme, and do a toast. We can even use _value here to display the value
+		// of the options array that was picked (the theme name as a string, in this case)
 		ui_root.ApplyTheme(_new_theme);
-		ui_root.ShowToast("Theme applied", 1000);
+		ui_root.ShowToast($"{_value} theme applied", 1000);
 	}))
 _panel_top.AddControl(_dd_theme);
 
