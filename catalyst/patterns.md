@@ -498,11 +498,15 @@ Previews do **not** mutate the stat and respect layers/families/conditions just 
 ## Pattern 9: Source-based cleanup and queries
 
 > We have three variables related to "source" in modifiers. Let's break them down to understand why they exist better, and then go through some functionality afterwards:
+>
 > `source_label`: In general, you want to use `source_label` as a user facing string, for instance, a modifier that increases damage by 1 and comes from a weapon struct could have a `source_label` like this: "+1 damage from Sword". This allows you to always have an accessible string that you can use to show users where a particular modification came from
+>
 > `source_id`: `source_id` should generally hold an actual reference to the thing that applied the modifier (for instance, a reference to an enemy that applied a burn DOT effect). This lets you to check for existence, or attempt to read data, etc, from the source of the modifier. We keep the user facing string separate from this, since the reference could become stale and inaccessible, whereas a plain string will always be accessible.
+>
 > `source_meta`: This is just storage for any extra meta data you may want to keep related to the source on the modifier. Usually this would be a struct, but it doesn't really matter what's stored here, use it for anything that feels awkward to keep in `source_label` or `source_id`.
+>
 > Final note: While Catalyst uses feathers type checking to ensure `source_label` is a string and `source_id` is a struct or id, feel free to ignore these enforced types if you wish to. Storing some other data type in them won't break Catalyst, it'll only cause feather to complain.
-{: .info}
+{: .note}
 
 ## "Remove or inspect modifiers based on where they came from."
 
