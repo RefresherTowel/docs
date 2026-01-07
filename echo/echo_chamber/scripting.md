@@ -67,7 +67,7 @@ Base binding type for input actions.
 ### `EchoChamberInputBindingKey(_key, _check, _ctrl, _alt, _shift)`
 Keyboard binding for an input action.
 
-**Parameters**
+**Arguments**
 - `_key` `Real` Keycode (vk_* or ord()).
 - `_check` `eEchoChamberInputCheck` Optional, defaults to `PRESSED`.
 - `_ctrl` `Bool` Optional, require Ctrl held.
@@ -81,7 +81,7 @@ Keyboard binding for an input action.
 ### `EchoChamberInputBindingFunc(_fn)`
 Function binding for an input action.
 
-**Parameters**
+**Arguments**
 - `_fn` `Function` Function that returns true when the action should fire (signature: `function() -> Bool`).
 
 **Returns**: `Struct.EchoChamberInputBinding`
@@ -98,7 +98,7 @@ Binding that blocks an action from inheriting from its parent context.
 ### `EchoChamberInputContext(_id)`
 Input context for Echo Chamber actions, supports inheritance.
 
-**Parameters**
+**Arguments**
 - `_id` `String`
 
 **Returns**: `Struct.EchoChamberInputContext`
@@ -159,7 +159,7 @@ Input context for Echo Chamber actions, supports inheritance.
 ### `EchoChamberRoot(_theme)`
 Root container for debug UI panels and controls.
 
-**Parameters**
+**Arguments**
 - `_theme` `Struct.EchoChamberTheme`
 
 **Returns**: `Struct.EchoChamberRoot`
@@ -527,7 +527,7 @@ Root container for debug UI panels and controls.
 ### `EchoChamberWindow(_id)`
 Floating debug window that owns a collection of docked panels.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberWindow`
@@ -790,7 +790,7 @@ Floating debug window that owns a collection of docked panels.
 ### `EchoChamberPanel(_id, _dock)`
 Layout panel docked to an edge or fill.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 - `_dock` `eEchoChamberDock`
 
@@ -957,7 +957,7 @@ Layout panel docked to an edge or fill.
 ### `EchoChamberScrollState(_id)`
 Persistent scroll state for a scrollable region.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberScrollState`
@@ -980,7 +980,7 @@ Persistent scroll state for a scrollable region.
 ### `EchoChamberControlBase(_id)`
 Base type for all debug UI controls.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberControlBase`
@@ -1041,7 +1041,7 @@ Base type for all debug UI controls.
 ### `EchoChamberLabel(_id)`
 Non-interactive text label.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberLabel`
@@ -1074,7 +1074,7 @@ Non-interactive text label.
 ### `EchoChamberTextBox(_id)`
 Non-interactive text box that wraps text to its width.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberTextBox`
@@ -1116,7 +1116,7 @@ Non-interactive text box that wraps text to its width.
 ### `EchoChamberButton(_id)`
 Clickable button.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberButton`
@@ -1143,7 +1143,7 @@ Clickable button.
 ### `EchoChamberSlider(_id)`
 Horizontal slider control.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberSlider`
@@ -1179,7 +1179,7 @@ Horizontal slider control.
 ### `EchoChamberToggle(_id)`
 Checkbox-style toggle.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberToggle`
@@ -1213,7 +1213,7 @@ Checkbox-style toggle.
 ### `EchoChamberTextInput(_id)`
 Single-line text input.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberTextInput`
@@ -1279,7 +1279,7 @@ Single-line text input.
 ### `EchoChamberSeparator(_id)`
 Non-interactive separator line.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberSeparator`
@@ -1295,7 +1295,7 @@ Non-interactive separator line.
 ### `EchoChamberListView(_id)`
 Virtualized list view control for very large row counts. Draws and hit-tests only visible rows.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberListView`
@@ -1413,7 +1413,7 @@ Virtualized list view control for very large row counts. Draws and hit-tests onl
 ### `EchoChamberDropdownBase(_id)`
 Base dropdown control. Variants override selection and row behavior.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberDropdownBase`
@@ -1466,7 +1466,7 @@ Base dropdown control. Variants override selection and row behavior.
 ### `EchoChamberDropdownSelect(_id)`
 Dropdown variant that binds a selected index to a struct field.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberDropdownSelect`
@@ -1506,7 +1506,7 @@ Dropdown variant that binds a selected index to a struct field.
 ### `EchoChamberDropdownToggleMenu(_id)`
 Dropdown variant that shows a checklist menu that stays open.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberDropdownToggleMenu`
@@ -1553,7 +1553,7 @@ Dropdown variant that shows a checklist menu that stays open.
 ### `EchoChamberMachinePicker(_id)`
 Dropdown-style machine picker with search field at top.
 
-**Parameters**
+**Arguments**
 - `_id` `Any`
 
 **Returns**: `Struct.EchoChamberMachinePicker`
@@ -1583,7 +1583,7 @@ Dropdown-style machine picker with search field at top.
 ### `EchoChamberOpenConsole(_ui_root)`
 Open or create the built-in Echo Console window (log history viewer + filters).
 
-**Parameters**
+**Arguments**
 - `_ui_root` `Struct.EchoChamberRoot`
 
 **Returns**: `Struct.EchoChamberWindow`
@@ -1722,7 +1722,7 @@ Creates the shared default UI theme container for Echo Chamber visuals.
 ### `EchoChamberThemeTryGetFont(_font_name)`
 Resolve a font asset by name. If missing, returns the current draw font.
 
-**Parameters**
+**Arguments**
 - `_font_name` `String, Asset.GMFont`
 
 **Returns**: `Asset.GMFont`
@@ -1730,7 +1730,7 @@ Resolve a font asset by name. If missing, returns the current draw font.
 ### `EchoChamberThemeTryGetSprite(_sprite_name)`
 Resolve a sprite asset by name. If missing, returns -1.
 
-**Parameters**
+**Arguments**
 - `_sprite_name` `String, Asset.GMSprite`
 
 **Returns**: `Asset.GMSprite,Real`
