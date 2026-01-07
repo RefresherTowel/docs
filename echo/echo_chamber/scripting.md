@@ -62,6 +62,8 @@ Base binding type for input actions.
 
 **Returns**: `Struct.EchoChamberInputBinding`
 
+---
+
 ### `EchoChamberInputBindingKey(_key, _check, _ctrl, _alt, _shift)`
 Keyboard binding for an input action.
 
@@ -74,20 +76,31 @@ Keyboard binding for an input action.
 
 **Returns**: `Struct.EchoChamberInputBinding`
 
+---
+
 ### `EchoChamberInputBindingFunc(_fn)`
 Function binding for an input action.
+
 **Parameters**
 - `_fn` `Function` Function that returns true when the action should fire (signature: `function() -> Bool`).
+
 **Returns**: `Struct.EchoChamberInputBinding`
+
+---
 
 ### `EchoChamberInputBindingBlock()`
 Binding that blocks an action from inheriting from its parent context.
+
 **Returns**: `Struct.EchoChamberInputBinding`
+
+---
 
 ### `EchoChamberInputContext(_id)`
 Input context for Echo Chamber actions, supports inheritance.
+
 **Parameters**
 - `_id` `String`
+
 **Returns**: `Struct.EchoChamberInputContext`
 
 **Public methods**
@@ -105,10 +118,14 @@ Input context for Echo Chamber actions, supports inheritance.
 - `BindBlock(_action_id)`: Bind an action to a blocker (prevents inheritance).
 - `ClearAction(_action_id)`: Clear a local action binding so the parent can take over.
 
+---
+
 ### `EchoChamberRoot(_theme)`
 Root container for debug UI panels and controls.
+
 **Parameters**
 - `_theme` `Struct.EchoChamberTheme`
+
 **Returns**: `Struct.EchoChamberRoot`
 
 **Public methods**
@@ -220,10 +237,14 @@ Root container for debug UI panels and controls.
 - `BlurControlFocus(_id)`: Blur (clear) keyboard focus from a control by id.
 - `RegisterFocusable(_id, _rect)`: Register a focusable control for Tab navigation.
 
+---
+
 ### `EchoChamberWindow(_id)`
 Floating debug window that owns a collection of docked panels.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberWindow`
 
 **Public methods**
@@ -310,11 +331,15 @@ Floating debug window that owns a collection of docked panels.
 - `ProcessWindowInteractions(_root)`: Handle mouse interactions for dragging/resizing and chrome button clicks.
 - `Draw(_root)`: Draw the window chrome and all owned panels.
 
+---
+
 ### `EchoChamberPanel(_id, _dock)`
 Layout panel docked to an edge or fill.
+
 **Parameters**
 - `_id` `Any`
 - `_dock` `eEchoChamberDock`
+
 **Returns**: `Struct.EchoChamberPanel`
 
 **Public methods**
@@ -354,10 +379,14 @@ Layout panel docked to an edge or fill.
 - `ResolveThickness(_root, _avail_width, _avail_height)`: Resolve actual thickness for layout considering size mode.
 - `Draw(_root)`: Draw this panel and its contents (controls or child panels).
 
+---
+
 ### `EchoChamberScrollState(_id)`
 Persistent scroll state for a scrollable region.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberScrollState`
 
 **Public methods**
@@ -365,10 +394,14 @@ Persistent scroll state for a scrollable region.
 - `ScrollBy(_dy)`: Scroll by a delta in pixels (positive scrolls down).
 - `Reset()`: Reset scroll to the top.
 
+---
+
 ### `EchoChamberControlBase(_id)`
 Base type for all debug UI controls.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberControlBase`
 
 **Public methods**
@@ -385,11 +418,14 @@ Base type for all debug UI controls.
 - `SetEnabled(_flag)`: Enable or disable this control (disabled controls should not accept input).
 - `ProcessAndDraw(_root, _panel, _rect)`: Override: process input and draw using the given rect.
 
-### Functions
+---
+
 ### `EchoChamberLabel(_id)`
 Non-interactive text label.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberLabel`
 
 **Public methods**
@@ -406,10 +442,14 @@ Non-interactive text label.
 - `SetAlign(_align)`: Set text alignment ("left", "center", "right").
 - `UseSmallFont(_flag)`: Use the smaller theme font.
 
+---
+
 ### `EchoChamberTextBox(_id)`
 Non-interactive text box that wraps text to its width.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberTextBox`
 
 **Public methods**
@@ -428,10 +468,14 @@ Non-interactive text box that wraps text to its width.
 - `SetPadding(_x, [_y])`: Set inner padding for the text box.
 - `SetFillWidth(_flag)`: Set whether this box fills the available row width.
 
+---
+
 ### `EchoChamberButton(_id)`
 Clickable button.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberButton`
 
 **Public methods**
@@ -451,10 +495,14 @@ Clickable button.
     - If `_source` is a struct, `_key_or_fn` is the field key and any function binding is cleared.
     - If the getter returns `undefined`, the button keeps its previous label.
 
+---
+
 ### `EchoChamberSlider(_id)`
 Horizontal slider control.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberSlider`
 
 **Public methods**
@@ -476,10 +524,14 @@ Horizontal slider control.
   - Additional details:
     - Fires when the slider changes via user input.
 
+---
+
 ### `EchoChamberToggle(_id)`
 Checkbox-style toggle.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberToggle`
 
 **Public methods**
@@ -506,10 +558,14 @@ Checkbox-style toggle.
   - Additional details:
     - Fires when the toggle changes via click or keyboard.
 
+---
+
 ### `EchoChamberTextInput(_id)`
 Single-line text input.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberTextInput`
 
 **Public methods**
@@ -536,19 +592,27 @@ Single-line text input.
     - Return an empty string to reject the insert.
 - `SetInvalid(_flag)`: Toggle invalid styling.
 
+---
+
 ### `EchoChamberSeparator(_id)`
 Non-interactive separator line.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberSeparator`
 
 **Public methods**
 - `SetOrientation(_ori)`: Set orientation ("horizontal" or "vertical").
 
+---
+
 ### `EchoChamberListView(_id)`
 Virtualized list view control for very large row counts. Draws and hit-tests only visible rows.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberListView`
 
 **Public methods**
@@ -612,10 +676,14 @@ Virtualized list view control for very large row counts. Draws and hit-tests onl
 - `GetSelectedIndex()`: Get the selected index.
 - `SetSelectedIndex(_index)`: Set the selected index.
 
+---
+
 ### `EchoChamberDropdownBase(_id)`
 Base dropdown control. Variants override selection and row behavior.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberDropdownBase`
 
 **Public methods**
@@ -642,10 +710,14 @@ Base dropdown control. Variants override selection and row behavior.
 - `SetUseSelectedLabelWhenClosed(_flag)`: Use the selected label when closed.
 - `SetOverlayMaxHeight(_height)`: Set the max overlay height.
 
+---
+
 ### `EchoChamberDropdownSelect(_id)`
 Dropdown variant that binds a selected index to a struct field.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberDropdownSelect`
 
 **Public methods**
@@ -660,10 +732,14 @@ Dropdown variant that binds a selected index to a struct field.
 - `SetSelectedIndex(_idx)`: Set the selected index.
 - `OnOverlayRowClick(_root, _row_index, _rect, _mx, _my)`: Handle overlay row click.
 
+---
+
 ### `EchoChamberDropdownToggleMenu(_id)`
 Dropdown variant that shows a checklist menu that stays open.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberDropdownToggleMenu`
 
 **Public methods**
@@ -677,10 +753,14 @@ Dropdown variant that shows a checklist menu that stays open.
 - `DrawOverlayRow(_root, _row_index, _rect, _hover, _is_selected)`: Draw an overlay row.
 - `OnOverlayRowClick(_root, _row_index, _rect, _mx, _my)`: Handle overlay row click.
 
+---
+
 ### `EchoChamberMachinePicker(_id)`
 Dropdown-style machine picker with search field at top.
+
 **Parameters**
 - `_id` `Any`
+
 **Returns**: `Struct.EchoChamberMachinePicker`
 
 **Public methods**
@@ -700,16 +780,21 @@ Dropdown-style machine picker with search field at top.
     - `_real_index` comes from `index_map` for the selected filtered row.
 - `SetUnfoldDirection(_dir)`: Set the overlay unfold direction ("up" or "down").
 
+---
+
 ### `EchoChamberOpenConsole(_ui_root)`
 Open or create the built-in Echo Console window (log history viewer + filters).
+
 **Parameters**
 - `_ui_root` `Struct.EchoChamberRoot`
+
 **Returns**: `Struct.EchoChamberWindow`
+
+---
 
 ## Echo Chamber Themes
 
-Themes are just structs that hold fonts, sprites, colors, spacing, and sizing rules.
-They are not magic. They are a big bag of settings that Echo Chamber reads when drawing.
+Themes are just structs that hold fonts, sprites, colors, spacing, and sizing rules. They're essentially a big bag of settings that Echo Chamber reads when drawing.
 
 ### Default theme structure
 The base theme constructor is: `EchoChamberTheme()`.
@@ -815,13 +900,12 @@ It outputs a struct with fields in roughly these buckets (names below are from t
 - `window_button_pin_label`
 - `window_button_unpin_label`
 
-> Statement stores its own themes inside its own debug UI constructors.
-> You can do the same for your own tools (keep themes close to the UI they belong to).
-{: .note}
+---
 
 ### Theme constructors
 ### `EchoChamberTheme()`
 Creates the shared default UI theme container for Echo Chamber visuals.
+
 **Returns**: `Struct.EchoChamberTheme`
 
 > If you wish to create your own themes, the simplest way is to create a constructor that inherits from the EchoChamberTheme and then just override the specific values you wish to change.
@@ -830,51 +914,66 @@ Creates the shared default UI theme container for Echo Chamber visuals.
 **Public methods**
 - `RefreshMetrics()`: Recompute row heights based on current fonts and padding.
 
+---
+
 ### Functions
 ### `EchoChamberThemeTryGetFont(_font_name)`
 Resolve a font asset by name. If missing, returns the current draw font.
+
 **Parameters**
 - `_font_name` `String, Asset.GMFont`
+
 **Returns**: `Asset.GMFont`
 
 ### `EchoChamberThemeTryGetSprite(_sprite_name)`
 Resolve a sprite asset by name. If missing, returns -1.
+
 **Parameters**
 - `_sprite_name` `String, Asset.GMSprite`
+
 **Returns**: `Asset.GMSprite,Real`
 
 ### `EchoChamberThemeMidnightNeon()`
 Dark midnight blues with neon purple accent.
+
 **Returns**: `Struct.EchoChamberThemeMidnightNeon`
 
 ### `EchoChamberThemeAmberForest()`
 Forest greens with warm amber highlights.
+
 **Returns**: `Struct.EchoChamberThemeAmberForest`
 
 ### `EchoChamberThemeSakuraPunch()`
 Inky plum with candy pink accents.
+
 **Returns**: `Struct.EchoChamberThemeSakuraPunch`
 
 ### `EchoChamberThemeArcadeWave()`
 Retro arcade navy with bright cyan accents.
+
 **Returns**: `Struct.EchoChamberThemeArcadeWave`
 
 ### `EchoChamberThemeCircuitCandy()`
 Playful teal and orange on a soft dark background.
+
 **Returns**: `Struct.EchoChamberThemeCircuitCandy`
 
 ### `EchoChamberThemeToxicTerminal()`
 Acid terminal green with rogue magenta highlights.
+
 **Returns**: `Struct.EchoChamberThemeToxicTerminal`
 
 ### `EchoChamberThemeSunsetGlitch()`
 Sunset oranges colliding with cyan and grape.
+
 **Returns**: `Struct.EchoChamberThemeSunsetGlitch`
 
 ### `EchoChamberThemeBubblegumTerminal()`
 Bubblegum pink UI with teal statement nodes.
+
 **Returns**: `Struct.EchoChamberThemeBubblegumTerminal`
 
 ### `EchoChamberThemeMangoMint()`
 Warm mango chrome with mint green graph.
+
 **Returns**: `Struct.EchoChamberThemeMangoMint`
