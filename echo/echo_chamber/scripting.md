@@ -105,9 +105,35 @@ Input context for Echo Chamber actions, supports inheritance.
 
 **Public methods**
 - `SetParent(_parent_id)`: Set the parent context id for inheritance.
+  - Arguments:
+    - `_parent_id` `String` Parent context id (use `undefined` to clear the parent).
+  - Returns: `Struct.EchoChamberInputContext`
+  - Additional details:
+    - If `_parent_id` resolves to this context's own id, the call is ignored.
 - `GetBinding(_action_id)`: Get the binding for an action id.
-- `BindAction(_action_id, _binding)`: Bind an action to a binding. Requires an input binding struct built from `EchoChamberInputBinding`.
+  - Arguments:
+    - `_action_id` `String` Action id to look up.
+  - Returns: `Struct.EchoChamberInputBinding,Undefined`
+  - Additional details:
+    - This only returns the local binding (it does not walk parent contexts).
+- `BindAction(_action_id, _binding)`: Bind an action to a binding.
+  - Arguments:
+    - `_action_id` `String` Action id to bind.
+    - `_binding` `Struct.EchoChamberInputBinding` Binding instance (built from `EchoChamberInputBinding*`).
+  - Returns: `Struct.EchoChamberInputContext`
+  - Additional details:
+    - If `_binding` is not an `EchoChamberInputBinding`, the call is ignored.
 - `BindKey(_action_id, _key, _check, _ctrl, _alt, _shift)`: Bind an action to a keyboard key.
+  - Arguments:
+    - `_action_id` `String` Action id to bind.
+    - `_key` `Real` Keycode (vk_* or ord()).
+    - `_check` `eEchoChamberInputCheck` Optional check type (pressed/down/released).
+    - `_ctrl` `Bool` Optional, require Ctrl held.
+    - `_alt` `Bool` Optional, require Alt held.
+    - `_shift` `Bool` Optional, require Shift held.
+  - Returns: `Struct.EchoChamberInputContext`
+  - Additional details:
+    - Creates a key binding and forwards to `BindAction`.
 - `BindFunc(_action_id, _fn)`: Bind an action to a function.
   - Arguments:
     - `_action_id` `String` Action id to bind.
@@ -116,7 +142,17 @@ Input context for Echo Chamber actions, supports inheritance.
   - Additional details:
     - The function is polled each frame while this context is active.
 - `BindBlock(_action_id)`: Bind an action to a blocker (prevents inheritance).
+  - Arguments:
+    - `_action_id` `String` Action id to bind.
+  - Returns: `Struct.EchoChamberInputContext`
+  - Additional details:
+    - Blocks inheritance from the parent context for this action id.
 - `ClearAction(_action_id)`: Clear a local action binding so the parent can take over.
+  - Arguments:
+    - `_action_id` `String` Action id to clear.
+  - Returns: `Struct.EchoChamberInputContext`
+  - Additional details:
+    - Clears only the local binding; parent bindings (if any) will be used again.
 
 ---
 
@@ -130,39 +166,182 @@ Root container for debug UI panels and controls.
 
 **Public methods**
 - `ApplyTheme(_theme)`: Apply a new theme and reapply defaults across windows and panels.
+  - Arguments:
+    - `_theme` `Struct.EchoChamberTheme` Theme instance to apply.
+  - Returns: `Struct.EchoChamberRoot`
+  - Additional details:
+    - If `_theme` is not an `EchoChamberTheme`, the call is ignored.
+    - Reapplies theme defaults to all registered windows and panels.
 - `BeginFrame()`: Snapshot mouse and wheel for this frame.
+  - Arguments: None.
+  - Returns: N/A
+  - Additional details:
+    - Resets per-frame state such as mouse/wheel consumption and overlay queue.
 - `GetDefaultInputContextId()`: Return the default input context id.
-- `BindCoreInputAction(_action_id, _binding)`: Bind a core Echo Chamber action in the default context. Requires an input binding struct built from `EchoChamberInputBinding`.
+  - Arguments: None.
+  - Returns: `String`
+- `BindCoreInputAction(_action_id, _binding)`: Bind a core Echo Chamber action in the default context.
+  - Arguments:
+    - `_action_id` `String` Action id to bind.
+    - `_binding` `Struct.EchoChamberInputBinding` Binding instance.
+  - Returns: `Struct.EchoChamberRoot`
+  - Additional details:
+    - If the default context or binding is invalid, the call is ignored.
 - `GetInputContext(_id)`: Get an input context by id.
-- `CreateInputContext(_id, _parent_id)`: Create or return an input context by id. If parent is omitted, it inherits from the default context.
-- `RemoveInputContext(_id)`: Remove an input context by id (only if unused by any window).
+  - Arguments:
+    - `_id` `String` Context id to look up.
+  - Returns: `Struct.EchoChamberInputContext,Undefined`
+- `CreateInputContext(_id, _parent_id)`: Create or return an input context by id.
+  - Arguments:
+    - `_id` `String` Context id to create or fetch.
+    - `_parent_id` `String` Optional parent context id (defaults to the root default context when created).
+  - Returns: `Struct.EchoChamberInputContext,Undefined`
+  - Additional details:
+    - If a context already exists, it is returned and the parent is optionally updated.
+- `RemoveInputContext(_id)`: Remove an input context by id.
+  - Arguments:
+    - `_id` `String` Context id to remove.
+  - Returns: `Bool`
+  - Additional details:
+    - Returns false if the context is the default or is currently in use by any window.
 - `InputPressed(_action_id, _window)`: Check whether an action is pressed in the active input context.
+  - Arguments:
+    - `_action_id` `String` Action id to check.
+    - `_window` `Struct.EchoChamberWindow` Optional window whose input context should be used.
+  - Returns: `Bool`
+  - Additional details:
+    - If `_window` is omitted, the focused window context is used.
 - `InputDown(_action_id, _window)`: Check whether an action is held in the active input context.
+  - Arguments:
+    - `_action_id` `String` Action id to check.
+    - `_window` `Struct.EchoChamberWindow` Optional window whose input context should be used.
+  - Returns: `Bool`
+  - Additional details:
+    - If `_window` is omitted, the focused window context is used.
 - `InputReleased(_action_id, _window)`: Check whether an action is released in the active input context.
-- `AddPanel(_panel)`: Add a top-level panel to the root. Requires a panel struct built from `EchoChamberPanel`.
+  - Arguments:
+    - `_action_id` `String` Action id to check.
+    - `_window` `Struct.EchoChamberWindow` Optional window whose input context should be used.
+  - Returns: `Bool`
+  - Additional details:
+    - If `_window` is omitted, the focused window context is used.
+- `AddPanel(_panel)`: Add a top-level panel to the root.
+  - Arguments:
+    - `_panel` `Struct.EchoChamberPanel` Panel instance to attach.
+  - Returns: `Struct.EchoChamberPanel,Undefined`
+  - Additional details:
+    - Assigns ownership to the root and its child panels/controls.
 - `CreateWindow(_id)`: Create and register a floating debug window.
-- `RegisterWindow(_window)`: Register an externally created window instance. Requires a window struct built from `EchoChamberWindow`.
+  - Arguments:
+    - `_id` `Any` Window id.
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - Applies theme defaults and registers the window with this root.
+- `RegisterWindow(_window)`: Register an externally created window instance.
+  - Arguments:
+    - `_window` `Struct.EchoChamberWindow` Window instance to register.
+  - Returns: `Struct.EchoChamberWindow,Undefined`
+  - Additional details:
+    - Applies theme defaults, sets the window owner, and assigns ownership for all panels/controls.
 - `FindWindow(_id)`: Find a registered window by id.
+  - Arguments:
+    - `_id` `Any` Window id.
+  - Returns: `Struct.EchoChamberWindow,Undefined`
 - `FindControl(_id)`: Find a control by id across all windows.
+  - Arguments:
+    - `_id` `Any` Control id.
+  - Returns: `Struct.EchoChamberControlBase,Undefined`
 - `DumpUI()`: Dump the current UI tree and focus/overlay state to the debug log.
+  - Arguments: None.
+  - Returns: `Struct.EchoChamberRoot`
+  - Additional details:
+    - Uses `EchoDebugInfo` to output the structure.
 - `RemoveWindow(_window_or_id)`: Remove a registered window and detach its panels/controls.
+  - Arguments:
+    - `_window_or_id` `Struct.EchoChamberWindow,Any` Window instance or id.
+  - Returns: `Bool`
+  - Additional details:
+    - Clears focus, modal, overlays, and mouse capture if they reference the removed window.
 - `BringWindowToFront(_window_or_id)`: Bring a window (or id) to the front of the z-order.
+  - Arguments:
+    - `_window_or_id` `Struct.EchoChamberWindow,Any` Window instance or id.
+  - Returns: N/A
+  - Additional details:
+    - Updates keyboard focus to the brought window.
 - `BringWindowToFrontById(_id)`: Bring a window to the front by id.
+  - Arguments:
+    - `_id` `Any` Window id.
+  - Returns: `Struct.EchoChamberWindow,Undefined`
 - `SendWindowToBack(_window_or_id)`: Send a window (or id) to the back of the z-order.
+  - Arguments:
+    - `_window_or_id` `Struct.EchoChamberWindow,Any` Window instance or id.
+  - Returns: `Bool`
+  - Additional details:
+    - Modal windows stay on top; sending a modal window to back just re-brings it to front.
 - `BringWindowsBack()`: Bring all windows back into view so their title bars remain accessible.
+  - Arguments: None.
+  - Returns: `Struct.EchoChamberRoot`
 - `SetWindowZIndex(_window_or_id, _index)`: Set a window z-order index (0 = back, last = front).
+  - Arguments:
+    - `_window_or_id` `Struct.EchoChamberWindow,Any` Window instance or id.
+    - `_index` `Real` Target z-order index.
+  - Returns: `Bool`
+  - Additional details:
+    - Modal windows are forced to the front index.
 - `SetModalWindow(_window_or_id)`: Set the modal window (blocks input to other windows).
+  - Arguments:
+    - `_window_or_id` `Struct.EchoChamberWindow,Any` Window instance or id, or `undefined` to clear.
+  - Returns: `Bool`
+  - Additional details:
+    - Clears overlays, context menus, and focus that are owned by other windows.
 - `ClearModalWindow()`: Clear the current modal window.
+  - Arguments: None.
+  - Returns: `Bool`
 - `GetModalWindow()`: Get the current modal window (if any).
+  - Arguments: None.
+  - Returns: `Struct.EchoChamberWindow,Undefined`
 - `SetPersistenceFile(_filename)`: Set the INI filename used for saving and loading UI layout state.
+  - Arguments:
+    - `_filename` `String` INI filename (relative or absolute path).
+  - Returns: `Struct.EchoChamberRoot`
 - `SetPersistenceSection(_section)`: Set the INI section prefix used for saving and loading UI layout state.
+  - Arguments:
+    - `_section` `String` INI section prefix.
+  - Returns: `Struct.EchoChamberRoot`
 - `SaveLayout()`: Save window layout, z-order, and panel state to an INI file.
-- `LoadLayout()`: Load window layout, z-order, and panel state from an INI file. Windows and panels must already be created/registered before calling this.
-- `SetMouseCapture(_window)`: Capture the mouse for a window interaction (drag/resize). Requires a window struct built from `EchoChamberWindow`.
-- `ClearMouseCapture(_window)`: Release mouse capture if owned by the given window. Requires a window struct built from `EchoChamberWindow`.
+  - Arguments: None.
+  - Returns: `Bool`
+  - Additional details:
+    - Returns false if the persistence file name is empty.
+- `LoadLayout()`: Load window layout, z-order, and panel state from an INI file.
+  - Arguments: None.
+  - Returns: `Bool`
+  - Additional details:
+    - Windows and panels must already be created/registered before calling this.
+    - Returns false if the file does not exist.
+- `SetMouseCapture(_window)`: Capture the mouse for a window interaction (drag/resize).
+  - Arguments:
+    - `_window` `Struct.EchoChamberWindow` Window to own mouse capture.
+  - Returns: N/A
+  - Additional details:
+    - Only used internally for drag/resize; you usually don't call this directly.
+- `ClearMouseCapture(_window)`: Release mouse capture if owned by the given window.
+  - Arguments:
+    - `_window` `Struct.EchoChamberWindow` Window attempting to release capture.
+  - Returns: N/A
+  - Additional details:
+    - Capture is only cleared if `_window` currently owns it.
 - `RunDesktop()`: Run the managed desktop: capture input, process the active window, draw all windows, then draw overlays and tooltip.
+  - Arguments: None.
+  - Returns: N/A
+  - Additional details:
+    - Call this once per Draw GUI frame to run Echo Chamber.
 - `ConsumeMouse()`: Consume mouse input for all remaining controls this frame.
+  - Arguments: None.
+  - Returns: N/A
 - `ConsumeWheel()`: Consume mouse wheel for all remaining scroll regions.
+  - Arguments: None.
+  - Returns: N/A
 - `DrawScrollArea(_scroll_state, _rect, _content_h, _draw_fn)`: Draw a scrollable clipped region and handle mouse wheel scrolling when hovered.
   - Arguments:
     - `_scroll_state` `Struct.EchoChamberScrollState` Scroll state that stores the current scroll offset.
@@ -173,13 +352,50 @@ Root container for debug UI panels and controls.
   - Additional details:
     - The draw callback should offset its content by `_scroll_y` (positive values scroll down).
     - The scissor clip is already applied to `_rect` when `_draw_fn` runs.
-- `PushClipRect(_x1, _y1, _x2, _y2)`: Push a clip rectangle. Any existing clip will be intersected with this one.
+- `PushClipRect(_x1, _y1, _x2, _y2)`: Push a clip rectangle.
+  - Arguments:
+    - `_x1` `Real` Left bound (GUI space).
+    - `_y1` `Real` Top bound (GUI space).
+    - `_x2` `Real` Right bound (GUI space).
+    - `_y2` `Real` Bottom bound (GUI space).
+  - Returns: N/A
+  - Additional details:
+    - Any existing clip is intersected with the new rect.
 - `PopClipRect()`: Pop the most recently pushed clip rectangle.
-- `HitTestRect(_x1, _y1, _x2, _y2)`: Simple hit test for a rect, respecting mouse_consumed and the current clip region.
+  - Arguments: None.
+  - Returns: N/A
+- `HitTestRect(_x1, _y1, _x2, _y2)`: Simple hit test for a rect.
+  - Arguments:
+    - `_x1` `Real` Left bound (GUI space).
+    - `_y1` `Real` Top bound (GUI space).
+    - `_x2` `Real` Right bound (GUI space).
+    - `_y2` `Real` Bottom bound (GUI space).
+  - Returns: `Bool`
+  - Additional details:
+    - Respects `mouse_consumed` and the current clip region.
 - `RequestTooltip(_control_id, _text, _anchor_x, _anchor_y)`: Request a tooltip for a given control id.
+  - Arguments:
+    - `_control_id` `String` Control id requesting the tooltip.
+    - `_text` `String` Tooltip text.
+    - `_anchor_x` `Real` Tooltip anchor X (GUI space).
+    - `_anchor_y` `Real` Tooltip anchor Y (GUI space).
+  - Returns: N/A
+  - Additional details:
+    - If a modal overlay is active, only its owner may request a tooltip.
 - `SetActiveOverlayOwner(_control_id)`: Mark a control as owning a modal overlay (e.g. a dropdown).
+  - Arguments:
+    - `_control_id` `String,Undefined` Control id to own the overlay (use `undefined` to clear).
+  - Returns: N/A
+  - Additional details:
+    - Overlay ownership is tied to the current window context.
 - `ClearActiveOverlayOwner()`: Clear the active overlay (if any).
+  - Arguments: None.
+  - Returns: N/A
 - `RequestCloseOverlay()`: Request the currently active overlay (if any) to close.
+  - Arguments: None.
+  - Returns: N/A
+  - Additional details:
+    - Overlay owners should honor this during `ProcessAndDraw`.
 - `QueueOverlay(_owner_id, _draw_fn, _rect, _owner_window)`: Queue an overlay draw callback. Overlays are drawn after all windows.
   - Arguments:
     - `_owner_id` `Any` Control id that owns the overlay (used for overlay focus tracking).
@@ -197,15 +413,50 @@ Root container for debug UI panels and controls.
   - Additional details:
     - `on_click` is a callback with signature `function()`.
 - `CloseContextMenu()`: Close the active context menu overlay (if open).
+  - Arguments: None.
+  - Returns: N/A
 - `IsContextMenuOpen()`: Returns true if the context menu overlay is open.
+  - Arguments: None.
+  - Returns: `Bool`
 - `DrawOverlays()`: Draw all queued overlays once per frame.
+  - Arguments: None.
+  - Returns: N/A
+  - Additional details:
+    - Overlays are drawn after all windows and are clipped to their queued rects.
 - `LayoutPanels(_x1, _y1, _x2, _y2)`: Dock + collapse layout. Assigns rects to all top-level panels.
+  - Arguments:
+    - `_x1` `Real` Left bound (GUI space).
+    - `_y1` `Real` Top bound (GUI space).
+    - `_x2` `Real` Right bound (GUI space).
+    - `_y2` `Real` Bottom bound (GUI space).
+  - Returns: N/A
 - `DrawTooltip()`: Draw simple tooltip for the current tooltip_control_id (if delay elapsed).
-- `ShowToast(_text, _duration_ms)`: Show a short toast message (non-blocking). A toast is a brief popup in the bottom right hand corner of the game window.
+  - Arguments: None.
+  - Returns: N/A
+- `ShowToast(_text, _duration_ms)`: Show a short toast message (non-blocking).
+  - Arguments:
+    - `_text` `Any` Toast text (converted to string).
+    - `_duration_ms` `Real` Optional duration in milliseconds.
+  - Returns: N/A
+  - Additional details:
+    - Toasts appear in the bottom right of the game window.
 - `CopyToClipboard(_text, _toast_text, _duration_ms)`: Copy text to clipboard and show a toast confirmation.
+  - Arguments:
+    - `_text` `Any` Text to copy.
+    - `_toast_text` `Any` Optional toast text (defaults to a preview of `_text`).
+    - `_duration_ms` `Real` Optional toast duration in milliseconds.
+  - Returns: N/A
 - `DrawToast()`: Draw active toast notifications for this frame.
+  - Arguments: None.
+  - Returns: N/A
 - `DrawPanelBackground(_panel)`: Convenience: draw a basic panel background.
+  - Arguments:
+    - `_panel` `Struct.EchoChamberPanel` Panel to draw.
+  - Returns: N/A
 - `DrawPanelCollapseHandle(_panel)`: Draw a collapse handle for a panel (if it supports collapsing).
+  - Arguments:
+    - `_panel` `Struct.EchoChamberPanel` Panel to draw.
+  - Returns: N/A
 - `SetTextInputSource(_fn)`: Set a function that returns the current active text input string. If not set, keyboard_string is used.
   - Arguments:
     - `_fn` `Function` Text source callback (signature: `function() -> String`).
@@ -228,14 +479,47 @@ Root container for debug UI panels and controls.
   - Returns: N/A
   - Additional details:
     - `_commit_fn` runs on blur after the final string is synced from the text source (if any).
-- `BlurTextInput(_id)`: Blur a focused text input by id. Returns the final string (after syncing from the text source).
+- `BlurTextInput(_id)`: Blur a focused text input by id.
+  - Arguments:
+    - `_id` `Any` Text input id to blur.
+  - Returns: `String`
+  - Additional details:
+    - Returns `""` if the id is not currently focused.
+    - Commits the final value (after syncing from the text source) before returning.
 - `IsActiveTextInput(_id)`: Returns true if the given id is the currently focused text input.
+  - Arguments:
+    - `_id` `Any` Text input id to check.
+  - Returns: `Bool`
 - `GetActiveText()`: Return the current active text string while a text input is focused.
+  - Arguments: None.
+  - Returns: `String`
+  - Additional details:
+    - If a text source is set, this returns the source value.
 - `GetTextBuffer()`: Return the last committed text buffer for the active text input.
-- `FocusControl(_id, _rect)`: Give keyboard focus to a non-text control by id. This focus is separate from text input focus.
+  - Arguments: None.
+  - Returns: `String`
+- `FocusControl(_id, _rect)`: Give keyboard focus to a non-text control by id.
+  - Arguments:
+    - `_id` `Any` Control id to focus.
+    - `_rect` `Struct` `{x1,y1,x2,y2}` control rect in GUI space.
+  - Returns: N/A
+  - Additional details:
+    - This focus is separate from text input focus.
 - `IsControlFocused(_id)`: Returns true if the given control id currently owns keyboard focus (and no text input is active).
+  - Arguments:
+    - `_id` `Any` Control id to check.
+  - Returns: `Bool`
+  - Additional details:
+    - Returns false when an overlay is active and owned by another control.
 - `BlurControlFocus(_id)`: Blur (clear) keyboard focus from a control by id.
+  - Arguments:
+    - `_id` `Any` Optional id to validate before clearing (if provided, it must match the focused id).
+  - Returns: `Bool`
 - `RegisterFocusable(_id, _rect)`: Register a focusable control for Tab navigation.
+  - Arguments:
+    - `_id` `Any` Control id.
+    - `_rect` `Struct` `{x1,y1,x2,y2}` control rect in GUI space.
+  - Returns: N/A
 
 ---
 
@@ -249,20 +533,79 @@ Floating debug window that owns a collection of docked panels.
 
 **Public methods**
 - `SetTitle(_title)`: Set the window title text.
+  - Arguments:
+    - `_title` `Any` Title text (converted to string).
+  - Returns: `Struct.EchoChamberWindow`
 - `SetInputContext(_context_id, _parent_id)`: Set the input context id used for this window.
+  - Arguments:
+    - `_context_id` `String` Context id (use `undefined` to clear).
+    - `_parent_id` `String` Optional parent context id.
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - When a root is assigned, the context is created if missing.
 - `SwapInputContext(_context_id, _parent_id)`: Swap the input context and remove the old one if unused.
+  - Arguments:
+    - `_context_id` `String` New context id.
+    - `_parent_id` `String` Optional parent context id.
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - Attempts to remove the previous context if it is unused by any window.
 - `SetWindowStyleKey(_key)`: Set the window style key (for theme.window_styles).
+  - Arguments:
+    - `_key` `String` Style key.
+  - Returns: `Struct.EchoChamberWindow`
 - `SetHeaderStyleKey(_key)`: Set the header style key (for theme.header_styles).
+  - Arguments:
+    - `_key` `String` Style key.
+  - Returns: `Struct.EchoChamberWindow`
 - `SetChromeButtonStyleKey(_key)`: Set the chrome button style key (for theme.button_styles).
+  - Arguments:
+    - `_key` `String` Style key.
+  - Returns: `Struct.EchoChamberWindow`
 - `ApplyTheme(_theme)`: Apply a theme override to this window and its children.
+  - Arguments:
+    - `_theme` `Struct.EchoChamberTheme` Theme override (use `undefined` to clear).
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - Overrides only this window and its panels/controls.
 - `ClearThemeOverride()`: Clear the window theme override (reverts to the root theme).
+  - Arguments: None.
+  - Returns: `Struct.EchoChamberWindow`
 - `SetPadding(_value)`: Set the content padding for this window.
+  - Arguments:
+    - `_value` `Real` Padding in pixels.
+  - Returns: `Struct.EchoChamberWindow`
 - `SetMargin(_x, [_y])`: Set the outer margin for this window in GUI-space.
+  - Arguments:
+    - `_x` `Real` Horizontal margin.
+    - `_y` `Real` Optional vertical margin (defaults to `_x`).
+  - Returns: `Struct.EchoChamberWindow`
 - `SetTitlebarHeight(_value)`: Set the titlebar height for this window.
+  - Arguments:
+    - `_value` `Real` Titlebar height in pixels.
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - Disables theme-driven titlebar sizing until `SetTitlebarAuto(true)` is used.
 - `SetTitlebarAuto(_flag)`: Set whether the titlebar height is driven by the current theme.
+  - Arguments:
+    - `_flag` `Bool` Enable or disable auto sizing.
+  - Returns: `Struct.EchoChamberWindow`
 - `SetResizeGripSize(_value)`: Set the resize grip size for this window.
+  - Arguments:
+    - `_value` `Real` Grip size in pixels.
+  - Returns: `Struct.EchoChamberWindow`
 - `SetVisible(_flag)`: Show or hide this window.
+  - Arguments:
+    - `_flag` `Bool` Visible flag.
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - Hiding clears modal/capture/overlay ownership tied to this window.
 - `SetShowChromeButtons(_show_close, _show_minimize, _show_pin)`: Configure which chrome buttons are shown in the window header.
+  - Arguments:
+    - `_show_close` `Bool` Show or hide the close button.
+    - `_show_minimize` `Bool` Show or hide the minimize button.
+    - `_show_pin` `Bool` Show or hide the pin button.
+  - Returns: `Struct.EchoChamberWindow`
 - `OnClose(_fn)`: Set a callback that runs when the window is closed via the close button.
   - Arguments:
     - `_fn` `Function` Callback (signature: `function()`).
@@ -305,31 +648,141 @@ Floating debug window that owns a collection of docked panels.
   - Arguments:
     - `_fn` `Function` Callback (signature: `function()`).
   - Returns: `Struct.EchoChamberWindow`
-- `Close()`: Close the window (sets visible to false). If an on_close callback exists, it is called.
+- `Close()`: Close the window (sets visible to false) and fires `OnClose`.
+  - Arguments: None.
+  - Returns: N/A
+  - Additional details:
+    - Calls `SetVisible(false)` first, then runs the close callback if assigned.
 - `SetPinned(_flag)`: Set whether the window is pinned (disables dragging and resizing).
+  - Arguments:
+    - `_flag` `Bool` True to pin, false to unpin.
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - Cancels any active drag/resize and clears mouse capture.
 - `TogglePinned()`: Toggle pinned state.
+  - Arguments: None.
+  - Returns: `Struct.EchoChamberWindow`
 - `SetMinimized(_flag)`: Set whether the window is minimized (collapses content; only the title bar remains).
+  - Arguments:
+    - `_flag` `Bool` True to minimize, false to restore.
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - Restores to the previous height (clamped by min/max).
+    - Clears any active overlay owned by this window.
+    - Fires `OnMinimize` or `OnRestore` as appropriate.
 - `ToggleMinimized()`: Toggle minimized state.
-- `SetRect(_x1, _y1, _x2, _y2)`: Set the window rectangle in GUI-space. Size is clamped to min_width/min_height.
+  - Arguments: None.
+  - Returns: `Struct.EchoChamberWindow`
+- `SetRect(_x1, _y1, _x2, _y2)`: Set the window rectangle in GUI-space.
+  - Arguments:
+    - `_x1` `Real` Left edge.
+    - `_y1` `Real` Top edge.
+    - `_x2` `Real` Right edge.
+    - `_y2` `Real` Bottom edge.
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - Size is clamped to min/max.
+    - Marks the rect as user-set and clears any pending fit-to-content on add.
 - `SetPosition(_x, _y)`: Set the window position in GUI-space (size is unchanged).
+  - Arguments:
+    - `_x` `Real` New left edge.
+    - `_y` `Real` New top edge.
+  - Returns: `Struct.EchoChamberWindow`
 - `GetWidth()`: Get the current window width (in GUI-space).
+  - Arguments: None.
+  - Returns: `Real`
 - `GetHeight()`: Get the current window height (in GUI-space).
+  - Arguments: None.
+  - Returns: `Real`
 - `SetMinSize(_w, _h)`: Set minimum width and height for this window.
-- `SetMaxSize(_w, _h)`: Set maximum width and height for this window.
-- `FitToContent([_root])`: Resize the window once to fit current content. Please note: If you have set a rectangle size (`SetRect()`) or a minimum / maximum window size (`SetMinSize()` / `SetMaxSize()`) those will override the autofit.
-- `SetAutoFit(_flag)`: When enabled, future layout changes auto-fit the window (batches defer until EndLayoutBatch).
-- `AddPanel(_panel)`: Add a top-level panel to this window. Requires a panel built from `EchoChamberPanel`.
+  - Arguments:
+    - `_w` `Real` Minimum width (clamped to at least 64).
+    - `_h` `Real` Minimum height (clamped to at least 64).
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - If the current max size is smaller, it is raised to match.
+- `SetMaxSize(_w, _h)`: Set maximum width and height for this window (0 means no max).
+  - Arguments:
+    - `_w` `Real` Maximum width (0 disables max width).
+    - `_h` `Real` Maximum height (0 disables max height).
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - If the max size is smaller than the minimum, it is clamped up to the minimum.
+- `FitToContent([_root])`: Resize the window once to fit current content.
+  - Arguments:
+    - `_root` `Struct.EchoChamberRoot` Optional root to use for measurement (defaults to owner root).
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - If no panels exist yet, the fit is deferred until the next panel is added.
+    - The result is clamped to any min/max size settings.
+- `SetAutoFit(_flag)`: Enable or disable auto-fit after layout changes.
+  - Arguments:
+    - `_flag` `Bool` True to auto-fit on future layout changes.
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - If a layout batch is active, the fit is deferred until `EndLayoutBatch`.
+- `AddPanel(_panel)`: Add a top-level panel to this window.
+  - Arguments:
+    - `_panel` `Struct.EchoChamberPanel` Panel to add.
+  - Returns: `Struct.EchoChamberPanel,Undefined`
+  - Additional details:
+    - Assigns ownership pointers on the panel and its children.
+    - Triggers fit-to-content or auto-fit depending on window settings.
 - `RemovePanel(_panel_or_id)`: Remove a panel from this window (top-level or nested).
+  - Arguments:
+    - `_panel_or_id` `Struct.EchoChamberPanel,Any` Panel struct or panel id.
+  - Returns: `Bool`
+  - Additional details:
+    - Detaches ownership pointers for the removed panel tree.
+    - Triggers auto-fit when enabled.
 - `ClearPanels()`: Remove all panels from this window.
+  - Arguments: None.
+  - Returns: N/A
+  - Additional details:
+    - Detaches all panel trees and triggers auto-fit when enabled.
 - `FindPanel(_id)`: Find a panel in this window by id (searches nested container panels too).
+  - Arguments:
+    - `_id` `Any` Panel id (converted to string).
+  - Returns: `Struct.EchoChamberPanel,Undefined`
 - `FindControl(_id)`: Find a control in this window by id (searches nested panels too).
+  - Arguments:
+    - `_id` `Any` Control id (converted to string).
+  - Returns: `Struct.EchoChamberControlBase,Undefined`
 - `MoveControlToPanel(_control_or_id, _panel_or_id, [_index])`: Move a control to another panel in this window.
-- `ContainsPoint(_x, _y)`: Returns true if a point is inside this window's current rectangle (and the window is visible).
-- `BeginLayoutBatch()`: Begin a layout batch (layout changes defer FitToContent until EndLayoutBatch).
-- `EndLayoutBatch()`: End a layout batch and apply a single FitToContent if any layout changes occurred.
+  - Arguments:
+    - `_control_or_id` `Struct.EchoChamberControlBase,Any` Control or control id.
+    - `_panel_or_id` `Struct.EchoChamberPanel,Any` Target panel or panel id.
+    - `_index` `Real` Optional target index (clamped).
+  - Returns: `Bool`
+- `ContainsPoint(_x, _y)`: Return true if a point is inside this window's current rectangle.
+  - Arguments:
+    - `_x` `Real` X position in GUI space.
+    - `_y` `Real` Y position in GUI space.
+  - Returns: `Bool`
+  - Additional details:
+    - Returns false when the window is not visible.
+- `BeginLayoutBatch()`: Begin a layout batch (defers FitToContent until EndLayoutBatch).
+  - Arguments: None.
+  - Returns: `Struct.EchoChamberWindow`
+- `EndLayoutBatch()`: End a layout batch and apply any deferred FitToContent.
+  - Arguments: None.
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - Only triggers when the batch depth returns to zero.
 - `LayoutPanels(_root)`: Layout this window's panels into the current content rect.
+  - Arguments:
+    - `_root` `Struct.EchoChamberRoot` Root for layout metrics.
+  - Returns: N/A
 - `ProcessWindowInteractions(_root)`: Handle mouse interactions for dragging/resizing and chrome button clicks.
+  - Arguments:
+    - `_root` `Struct.EchoChamberRoot` Root for input state and focus.
+  - Returns: N/A
+  - Additional details:
+    - Does nothing if the window is not visible.
 - `Draw(_root)`: Draw the window chrome and all owned panels.
+  - Arguments:
+    - `_root` `Struct.EchoChamberRoot` Root for theme and drawing helpers.
+  - Returns: N/A
 
 ---
 
