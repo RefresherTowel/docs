@@ -508,7 +508,7 @@ Previews do **not** mutate the stat and respect layers/families/conditions just 
 > Final note: While Catalyst uses feathers type checking to ensure `source_label` is a string and `source_id` is a struct or id, feel free to ignore these enforced types if you wish to. Storing some other data type in them won't break Catalyst, it'll only cause feather to complain.
 {: .note}
 
-## "Remove or inspect modifiers based on where they came from."
+## Remove or inspect modifiers based on where they came from.
 
 Catalyst lets you tag modifiers with `source_label`, `source_id`, and `source_meta`. You can then remove or find them by origin.
 
