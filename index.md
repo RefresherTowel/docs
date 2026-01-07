@@ -80,7 +80,9 @@ For bigger, messier projects, Pulse quietly scales up with you:
 If all you want is "emit event, something happens", Pulse does that in a couple of lines.
 If you want your whole project to sit on a clean, debuggable event layer, Pulse is built for that too.
 
-##### [**LEARN MORE ABOUT PULSE**](/docs/pulse/)
+<iframe frameborder="0" src="https://itch.io/embed/4116520?linkback=true&amp;border_width=2&amp;bg_color=370028&amp;fg_color=ffffff&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/pulse">Pulse by RefresherTowel</a></iframe>
+
+##### [**EXPLORE THE PULSE DOCS**](/docs/pulse/)
 {: .text-center }
 
 ---
@@ -99,7 +101,7 @@ Struggling to keep your stats, buffs, and item effects under control as your gam
 - Stack and combine effects without writing a new special case every time.
 - Built for weird ideas: context aware modifiers, derived stats, and complex interactions without tearing up your code.
 
-##### [**LEARN MORE ABOUT CATALYST**](/docs/catalyst/)
+##### [**EXPLORE THE CATALYST DOCS**](/docs/catalyst/)
 {: .text-center }
 
 ---
@@ -121,3 +123,6 @@ Plain debug logs are fine at first, but quickly become noise once your project g
 Echo ships free with all available frameworks and integrates cleanly with their designs. Or you can purchase it for cheap on its own.
 
 <iframe frameborder="0" src="https://itch.io/embed/4089088?border_width=2&amp;bg_color=1d471e&amp;fg_color=ffffff&amp;link_color=109200&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/echo">Echo by RefresherTowel</a></iframe>
+
+##### [**EXPLORE THE ECHO DOCS**](/docs/echo/)
+{: .text-center }
