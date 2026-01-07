@@ -59,22 +59,25 @@ Important: you can use Echo Chamber without Echo, but they are designed to play 
 ### Constructors
 ### `EchoChamberInputBinding()`
 Base binding type for input actions.
+
 **Returns**: `Struct.EchoChamberInputBinding`
 
 ### `EchoChamberInputBindingKey(_key, _check, _ctrl, _alt, _shift)`
 Keyboard binding for an input action.
+
 **Parameters**
 - `_key` `Real` Keycode (vk_* or ord()).
 - `_check` `eEchoChamberInputCheck` Optional, defaults to `PRESSED`.
 - `_ctrl` `Bool` Optional, require Ctrl held.
 - `_alt` `Bool` Optional, require Alt held.
 - `_shift` `Bool` Optional, require Shift held.
+
 **Returns**: `Struct.EchoChamberInputBinding`
 
 ### `EchoChamberInputBindingFunc(_fn)`
 Function binding for an input action.
 **Parameters**
-- `_fn` `Function` Function that returns true when the action should fire.
+- `_fn` `Function` Function that returns true when the action should fire (signature: `function() -> Bool`).
 **Returns**: `Struct.EchoChamberInputBinding`
 
 ### `EchoChamberInputBindingBlock()`
@@ -93,6 +96,12 @@ Input context for Echo Chamber actions, supports inheritance.
 - `BindAction(_action_id, _binding)`: Bind an action to a binding. Requires an input binding struct built from `EchoChamberInputBinding`.
 - `BindKey(_action_id, _key, _check, _ctrl, _alt, _shift)`: Bind an action to a keyboard key.
 - `BindFunc(_action_id, _fn)`: Bind an action to a function.
+  - Arguments:
+    - `_action_id` `String` Action id to bind.
+    - `_fn` `Function` Function that returns true when the action should fire (signature: `function() -> Bool`).
+  - Returns: `Struct.EchoChamberInputContext`
+  - Additional details:
+    - The function is polled each frame while this context is active.
 - `BindBlock(_action_id)`: Bind an action to a blocker (prevents inheritance).
 - `ClearAction(_action_id)`: Clear a local action binding so the parent can take over.
 
@@ -137,7 +146,16 @@ Root container for debug UI panels and controls.
 - `RunDesktop()`: Run the managed desktop: capture input, process the active window, draw all windows, then draw overlays and tooltip.
 - `ConsumeMouse()`: Consume mouse input for all remaining controls this frame.
 - `ConsumeWheel()`: Consume mouse wheel for all remaining scroll regions.
-- `DrawScrollArea(_scroll_state, _rect, _content_h, _draw_fn)`: Draw a scrollable clipped region and handle mouse wheel scrolling when hovered. Requires a scroll state struct built from `EchoChamberScrollState`.
+- `DrawScrollArea(_scroll_state, _rect, _content_h, _draw_fn)`: Draw a scrollable clipped region and handle mouse wheel scrolling when hovered.
+  - Arguments:
+    - `_scroll_state` `Struct.EchoChamberScrollState` Scroll state that stores the current scroll offset.
+    - `_rect` `Struct` `{x1,y1,x2,y2}` Visible clip rect in GUI space.
+    - `_content_h` `Real` Total content height in pixels.
+    - `_draw_fn` `Function` Draw callback (signature: `function(_root, _rect, _scroll_y)`).
+  - Returns: N/A
+  - Additional details:
+    - The draw callback should offset its content by `_scroll_y` (positive values scroll down).
+    - The scissor clip is already applied to `_rect` when `_draw_fn` runs.
 - `PushClipRect(_x1, _y1, _x2, _y2)`: Push a clip rectangle. Any existing clip will be intersected with this one.
 - `PopClipRect()`: Pop the most recently pushed clip rectangle.
 - `HitTestRect(_x1, _y1, _x2, _y2)`: Simple hit test for a rect, respecting mouse_consumed and the current clip region.
@@ -146,7 +164,21 @@ Root container for debug UI panels and controls.
 - `ClearActiveOverlayOwner()`: Clear the active overlay (if any).
 - `RequestCloseOverlay()`: Request the currently active overlay (if any) to close.
 - `QueueOverlay(_owner_id, _draw_fn, _rect, _owner_window)`: Queue an overlay draw callback. Overlays are drawn after all windows.
+  - Arguments:
+    - `_owner_id` `Any` Control id that owns the overlay (used for overlay focus tracking).
+    - `_draw_fn` `Function` Draw callback (signature: `function(_root)`).
+    - `_rect` `Struct` Optional `{x1,y1,x2,y2}` overlay rect used for clipping and hit testing.
+    - `_owner_window` `Struct.EchoChamberWindow` Optional owner window used for theme overrides.
+  - Returns: N/A
 - `OpenContextMenu(_items, _x, _y, _owner_window)`: Open a context menu overlay at a screen position.
+  - Arguments:
+    - `_items` `Array` Array of item structs: `{ label, on_click, enabled, shortcut }` or `{ is_separator:true }`.
+    - `_x` `Real` Screen X position (GUI space).
+    - `_y` `Real` Screen Y position (GUI space).
+    - `_owner_window` `Struct.EchoChamberWindow` Optional owner window for theme overrides.
+  - Returns: N/A
+  - Additional details:
+    - `on_click` is a callback with signature `function()`.
 - `CloseContextMenu()`: Close the active context menu overlay (if open).
 - `IsContextMenuOpen()`: Returns true if the context menu overlay is open.
 - `DrawOverlays()`: Draw all queued overlays once per frame.
@@ -158,8 +190,27 @@ Root container for debug UI panels and controls.
 - `DrawPanelBackground(_panel)`: Convenience: draw a basic panel background.
 - `DrawPanelCollapseHandle(_panel)`: Draw a collapse handle for a panel (if it supports collapsing).
 - `SetTextInputSource(_fn)`: Set a function that returns the current active text input string. If not set, keyboard_string is used.
+  - Arguments:
+    - `_fn` `Function` Text source callback (signature: `function() -> String`).
+  - Returns: N/A
+  - Additional details:
+    - When a source function is set, the active text input is treated as read-only and pulls its value from this function each frame.
 - `SetTextInputSeed(_fn)`: Set a function that seeds the active text input string when focusing. If not set, keyboard_string is used.
-- `FocusTextInput(_id, _initial_text, _placeholder, _commit_fn, _config)`: Focus a text input by id and seed its initial content. Optional _commit_fn is called with the final string on blur.
+  - Arguments:
+    - `_fn` `Function` Seed callback (signature: `function(_text)`), where `_text` is the initial seed value.
+  - Returns: N/A
+  - Additional details:
+    - Use this to sync the initial focus value into your own input storage when a text input gains focus.
+- `FocusTextInput(_id, _initial_text, _placeholder, _commit_fn, _config)`: Focus a text input by id and seed its initial content.
+  - Arguments:
+    - `_id` `Any` Text input id to focus.
+    - `_initial_text` `String` Initial text value.
+    - `_placeholder` `String` Placeholder text shown when empty.
+    - `_commit_fn` `Function` Optional commit callback (signature: `function(_final_text)`).
+    - `_config` `Struct` Optional config struct for read-only, filters, and caret styling.
+  - Returns: N/A
+  - Additional details:
+    - `_commit_fn` runs on blur after the final string is synced from the text source (if any).
 - `BlurTextInput(_id)`: Blur a focused text input by id. Returns the final string (after syncing from the text source).
 - `IsActiveTextInput(_id)`: Returns true if the given id is the currently focused text input.
 - `GetActiveText()`: Return the current active text string while a text input is focused.
@@ -192,14 +243,47 @@ Floating debug window that owns a collection of docked panels.
 - `SetVisible(_flag)`: Show or hide this window.
 - `SetShowChromeButtons(_show_close, _show_minimize, _show_pin)`: Configure which chrome buttons are shown in the window header.
 - `OnClose(_fn)`: Set a callback that runs when the window is closed via the close button.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function()`).
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - Also fired when `Close()` is called.
 - `OnMove(_fn)`: Set a callback that runs when the window moves.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function()`).
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - Fired after the window rect changes position.
 - `OnResize(_fn)`: Set a callback that runs when the window resizes.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function()`).
+  - Returns: `Struct.EchoChamberWindow`
+  - Additional details:
+    - Fired after the window rect changes size.
 - `OnShow(_fn)`: Set a callback that runs when the window becomes visible.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function()`).
+  - Returns: `Struct.EchoChamberWindow`
 - `OnHide(_fn)`: Set a callback that runs when the window is hidden.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function()`).
+  - Returns: `Struct.EchoChamberWindow`
 - `OnFocus(_fn)`: Set a callback that runs when the window gains focus.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function()`).
+  - Returns: `Struct.EchoChamberWindow`
 - `OnBlur(_fn)`: Set a callback that runs when the window loses focus.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function()`).
+  - Returns: `Struct.EchoChamberWindow`
 - `OnMinimize(_fn)`: Set a callback that runs when the window is minimized.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function()`).
+  - Returns: `Struct.EchoChamberWindow`
 - `OnRestore(_fn)`: Set a callback that runs when the window is restored.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function()`).
+  - Returns: `Struct.EchoChamberWindow`
 - `Close()`: Close the window (sets visible to false). If an on_close callback exists, it is called.
 - `SetPinned(_flag)`: Set whether the window is pinned (disables dragging and resizing).
 - `TogglePinned()`: Toggle pinned state.
@@ -261,6 +345,11 @@ Layout panel docked to an edge or fill.
 - `SetMinSize(_value)`: Set minimum dock thickness when using fit-to-content.
 - `SetMaxSize(_value)`: Set maximum dock thickness when using fit-to-content.
 - `SetContentDrawer(_fn)`: Assign a custom content drawer for this panel.
+  - Arguments:
+    - `_fn` `Function` Draw callback (signature: `function(_root, _rect)`), where `_rect` is the panel content rect.
+  - Returns: `Struct.EchoChamberPanel`
+  - Additional details:
+    - The callback runs after controls/child panels are drawn.
 - `GetThickness()`: Get panel thickness based on collapsed state.
 - `ResolveThickness(_root, _avail_width, _avail_height)`: Resolve actual thickness for layout considering size mode.
 - `Draw(_root)`: Draw this panel and its contents (controls or child panels).
@@ -306,6 +395,14 @@ Non-interactive text label.
 **Public methods**
 - `SetText(_text)`: Set the label text.
 - `BindText(_source, [_key_or_fn])`: Bind the label text to a struct field or getter function.
+  - Arguments:
+    - `_source` `Struct,Function` Struct to read from, or a getter function (signature: `function() -> Any`).
+    - `_key_or_fn` `String` Optional struct field key when `_source` is a struct.
+  - Returns: `Struct.EchoChamberLabel`
+  - Additional details:
+    - If `_source` is callable, it becomes the getter, `_key_or_fn` is ignored, and any struct binding is cleared.
+    - If `_source` is a struct, `_key_or_fn` is the field key and any function binding is cleared.
+    - If the getter returns `undefined`, the label keeps its previous text.
 - `SetAlign(_align)`: Set text alignment ("left", "center", "right").
 - `UseSmallFont(_flag)`: Use the smaller theme font.
 
@@ -318,6 +415,14 @@ Non-interactive text box that wraps text to its width.
 **Public methods**
 - `SetText(_text)`: Set the text content for this box.
 - `BindText(_source, [_key_or_fn])`: Bind the text content to a struct field or getter function.
+  - Arguments:
+    - `_source` `Struct,Function` Struct to read from, or a getter function (signature: `function() -> Any`).
+    - `_key_or_fn` `String` Optional struct field key when `_source` is a struct.
+  - Returns: `Struct.EchoChamberTextBox`
+  - Additional details:
+    - If `_source` is callable, it becomes the getter, `_key_or_fn` is ignored, and any struct binding is cleared.
+    - If `_source` is a struct, `_key_or_fn` is the field key and any function binding is cleared.
+    - If the getter returns `undefined`, the text box keeps its previous text.
 - `SetAlign(_align)`: Set text alignment ("left", "center", "right").
 - `UseSmallFont(_flag)`: Use the smaller theme font.
 - `SetPadding(_x, [_y])`: Set inner padding for the text box.
@@ -331,7 +436,20 @@ Clickable button.
 
 **Public methods**
 - `OnClick(_fn)`: Set a callback to run when the button is activated.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function()`).
+  - Returns: `Struct.EchoChamberButton`
+  - Additional details:
+    - Triggered by mouse click or Enter while the button is focused.
 - `BindLabel(_source, [_key_or_fn])`: Bind the button label to a struct field or getter function.
+  - Arguments:
+    - `_source` `Struct,Function` Struct to read from, or a getter function (signature: `function() -> Any`).
+    - `_key_or_fn` `String` Optional struct field key when `_source` is a struct.
+  - Returns: `Struct.EchoChamberButton`
+  - Additional details:
+    - If `_source` is callable, it becomes the getter, `_key_or_fn` is ignored, and any struct binding is cleared.
+    - If `_source` is a struct, `_key_or_fn` is the field key and any function binding is cleared.
+    - If the getter returns `undefined`, the button keeps its previous label.
 
 ### `EchoChamberSlider(_id)`
 Horizontal slider control.
@@ -343,7 +461,20 @@ Horizontal slider control.
 - `SetRange(_min, _max)`: Set the slider value range.
 - `SetStep(_step)`: Set snap step size (0 for no snapping).
 - `BindValue(_source, [_key_or_fn])`: Bind the slider value to a struct field or getter/setter functions.
+  - Arguments:
+    - `_source` `Struct,Function` Struct to bind, or a getter function (signature: `function() -> Real`).
+    - `_key_or_fn` `String,Function` Optional struct field key, or a setter function (signature: `function(_value)`).
+  - Returns: `Struct.EchoChamberSlider`
+  - Additional details:
+    - If `_source` is callable, it becomes the getter and `_key_or_fn` is used as the optional setter (if callable); struct binding is cleared.
+    - If `_source` is a struct, `_key_or_fn` is treated as the field key and getter/setter functions are cleared.
+    - If no setter is provided, the slider still changes visually and `OnChange` still fires.
 - `OnChange(_fn)`: Set a callback that runs when the value changes.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function(_value)`).
+  - Returns: `Struct.EchoChamberSlider`
+  - Additional details:
+    - Fires when the slider changes via user input.
 
 ### `EchoChamberToggle(_id)`
 Checkbox-style toggle.
@@ -353,8 +484,27 @@ Checkbox-style toggle.
 
 **Public methods**
 - `BindBool(_source, [_key_or_fn])`: Bind the toggle value to a struct field or getter/setter functions.
+  - Arguments:
+    - `_source` `Struct,Function` Struct to bind, or a getter function (signature: `function() -> Bool`).
+    - `_key_or_fn` `String,Function` Optional struct field key, or a setter function (signature: `function(_value)`).
+  - Returns: `Struct.EchoChamberToggle`
+  - Additional details:
+    - If `_source` is callable, it becomes the getter and `_key_or_fn` is used as the optional setter (if callable); struct binding is cleared.
+    - If `_source` is a struct, `_key_or_fn` is treated as the field key and getter/setter functions are cleared.
+    - If no setter is provided, the toggle still updates visually and `OnChange` still fires.
 - `BindValue(_source, [_key_or_fn])`: Bind the toggle value (alias of BindBool).
+  - Arguments:
+    - `_source` `Struct,Function` Struct to bind, or a getter function (signature: `function() -> Bool`).
+    - `_key_or_fn` `String,Function` Optional struct field key, or a setter function (signature: `function(_value)`).
+  - Returns: `Struct.EchoChamberToggle`
+  - Additional details:
+    - Same behavior as `BindBool`.
 - `OnChange(_fn)`: Set a callback that runs when the value changes.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function(_value)`).
+  - Returns: `Struct.EchoChamberToggle`
+  - Additional details:
+    - Fires when the toggle changes via click or keyboard.
 
 ### `EchoChamberTextInput(_id)`
 Single-line text input.
@@ -366,6 +516,11 @@ Single-line text input.
 - `BindText(_struct, _key)`: Bind the text input to a struct field.
 - `SetPlaceholder(_text)`: Set placeholder text shown when empty.
 - `OnChange(_fn)`: Set a callback that runs when text is committed.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function(_text)`).
+  - Returns: `Struct.EchoChamberTextInput`
+  - Additional details:
+    - Fired when the input is committed (blur or Enter).
 - `SetReadOnly(_flag)`: Toggle read-only mode.
 - `SetMaxLength(_len)`: Set the maximum number of characters (0 for unlimited).
 - `SetAllowedChars(_chars)`: Restrict input to a specific set of characters.
@@ -373,6 +528,12 @@ Single-line text input.
 - `SetNumericOnly(_flag, [_allow_decimal], [_allow_negative])`: Restrict input to numeric characters.
 - `SetSelectAllOnFocus(_flag)`: Select all text when the input gains focus.
 - `SetFilter(_fn)`: Provide a filter function for inserted text.
+  - Arguments:
+    - `_fn` `Function` Filter callback (signature: `function(_insert_text) -> String`).
+  - Returns: `Struct.EchoChamberTextInput`
+  - Additional details:
+    - The filter runs before allow/deny/numeric constraints.
+    - Return an empty string to reject the insert.
 - `SetInvalid(_flag)`: Toggle invalid styling.
 
 ### `EchoChamberSeparator(_id)`
@@ -399,12 +560,51 @@ Virtualized list view control for very large row counts. Draws and hit-tests onl
 - `SetPreferredHeight(_h)`: Set the preferred height for FitToContent.
 - `SetPreferredWidth(_w)`: Set the preferred width for FitToContent.
 - `SetCountGetter(_fn)`: Set a function that returns the row count.
+  - Arguments:
+    - `_fn` `Function` Row count callback (signature: `function() -> Real`).
+  - Returns: `Struct.EchoChamberListView`
+  - Additional details:
+    - Called whenever the list view needs to know its row count.
 - `SetRowDrawer(_fn)`: Set a function that draws a row.
+  - Arguments:
+    - `_fn` `Function` Row draw callback (signature: `function(_index, _rect, _is_selected, _is_hover)`).
+  - Returns: `Struct.EchoChamberListView`
+  - Additional details:
+    - `_rect` is `{x1,y1,x2,y2}` in GUI space and already excludes padding/scrollbar.
+    - Background is already drawn; this function should only draw row content.
 - `SetRowMeasure(_fn)`: Set a function that returns row text/width for auto width.
+  - Arguments:
+    - `_fn` `Function` Measure callback (signature: `function(_index, _root, _panel) -> String,Real`).
+  - Returns: `Struct.EchoChamberListView`
+  - Additional details:
+    - Returning a string uses the theme body font to measure width.
+    - Returning a real value treats it as a pixel width.
+    - Only used when `SetAutoWidthFromContent` is enabled.
 - `SetOnSelect(_fn)`: Set a callback that runs when selection changes.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function(_index)`).
+  - Returns: `Struct.EchoChamberListView`
+  - Additional details:
+    - Fired when the selected index changes via mouse or keyboard.
 - `SetOnActivate(_fn)`: Set a callback that runs when a row is activated.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function(_index)`).
+  - Returns: `Struct.EchoChamberListView`
+  - Additional details:
+    - Triggered by Enter while a row is selected.
 - `SetOnDoubleClick(_fn)`: Set a callback for double click on a row.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function(_index)`).
+  - Returns: `Struct.EchoChamberListView`
+  - Additional details:
+    - Triggered by a fast double-click on the same row.
 - `SetOnRightClick(_fn)`: Set a callback for right click on a row.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function(_index, _x, _y)`).
+  - Returns: `Struct.EchoChamberListView`
+  - Additional details:
+    - `_x`/`_y` are GUI-space mouse coordinates.
+    - `_index` is -1 when right-clicking empty space.
 - `SetAutoScroll(_enabled)`: Enable or disable auto scroll to bottom.
 - `JumpToBottom()`: Jump scroll to the bottom.
 - `IsNearBottom()`: Return true if the scroll is near the bottom.
@@ -422,7 +622,21 @@ Base dropdown control. Variants override selection and row behavior.
 - `GetSelectedIndex()`: Get the selected index.
 - `SetSelectedIndex(_idx)`: Set the selected index.
 - `DrawOverlayRow(_root, _row_index, _row_rect, _hover, _selected)`: Draw an overlay row (override to customize).
+  - Arguments:
+    - `_root` `Struct.EchoChamberRoot` Root for theme access and metrics.
+    - `_row_index` `Real` Row index being drawn.
+    - `_row_rect` `Struct` `{x1,y1,x2,y2}` row rect in GUI space.
+    - `_hover` `Bool` True if the row is hovered.
+    - `_selected` `Bool` True if the row is selected.
+  - Returns: N/A
 - `OnOverlayRowClick(_root, _row_index, _rect, _mx, _my)`: Handle overlay row click (override to customize).
+  - Arguments:
+    - `_root` `Struct.EchoChamberRoot` Root for focus/overlay management.
+    - `_row_index` `Real` Row index that was clicked.
+    - `_rect` `Struct` `{x1,y1,x2,y2}` row rect in GUI space.
+    - `_mx` `Real` Mouse X (GUI space).
+    - `_my` `Real` Mouse Y (GUI space).
+  - Returns: N/A
 - `SetOptions(_array)`: Set the dropdown options array.
 - `SetUnfoldDirection(_dir)`: Set the overlay unfold direction ("up" or "down").
 - `SetUseSelectedLabelWhenClosed(_flag)`: Use the selected label when closed.
@@ -437,6 +651,11 @@ Dropdown variant that binds a selected index to a struct field.
 **Public methods**
 - `BindIndex(_struct, _key)`: Bind the selected index to a struct field.
 - `OnChange(_fn)`: Set a callback that runs when the selected index changes.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function(_index, _value)`).
+  - Returns: `Struct.EchoChamberDropdownSelect`
+  - Additional details:
+    - Only fires when the selected index actually changes.
 - `GetSelectedIndex()`: Get the selected index.
 - `SetSelectedIndex(_idx)`: Set the selected index.
 - `OnOverlayRowClick(_root, _row_index, _rect, _mx, _my)`: Handle overlay row click.
@@ -450,6 +669,9 @@ Dropdown variant that shows a checklist menu that stays open.
 **Public methods**
 - `SetItems(_items)`: Set the item list for the menu.
 - `OnAnyChange(_fn)`: Set a callback that runs when any item changes.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function()`).
+  - Returns: `Struct.EchoChamberDropdownToggleMenu`
 - `GetSelectedIndex()`: Get the selected index.
 - `SetSelectedIndex(_idx)`: Set the selected index.
 - `DrawOverlayRow(_root, _row_index, _rect, _hover, _is_selected)`: Draw an overlay row.
@@ -463,7 +685,19 @@ Dropdown-style machine picker with search field at top.
 
 **Public methods**
 - `SetListBuilder(_fn)`: Set a function that provides the list of machines based on the current filter text.
+  - Arguments:
+    - `_fn` `Function` List builder (signature: `function(_filter_string) -> Struct` with `labels`, `index_map`, and `selected_index`).
+  - Returns: `Struct.EchoChamberMachinePicker`
+  - Additional details:
+    - `labels` is the filtered display list.
+    - `index_map` maps filtered indices to real indices in your source list.
+    - `selected_index` is the initially selected filtered index.
 - `OnSelect(_fn)`: Set a callback that runs when the user selects a machine.
+  - Arguments:
+    - `_fn` `Function` Callback (signature: `function(_real_index)`).
+  - Returns: `Struct.EchoChamberMachinePicker`
+  - Additional details:
+    - `_real_index` comes from `index_map` for the selected filtered row.
 - `SetUnfoldDirection(_dir)`: Set the overlay unfold direction ("up" or "down").
 
 ### `EchoChamberOpenConsole(_ui_root)`
