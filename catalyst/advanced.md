@@ -34,6 +34,7 @@ Advanced topics:
 - Derived base values (`base_func`)
 - Soft caps & curves (`post_process`)
 - Tags on stats and modifiers
+- Save and reload reattachment (`StaticSetup`)
 
 ---
 
@@ -418,3 +419,19 @@ Tags are purely for your game logic - Catalyst itself doesn't interpret
 them - but many patterns (dispels, "only fire buffs", "remove all movement
 effects") become much easier when you have them wired into stats and
 modifiers.
+
+---
+
+## 8. Save and reload reattachment (`StaticSetup`)
+
+If you serialize stats and modifiers, the modifier static methods are not preserved. After loading, call `StaticSetup()` once per stat to reattach those methods.
+
+Example with an array of stats:
+
+```js
+for (var i = 0; i < array_length(stats_list); i++) {
+	stats_list[i].StaticSetup();
+}
+```
+
+If you store stats in a struct, iterate the keys using whatever helper you already use and call `StaticSetup()` for each stat.

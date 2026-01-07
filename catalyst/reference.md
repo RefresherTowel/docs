@@ -17,20 +17,13 @@ nav_order: 3
 </details>
 </div>
 
-# Catalyst API Reference
+## Catalyst Scripting Reference
 
-This page lists the main types, enums, and methods provided by **Catalyst**.
+Catalyst is a stat and modifier system built around GML 2.3+ structs and functions.
 
-It is organized as:
-
-- [Enums](#enums)
-- [CatalystStatistic](#catalyststatistic)
-- [CatalystModifier](#catalystmodifier)
-- [CatalystModifierTracker & Countdown](#catalystmodifiertracker--countdown)
-
-The **Quickstart** and **Advanced Topics** pages show how these pieces are used
-together in practice. This page is more of a "what exists and what it does"
-reference.
+Callback notes:
+- Bind explicit scope with `method(self, function(...) {})` for instance scope.
+- If you need additional scope, bind a struct that contains references to all the different scope you might want with `method(scope_struct, function(...) {})` (for instance, you might want to save the values from local variables alongside a reference to the owner).
 
 ---
 
@@ -38,843 +31,702 @@ reference.
 
 ### `eCatMathOps`
 
-```js
-enum eCatMathOps {
-    ADD,
-    MULTIPLY,
-    FORCE_MIN,
-    FORCE_MAX,
-}
-```
-
-- `ADD`  
-  Flat addition; applied as `value * stacks` and added to the running value.
-
-- `MULTIPLY`  
-  Multiplicative scaling; applied as:
-
-  ```js
-  _value *= power(1 + value, stacks);
-  ```
-
-  So a modifier with `value = 0.20` and `stacks = 2` produces a factor of
-  `(1.20 ^ 2)`.
-
-- `FORCE_MIN`  
-  Enforces a minimum value **after** all ADD and MULTIPLY effects are applied.
-  FORCE_MIN modifiers are applied in a separate stage before post-processing
-  and are excluded from family comparisons.
-
-- `FORCE_MAX`  
-  Enforces a maximum value **after** ADD/MULTIPLY and FORCE_MIN effects are
-  applied. FORCE_MAX modifiers are applied in a separate stage before
-  post-processing and are excluded from family comparisons.
-
----
+- `ADD`
+  - Adds `value * stacks` to the running value.
+- `MULTIPLY`
+  - Multiplies the running value by `power(1 + value, stacks)`.
+- `FORCE_MIN`
+  - Applied after all ADD and MULTIPLY layers.
+  - If the current value is less than the modifier value, the value is raised to the modifier value.
+  - Excluded from family comparisons.
+- `FORCE_MAX`
+  - Applied after all ADD, MULTIPLY, and FORCE_MIN passes.
+  - If the current value is greater than the modifier value, the value is lowered to the modifier value.
+  - Excluded from family comparisons.
 
 ### `eCatStatLayer`
 
-```js
-enum eCatStatLayer {
-    BASE_BONUS, // attributes, level scaling, etc.
-    EQUIPMENT,  // wand / weapon bonuses
-    AUGMENTS,   // runes / talents / gems / etc
-    TEMP,       // short buffs / debuffs
-    GLOBAL,     // late-stage global modifiers
-}
-```
+Layers control when modifiers apply during evaluation. Catalyst processes layers in this order:
 
-Layers control *when* modifiers apply in the pipeline. For example:
-
-- `BASE_BONUS` - base stats, level-based bonuses, ancestry.
-- `EQUIPMENT` - weapons, wands, armor, accessories.
-- `AUGMENTS` - runes, talents, passive trees, gems.
-- `TEMP` - temporary buffs and debuffs.
-- `GLOBAL` - global auras and late-stage effects.
-
-Catalyst processes layers in this order when evaluating a stat.
-
----
+- `BASE_BONUS`
+- `EQUIPMENT`
+- `AUGMENTS`
+- `TEMP`
+- `GLOBAL`
 
 ### `eCatFamilyStackMode`
 
-```js
-enum eCatFamilyStackMode {
-    STACK_ALL,  // default: all apply
-    HIGHEST,    // only the strongest effect in the family applies
-    LOWEST,     // only the weakest effect in the family applies
-}
-```
-
-- `STACK_ALL` - all modifiers in the family apply as usual.  
-- `HIGHEST` - only the strongest modifier in the family applies
-  (per layer, per context).  
-- `LOWEST` - only the weakest modifier in the family applies
-  (per layer, per context).
-
-Family stacking is configured per modifier; see
-[Modifier families](#families--stacking) in the `CatalystModifier` section.
+- `STACK_ALL`
+  - All modifiers in the family apply.
+- `HIGHEST`
+  - Only the strongest modifier in the family applies (per layer, per family_mode).
+- `LOWEST`
+  - Only the weakest modifier in the family applies (per layer, per family_mode).
 
 ---
 
-## `CatalystStatistic`
+## Macros and globals
 
-A `CatalystStatistic` represents a single numeric stat: damage, armor, movement
-speed, cooldown, etc.
+### `CATALYST_COUNTDOWN`
 
-### Construction
+Macro alias for the global tracker instance.
 
-```js
-stat = new CatalystStatistic(_value, _min_value, _max_value);
-```
+- Definition: `#macro CATALYST_COUNTDOWN global.__catalyst_modifier_tracker`
+- Used by `CatalystModifier.ApplyDuration()` and `CatalystModCountdown()`.
 
-- `_value` - starting base value.
-- `_min_value` - minimum allowed value when clamped (default `-infinity`).
-- `_max_value` - maximum allowed value when clamped (default `infinity`).
+### `global.__catalyst_modifier_tracker`
 
-In most cases you create stats once (for example in an actor's `Create` event)
-and then attach modifiers to them over time.
+Default global tracker instance.
 
----
-
-### Core fields
-
-These fields are typically not mutated directly; use methods instead, but it's
-useful to know what exists.
-
-- `base_value` - base (pre-modifier) value.
-- `starting_value` - initial base value at construction time.
-- `current_value` - cached canonical value (result of the last `GetValue()`).
-- `base_func` - optional callback `fn(stat, context) -> Real` that overrides
-  `base_value` when present.
-
-- `min_value` - minimum allowed value when `clamped` is true.
-- `max_value` - maximum allowed value when `clamped` is true.
-- `clamped` - whether final values are clamped to `[min_value, max_value]`.
-
-- `rounded` - whether final values are rounded.
-- `round_step` - step used for rounding (1 for integers, 0.01 for 2 decimals, etc).
-
-- `modifiers` - array of attached `CatalystModifier` instances.
-- `altered` - `true` when the numeric value needs recomputing.
-
-- `name` - optional display name for the stat.
-- `on_change_callbacks` - array of `{ ident, fn }` structures registered via
-  `AddOnChangeFunction`.
-- `on_change_next_id` - internal id counter for callbacks.
-
-- `post_process` - optional callback `fn(stat, raw_value, context) -> Real`
-  that runs after all modifiers and families are applied.
-- `tags` - array of tag strings assigned to the stat.
+- Created at load time in `scr_catalyst_macro`.
+- Recreated on demand if missing when a timed modifier is applied.
+- You can replace it with your own `CatalystModifierTracker`, but the macro will still point at this global.
 
 ---
 
-### Static setup (saves / reload)
+## Constructors
 
-If you serialise stats and modifiers (for example, in a save system), the static methods on modifiers need to be reattached after loading. Catalyst provides a helper:
+### `CatalystStatistic(_value, _min_value, _max_value)`
 
-```js
-// After loading stats/modifiers from disk
-stat.StaticSetup();
-```
+Creates a numeric stat container with modifiers, clamping, rounding, and callbacks.
 
-`StaticSetup()` walks the stat's attached modifiers and re-applies the `CatalystModifier` static methods. Call it once per stat after deserialising.
+**Arguments**
+- `_value` `Real` Initial base value.
+- `_min_value` `Real` Optional minimum clamp value (defaults to `-infinity`).
+- `_max_value` `Real` Optional maximum clamp value (defaults to `infinity`).
+
+**Returns**: `Struct.CatalystStatistic`
+
+**Core fields**
+- `base_value` `Real` Base (pre modifier) value.
+- `starting_value` `Real` Base value at construction time.
+- `current_value` `Real` Cached canonical value from the last `GetValue()` call without context.
+- `base_func` `Function,Noone` Optional base override function `fn(stat, context) -> Real`.
+- `min_value` `Real` Minimum clamp value.
+- `max_value` `Real` Maximum clamp value.
+- `clamped` `Bool` Whether clamping is enabled (default `false`).
+- `rounded` `Bool` Whether rounding is enabled (default `true`).
+- `round_step` `Real` Rounding step (default `1`).
+- `modifiers` `Array<Struct.CatalystModifier>` Attached modifiers.
+- `altered` `Bool` Whether the cached value needs recomputing (default `true`).
+- `name` `String` Human readable label (default empty string).
+- `on_change_callbacks` `Array<Struct>` Entries are `{ ident, fn }`.
+- `on_change_next_id` `Real` Internal id counter for callbacks.
+- `post_process` `Function,Noone` Optional post process `fn(stat, raw_value, context) -> Real`.
+- `tags` `Array<String>` Stat tags.
+
+**Evaluation pipeline**
+- Start from `base_value` or `base_func(stat, context)` when `base_func` is callable.
+- Stage 1: Apply ADD and MULTIPLY modifiers by layer order.
+- Stage 2: Apply FORCE_MIN modifiers (all layers).
+- Stage 3: Apply FORCE_MIN extra ops (all layers).
+- Stage 4: Apply FORCE_MAX modifiers (all layers).
+- Stage 5: Apply FORCE_MAX extra ops (all layers).
+- Stage 6: Apply `post_process` if callable.
+- Stage 7: Apply clamping and rounding if enabled.
+
+**Evaluation rules**
+- Condition callbacks run only when callable. If `context` is `undefined`, the condition is called as `fn(stat)`; otherwise it is called as `fn(stat, context)`.
+- Stacks are computed as follows:
+  - Start from `stacks` (default `1` when missing in extra ops).
+  - If `stack_func` is callable and a context is provided, stacks become `stack_func(stat, context)`.
+  - If `stack_func` is callable and no context is provided, stacks become `0`.
+  - If `max_stacks` is defined, stacks are clamped to `[0, max_stacks]`. If it is missing, stacks are only clamped to `>= 0`.
+- Family stacking applies only when `family` is set and `family_mode` is `HIGHEST` or `LOWEST`.
+  - Family comparisons are per layer and include both real modifiers and preview ops.
+  - The strength comparison uses `abs(value * stacks)` for ADD and `abs(power(1 + value, stacks) - 1)` for MULTIPLY.
+  - `FORCE_MIN` and `FORCE_MAX` are excluded from family comparisons.
+
+**Public methods**
+
+- #### `StaticSetup()`
+  - **Arguments:** None.
+  - **Returns:** `Undefined`
+  - **Additional details:**
+    - Reapplies the `CatalystModifier` static methods to all current modifiers.
+    - Call this after loading serialized stats and modifiers from disk.
+
+- #### `AddModifier(_mod)`
+  - **Arguments:**
+    - `_mod` `Struct.CatalystModifier` Modifier to attach.
+  - **Returns:** `Struct.CatalystStatistic`
+  - **Additional details:**
+    - If the modifier is already attached to a different stat, the call is ignored and `EchoDebugWarn` logs a warning.
+    - If the modifier is already attached to this stat, the call is a no op.
+    - Sets `_mod.applied_stat = self` and marks the stat as altered.
+
+- #### `AddOnChangeFunction(fn1, fn2, ...)`
+  - **Arguments:**
+    - `fn*` `Function` One or more callback functions. Each is called as `fn(stat, old_value, new_value)`.
+  - **Returns:** `Array<Real>` Array of callback ids, one per function added.
+  - **Additional details:**
+    - Callbacks fire only when `GetValue()` is called with no context and the cached value changes.
+    - `undefined` arguments are skipped, but non-callable values are stored as-is and will error when fired.
+    - Use `method(self, function(...) {})` if you need instance scope.
+
+- #### `RemoveOnChangeFunction(_id)`
+  - **Arguments:**
+    - `_id` `Real` Callback id returned by `AddOnChangeFunction`.
+  - **Returns:** `Bool`
+
+- #### `RemoveModifierById(_mod_id)`
+  - **Arguments:**
+    - `_mod_id` `Struct.CatalystModifier` Modifier instance to remove.
+  - **Returns:** `Bool`
+  - **Additional details:**
+    - Destroys the modifier via `Destroy(false)` and removes it from the stat.
+
+- #### `RemoveAllModifiers()`
+  - **Arguments:** None.
+  - **Returns:** `Struct.CatalystStatistic`
+  - **Additional details:**
+    - Calls `Destroy(false)` on each modifier, then clears the modifiers array.
+
+- #### `RemoveModifierBySourceLabel(_source_label)`
+  - **Arguments:**
+    - `_source_label` `String` Source label to match.
+  - **Returns:** `Real` Number of modifiers removed.
+
+- #### `RemoveModifierBySourceId(_source_id)`
+  - **Arguments:**
+    - `_source_id` `ID.Instance|Struct` Source id to match.
+  - **Returns:** `Real` Number of modifiers removed.
+
+- #### `RemoveModifierBySourceMeta(_source_meta_func)`
+  - **Arguments:**
+    - `_source_meta_func` `Function` Predicate called as `fn(source_meta) -> Bool`.
+  - **Returns:** `Real` Number of modifiers removed.
+  - **Additional details:**
+    - The predicate is called for every modifier.
+    - The function is not validated. It must be callable.
+
+- #### `RemoveModifierByPosition(_pos)`
+  - **Arguments:**
+    - `_pos` `Real` Index in the modifiers array.
+  - **Returns:** `Bool` True if an entry existed and was removed.
+
+- #### `RemoveModifiersByTag(_tag)`
+  - **Arguments:**
+    - `_tag` `String` Tag string to remove.
+  - **Returns:** `Real` Number of modifiers removed.
+
+- #### `FindModifiersBySourceId(_source_id)`
+  - **Arguments:**
+    - `_source_id` `ID.Instance|Struct`
+  - **Returns:** `Array<Struct.CatalystModifier>`
+
+- #### `FindModifiersBySourceLabel(_source_label)`
+  - **Arguments:**
+    - `_source_label` `String`
+  - **Returns:** `Array<Struct.CatalystModifier>`
+
+- #### `FindModifiersBySourceMeta(_predicate_func)`
+  - **Arguments:**
+    - `_predicate_func` `Function` Predicate called as `fn(source_meta) -> Bool`.
+  - **Returns:** `Array<Struct.CatalystModifier>`
+  - **Additional details:**
+    - The function is not validated. It must be callable.
+
+- #### `FindModifiersById(_id)`
+  - **Arguments:**
+    - `_id` `Struct.CatalystModifier`
+  - **Returns:** `Array<Struct.CatalystModifier>`
+
+- #### `HasModifierFromSourceId(_source_id)`
+  - **Arguments:**
+    - `_source_id` `ID.Instance|Struct`
+  - **Returns:** `Bool`
+
+- #### `HasModifierFromSourceLabel(_source_label)`
+  - **Arguments:**
+    - `_source_label` `String`
+  - **Returns:** `Bool`
+
+- #### `HasModifierFromSourceMeta(_predicate_func)`
+  - **Arguments:**
+    - `_predicate_func` `Function` Predicate called as `fn(source_meta) -> Bool`.
+  - **Returns:** `Bool`
+  - **Additional details:**
+    - The function is not validated. It must be callable.
+
+- #### `HasModifier(_mod)`
+  - **Arguments:**
+    - `_mod` `Struct.CatalystModifier` Modifier instance.
+  - **Returns:** `Bool`
+
+- #### `SetPostProcess(_fn)`
+  - **Arguments:**
+    - `_fn` `Function` Callback `fn(stat, value, context) -> Real`.
+  - **Returns:** `Struct.CatalystStatistic`
+  - **Additional details:**
+    - Logs a debug message and ignores the call if `_fn` is not callable.
+
+- #### `ClearPostProcess()`
+  - **Arguments:** None.
+  - **Returns:** `Struct.CatalystStatistic`
+
+- #### `GetValue(_context)`
+  - **Arguments:**
+    - `_context` `Any` Optional evaluation context.
+  - **Returns:** `Real`
+  - **Additional details:**
+    - If `_context` is `undefined` or omitted, returns the cached canonical value and fires on change callbacks when the value changes.
+    - If `_context` is provided, evaluates a preview value without caching or callbacks.
+    - Passing `undefined` explicitly is treated the same as omitting the argument.
+
+- #### `GetValuePreview(_context)`
+  - **Arguments:**
+    - `_context` `Any` Optional evaluation context.
+  - **Returns:** `Real`
+  - **Additional details:**
+    - Always evaluates without caching or callbacks.
+
+- #### `PreviewChange(_mod_value, _mod_op, _layer, _stacks, _max_stacks, _condition, _stack_func, _context, _family, _family_mode)`
+  - **Arguments:**
+    - `_mod_value` `Real` Modifier value to apply.
+    - `_mod_op` `eCatMathOps` Math operation.
+    - `_layer` `eCatStatLayer` Optional layer (defaults to `AUGMENTS`).
+    - `_stacks` `Real` Optional stacks (defaults to `1`).
+    - `_max_stacks` `Real` Optional max stacks (defaults to `_stacks` when negative).
+    - `_condition` `Function` Optional condition `fn(stat, context) -> Bool`.
+    - `_stack_func` `Function` Optional stack function `fn(stat, context) -> Real`.
+    - `_context` `Any` Optional evaluation context.
+    - `_family` `Any` Optional family key.
+    - `_family_mode` `eCatFamilyStackMode` Optional family mode (defaults to `STACK_ALL`).
+  - **Returns:** `Real`
+  - **Additional details:**
+    - Builds a temporary op struct and evaluates it without mutating the stat.
+
+- #### `PreviewChanges(_extra_ops, _context)`
+  - **Arguments:**
+    - `_extra_ops` `Array<Struct>` Array of op structs with fields:
+      - `value` `Real`
+      - `operation` `eCatMathOps`
+      - `layer` `eCatStatLayer` Optional, defaults to `AUGMENTS`.
+      - `stacks` `Real` Optional, defaults to `1`.
+      - `max_stacks` `Real` Optional, when omitted no max clamp is applied.
+      - `condition` `Function` Optional, `fn(stat, context) -> Bool`.
+      - `stack_func` `Function` Optional, `fn(stat, context) -> Real`.
+      - `family` `Any` Optional family key.
+      - `family_mode` `eCatFamilyStackMode` Optional, defaults to `STACK_ALL`.
+    - `_context` `Any` Optional evaluation context.
+  - **Returns:** `Real`
+  - **Additional details:**
+    - If `_extra_ops` is `undefined`, it is treated as an empty array.
+
+- #### `SetClamped(_bool)`
+  - **Arguments:**
+    - `_bool` `Bool` Optional, defaults to `true`.
+  - **Returns:** `Struct.CatalystStatistic`
+  - **Additional details:**
+    - Use `SetClamped(false)` to disable clamping.
+
+- #### `SetRounding(_enabled, _step)`
+  - **Arguments:**
+    - `_enabled` `Bool` Whether rounding is enabled.
+    - `_step` `Real` Optional step (defaults to `1`).
+  - **Returns:** `Struct.CatalystStatistic`
+  - **Additional details:**
+    - If `round_step <= 0`, the evaluation step uses `1` to avoid division by zero.
+
+- #### `SetName(_name)`
+  - **Arguments:**
+    - `_name` `String` Name to assign.
+  - **Returns:** `Struct.CatalystStatistic`
+
+- #### `SetBaseValue(_amount)`
+  - **Arguments:**
+    - `_amount` `Real` New base value.
+  - **Returns:** `Struct.CatalystStatistic`
+
+- #### `SetBaseFunc(_fn)`
+  - **Arguments:**
+    - `_fn` `Function` Callback `fn(stat, context) -> Real`.
+  - **Returns:** `Struct.CatalystStatistic`
+  - **Additional details:**
+    - Logs a debug message and ignores the call if `_fn` is not callable.
+
+- #### `ClearBaseFunc()`
+  - **Arguments:** None.
+  - **Returns:** `Struct.CatalystStatistic`
+
+- #### `SetMaxValue(_amount)`
+  - **Arguments:**
+    - `_amount` `Real` New max value.
+  - **Returns:** `Struct.CatalystStatistic`
+
+- #### `SetMinValue(_amount)`
+  - **Arguments:**
+    - `_amount` `Real` New min value.
+  - **Returns:** `Struct.CatalystStatistic`
+
+- #### `ChangeBaseValue(_amount)`
+  - **Arguments:**
+    - `_amount` `Real` Amount to add.
+  - **Returns:** `Struct.CatalystStatistic`
+  - **Additional details:**
+    - Applies clamping and rounding to `base_value` if enabled.
+
+- #### `ChangeMaxValue(_amount)`
+  - **Arguments:**
+    - `_amount` `Real` Amount to add.
+  - **Returns:** `Struct.CatalystStatistic`
+
+- #### `ChangeMinValue(_amount)`
+  - **Arguments:**
+    - `_amount` `Real` Amount to add.
+  - **Returns:** `Struct.CatalystStatistic`
+
+- #### `ResetToStarting()`
+  - **Arguments:** None.
+  - **Returns:** `Struct.CatalystStatistic`
+
+- #### `ResetAll()`
+  - **Arguments:** None.
+  - **Returns:** `Struct.CatalystStatistic`
+  - **Additional details:**
+    - Resets base and cached values to `starting_value`.
+    - Clears modifiers, callbacks, tags, base_func, and post_process.
+    - Resets clamping and rounding to defaults.
+
+- #### `GetStartingValue()`
+  - **Arguments:** None.
+  - **Returns:** `Real`
+
+- #### `GetBaseValue()`
+  - **Arguments:** None.
+  - **Returns:** `Real`
+
+- #### `GetMaxValue()`
+  - **Arguments:** None.
+  - **Returns:** `Real`
+
+- #### `GetMinValue()`
+  - **Arguments:** None.
+  - **Returns:** `Real`
+
+- #### `GetName()`
+  - **Arguments:** None.
+  - **Returns:** `String`
+
+- #### `DebugDescribe()`
+  - **Arguments:** None.
+  - **Returns:** `Undefined`
+  - **Additional details:**
+    - Logs the stat and modifier details using `GetValuePreview()`.
+    - Does not change cached values or fire callbacks.
+
+- #### `AddTag(_tag)`
+  - **Arguments:**
+    - `_tag` `String`
+  - **Returns:** `Struct.CatalystStatistic`
+
+- #### `RemoveTag(_tag)`
+  - **Arguments:**
+    - `_tag` `String`
+  - **Returns:** `Struct.CatalystStatistic`
+
+- #### `HasTag(_tag)`
+  - **Arguments:**
+    - `_tag` `String`
+  - **Returns:** `Bool`
+
+- #### `ClearTags()`
+  - **Arguments:** None.
+  - **Returns:** `Struct.CatalystStatistic`
+
+- #### `_EvaluateWithExtraOps(_extra_ops, _context)`
+  - **Arguments:**
+    - `_extra_ops` `Array<Struct>` Extra ops array, same format as `PreviewChanges`.
+    - `_context` `Any` Optional evaluation context.
+  - **Returns:** `Real`
+  - **Additional details:**
+    - Internal evaluation helper used by `GetValue` and preview methods.
+    - Available as a method but usually not called directly.
 
 ---
 
-### Modifier management
+### `CatalystModifier(_value, _math_operation, _duration, _source_label, _source_id, _source_meta)`
 
-Attach and remove modifiers from a stat:
+Creates a modifier that can be attached to a `CatalystStatistic`.
 
-```js
-stat.AddModifier(mod);
+**Arguments**
+- `_value` `Real` Modifier value.
+- `_math_operation` `eCatMathOps` How the value applies.
+- `_duration` `Real` Optional duration in ticks (`-1` for permanent).
+- `_source_label` `String` Optional human readable label.
+- `_source_id` `ID.Instance|Struct` Optional source handle.
+- `_source_meta` `Any` Optional metadata.
 
-stat.RemoveModifierById(mod);
-stat.RemoveAllModifiers();
+**Returns**: `Struct.CatalystModifier`
 
-stat.RemoveModifierBySourceLabel(source_label);
-stat.RemoveModifierBySourceId(source_id);
-stat.RemoveModifierBySourceMeta(predicate_func);
+**Core fields**
+- `value` `Real` Modifier value.
+- `operation` `eCatMathOps` Math operation.
+- `duration` `Real` Remaining duration (`-1` for permanent).
+- `duration_max` `Real` Original duration.
+- `duration_applied` `Bool` Whether the modifier is tracked.
+- `stacks` `Real` Current stack count (default `1`).
+- `max_stacks` `Real` Max stack count (default `infinity`).
+- `layer` `eCatStatLayer` Default layer (default `TEMP`).
+- `condition` `Function,Undefined` Optional condition.
+- `stack_func` `Function,Undefined` Optional stack function.
+- `family` `Any` Family key (default empty string).
+- `family_mode` `eCatFamilyStackMode` Family stacking mode (default `STACK_ALL`).
+- `tags` `Array<String>` Modifier tags.
+- `source_label` `String` Source label.
+- `source_id` `ID.Instance|Struct` Source handle.
+- `source_meta` `Any` Metadata object.
+- `applied_stat` `Struct.CatalystStatistic,Noone` Owning stat.
+- `remove_from_stat` `Bool` Internal flag used during destruction.
 
-stat.RemoveModifierByPosition(pos);
+**Duration behavior**
+- A positive duration registers the modifier with the global tracker.
+- A negative duration is permanent and not tracked.
+- A duration of `0` is not tracked when first created. If already tracked, it will expire on the next countdown.
+- `ApplyDuration()` is called at the end of the constructor.
 
-stat.RemoveModifiersByTag(tag);
+**Public methods**
 
-var _mods_by_id    = stat.FindModifiersById(mod);
-var _mods_by_label = stat.FindModifiersBySourceLabel(source_label);
-var _mods_by_id2   = stat.FindModifiersBySourceId(source_id);
-var _mods_by_meta  = stat.FindModifiersBySourceMeta(predicate_func);
+- #### `ApplyDuration()`
+  - **Arguments:** None.
+  - **Returns:** `Undefined`
+  - **Additional details:**
+    - Registers the modifier with `CATALYST_COUNTDOWN` if `duration > 0` and not already applied.
+    - Creates the global tracker if missing.
 
-var _has_from_id    = stat.HasModifierFromSourceId(source_id);
-var _has_from_label = stat.HasModifierFromSourceLabel(source_label);
-var _has_from_meta  = stat.HasModifierFromSourceMeta(predicate_func);
-var _has_mod        = stat.HasModifier(mod);
-```
+- #### `SetDuration(_duration)`
+  - **Arguments:**
+    - `_duration` `Real` New duration value.
+  - **Returns:** `Struct.CatalystModifier`
+  - **Additional details:**
+    - Updates `duration` and `duration_max`.
+    - Detaches from the tracker when `_duration < 0`.
+    - Reapplies tracking when `_duration >= 0` and `duration > 0`.
 
-- `AddModifier(mod)`  
-  Attaches a `CatalystModifier` and marks the stat as altered. The modifier's
-  `applied_stat` field is set to this stat. If the modifier is already attached
-  to another stat, the call is ignored and an `EchoDebugWarn` message is emitted.
-  If it is already attached to this stat, the call is a no-op.
+- #### `ResetDuration()`
+  - **Arguments:** None.
+  - **Returns:** `Undefined`
+  - **Additional details:**
+    - Calls `SetDuration(duration_max)`.
 
-- `RemoveModifierById(mod)`  
-  Removes the first matching modifier instance from this stat, calls
-  `Destroy(false)`, and marks the stat as altered. Returns `true` if a modifier
-  was removed.
+- #### `SetValue(_value)`
+  - **Arguments:**
+    - `_value` `Real`
+  - **Returns:** `Struct.CatalystModifier`
+  - **Additional details:**
+    - Marks the owning stat as altered if attached.
 
-- `RemoveAllModifiers()`  
-  Removes and destroys all modifiers on this stat and marks it as altered.
+- #### `SetMathsOp(_maths_op)`
+  - **Arguments:**
+    - `_maths_op` `eCatMathOps`
+  - **Returns:** `Struct.CatalystModifier`
+  - **Additional details:**
+    - Marks the owning stat as altered if attached.
 
-- `RemoveModifierBySourceLabel(source_label)`  
-  Removes all modifiers whose `source_label` equals the provided value.
+- #### `SetSourceLabel(_source_label)`
+  - **Arguments:**
+    - `_source_label` `String`
+  - **Returns:** `Struct.CatalystModifier`
 
-- `RemoveModifierBySourceId(source_id)`  
-  Removes all modifiers whose `source_id` equals the provided value.
+- #### `SetSourceId(_source_id)`
+  - **Arguments:**
+    - `_source_id` `ID.Instance|Struct`
+  - **Returns:** `Struct.CatalystModifier`
 
-- `RemoveModifierBySourceMeta(predicate_func)`  
-  Removes all modifiers where `predicate_func(mod.source_meta)` returns `true`.
+- #### `SetSourceMeta(_source_meta)`
+  - **Arguments:**
+    - `_source_meta` `Any`
+  - **Returns:** `Struct.CatalystModifier`
 
-- `RemoveModifierByPosition(pos)`  
-  Removes the modifier at index `pos` in the `modifiers` array, if it exists.
+- #### `SetLayer(_layer)`
+  - **Arguments:**
+    - `_layer` `eCatStatLayer`
+  - **Returns:** `Struct.CatalystModifier`
+  - **Additional details:**
+    - Marks the owning stat as altered if attached.
 
-- `RemoveModifiersByTag(tag)`  
-  Removes all modifiers that have the given tag.
+- #### `SetStacks(_stacks)`
+  - **Arguments:**
+    - `_stacks` `Real`
+  - **Returns:** `Struct.CatalystModifier`
+  - **Additional details:**
+    - Clamps to `[0, max_stacks]`.
+    - Marks the owning stat as altered if attached.
 
-- `FindModifiersBySourceId(source_id)`  
-  Returns an array of modifiers whose `source_id` matches.
+- #### `AddStacks(_delta)`
+  - **Arguments:**
+    - `_delta` `Real` Optional delta (defaults to `1`).
+  - **Returns:** `Struct.CatalystModifier`
 
-- `FindModifiersBySourceLabel(source_label)`  
-  Returns an array of modifiers whose `source_label` matches.
+- #### `SetMaxStacks(_max)`
+  - **Arguments:**
+    - `_max` `Real` New max stack count.
+  - **Returns:** `Struct.CatalystModifier`
+  - **Additional details:**
+    - Uses `max(1, _max)` so the minimum is `1`.
+    - Clamps the current stack count if needed.
+    - Marks the owning stat as altered if attached.
 
-- `FindModifiersBySourceMeta(predicate_func)`  
-  Returns an array of modifiers whose `source_meta` passes the predicate.
+- #### `SetCondition(_fn)`
+  - **Arguments:**
+    - `_fn` `Function` Callback `fn(stat)` or `fn(stat, context) -> Bool`.
+  - **Returns:** `Struct.CatalystModifier`
+  - **Additional details:**
+    - Marks the owning stat as altered if attached.
 
-- `FindModifiersById(mod)`  
-  Returns an array of modifiers equal to the given instance (either empty or
-  containing the instance).
+- #### `ClearCondition()`
+  - **Arguments:** None.
+  - **Returns:** `Struct.CatalystModifier`
+  - **Additional details:**
+    - Marks the owning stat as altered if attached.
 
-- `HasModifierFromSourceId(source_id)`  
-  `true` if any modifier on the stat has that `source_id`.
+- #### `SetStackFunc(_fn)`
+  - **Arguments:**
+    - `_fn` `Function` Callback `fn(stat, context) -> Real`.
+  - **Returns:** `Struct.CatalystModifier`
+  - **Additional details:**
+    - When set, the effective stack count comes from this callback when a context is provided.
+    - When no context is provided, the effective stack count is `0`.
+    - Marks the owning stat as altered if attached.
 
-- `HasModifierFromSourceLabel(source_label)`  
-  `true` if any modifier on the stat has that `source_label`.
+- #### `ClearStackFunc()`
+  - **Arguments:** None.
+  - **Returns:** `Struct.CatalystModifier`
+  - **Additional details:**
+    - Marks the owning stat as altered if attached.
 
-- `HasModifierFromSourceMeta(predicate_func)`  
-  `true` if any modifier's `source_meta` makes the predicate return `true`.
+- #### `SetFamily(_family, _mode)`
+  - **Arguments:**
+    - `_family` `Any` Family key.
+    - `_mode` `eCatFamilyStackMode` Optional stacking mode (defaults to `HIGHEST`).
+  - **Returns:** `Struct.CatalystModifier`
+  - **Additional details:**
+    - Marks the owning stat as altered if attached.
 
-- `HasModifier(mod)`  
-  `true` if the given modifier instance is currently attached to this stat.
+- #### `SetFamilyMode(_mode)`
+  - **Arguments:**
+    - `_mode` `eCatFamilyStackMode`
+  - **Returns:** `Struct.CatalystModifier`
+  - **Additional details:**
+    - Marks the owning stat as altered if attached.
 
-All removal helpers call `Destroy(false)` on modifiers so that they are
-properly removed from the global tracker (if applicable) without triggering
-recursive stat cleanup.
+- #### `ClearFamily()`
+  - **Arguments:** None.
+  - **Returns:** `Struct.CatalystModifier`
+  - **Additional details:**
+    - Clears the family key and resets the mode to `STACK_ALL`.
+    - Marks the owning stat as altered if attached.
+
+- #### `AddTag(_tag)`
+  - **Arguments:**
+    - `_tag` `String`
+  - **Returns:** `Struct.CatalystModifier`
+
+- #### `RemoveTag(_tag)`
+  - **Arguments:**
+    - `_tag` `String`
+  - **Returns:** `Struct.CatalystModifier`
+
+- #### `HasTag(_tag)`
+  - **Arguments:**
+    - `_tag` `String`
+  - **Returns:** `Bool`
+
+- #### `ClearTags()`
+  - **Arguments:** None.
+  - **Returns:** `Struct.CatalystModifier`
+
+- #### `Destroy(_remove_from_stat)`
+  - **Arguments:**
+    - `_remove_from_stat` `Bool` Optional (defaults to `true`).
+  - **Returns:** `Undefined`
+  - **Additional details:**
+    - Removes the modifier from the tracker if present.
+    - When `_remove_from_stat` is `true`, also detaches it from the owning stat.
+    - When `_remove_from_stat` is `false`, the stat is not updated. Use this only when the stat is already handling its own removal.
+    - The modifier is deleted and should not be used after this call.
 
 ---
 
-### On-change callbacks
+### `CatalystModifierTracker()`
 
-You can register callbacks that fire when the **canonical value** changes
-(i.e. when `GetValue()` is called with no context and produces a new value):
+Creates a tracker for timed modifiers.
 
-```js
-var _ids = stat.AddOnChangeFunction(fn1, fn2, ...);
+**Returns**: `Struct.CatalystModifierTracker`
 
-// Later, to remove a specific callback:
-var _removed = stat.RemoveOnChangeFunction(_ids[0]);
-```
+**Fields**
+- `modifiers` `Array<Struct.CatalystModifier>` Currently tracked modifiers.
 
-- `AddOnChangeFunction(fn1, fn2, ...)`  
-  Registers one or more functions to be called as:
+**Public methods**
 
-  ```js
-  fn(stat, old_value, new_value);
-  ```
+- #### `AddModifier(_mod)`
+  - **Arguments:**
+    - `_mod` `Struct.CatalystModifier`
+  - **Returns:** `Undefined`
+  - **Additional details:**
+    - Simply pushes the modifier into the list.
 
-  Returns an array of numeric IDs for the registered callbacks.
+- #### `RemoveModifierById(_mod)`
+  - **Arguments:**
+    - `_mod` `Struct.CatalystModifier`
+  - **Returns:** `Bool`
+  - **Additional details:**
+    - Removes the first matching instance, calls `RemoveModifierByPos`, and returns true when a modifier was removed.
 
-- `RemoveOnChangeFunction(id)`  
-  Removes a previously registered callback by ID. Returns `true` if a callback
-  was found and removed.
+- #### `RemoveModifierByPos(_pos)`
+  - **Arguments:**
+    - `_pos` `Real` Index in the modifiers array.
+  - **Returns:** `Bool`
+  - **Additional details:**
+    - Deletes the modifier and removes it from the tracker.
+    - If `remove_from_stat` is true and `applied_stat` is a `CatalystStatistic`, the stat reference is removed as well.
 
-Callbacks are fired only when `GetValue()` (no context) is called and the
-computed value differs from `current_value`.
+- #### `DetachModifier(_mod)`
+  - **Arguments:**
+    - `_mod` `Struct.CatalystModifier`
+  - **Returns:** `Bool`
+  - **Additional details:**
+    - Removes the modifier from the tracker without touching its owning stat.
+    - Sets `_mod.duration_applied = false`.
 
----
+- #### `Countdown()`
+  - **Arguments:** None.
+  - **Returns:** `Undefined`
+  - **Additional details:**
+    - Decrements each tracked modifier duration by 1.
+    - Removes and deletes modifiers whose duration reaches 0 or lower.
 
-### Getting values and previews
-
-```js
-var _base   = stat.GetBaseValue();
-var _value  = stat.GetValue();
-var _value2 = stat.GetValue(context);
-var _value3 = stat.GetValuePreview(context);
-
-var _preview1 = stat.PreviewChange(
-    mod_value,
-    mod_op,
-    layer,
-    stacks,
-    max_stacks,
-    condition,
-    stack_func,
-    context,
-    family,
-    family_mode
-);
-
-var _preview2 = stat.PreviewChanges(extra_ops_array, context);
-```
-
-- `GetValue()`  
-  Returns the canonical cached value, recomputing if `altered` is true.
-  - Recomputes via `_EvaluateWithExtraOps([], undefined)` if needed.
-  - Updates `current_value`.
-  - Clears `altered`.
-  - Fires on-change callbacks if the numeric value changed.
-
-- `GetValue(context)`  
-  Returns a freshly evaluated value for the given context.
-  - Uses `_EvaluateWithExtraOps([], context)`.
-  - Does **not** change `current_value` or `altered`.
-  - Does **not** fire on-change callbacks.
-
-- `GetValuePreview(context)`  
-  Returns a freshly evaluated value for the given context without caching or
-  callbacks (same evaluation path as `GetValue(context)`).
-
-- `PreviewChange(...)`  
-  Simulates what the stat value would be if a **single** extra operation were
-  applied on top of existing modifiers. Parameters:
-
-  ```js
-  _mod_value,
-  _mod_op,
-  _layer      = eCatStatLayer.AUGMENTS,
-  _stacks     = 1,
-  _max_stacks = -1, // defaults to _stacks if negative
-  _condition  = undefined,
-  _stack_func = undefined,
-  _context    = undefined,
-  _family     = "",
-  _family_mode= eCatFamilyStackMode.STACK_ALL
-  ```
-
-  Returns the simulated value without mutating the stat.
-
-- `PreviewChanges(extra_ops_array, context)`  
-  Simulates what the stat value would be if **all** extra operations in
-  `extra_ops_array` were applied together, in addition to existing modifiers.
-
-  Each `extra_op` is a struct with the same fields as a modifier's core fields:
-  `.value`, `.operation`, `.layer`, `.stacks`, `.max_stacks`, `.condition`,
-  `.stack_func`, `.family`, `.family_mode`.
-
-  Returns the simulated value without mutating the stat.
+- #### `DebugDump()`
+  - **Arguments:** None.
+  - **Returns:** `Undefined`
+  - **Additional details:**
+    - Writes a summary of all tracked modifiers to the debug output.
 
 ---
 
-### Configuration helpers
+### `EchoChamberThemeCatalyst()`
 
-```js
-stat.SetClamped(true);
-stat.SetRounding(true, 1);
+Creates a Catalyst themed `EchoChamberTheme` variant with a neon reactor palette.
 
-stat.SetName("Damage");
+**Returns**: `Struct.EchoChamberThemeCatalyst`
 
-stat.SetBaseValue(10);
-stat.SetBaseFunc(fn);
-stat.ClearBaseFunc();
-stat.SetPostProcess(fn);
-stat.ClearPostProcess();
-
-stat.SetMaxValue(100);
-stat.SetMinValue(0);
-
-stat.ChangeBaseValue(5);
-stat.ChangeMaxValue(10);
-stat.ChangeMinValue(-5);
-
-stat.ResetToStarting();
-stat.ResetAll();
-```
-
-- `SetClamped(enabled = true)`  
-  Enables/disables clamping to `[min_value, max_value]`.
-
-- `SetRounding(enabled, step = 1)`  
-  Enables/disables rounding and sets the rounding step.
-
-- `SetName(name)`  
-  Sets the stat's human-readable name.
-
-- `SetBaseValue(amount)`  
-  Sets `base_value` and marks the stat as altered.
-
-- `SetBaseFunc(fn)`  
-  Sets a base-value function `fn(stat, context) -> Real` that overrides
-  `base_value` when present. Logs a debug message and ignores the call if
-  `fn` is not callable.
-
-- `ClearBaseFunc()`  
-  Clears the base-value function so `base_value` is used directly again.
-
-- `SetPostProcess(fn)`  
-  Sets a post-process function `fn(stat, raw_value, context) -> Real` that runs
-  after all modifiers and family rules, before clamping and rounding. Logs a
-  debug message and ignores the call if `fn` is not callable.
-
-- `ClearPostProcess()`  
-  Clears the post-process function.
-
-- `SetMaxValue(amount)` / `SetMinValue(amount)`  
-  Set clamp bounds; mark the stat as altered.
-
-- `ChangeBaseValue(amount)`  
-  Adds `amount` to `base_value`, then reapplies clamping and rounding rules
-  and marks the stat as altered.
-
-- `ChangeMaxValue(amount)` / `ChangeMinValue(amount)`  
-  Add `amount` to the corresponding bound; mark the stat as altered.
-
-- `ResetToStarting()`  
-  Resets `base_value` to `starting_value` and marks the stat as altered.
-
-- `ResetAll()`  
-  Restores the stat's base/derived configuration to defaults:
-
-  - Sets `base_value` and `current_value` to `starting_value`.
-  - Removes all modifiers.
-  - Resets clamp bounds to `[-infinity, +infinity]`.
-  - Clears `base_func`, `post_process`, callbacks, and tags.
-  - Resets the on-change callback id counter.
-  - Marks the stat as altered.
+**Additional details**
+- Extends `EchoChamberTheme` and overrides colors, panel styles, button styles, toggles, dropdowns, and text inputs.
+- Requires Echo Chamber to be present in your project.
 
 ---
 
-### Getters & debug
+## Functions
 
-```js
-var _starting = stat.GetStartingValue();
-var _base     = stat.GetBaseValue();
-var _min_val  = stat.GetMinValue();
-var _max_val  = stat.GetMaxValue();
-var _name     = stat.GetName();
+### `CatalystModCountdown()`
 
-stat.DebugDescribe();
-```
+Helper for driving the global modifier tracker.
 
-- `GetStartingValue()` - returns `starting_value`.
-- `GetBaseValue()` - returns `base_value`.
-- `GetMaxValue()` - returns `max_value`.
-- `GetMinValue()` - returns `min_value`.
-- `GetName()` - returns `name`.
+**Arguments**: None.
 
-- `DebugDescribe()` - writes a summary of the stat and all attached modifiers
-  to the debug output, including value, operation, stacks, layer, duration,
-  tags, and source label. Uses `GetValuePreview()` so it does not fire
-  on-change callbacks or mutate `current_value`.
+**Returns**: `Undefined`
 
----
-
-### Stat tags
-
-```js
-stat.AddTag("offense");
-stat.AddTag("fire");
-
-if (stat.HasTag("offense")) {
-    // show in offensive stats section
-}
-
-stat.RemoveTag("fire");
-stat.ClearTags();
-```
-
-- `AddTag(tag)` - adds a tag if not already present.
-- `RemoveTag(tag)` - removes a tag if present.
-- `HasTag(tag)` - `true` if the tag is present.
-- `ClearTags()` - removes all tags from the stat.
-
-Tags do not affect the math; they are for grouping, UI, and your own logic.
-
----
-
-## `CatalystModifier`
-
-A `CatalystModifier` represents a single rule for changing a stat.
-
-### Construction
-
-```js
-var _mod = new CatalystModifier(
-    _value,
-    _math_operation,
-    _duration      = -1,
-    _source_label  = "",
-    _source_id     = noone,
-    _source_meta   = undefined
-);
-```
-
-- `_value` - base strength of the modifier.
-- `_math_operation` - one of `eCatMathOps.ADD`, `MULTIPLY`, `FORCE_MIN`, or
-  `FORCE_MAX`.
-- `_duration` - number of ticks the modifier should last.
-  - `-1` - permanent (not tracked by the global tracker).
-  - `> 0` - timed; will be registered with the global tracker.
-- `_source_label` - human-readable label for the source (weapon name, skill, etc.).
-- `_source_id` - handle for the source (instance id, owner struct, item reference, etc.).
-- `_source_meta` - arbitrary metadata (often a struct) for custom logic.
-
-After construction you usually configure stacks, layers, conditions, etc. and
-then call `stat.AddModifier(mod)` to attach it.
-
----
-
-### Core fields
-
-- `value` - base strength of the modifier.
-- `operation` - one of `eCatMathOps.ADD`, `MULTIPLY`, `FORCE_MIN`, or
-  `FORCE_MAX`.
-
-- `duration` - remaining duration in ticks.
-- `duration_max` - original or "max" duration value for reference.
-- `duration_applied` - whether the modifier has been registered with the tracker.
-
-- `stacks` - current stack count (stateful, event-driven).
-- `max_stacks` - maximum allowed stack count (defaults to `infinity`).
-- `layer` - layer in which this modifier is applied (`eCatStatLayer`).
-
-- `condition` - optional predicate `fn(stat)` or `fn(stat, context) -> Bool`
-  controlling whether the modifier applies at all.
-
-- `stack_func` - optional callback `fn(stat, context) -> Real` that can compute
-  effective stacks directly from context (environment-driven stacks).
-
-- `family` - family key (string or enum) for family stacking.
-- `family_mode` - one of `eCatFamilyStackMode` controlling how this family stacks.
-
-- `tags` - array of tag strings on the modifier.
-
-- `source_label` - human-readable label for where this modifier came from.
-- `source_id` - handle for the source object.
-- `source_meta` - arbitrary metadata associated with the source.
-
-- `applied_stat` - the `CatalystStatistic` this modifier is currently attached to
-  (or `noone` if not attached).
-- `remove_from_stat` - internal flag used when destroying the modifier to avoid
-  recursive removal loops.
-
----
-
-### Duration & tracking
-
-```js
-mod.ApplyDuration();
-mod.SetDuration(5);
-mod.ResetDuration();
-```
-
-- `ApplyDuration()`  
-  Registers the modifier with the global `CatalystModifierTracker` if
-  `duration > 0` and it is not already applied. Creates the global tracker
-  if it does not exist yet.
-
-- `SetDuration(duration)`  
-  Sets `duration` and `duration_max` and re-syncs with the tracker:
-
-  - If the new duration is negative, the modifier is removed from the tracker.
-  - If the new duration is positive, it is (re)applied via `ApplyDuration()`.
-  - A duration of `0` is not tracked (if it was tracked, it will expire on the
-    next `Countdown()` tick).
-
-  Returns the modifier for chaining.
-
-- `ResetDuration()`  
-  Resets `duration` back to `duration_max` and re-syncs with the global tracker
-  (equivalent to `SetDuration(duration_max)`).
-
-> **Note:** Timed modifiers are automatically registered with the tracker when
-> you construct them with a positive `_duration` or when you call `SetDuration`
-> with a positive value.
-
----
-
-### Value, operation, and layer
-
-```js
-mod.SetValue(5);
-mod.SetMathsOp(eCatMathOps.MULTIPLY);
-mod.SetLayer(eCatStatLayer.AUGMENTS);
-```
-
-- `SetValue(value)`  
-  Sets the modifier's `value`. If the modifier is attached to a
-  `CatalystStatistic`, marks that stat as altered.
-
-- `SetMathsOp(maths_op)`  
-  Sets the modifier's `operation` (`ADD`, `MULTIPLY`, `FORCE_MIN`, or
-  `FORCE_MAX`). Marks the owning stat as altered if attached.
-
-- `SetLayer(layer)`  
-  Sets the `eCatStatLayer` this modifier should apply in. Marks the owning stat
-  as altered if attached.
-
----
-
-### Stacks
-
-```js
-mod.SetStacks(3);
-mod.AddStacks(1);
-mod.SetMaxStacks(5);
-```
-
-- `SetStacks(stacks)`  
-  Sets the current stack count, clamped to `[0, max_stacks]`.
-
-- `AddStacks(delta)`  
-  Adds `delta` to the stack count, then clamps to `[0, max_stacks]` if needed.
-
-- `SetMaxStacks(max_stacks)`  
-  Sets the maximum stack count. If the current `stacks` exceeds the new max,
-  it is clamped down. Defaults are unlimited (`max_stacks = infinity`) until
-  you set a cap.
-
-Stacks are used both for stateful buffs (event-driven) and in combination with
-`stack_func` for environment-driven stacks.
-
----
-
-### Conditions
-
-```js
-mod.SetCondition(function(_stat, _ctx) {
-    return _ctx.target_frozen;
-});
-
-mod.ClearCondition();
-```
-
-- `SetCondition(fn)`  
-  Sets a predicate that decides whether the modifier applies:
-
-  - Called as `fn(stat)` when evaluating without context.
-  - Called as `fn(stat, context)` when evaluating with context.
-
-  If the condition returns `false`, the modifier is skipped entirely.
-
-- `ClearCondition()`  
-  Clears the condition (equivalent to "always applies").
-
----
-
-### Context-driven stacks (`stack_func`)
-
-```js
-mod.SetStackFunc(function(_stat, _ctx) {
-    return clamp(_ctx.burning_enemy_count, 0, 10);
-});
-
-mod.ClearStackFunc();
-```
-
-- `SetStackFunc(fn)`  
-  Sets a stack function `fn(stat, context) -> Real` that computes effective
-  stacks from context. Used for environment-driven stacks such as "+5% damage
-  per burning enemy nearby".
-
-  When evaluating with a context, Catalyst:
-
-  - Starts from `stacks` as the base.
-  - If `stack_func` is set, calls it to get an effective stack count.
-  - Clamps the result to `>= 0` and to `max_stacks` (defaults to `infinity`).
-
-- `ClearStackFunc()`  
-  Clears the stack function; stacks will then be taken directly from the
-  `stacks` field.
-
----
-
-### Families & stacking
-
-```js
-mod.SetFamily("movement_aura", eCatFamilyStackMode.HIGHEST);
-mod.SetFamilyMode(eCatFamilyStackMode.LOWEST);
-mod.ClearFamily();
-```
-
-- `SetFamily(family, mode = eCatFamilyStackMode.HIGHEST)`  
-  Sets `family` (string/enum) and `family_mode` for this modifier.
-
-- `SetFamilyMode(mode)`  
-  Changes the family stacking mode without altering the family key.
-
-- `ClearFamily()`  
-  Clears the family key and resets the stacking mode to `STACK_ALL`.
-
-Family stacking is resolved within each layer, separately for real modifiers
-and preview operations. For modes:
-
-- `STACK_ALL` - all modifiers of this family apply normally.
-- `HIGHEST` - only the strongest effect in the family applies.
-- `LOWEST` - only the weakest effect applies.
-
-Strength is determined by the magnitude of the effect, taking into account:
-
-- Operation (`ADD` vs `MULTIPLY`).
-- Effective stack count (including `stack_func`).
-- Condition (modifiers that don't apply are excluded).
-
-`FORCE_MIN` and `FORCE_MAX` modifiers do not participate in family comparisons;
-they are applied later as a separate floor/ceiling stage before post-processing
-and clamping.
-
----
-
-### Source fields
-
-```js
-mod.SetSourceLabel("Bronze Wand");
-mod.SetSourceId(owner);
-mod.SetSourceMeta({ slot: 2, rarity: "uncommon" });
-```
-
-- `SetSourceLabel(label)` - sets the human-readable label for this modifier.
-- `SetSourceId(source_id)` - sets the handle/ID representing the source.
-- `SetSourceMeta(source_meta)` - sets arbitrary metadata associated with the source.
-
-These fields are used by the `CatalystStatistic` helper functions
-(`RemoveModifierBySourceLabel`, `FindModifiersBySourceMeta`, etc.) to query
-and clean up modifiers based on where they came from.
-
----
-
-### Modifier tags
-
-```js
-mod.AddTag("buff");
-mod.AddTag("fire");
-
-if (mod.HasTag("buff")) {
-    // treat as a buff in UI
-}
-
-mod.RemoveTag("fire");
-mod.ClearTags();
-```
-
-- `AddTag(tag)` - adds a tag to this modifier if not already present.
-- `RemoveTag(tag)` - removes a tag if present.
-- `HasTag(tag)` - `true` if the tag is present.
-- `ClearTags()` - removes all tags.
-
-Tags are free-form and for your own logic; Catalyst itself doesn't interpret
-them, but the stat's `RemoveModifiersByTag` helper makes tag-based cleanup easy.
-
----
-
-### Destroying a modifier
-
-```js
-mod.Destroy(true);
-mod.Destroy(false);
-```
-
-- `Destroy(remove_from_stat = true)`  
-  Cleans up the modifier:
-
-  - Removes it from the global `CatalystModifierTracker` if present.
-  - If `remove_from_stat` is `true` and `applied_stat` is a
-    `CatalystStatistic`, removes it from that stat's `modifiers` array and
-    marks the stat as altered.
-  - If `remove_from_stat` is `false`, the owning stat is left alone (useful
-    when the stat is already in the middle of its own cleanup).
-
----
-
-## `CatalystModifierTracker` & Countdown
-
-`CatalystModifierTracker` tracks timed modifiers (those with `duration > 0`) and
-decrements their durations each tick.
-
-### Global tracker & helper
-
-Catalyst uses a single global tracker by default:
-
-- `#macro CATALYST_COUNTDOWN global.__catalyst_modifier_tracker`
-- `global.__catalyst_modifier_tracker` - created at load time.
-- `function CatalystModCountdown()` - safe helper for driving the countdown.
-
-Typical usage:
-
-```js
-// Global or controller Step event
-CatalystModCountdown();
-```
-
-The helper function:
-
-```js
-function CatalystModCountdown() {
-    if (variable_global_exists("__catalyst_modifier_tracker")
-        && is_instanceof(CATALYST_COUNTDOWN, CatalystModifierTracker)) {
-        CATALYST_COUNTDOWN.Countdown();
-    }
-}
-```
-
-In most games you don't need to construct your own tracker; the global one is
-sufficient.
-
----
-
-### `CatalystModifierTracker` structure
-
-```js
-tracker = new CatalystModifierTracker();
-```
-
-Fields:
-
-- `modifiers` - array of `CatalystModifier` instances being tracked.
-
-Methods:
-
-```js
-tracker.AddModifier(mod);
-tracker.RemoveModifierById(mod);
-tracker.RemoveModifierByPos(index);
-tracker.DetachModifier(mod);
-tracker.Countdown();
-tracker.DebugDump();
-```
-
-- `AddModifier(mod)`  
-  Registers a modifier with this tracker so its duration will be decremented.
-
-- `RemoveModifierById(mod)`  
-  Removes the first matching instance of the given modifier from the tracker.
-  Returns `true` if a modifier was removed.
-
-- `RemoveModifierByPos(index)`  
-  Removes the modifier at the given index from the tracker array.
-
-- `DetachModifier(mod)`  
-  Removes the given modifier from the tracker **without** touching its owning
-  stat and clears its `duration_applied` flag. Returns `true` if a modifier
-  was removed.
-
-- `Countdown()`  
-  Decrements `duration` for each tracked modifier and removes any whose
-  duration reaches 0, also removing them from their owning stats.
-
-- `DebugDump()`  
-  Writes a summary of all tracked modifiers to the debug output.
-
----
-
-When a `CatalystModifier` is created with `duration > 0` or has `SetDuration`
-called with a positive value, it automatically calls `ApplyDuration`, which
-registers it with the global tracker. Driving `CatalystModCountdown()` once per
-tick keeps all timed modifiers in sync with your game loop.
+**Additional details**
+- Calls `global.__catalyst_modifier_tracker.Countdown()` when the tracker exists and is a `CatalystModifierTracker`.
+- Safe to call once per Step or per tick in your game loop.

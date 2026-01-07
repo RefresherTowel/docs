@@ -65,6 +65,23 @@ var _speed = stats.speed.GetValue();
 
 ---
 
+## Optional: Clamping and rounding
+
+Use this when a stat must stay within bounds and round to a step size.
+
+```js
+stats.hp = new CatalystStatistic(100, 0, 999).SetName("HP");
+stats.hp.SetClamped(true);
+stats.hp.SetRounding(true, 1);
+
+// This would go below 0 without clamping.
+stats.hp.ChangeBaseValue(-150);
+
+var _hp = stats.hp.GetValue();
+```
+
+---
+
 ## 2. Adding basic modifiers
 
 To change a stat, you create one or more `CatalystModifier` instances and attach them.
