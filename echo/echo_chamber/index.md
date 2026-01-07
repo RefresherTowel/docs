@@ -6,17 +6,6 @@ parent: Echo
 has_children: true
 ---
 
-<div class="sticky-toc" markdown="block">
-<details open markdown="block">
-  <summary>On this page</summary>
-  {: .text-delta }
-
-1. TOC
-{:toc}
-
-</details>
-</div>
-
 Echo Chamber is a debug UI builder I've designed to help me build debuggers for my frameworks. I'm releasing it publicly because it's become powerful enough to be useful for others building debug UIs too. It's intended for debug overlays first, but you can also use it for lightweight menus like options or pause screens (note: it's not optimised for full production HUDs right now, but that may be reworked in the future). I've tried to keep it powerful while still being as simple as possible to use. Let's start with a very simple example to get a feel for it:
 
 ```js

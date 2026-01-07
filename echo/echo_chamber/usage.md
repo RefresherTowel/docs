@@ -6,11 +6,16 @@ parent: Echo Chamber
 has_children: false
 ---
 
-<!--
-/// usage.md - Changelog:
-/// - 23-12-2025: Fixed Echo Chamber usage examples to match current API and callback behavior.
-/// - 23-12-2025: Ensure example variables are created in Create before use.
--->
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
+
+1. TOC
+{:toc}
+
+</details>
+</div>
 
 # Usage & Examples
 

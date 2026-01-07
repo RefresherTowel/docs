@@ -5,6 +5,17 @@ parent: Echo
 nav_order: 3
 ---
 
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
+
+1. TOC
+{:toc}
+
+</details>
+</div>
+
 # Usage and Examples
 
 Echo is the logger. Echo Chamber is the thing you can *look at* while you are logging (plus a bunch of other UI goodies for your own tools).

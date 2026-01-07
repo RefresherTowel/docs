@@ -5,6 +5,17 @@ parent: Echo
 nav_order: 2
 ---
 
+<div class="sticky-toc" markdown="block">
+<details open markdown="block">
+  <summary>On this page</summary>
+  {: .text-delta }
+
+1. TOC
+{:toc}
+
+</details>
+</div>
+
 # Reference
 
 This page covers the public API for Echo. Echo Chamber has its own scripting reference under `docs/echo_chamber/scripting.md`.
