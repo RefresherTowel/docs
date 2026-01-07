@@ -80,9 +80,6 @@ For bigger, messier projects, Pulse quietly scales up with you:
 If all you want is "emit event, something happens", Pulse does that in a couple of lines.
 If you want your whole project to sit on a clean, debuggable event layer, Pulse is built for that too.
 
-> Note: Pulse is not released yet. These docs are here as a preview and may change before launch. Right now, only **Statement** is available on itch.
-{: .note}
-
 ##### [**LEARN MORE ABOUT PULSE**](/docs/pulse/)
 {: .text-center }
 
@@ -101,9 +98,6 @@ Struggling to keep your stats, buffs, and item effects under control as your gam
 - Handle health, damage, resistances, buffs, debuffs, item bonuses, and more in one consistent way.
 - Stack and combine effects without writing a new special case every time.
 - Built for weird ideas: context aware modifiers, derived stats, and complex interactions without tearing up your code.
-
-> Note: Catalyst is not released yet. These docs are here as a preview and may change before launch. Right now, only **Statement** is available on itch.
-{: .note}
 
 ##### [**LEARN MORE ABOUT CATALYST**](/docs/catalyst/)
 {: .text-center }
