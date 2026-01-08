@@ -999,6 +999,14 @@ Base type for all debug UI controls.
   - **Arguments:**
     - `_width` `Real` Preferred width in pixels.
   - **Returns:** `Struct.EchoChamberControlBase`
+- `SetPreferredHeight(_height)`: Set a preferred pixel height for this control.
+  - **Arguments:**
+    - `_height` `Real` Preferred height in pixels.
+  - **Returns:** `Struct.EchoChamberControlBase`
+- `SetFillWidth(_flag)`: Set whether this control fills the available row width.
+  - **Arguments:**
+    - `_flag` `Bool` Fill width flag.
+  - **Returns:** `Struct.EchoChamberControlBase`
 - `SetPadding(_x, [_y])`: Set inner padding for this control.
   - **Arguments:**
     - `_x` `Real` Horizontal padding in pixels.
@@ -1641,8 +1649,14 @@ It outputs a struct with fields in roughly these buckets (names below are from t
 #### HEADER
 - `header_styles`
 
+#### LABEL
+- `label_styles` (style keys include `font`, `text`, `text_alpha`, `text_disabled`, `text_disabled_alpha`)
+
 #### LIST
-- `list_row_styles`
+- `list_row_styles` (style keys include `bg_*`, `text_*`, and `*_alpha` variants)
+
+#### SEPARATOR
+- `separator_styles` (style keys include `line`, `line_alpha`, `line_disabled`, `line_disabled_alpha`)
 
 #### MIN
 - `min_hit_h`
@@ -1652,7 +1666,7 @@ It outputs a struct with fields in roughly these buckets (names below are from t
 - `pad_y`
 
 #### PANEL
-- `panel_styles`
+- `panel_styles` (style keys include `bg`, `border`, `bg_alpha`, `border_alpha`)
 - `panel_padding`
 - `panel_gap`
 - `panel_row_height`
@@ -1668,6 +1682,7 @@ It outputs a struct with fields in roughly these buckets (names below are from t
 - `row_small_h`
 
 #### SCROLLBAR
+- `scrollbar_styles`
 - `scrollbar_w`
 
 #### TEXTINPUT
@@ -1698,6 +1713,33 @@ It outputs a struct with fields in roughly these buckets (names below are from t
 - `window_button_pin_label`
 - `window_button_unpin_label`
 
+### Style map conventions
+Most control styles are stored in a map of named styles (including `_default`). A control reads its `style_id` key and falls back to `_default`.
+
+**Common interaction keys** (buttons, toggles, dropdowns, text inputs):
+- `bg`, `bg_alpha`
+- `border`, `border_alpha`
+- `text`, `text_alpha`
+- `bg_hover`, `bg_hover_alpha`, `border_hover`, `border_hover_alpha`, `text_hover`, `text_hover_alpha`
+- `bg_pressed`, `bg_pressed_alpha`, `border_pressed`, `border_pressed_alpha`, `text_pressed`, `text_pressed_alpha`
+- `bg_disabled`, `bg_disabled_alpha`, `border_disabled`, `border_disabled_alpha`, `text_disabled`, `text_disabled_alpha`
+
+**Control-specific keys**
+- `label_styles`: `font`, `text`, `text_alpha`, `text_disabled`, `text_disabled_alpha`.
+- `separator_styles`: `line`, `line_alpha`, `line_disabled`, `line_disabled_alpha`.
+- `list_row_styles`: `bg_normal`, `bg_hover`, `bg_selected`, `bg_pressed`, `bg_disabled`, `text_normal`, `text_hover`, `text_selected`, `text_pressed`, `text_disabled`, and matching `*_alpha` keys.
+- `toggle_styles`: `box_on`, `box_off`, `box_border`, plus `box_*_hover`, `box_*_pressed`, `box_*_disabled`, and matching `*_alpha` keys.
+- `slider_styles`: `track_bg`, `track_fill`, `knob`, plus hover/pressed/disabled variants and matching `*_alpha` keys.
+- `dropdown_styles`: `bg_open`, `border_open`, `text_open` with `*_alpha` keys, plus overlay keys:
+  - `overlay_bg`, `overlay_bg_alpha`, `overlay_border`, `overlay_border_alpha`
+  - `overlay_row_*` and `overlay_text_*` keys, each with `*_alpha`
+  - `overlay_search_bg`, `overlay_search_hover_bg`, `overlay_search_border`, `overlay_search_text`, `overlay_search_placeholder`, each with `*_alpha`
+- `textinput_styles`: `bg_active`, `border_active`, `text_active`, `bg_readonly`, `border_readonly`, `text_readonly`, `bg_invalid`, `border_invalid`, `text_invalid` with `*_alpha` keys, plus:
+  - `selection_bg`, `selection_text`, `selection_bg_inactive`, `selection_text_inactive` with `*_alpha`
+  - `caret_color`, `caret_alpha`, `caret_char`, `caret_blink_ms`, `caret_width`, `caret_height`, `caret_inset_x`, `caret_inset_y`
+  - `placeholder`, `placeholder_alpha`, `align`
+- `scrollbar_styles`: `track_bg`, `track_bg_hover`, `track_border`, `handle_bg`, `handle_bg_hover`, `handle_bg_pressed`, `handle_border`, each with `*_alpha`.
+
 ---
 
 ### Theme constructors
@@ -1716,24 +1758,7 @@ Creates the shared default UI theme container for Echo Chamber visuals.
   - **Additional details:**
     - Updates derived layout metrics such as row heights, padding, and window sizing.
 
----
-
-### Functions
-### `EchoChamberThemeTryGetFont(_font_name)`
-Resolve a font asset by name. If missing, returns the current draw font.
-
-**Arguments**
-- `_font_name` `String, Asset.GMFont`
-
-**Returns**: `Asset.GMFont`
-
-### `EchoChamberThemeTryGetSprite(_sprite_name)`
-Resolve a sprite asset by name. If missing, returns -1.
-
-**Arguments**
-- `_sprite_name` `String, Asset.GMSprite`
-
-**Returns**: `Asset.GMSprite,Real`
+### Pre-built Custom Themes
 
 ### `EchoChamberThemeMidnightNeon()`
 Dark midnight blues with neon purple accent.
@@ -1779,3 +1804,22 @@ Bubblegum pink UI with teal statement nodes.
 Warm mango chrome with mint green graph.
 
 **Returns**: `Struct.EchoChamberThemeMangoMint`
+
+---
+
+### Functions
+### `EchoChamberThemeTryGetFont(_font_name)`
+Resolve a font asset by name. If missing, returns the current draw font.
+
+**Arguments**
+- `_font_name` `String, Asset.GMFont`
+
+**Returns**: `Asset.GMFont`
+
+### `EchoChamberThemeTryGetSprite(_sprite_name)`
+Resolve a sprite asset by name. If missing, returns -1.
+
+**Arguments**
+- `_sprite_name` `String, Asset.GMSprite`
+
+**Returns**: `Asset.GMSprite,Real`

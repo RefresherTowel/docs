@@ -858,3 +858,119 @@ If you want to build something more custom (graphs, inspectors, weird visualizer
 - the overlay helpers (dropdowns, popups, context menus)
 
 And, very importantly, make sure you look over the API reference page to see all the possible options you have available to you.
+
+---
+
+## Callback recipes (ListView and dropdown overlays)
+
+These are small, copy-paste friendly patterns that show the callback signatures in action. Use `method(...)` to bind scope and avoid closure issues.
+
+### ListView: required settings, row drawer, auto width, and activation
+
+The list view is callback-driven. It will not show anything unless you tell it how many rows exist and how to draw them.
+
+Required settings to make a list view function:
+
+- `SetCountGetter(...)` is required. Without it, the list has a row count of 0 and nothing draws.
+- `SetRowDrawer(...)` is required if you want visible row content. Without it, you only get background/selection visuals.
+- You should also set height via one of: `SetVisibleRows(...)`, `SetPreferredHeight(...)`, or `SetAutoHeightFromCount(...)`. If you skip this, the control only reserves one row of height.
+- If you enable auto width with `SetAutoWidthFromContent(...)`, you must also provide `SetRowMeasure(...)` so it can measure row width.
+
+Below is a full example that wires those pieces together and shows the callback signatures in context.
+
+```js
+// Keep the data as instance variables so callbacks can read it safely.
+ui_log = [];
+for (var _i = 0; _i < 200; _i++) {
+	ui_log[_i] = "Log line " + string(_i);
+}
+
+var _list = new EchoChamberListView("list_log")
+	// Basic sizing so we don't collapse to a single row.
+	.SetRowHeight(20)
+	.SetVisibleRows(10)
+	// Auto width depends on SetRowMeasure.
+	.SetAutoWidthFromContent(120)
+	// REQUIRED: row count.
+	.SetCountGetter(method(self, function() {
+		return array_length(ui_log);
+	}))
+	// Used only for auto width. Return a string or a pixel width.
+	.SetRowMeasure(method(self, function(_index, _root, _panel) {
+		return ui_log[_index];
+	}))
+	// REQUIRED for visible content: draw each row.
+	.SetRowDrawer(method(self, function(_index, _rect, _is_selected, _is_hover) {
+		// Background is already drawn by the control; draw only the content.
+		var _x = _rect.x1;
+		var _y = _rect.y1;
+		draw_text(_x + 6, _y + 2, ui_log[_index]);
+	}))
+	// Optional: enter/activate callback.
+	.SetOnActivate(method(self, function(_index) {
+		ui_root.ShowToast("Activated: " + ui_log[_index], 900);
+	}))
+	// Optional: right-click menu with GUI-space mouse coordinates.
+	.SetOnRightClick(method(self, function(_index, _mx, _my) {
+		// _index is -1 when right-clicking empty space.
+		if (_index < 0) return;
+		// Context menu on_click callbacks receive no arguments, so capture what you need here.
+		var _root = ui_root;
+		var _log = ui_log;
+		var _items = [
+			{
+				label: "Inspect",
+				on_click: method({ root: _root, log: _log, _index }, function() {
+					root.ShowToast("Inspect " + log[_index], 900);
+				})
+			},
+			{ is_separator: true },
+			{
+				label: "Delete",
+				on_click: method({ root: _root, log: _log, _index }, function() {
+					root.ShowToast("Delete " + log[_index], 900);
+				})
+			}
+		];
+		ui_root.OpenContextMenu(_items, _mx, _my, ui_win);
+	}));
+
+_panel_main.AddControl(_list);
+```
+
+### Dropdown overlay hooks: custom row visuals + custom click handling
+
+When you override overlay hooks, you own the selection + close behavior. This pattern customizes the row visuals and then manually closes the overlay after selection.
+
+```js
+ui_mode_labels = ["Safe", "Fast", "Insane"];
+
+ui_dd_mode = new EchoChamberDropdownSelect("dd_mode")
+	.SetLabel("Mode")
+	.SetOptions(ui_mode_labels)
+	.BindIndex(ui_settings, "mode_index");
+
+ui_dd_mode.DrawOverlayRow = method(self, function(_root, _row_index, _row_rect, _hover, _selected) {
+	var _x1 = _row_rect.x1;
+	var _y1 = _row_rect.y1;
+	var _x2 = _row_rect.x2;
+	var _y2 = _row_rect.y2;
+	var _label = ui_mode_labels[_row_index];
+
+	if (_selected) {
+		draw_set_color(_root.theme.col_accent);
+		draw_rectangle(_x1, _y1, _x1 + 3, _y2, false);
+	}
+
+	draw_set_color(_root.theme.col_text);
+	draw_text(_x1 + 8, _y1 + 2, _label);
+});
+
+ui_dd_mode.OnOverlayRowClick = method(self, function(_root, _row_index, _row_rect, _mx, _my) {
+	ui_dd_mode.SetSelectedIndex(_row_index);
+	_root.ClearActiveOverlayOwner();
+	ui_dd_mode.is_open = false;
+});
+
+_panel_top.AddControl(ui_dd_mode);
+```
