@@ -45,8 +45,8 @@ You do not have to memorize everything at once. Treat it like a skill tree. Grab
 > Please [**join the discord**](https://discord.gg/8spFZdyvkb) and offer suggestions or features, and detail any bugs you encounter!
 {: .warning}
 
-> Statement Lens ships with its own internal debug UI layer. You do not need to install anything extra; enable `STATEMENT_DEBUG` and wire the Lens update/draw hooks and you are good to go.
-{: .bonus}
+> Statement Lens requires Echo (with Echo Chamber) to be added to the project. Statement should ship with a version of Echo included.
+{: .note}
 
 ---
 

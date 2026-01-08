@@ -13,7 +13,8 @@ It is happiest when:
 
 - [![Statement icon]({{ '/assets/statement_icon.png' | relative_url }}){: .framework-icon-small } **Statement**](https://refreshertowel.itch.io/statement) owns the flow of behaviour and modes.
 - [![Pulse icon]({{ '/assets/pulse_icon.png' | relative_url }}){: .framework-icon-small } **Pulse**](https://refreshertowel.itch.io/pulse) moves information around without tight coupling.
-- [![Echo icon]({{ '/assets/echo_icon.png' | relative_url }}){: .framework-icon-small } **Echo**](https://refreshertowel.itch.io/echo) keeps you honest by logging what actually happened.
+- [![Catalyst icon]({{ '/assets/catalyst_icon.png' | relative_url }}){: .framework-icon-small } **Catalyst**](https://refreshertowel.itch.io/catalyst) handles the numbers.
+- [![Echo icon]({{ '/assets/echo_icon.png' | relative_url }}){: .framework-icon-small } **Echo**](https://refreshertowel.itch.io/echo) keeps you informed by logging what actually happened.
 
 This page shows practical ways to connect Statement to the rest of the
 RefresherTowel frameworks.
