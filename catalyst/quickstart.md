@@ -241,9 +241,4 @@ var _preview = _dmg_stat.PreviewChange(
 );
 ```
 
-Previews:
-
-- Don't mutate the stat.
-- Respect all layers, tags, families, and conditions.
-- Can optionally take a context for more advanced arguments
-  (covered on the **Advanced Topics** page).
+Previews don't mutate the stat, respect all layers, tags, families and conditions, and can optionally take a context for more advanced arguments (covered on the **Advanced Topics** page).

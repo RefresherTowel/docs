@@ -284,9 +284,3 @@ function CatDebugDescribeStat(_name, _stat) {
 
 Call this when something looks wrong to get a readable dump of what is
 affecting a given stat.
-
----
-
-You do not need to wire every system to Catalyst on day one. Start by using
-stats in one place - a Whisper predicate, a Statement transition, or a Pulse
-signal - and grow from there.

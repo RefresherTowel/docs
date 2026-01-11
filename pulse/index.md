@@ -151,13 +151,16 @@ These are optional, but they are where Pulse stops being "just a signal script" 
 * **Cancellation / consumption**
   A listener can stop propagation (either by returning `true`, or by using a struct payload that includes a `consumed` flag and setting it to `true`).
 
+* **Listener error isolation**
+  Listener exceptions are logged to Echo and dispatch continues. Errors emit the `PULSE_ON_ERROR` signal for tooling.
+
 * **Queued dispatch (post now, process later)**
   Use `PulsePost()` to enqueue events, then process them later with `PulseFlushQueue()`.
   Also includes `PulseQueueCount()` and `PulseClearQueue()` for sanity and resets.
 
 * **Listener builder (for readability)**
   `PulseListener(id, signal, callback)` gives you a config struct you can chain:
-  `.From()`, `.Once()`, `.Tag()`, `.Priority()`, `.Enabled()`, and `.Bus()` for custom controllers, then `.Subscribe()` or `PulseSubscribeConfig(listener)`.
+  `.From()`, `.Once()`, `.Sticky()`, `.Tag()`, `.Priority()`, `.Enabled()`, and `.Bus()` for custom controllers, then `.Subscribe()` or `PulseSubscribeConfig(listener)`.
   `PulseSubscribeConfig` requires a config struct built from `PulseListener`.
 
 * **Subscription handles and groups**
@@ -170,6 +173,12 @@ These are optional, but they are where Pulse stops being "just a signal script" 
 
 * **Introspection and debug dumping**
   Count listeners (`PulseCount`, `PulseCountFor`) and dump wiring (`PulseDump`, `PulseDumpSignal`) when things get weird.
+
+* **Signal metadata registry**
+  Register signal names and categories to improve `PulseDump` output and Vitals labels.
+
+* **Trace recorder**
+  Record tap events into a ring buffer and dump them with `PulseTraceDump()`.
 
 ---
 
@@ -371,13 +380,6 @@ This behaviour is predictable and avoids "modified the list I am iterating" cras
 
 * Pulse expects a modern GameMaker that supports struct constructors and methods.
 * Debug dumps use your debug logger functions (Echo style). If you do not care about dumps, those can be simple no-ops.
-
----
-
-## Where to next?
-
-* If you just want to start using it: read the [Usage & Examples]({% link pulse/usage.md %}) page, check out the examples included with the tool, and go build something.
-* If you want every public function documented: the [Scripting Reference]({% link pulse/scripting.md %}) page has the full API list, including queue, queries, builders, groups, custom buses, and introspection. 
 
 ---
 

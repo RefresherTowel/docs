@@ -554,7 +554,7 @@ Inside a handler, read the current state's config with `state_machine.GetState()
 ### Advanced Gotchas
 
 1. **Locked states (`can_exit` flag) gates transitions**  
-   If a state is locked via `LockExit();` (or `SetCanExit(false);`), then `ChangeState("Other")` will do nothing unless the `force` argument is true. Make sure to set `UnlockExit()` (or `SetCanExit(true);`) again when you actually want to leave.
+   If a state is locked via `LockExit();` (or `SetCanExit(false);`), then `ChangeState(_state_name, _force)` will do nothing unless the `_force` argument is true. Make sure to set `UnlockExit()` (or `SetCanExit(true);`) again when you actually want to leave.
 
 2. **Queued transitions are one-shot**  
    Once a queued state is processed (or cleared), it's gone.
@@ -566,7 +566,7 @@ Inside a handler, read the current state's config with `state_machine.GetState()
 
 4. **Per-state timers are independent of `GetStateTime()`**  
    Per-state timers use `Timer*` methods and GMs underlying `time_source` functionality. Once started, they tick based on the time-source, not on how often you call `Update()`.  
-   They do not automatically match `GetStateTime()`; in almost all cases you should prefer `GetStateTime()` and only reach for per-state timers when you need that extra flexibility.
+   They do not automatically match `GetStateTime()`; in almost all cases you should prefer `GetStateTime()` and only reach for per-state timers when you *really* need that extra flexibility.
 
 5. **Clean up when resetting**  
    - Use `ClearStates()` when you want to fully reset the machine's states.

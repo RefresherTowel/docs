@@ -37,7 +37,7 @@ EchoDebugSevere("Something exploded.", ["Combat", "Damage"]);
 ```
 
 - `EchoDebugInfo` and `EchoDebugWarn` are just convenience wrappers.
-- `EchoDebugSevere` includes a stack trace (and stack traces can also be enabled for everything, see levels below).
+- `EchoDebugSevere` includes a stack trace (and in COMPLETE mode, WARNING/SEVERE do too, see levels below).
 - The third argument can be a single tag string or an array of tag strings.
 
 ### Picking a log level (so you are not drowning)
@@ -53,7 +53,7 @@ The levels are:
 - `eEchoDebugLevel.NONE` -> logs nothing
 - `eEchoDebugLevel.SEVERE_ONLY` -> only `SEVERE`
 - `eEchoDebugLevel.COMPREHENSIVE` -> `WARNING` + `SEVERE` (this is the default)
-- `eEchoDebugLevel.COMPLETE` -> everything, and all logs include stack traces
+- `eEchoDebugLevel.COMPLETE` -> everything, and WARNING/SEVERE include stack traces (INFO does not)
 
 So if you want "only the scary stuff", use `SEVERE_ONLY`.
 If you want "I am hunting a heisenbug", use `COMPLETE`.
@@ -70,15 +70,17 @@ EchoDebugClearTags(); // back to allowing all
 
 Tags are simple strings. Use whatever makes sense for your project:
 `"UI"`, `"Net"`, `"AI"`, `"Loot"`, `"Save"`, `"Audio"`, etc.
+Note: the Echo Console tag field is a display-only filter; use `EchoDebugSetTags`/`EchoDebugClearTags` to control actual logging.
 
 ### History and dumping
 
-Echo keeps a history buffer so a UI can render it (Echo Chamber's console uses this).
+Echo keeps a history buffer so a UI can render it. Echo Chamber's console also captures a raw history so it can re-filter when you change debug levels.
 
 Some handy calls:
 
 ```js
 EchoDebugSetHistorySize(500); // 0 means "do not trim" (unbounded)
+EchoDebugSetRawHistoryCapture(true); // console-only raw history (set false for live-only)
 var _history = EchoDebugGetHistory();
 var _structured = EchoDebugGetStructuredHistory();
 
@@ -87,6 +89,7 @@ EchoDebugDumpLog(); // writes a timestamped text file
 
 If you are leaving Echo running for a long play session, set a history size.
 Unbounded history is fine for short sessions, but it *will* grow forever if you let it.
+If you disable raw history capture, the console only shows future messages that pass the current debug level.
 
 ---
 
@@ -122,6 +125,7 @@ EchoChamberOpenConsole(global.echo_ui);
 
 Now your `EchoDebug...()` calls are visible in a real in-game console.
 No copy/pasting from the Output window. No scrolling through 800 lines of noise.
+If `ECHO_CONSOLE_ENABLED` is 0, Echo will not auto create the console root or controller. Create your own `EchoChamberRoot` and call `EchoChamberOpenConsole(...)` manually.
 
 ### Build a tiny custom window (labels, toggles, sliders, buttons)
 

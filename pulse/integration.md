@@ -139,8 +139,3 @@ function PulseSendLogged(_signal, _data, _from) {
 Replace calls to `PulseSend` in the systems you are diagnosing. Combined
 with Echo's configurable debug level, this gives you a clear picture of
 which signals fired and in what order.
-
----
-
-Start small. Add Pulse where you feel a tight coupling between systems,
-then layer in Statement, and Echo as the project grows.

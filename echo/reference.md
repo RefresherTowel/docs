@@ -91,6 +91,12 @@ Sets the maximum number of entries allowed in the debug log history. Setting it 
 - `_max` `Real`
 **Returns**: `Boolean`
 
+### `EchoDebugSetRawHistoryCapture(_enabled)`
+Enables or disables raw history capture for the Echo Console (default is enabled). When disabled, no raw history is captured and the console only displays future messages that pass the current debug level.
+**Parameters**
+- `_enabled` `Boolean`
+**Returns**: `Boolean`
+
 ### `EchoDebugClearHistory()`
 Clears all entries from the debug log history
 **Returns**: `Boolean` - False if debug is disabled, otherwise true after clearing.

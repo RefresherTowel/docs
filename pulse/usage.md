@@ -52,6 +52,18 @@ A signal is just an identifier. The usual pattern is to define macros in a share
 
 These can be any unique values (numbers, strings, enums). Macros keep your callsites readable.
 
+Optional: register metadata so dumps and Vitals show friendly names.
+
+```js
+PulseSignalMeta(SIG_DAMAGE_TAKEN, "Damage Taken", "COMBAT", "{ amount: real }");
+```
+
+For custom buses, register metadata on the controller:
+
+```js
+global.BusGame.SetSignalMeta(SIG_DAMAGE_TAKEN, "Damage Taken", "COMBAT");
+```
+
 ### 2. Subscribing to a signal
 
 To listen for a signal, use `PulseSubscribe(id, signal, callback, [from])`.
@@ -534,7 +546,7 @@ You can combine this with your own debug overlays, in-game consoles, or visual d
 
 ---
 
-If you read all the way down here: congrats, you've officially added a heartbeat to your game. In practice, you will probably pick 1 or 2 patterns from the Advanced section and ignore the rest until some future "hm, I bet Pulse can help with this" moment.
+If you read all the way down here: congrats, you've officially added a heartbeat to your game. In practice, you will probably pick 1 or 2 patterns from the Advanced section and ignore the rest until some future "hmmm, I bet Pulse can help with this" moment.
 
 If you have any feature requests, or bugs to report please either
 

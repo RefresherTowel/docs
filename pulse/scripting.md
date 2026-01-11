@@ -180,6 +180,48 @@ PulseSend(SIG_DAMAGE_TAKEN, _payload, id);
 - Each listener sees the same `signal`, `data`, and `from` values.  
 - If a listener returns `true`, or if a struct payload has `consumed == true`, remaining listeners are not invoked (cancellation). For the payload method, make sure the payload already includes a `consumed` field when you send it (for example `{ ..., consumed: false }`).  
 - Subscriptions changed during dispatch take effect on the **next** send, not the current one.
+- Listener errors are isolated. Exceptions are logged to Echo and dispatch continues with the next listener. When this happens, Pulse emits the `PULSE_ON_ERROR` signal with error details.
+
+#### `PULSE_ON_ERROR`
+
+Signal emitted when a listener throws during dispatch or query. Subscribe to it for tooling or diagnostics:
+
+```js
+PulseSubscribe(id, PULSE_ON_ERROR, function(_ev) {
+    EchoDebugWarn("Pulse error in " + _ev.signal_key + ": " + _ev.error_message);
+});
+```
+
+For custom buses, subscribe on that bus so you only receive its errors.
+
+Payload fields include:
+
+- `kind`: `"send"`, `"queued_send"`, `"send_sticky"`, `"query"`, or `"query_first"`.
+- `signal` / `signal_key`: the signal that was being dispatched.
+- `from` / `from_key`: sender from the original dispatch.
+- `payload`: original payload or query context.
+- `listener_uid`: uid of the listener entry that failed.
+- `listener_id`: resolved listener id/struct.
+- `listener_from`: the listener's from filter (raw).
+- `listener_tag`, `listener_priority`, `listener_once`, `listener_enabled`.
+- `listener_group_name`, `listener_phase_name`.
+- `error_message`, `error_long_message`, `error_script`, `error_stacktrace`, `error`.
+
+#### `PulseSendSticky(signal, [data], [from])`
+
+Dispatch a signal immediately and store the payload as the latest sticky value for late subscribers.
+
+- Parameters are the same as `PulseSend`.  
+- **Returns:** `ePulseResult` (same meanings as `PulseSend`).
+
+Sticky payloads are replayed only for listeners that opt in via `listener.Sticky(true)` (default is false).
+
+#### `PulseClearSticky(signal)`
+
+Clear the stored sticky payload for a signal.
+
+- `signal`: `Any` - signal identifier.  
+- **Returns:** `Void`.
 
 ---
 
@@ -265,10 +307,11 @@ var _l = PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
 - `callback`: `Function` - function to invoke when the signal is dispatched.  
 - **Returns:** `Struct.__PulseListener` - a listener configuration object with fields:
   - `ident`, `signal`, `callback`  
-  - `from`, `once`, `tag`, `priority`, `enabled`  
+  - `from`, `once`, `sticky`, `tag`, `priority`, `enabled`  
   and methods:
   - `.From(from_id)`  
   - `.Once()`  
+  - `.Sticky(sticky)`  
   - `.Tag(tag)`  
   - `.Priority(priority)`  
   - `.Enabled(enabled)` / `.Enable()` / `.Disable()`  
@@ -300,6 +343,19 @@ Mark the listener configuration as one-shot.
 listener.Once();
 ```
 
+- **Returns:** `Struct.__PulseListener` - the same listener config.
+
+---
+
+#### `listener.Sticky(sticky)`
+
+Set whether this listener should receive sticky replays on subscribe.
+
+```js
+listener.Sticky(true);
+```
+
+- `sticky`: `Bool` - set true to receive the last sticky payload on subscribe.  
 - **Returns:** `Struct.__PulseListener` - the same listener config.
 
 ---
@@ -551,6 +607,78 @@ PulseDumpSignal(SIG_DAMAGE_TAKEN);
 
 ---
 
+### Trace Recorder
+
+Pulse can record tap events into a ring buffer for debugging.
+
+#### `PulseTraceStart([max_events], [kinds])`
+
+Start recording tap events on the default bus.
+
+- `max_events` *(optional)*: `Real` - ring buffer size (default 256).  
+- `kinds` *(optional)*: `String` or `Array<String>` - filter by tap kind (for example `"send"` or `["send", "query"]`).  
+- **Returns:** `Undefined`.
+
+#### `PulseTraceStop()`
+
+Stop recording tap events on the default bus.
+
+- **Returns:** `Undefined`.
+
+#### `PulseTraceClear()`
+
+Clear recorded events from the default bus.
+
+- **Returns:** `Undefined`.
+
+#### `PulseTraceGet()`
+
+Get recorded tap events in chronological order.
+
+- **Returns:** `Array<Struct>`.
+
+#### `PulseTraceDump()`
+
+Dump recorded tap events to Echo.
+
+- **Returns:** `Undefined`.
+
+For custom buses, use `TraceStart`, `TraceStop`, `TraceClear`, `TraceGet`, and `TraceDump` on the controller.
+
+---
+
+### Signal Metadata
+
+Use metadata to register friendly names and categories for signals. This improves `PulseDump` output and Vitals labels.
+
+#### `PulseSignalMeta(signal, name, [category], [schema])`
+
+Register metadata for a signal on the default `PULSE` bus.
+
+- `signal`: `Any` - signal identifier.  
+- `name`: `String` - friendly display name.  
+- `category` *(optional)*: `String` - category label (for example `"UI"` or `"COMBAT"`).  
+- `schema` *(optional)*: `Any` - payload schema description or example.  
+- **Returns:** `Undefined`.
+
+#### `PulseSignalMetaGet(signal)`
+
+Get metadata for a signal on the default `PULSE` bus.
+
+- `signal`: `Any`.  
+- **Returns:** `Struct` or `Undefined` if none is registered.
+
+#### `PulseSignalMetaClear(signal)`
+
+Clear metadata for a signal on the default `PULSE` bus.
+
+- `signal`: `Any`.  
+- **Returns:** `Undefined`.
+
+Metadata is stored per bus. For custom buses, use the controller methods `SetSignalMeta`, `GetSignalMeta`, and `ClearSignalMeta`.
+
+---
+
 ### Subscription Groups
 
 #### `PulseGroup()`
@@ -574,7 +702,7 @@ group.Add([
   - Defaults / factory: `Bus(bus)`, `Name(name)`, `From(from)`, `Tag(tag)`, `Priority(prio)`, `PriorityOffset(delta)`, `Phase(name)`, `PhaseBase(base)`
   - Enable/disable: `IsEnabled()`, `SetEnabled(bool)`, `Enable()`, `Disable()`
   - Subscribe via group: `Listener(id, signal, callback)`, `Subscribe(...)`, `SubscribeOnce(...)`, `SubscribeConfig(listener)`
-  - Bus passthrough: `Send(...)`, `Post(...)`, `FlushQueue(...)`, `ClearQueue()`, `QueueCount()`, `Query(...)`, `QueryAll(...)`, `QueryFirst(...)`
+  - Bus passthrough: `Send(...)`, `SendSticky(...)`, `Post(...)`, `FlushQueue(...)`, `ClearQueue()`, `ClearSticky(...)`, `QueueCount()`, `Query(...)`, `QueryAll(...)`, `QueryFirst(...)`
   - Debug: `Dump()`, `DumpManaged()`, counts (`Count()`, `CountActive()`, `CountEnabled()`)
 
 `Add(handle_or_array)` and `Track(handle_or_array)` require subscription handle structs built from `PulseSubscribe`, `PulseSubscribeOnce`, `PulseSubscribeConfig`, or `listener.Subscribe`.
@@ -593,6 +721,7 @@ Pulse stores its state in a global controller referenced by:
 
 ```js
 #macro PULSE global.__pulse_controller
+#macro PULSE_ON_ERROR "PULSE_ON_ERROR"
 ```
 
 and constructed once as:
@@ -661,9 +790,11 @@ Unsubscription:
 Dispatch and queue:
 
 - `Send(signal, [data], [from])` - dispatch immediately on this bus (same rules as `PulseSend`).
+- `SendSticky(signal, [data], [from])` - dispatch and store sticky payload (same rules as `PulseSendSticky`).
 - `Post(signal, [data], [from])` - enqueue an event on this bus (same idea as `PulsePost`).
 - `FlushQueue([max_events])` - process queued events for this bus (same as `PulseFlushQueue` but scoped to the bus).
 - `ClearQueue()` - clear this bus queue without dispatching.
+- `ClearSticky(signal)` - clear the stored sticky payload for a signal on this bus.
 - `QueueCount()` - number of events currently queued on this bus.
 
 Query API:
@@ -678,6 +809,14 @@ Introspection:
 - `CountFor(id)` - total number of subscriptions held by an id on this bus.
 - `Dump()` - log all signals and their listeners for this bus (debug use only).
 - `DumpSignal(signal)` - log listeners for a single signal on this bus.
+- `SetSignalMeta(signal, name, [category], [schema])` - register metadata for a signal.
+- `GetSignalMeta(signal)` - get metadata for a signal (or undefined if missing).
+- `ClearSignalMeta(signal)` - clear metadata for a signal.
+- `TraceStart([max_events], [kinds])` - start recording tap events on this bus.
+- `TraceStop()` - stop recording tap events on this bus.
+- `TraceClear()` - clear recorded tap events on this bus.
+- `TraceGet()` - get recorded tap events for this bus.
+- `TraceDump()` - dump recorded tap events via Echo.
 
 Phase lanes (optional priority tooling):
 

@@ -200,9 +200,3 @@ Catalyst is intended for things like:
 - "Highest-of-kind" auras where only the strongest effect applies.
 - Mouseover previews when hovering items: `20 -> 28 damage`.
 
-See the other pages for details:
-
-- [Quickstart](./quickstart.md) - basic setup and simple examples.
-- [Advanced Topics](./advanced.md) - layers, families, derived stats, curves, context.
-- [API Reference](./reference.md) - full list of methods and fields.
-- [Patterns & Recipes](./patterns.md) - example runes and abilities built on Catalyst.

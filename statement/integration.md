@@ -158,9 +158,3 @@ var _combat = new StatementState(self, "Combat")
 Combined with `EchoDebugSetLevel(__ECHO_eDebugLevel.COMPLETE);` in your
 debug builds, this gives you a clear picture of how each state behaves
 over time.
-
----
-
-You do not have to adopt all of these patterns at once. Start with a single
-integration (for example Statement + Whisper or Statement + Pulse) and add
-more connections as your project grows.

@@ -39,7 +39,7 @@ Echo is my attempt to fix that problem without turning logging into a whole seco
 
 If you want the itch page: [Echo on itch.io](https://refreshertowel.itch.io/echo)
 
-> Both of my other frameworks, [![Statement icon]({{ '/assets/statement_icon.png' | relative_url }}){: .framework-icon-small } **Statement**](https://refreshertowel.itch.io/statement) and [![Pulse icon]({{ '/assets/pulse_icon.png' | relative_url }}){: .framework-icon-small } **Pulse**](https://refreshertowel.itch.io/pulse) ship with **Echo** for free! So if either of them sounds interesting and you're thinking of buying Echo, grab them instead and get Echo bundled with them!
+> All of my other frameworks, [![Statement icon]({{ '/assets/statement_icon.png' | relative_url }}){: .framework-icon-small } **Statement**](https://refreshertowel.itch.io/statement), [![Pulse icon]({{ '/assets/pulse_icon.png' | relative_url }}){: .framework-icon-small } **Pulse**](https://refreshertowel.itch.io/pulse) and [![Catalyst icon]({{ '/assets/catalyst_icon.png' | relative_url }}){: .framework-icon-small } **Catalyst**](https://refreshertowel.itch.io/catalyst) ship with **Echo** for free! So if either of them sounds interesting and you're thinking of buying Echo, grab them instead and get Echo bundled with them!
 {: .important}
 
 ---
@@ -67,7 +67,7 @@ If you only learn three calls, learn these:
 - EchoDebugWarn(message, [tag_or_tags])
 - EchoDebugSevere(message, [tag_or_tags])
 
-SEVERE always includes a stack trace (and in COMPLETE mode, everything includes stack traces).
+SEVERE always includes a stack trace (and in COMPLETE mode, WARNING/SEVERE include stack traces; INFO does not).
 
 > `EchoDebug*()` functions return true if the message actually logged (passed your current filters), and false if it was ignored by your current settings.
 {: .note}
@@ -103,7 +103,7 @@ Echo has four debug levels:
 - eEchoDebugLevel.COMPREHENSIVE (default)
   Logs WARNING + SEVERE (but not INFO).
 - eEchoDebugLevel.COMPLETE
-  Logs INFO + WARNING + SEVERE, and includes stack traces for everything.
+  Logs INFO + WARNING + SEVERE, and includes stack traces for WARNING/SEVERE (INFO does not).
 
 You can switch it at runtime:
 
@@ -117,6 +117,19 @@ And you can read the current level (optionally stringified):
 var _lvl = EchoDebugGetLevel(false);
 var _lvl_name = EchoDebugGetLevel(true);
 ```
+
+---
+
+## Macros (enable or disable features)
+
+```js
+#macro ECHO_DEBUG_ENABLED 1
+#macro ECHO_CONSOLE_ENABLED 1
+```
+
+- `ECHO_DEBUG_ENABLED` controls all Echo logging. When set to 0, `EchoDebug*` calls return `false` and do nothing (no output).
+- `ECHO_CONSOLE_ENABLED` controls whether Echo auto creates the built-in console root/controller. Logging still works when this is 0.
+- If you plan to create and manage your own `EchoChamberRoot`, set `ECHO_CONSOLE_ENABLED` to 0 so you do not end up with two roots.
 
 ---
 
@@ -155,6 +168,12 @@ You can cap history size (0 means unlimited):
 EchoDebugSetHistorySize(300);
 ```
 
+The console also uses a raw history buffer so it can re-filter when you change debug levels. If you want a live-only feed, turn it off:
+
+```js
+EchoDebugSetRawHistoryCapture(false);
+```
+
 And when you need to ship a bug report to your future self:
 
 ```js
@@ -167,11 +186,12 @@ That writes a text file using `file_text_open_write` with a timestamped name.
 
 ## Echo Chamber (included)
 
-Echo ships with Echo Chamber, which is a full in-game debug UI builder, learn more about it here: [Echo Chamber](/echo_chamber/echo_chamber.md).
+Echo ships with Echo Chamber, which is a full in-game debug UI builder, learn more about it here: [Echo Chamber](/echo_chamber/index.md).
 
 If all you want is logging, you can ignore it. If you want to build real tooling (log consoles, inspectors, debug panels, whatever) Echo Chamber is where things get fun.
 
 It also includes a built-in "Echo Console" window that can view your log history, search it, and tweak log level / tags / history size from inside the game.
+If you want to manage your own `EchoChamberRoot`, set `ECHO_CONSOLE_ENABLED` to 0 so Echo does not auto create a second root.
 
 I have used it to build debugging visualisers for all my frameworks, such as [Statement Lens, the real-time interactable visual debugger for Statement](https://refreshertowel.itch.io/statement) (an advanced yet easy to use state machine manager):
 
@@ -180,7 +200,7 @@ I have used it to build debugging visualisers for all my frameworks, such as [St
 
 ---
 
-## Quick start (8 lines, no ceremony)
+## Quick start (a few lines, no ceremony)
 
 ```js
 // Somewhere shared:
@@ -193,11 +213,3 @@ if (hp <= 0) {
 	EchoDebugInfo("Player died with hp <= 0", TAG_COMBAT);
 }
 ```
-
----
-
-## Where to go next
-
-- [Usage & Examples (includes examples for how to build your own debug interface with Echo Chamber)](usage.md)
-- [Full API Reference](scripting.md)
-
