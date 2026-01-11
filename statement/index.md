@@ -112,7 +112,7 @@ Check out the other frameworks currently available:
 * [![Pulse icon]({{ '/assets/pulse_icon.png' | relative_url }}){: .framework-icon-small } **Pulse**](https://refreshertowel.itch.io/pulse) - A signals and events framework. Broadcast "what happened", let any number of listeners react. Includes queries (ask your game a question, anything that might want to answer responds!), tags, priorities, sender filters, queued dispatch, groups, and solid debug/introspection.
 * [![Echo icon]({{ '/assets/echo_icon.png' | relative_url }}){: .framework-icon-small } **Echo**](https://refreshertowel.itch.io/echo) - A lightweight debug logger for filtering and prioritising messages, plus dumping logs to file without pain.
 
-These frameworks are designed specifically to work together easily, to allow you to focus on actually making your games, rather than inventing tooling! [See how you might use them with Statement here!]({% link statement/integration.md %})
+These frameworks are designed specifically to work together easily, to allow you to focus on actually making your games, rather than inventing tooling!
 
 > Statement ships with [**Echo**](../echo/) (a minimalist, yet powerful, debug logging framework) for free!
 > {: .important}
