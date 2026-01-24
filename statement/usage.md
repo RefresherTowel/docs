@@ -532,6 +532,21 @@ state_machine.AddStateTemplate(_attack_template, { damage: 8 }, "AttackHeavy");
 
 Inside a handler, read the current state's config with `state_machine.GetState().GetConfig()` if you need template-specific data.
 
+You can also extend a template-built state's handlers without overwriting the template logic by passing a bind mode:
+
+- `eStatementBindMode.APPEND`: run your extra handler after the template handler(s).
+- `eStatementBindMode.PREPEND`: run your extra handler before the template handler(s).
+
+```js
+state_machine.GetState("AttackLight").AddEnter(function() {
+	audio_play_sound(snd_attack_light, 0, false);
+}, eStatementBindMode.APPEND);
+
+state_machine.GetState("AttackHeavy").AddEnter(function() {
+	audio_play_sound(snd_attack_heavy, 0, false);
+}, eStatementBindMode.APPEND);
+```
+
 ---
 
 ## Gotchas & Best Practices

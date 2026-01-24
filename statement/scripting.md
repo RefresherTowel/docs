@@ -583,7 +583,7 @@ Returns the machine for chaining.
 
 ### Core StatementState Methods
 
-#### `AddEnter(fn)`
+#### `AddEnter(fn, [mode])`
 
 Bind an `Enter` handler that runs once when the state becomes active.
 
@@ -594,11 +594,20 @@ idle.AddEnter(function() {
 ```
 
 - `fn`: `Function` - automatically `method(owner, fn)` bound. In other words, the scope of the function runs from whoever has been supplied as the owner of the state (most often the instance running the state machine itself). This behaviour extends through to all the `fn` arguments in the other three `Add*()` methods below.
+- `mode` *(optional)*: `Constant.eStatementBindMode` - how to combine this handler with an existing handler for the same event (default `REPLACE`).
 - **Returns:** `Struct.StatementState`
+
+`mode` options:
+
+- `eStatementBindMode.REPLACE` *(default)*: overwrite the existing handler(s).
+- `eStatementBindMode.APPEND`: run this handler after the existing handler(s).
+- `eStatementBindMode.PREPEND`: run this handler before the existing handler(s).
+
+When an event has multiple handlers, they run in order. The last handler's return value is the event's return value.
 
 ---
 
-#### `AddUpdate(fn)`
+#### `AddUpdate(fn, [mode])`
 
 Bind an `Update` handler that runs every Step while the state is active.
 
@@ -609,11 +618,12 @@ idle.AddUpdate(function() {
 ```
 
 - `fn`: `Function` - automatically `method(owner, fn)` bound.
+- `mode` *(optional)*: `Constant.eStatementBindMode` - default `REPLACE`.
 - **Returns:** `Struct.StatementState`
 
 ---
 
-#### `AddExit(fn)`
+#### `AddExit(fn, [mode])`
 
 Bind an `Exit` handler that runs once when the state stops being active.
 
@@ -624,11 +634,12 @@ idle.AddExit(function() {
 ```
 
 - `fn`: `Function` - automatically `method(owner, fn)` bound.
+- `mode` *(optional)*: `Constant.eStatementBindMode` - default `REPLACE`.
 - **Returns:** `Struct.StatementState`
 
 ---
 
-#### `AddDraw(fn)`
+#### `AddDraw(fn, [mode])`
 
 Bind a `Draw` handler that runs each Draw while the state is active if you call `Statement.Draw()`.
 
@@ -639,6 +650,7 @@ idle.AddDraw(function() {
 ```
 
 - `fn`: `Function` - automatically `method(owner, fn)` bound.
+- `mode` *(optional)*: `Constant.eStatementBindMode` - default `REPLACE`.
 - **Returns:** `Struct.StatementState`
 
 ---
@@ -1381,7 +1393,7 @@ state_machine.ClearAnyTransitionHooks();
 
 ### Low-Level Event Running
 
-Behind the scenes, each Statement state uses an array indexed with enums to decide what handler to run. For instance, `Update()`, runs the handler stored in the array position indexed by `eStatementEvents.STEP`. In most circumstances, you don't need to worry about this stuff, simply use `Update()` / `Draw()` and it will be handled automatically.
+Behind the scenes, each Statement state uses an array indexed with enums to decide what handler to run. For instance, `Update()` runs the handler stored in the array position indexed by `eStatementEvents.STEP`. Each slot can store a single function, or an array of functions when you use `eStatementBindMode.APPEND` / `eStatementBindMode.PREPEND`.
 
 However, if you're confident editing Statement itself, you can extend `eStatementEvents` with your own custom event types. The enum is defined in `scr_statement_macro`.
 
@@ -1400,7 +1412,7 @@ However, if you're confident editing Statement itself, you can extend `eStatemen
 
 ---
 
-#### `AddStateEvent(event, fn)`
+#### `AddStateEvent(event, fn, [mode])`
 
 **StatementState method**. Bind a handler to a specific `eStatementEvents` index. This is your "custom" handler entry point.
 
@@ -1414,6 +1426,7 @@ idle.AddStateEvent(eStatementEvents.ANIMATION_END, function() {
 
 - `event`: `Real` - one of the `eStatementEvents` values (`ENTER`, `EXIT`, `STEP`, `DRAW` or any custom `eStatementEvents` value you've defined).
 - `fn`: `Function` - automatically `method(owner, fn)` bound.
+- `mode` *(optional)*: `Constant.eStatementBindMode` - default `REPLACE`.
 - **Returns:** `Struct.StatementState`
 
 ---
@@ -1661,7 +1674,7 @@ Default is true.
 
 ---
 
-#### `AddStateEvent(event, fn)`
+#### `AddStateEvent(event, fn, [mode])`
 
 Bind a handler to a template event slot.
 
@@ -1673,13 +1686,14 @@ template.AddStateEvent(eStatementEvents.ENTER, function() {
 
 - `event`: `Real` - one of the `eStatementEvents` values (including custom entries you add).  
 - `fn`: `Function`  
+- `mode` *(optional)*: `Constant.eStatementBindMode` - default `REPLACE`.
 - **Returns:** `Struct.StatementStateTemplate`
 
 Handlers are stored unbound; when you call `Build`, they are attached to the new state and bound to the owner.
 
 ---
 
-#### `AddEnter(fn)`
+#### `AddEnter(fn, [mode])`
 
 Bind an Enter handler to this template.
 
@@ -1690,11 +1704,12 @@ template.AddEnter(function() {
 ```
 
 - `fn`: `Function`  
+- `mode` *(optional)*: `Constant.eStatementBindMode` - default `REPLACE`.
 - **Returns:** `Struct.StatementStateTemplate`
 
 ---
 
-#### `AddUpdate(fn)`
+#### `AddUpdate(fn, [mode])`
 
 Bind an Update/Step handler to this template.
 
@@ -1705,11 +1720,12 @@ template.AddUpdate(function() {
 ```
 
 - `fn`: `Function`  
+- `mode` *(optional)*: `Constant.eStatementBindMode` - default `REPLACE`.
 - **Returns:** `Struct.StatementStateTemplate`
 
 ---
 
-#### `AddExit(fn)`
+#### `AddExit(fn, [mode])`
 
 Bind an Exit handler to this template.
 
@@ -1720,11 +1736,12 @@ template.AddExit(function() {
 ```
 
 - `fn`: `Function`  
+- `mode` *(optional)*: `Constant.eStatementBindMode` - default `REPLACE`.
 - **Returns:** `Struct.StatementStateTemplate`
 
 ---
 
-#### `AddDraw(fn)`
+#### `AddDraw(fn, [mode])`
 
 Bind a Draw handler to this template.
 
@@ -1735,6 +1752,7 @@ template.AddDraw(function() {
 ```
 
 - `fn`: `Function`  
+- `mode` *(optional)*: `Constant.eStatementBindMode` - default `REPLACE`.
 - **Returns:** `Struct.StatementStateTemplate`
 
 ---
