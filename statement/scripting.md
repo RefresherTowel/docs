@@ -1481,13 +1481,29 @@ idle.AddTransition("Run", function() {
 ```
 
 - `target_name`: `String`
-- `condition`: `Function` - automatically bound to the owner via `method(owner, fn)`.
+- `condition`: `Function` - automatically bound to the owner via `method(owner, fn)`. The transition `data` payload is passed in as the first argument.
 - `data` *(optional)*: `Any` - payload attached to the transition if it fires.
 - `force` *(optional)*: `Bool` - ignore `can_exit` when firing.
 - **Returns:** `Struct.StatementState`
 
 Transitions are checked in the order they were added; the first condition returning true will fire.
 When a transition fires, its `data` payload is passed into `ChangeState`.
+
+You can also read or modify the payload during the transition check:
+
+```js
+idle.AddTransition("Jump", function(_data) {
+    if (keyboard_check(vk_control)) {
+        _data.height = 5;
+        return true;
+    }
+    else if (keyboard_check(vk_space)) {
+        _data.height = 10;
+        return true;
+    }
+    return false;
+}, { height: 5 });
+```
 
 ---
 
@@ -1734,7 +1750,7 @@ template.AddTransition("Run", function() {
 ```
 
 - `target_name`: `String`  
-- `condition`: `Function` - stored unbound and later bound to the owner when built.  
+- `condition`: `Function` - stored unbound and later bound to the owner when built. The transition `data` payload is passed in as the first argument at runtime.  
 - `data` *(optional)*: `Any`  
 - `force` *(optional)*: `Bool`  
 - **Returns:** `Struct.StatementStateTemplate`

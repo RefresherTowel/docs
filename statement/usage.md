@@ -367,6 +367,7 @@ var _run = new StatementState(self, "Run")
 
 - Transitions are checked in the order they were added; the first that returns `true` fires.
 - You can attach a payload via `ChangeState` or by providing `data` in `AddTransition`, then read it in the next state's `Enter` via `GetLastTransitionData()`.
+- If you provide `data` in `AddTransition`, the `condition` function receives it as its first argument, so you can update the payload during the transition check.
 - Declarative transitions always evaluate at the end of `Update()`. If you need a different ordering, move the condition into your `AddUpdate` logic and call `ChangeState` directly.
 
 ---
