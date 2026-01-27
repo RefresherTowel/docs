@@ -3,7 +3,7 @@ layout: default
 title: Whisper
 nav_order: 6
 has_children: true
-------------------
+---
 
 <!--
 /// whisper/index.md - Changelog:

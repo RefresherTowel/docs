@@ -3,7 +3,7 @@ layout: default
 title: Concepts
 parent: Whisper
 nav_order: 1
-------------
+---
 
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
