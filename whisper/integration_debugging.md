@@ -1,5 +1,4 @@
 ---
-
 layout: default
 title: Integration and Debugging
 parent: Whisper

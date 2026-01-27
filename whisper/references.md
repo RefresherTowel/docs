@@ -1,5 +1,4 @@
 ---
-
 layout: default
 title: Scripting Reference
 parent: Whisper

@@ -1,5 +1,4 @@
 ---
-
 layout: default
 title: Verbs & Insertions
 parent: Whisper
