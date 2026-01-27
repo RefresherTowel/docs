@@ -16,7 +16,7 @@ has_children: true
   {: .text-delta }
 
 1. TOC
-   {:toc}
+{:toc}
 
 </details>
 </div>
