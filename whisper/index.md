@@ -39,7 +39,7 @@ If you have never seen the word "storylet" before, don't stress. It isn't a fanc
 
 ---
 
-## What Whisper is
+## What Whisper is (in simple terms)
 
 A **storylet** is a small piece of content that can be chosen when its rules say it is allowed.
 
@@ -69,7 +69,7 @@ Whisper checks the rules, filters, cooldowns, usage limits, etc, and then picks 
 
 ---
 
-## The core idea
+## The core idea (the 3 nouns)
 
 You will see these three concepts everywhere:
 
@@ -165,7 +165,7 @@ That alone gives you:
 
 ---
 
-## Quick Start
+## Quick Start (slightly less tiny)
 
 This version shows the normal "shape" of Whisper usage.
 
@@ -198,7 +198,7 @@ At this point you're ready for the next step: adding rules.
 
 ---
 
-## A tiny taste of rules
+## A tiny taste of rules (predicates)
 
 Rules are where storylets stop being "random lines" and start being "picked at the right time".
 
@@ -219,7 +219,7 @@ WhisperStorylet("gossip_well_hint")
 
 ---
 
-## Verbs and insertions
+## Verbs and insertions (the weird markers)
 
 Whisper supports two kinds of text markup:
 

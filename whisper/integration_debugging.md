@@ -176,9 +176,9 @@ Whisper gives you debug helpers that answer that question directly.
 
 At the top of the script there is a macro:
 
-* `#macro WHISPER_DEBUG 0`
+* `#macro WHISPER_DEBUG 1`
 
-Set it to `1` while you are developing.
+Set it to `1` while you are developing (and `0` when you want it quiet).
 
 When debug is enabled, Whisper logs extra information via Echo-style functions (for example `EchoDebugInfo`, `EchoDebugWarn`).
 
@@ -203,7 +203,9 @@ Each entry contains:
 * `can_fire` (passes predicate/cooldown/uses rules)
 * detailed flags like `predicate_ok`, `cooldown_ok`, `uses_total_ok`, `uses_run_ok`
 * tag filter flags like `tags_all_ok`, `tags_any_ok`, `tags_not_ok`
-* `reasons` (an array of short strings like `"cooldown_active"`)
+* `reasons` (an array of short strings like `"cooldown is active"`)
+
+The `reasons` strings are human-readable messages (for example `"cooldown is active"`).
 
 Example:
 

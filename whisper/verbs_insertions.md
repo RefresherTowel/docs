@@ -101,7 +101,7 @@ If you use `##ship##`, Whisper might produce:
 * "The Scout Horizon"
 * "The Freighter Horizon"
 
-Important: there is a recursion depth cap (so you cannot accidentally infinite-loop your game by doing `a -> ##a##` forever). If you hit the cap and `WHISPER_DEBUG` is enabled, Whisper will warn.
+Important: there is a recursion depth cap (currently 10) so you cannot accidentally infinite-loop your game by doing `a -> ##a##` forever. If you hit the cap and `WHISPER_DEBUG` is enabled, Whisper will warn.
 
 > Best practice: avoid self-referential insertions (directly or indirectly). Keep insertion chains short.
 {: .note}
@@ -125,6 +125,9 @@ WhisperAddVerb("give_xp", function(_ctx, _ev) {
 	// do something
 });
 ```
+
+> GameMaker callbacks are not closures. Do not rely on local variables from outside the callback (they will not exist later). If a callback needs values or an instance/struct scope, carry them explicitly (for example via `_ctx`), or bind scope with `method(scope_struct_or_instance, function(...) { ... })`.
+{: .note}
 
 Then you reference that verb name from text, and Whisper turns it into an event in the resolved result.
 
@@ -211,7 +214,7 @@ Example (simple typewriter controller logic):
 ```js
 // Create
 say = WhisperSaySimple("npc_bridge", ctx);
-cursor = 0;
+cursor = -1;
 
 // Step
 if (!is_undefined(say)) {
@@ -244,7 +247,7 @@ Inline markers can include `:arg1,arg2` after the name:
 
 Whisper parses each token:
 
-* If it looks exactly like a number, it becomes a number.
+* If converting to a number and back to a string matches exactly, it becomes a number.
 * Otherwise it stays a string.
 
 Inside the callback, read them from `meta.args`:

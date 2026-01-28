@@ -84,7 +84,7 @@ Debug a global query (returns details about candidates and why they matched/fail
 * `[_now]` `Real,Undefined` Time value used for cooldown checks.
 * `[_filter]` `Struct,Undefined` Filter struct ({ tags_all, tags_any, tags_not, tags_prefer, prefer_weight, custom }).
 
-**Returns**: `Struct`
+**Returns**: `Array<Struct>`
 
 ---
 
@@ -133,7 +133,7 @@ Register an insertion value for a key.
 * `_value` `String` Replacement text.
 * `[_lang]` `String` Language code.
 
-**Returns**: `Real` (ignored)
+**Returns**: `Undefined`
 
 ---
 
@@ -160,7 +160,7 @@ Register an insertion list for a key, used for random selection.
 * `_array` `Array<String>` List of possible replacement strings.
 * `[_lang]` `String` Language code.
 
-**Returns**: `Real` (ignored)
+**Returns**: `Undefined`
 
 ---
 
@@ -207,7 +207,7 @@ This also clears pool repeat-suppression state (the last picked storylet), so a 
 
 * None.
 
-**Returns**: `Real` (ignored)
+**Returns**: `Undefined`
 
 ---
 
@@ -215,7 +215,9 @@ This also clears pool repeat-suppression state (the last picked storylet), so a 
 
 Simple time helper for Whisper cooldowns and usage.
 
-By default, this returns seconds since game start. If manual ticking is enabled via `WhisperTickManual(true)`, this returns the current manual tick counter.
+By default, this returns seconds since game start.
+
+If manual ticking is enabled via `WhisperTickManual(true)`, this returns the current manual tick counter. The counter is seeded to the current time (seconds since game start) the first time it is used, unless you explicitly set it with `WhisperTickReset()` or `WhisperTickSet(num)`.
 
 **Arguments**
 
@@ -302,7 +304,7 @@ Debug a pool query (returns details about candidates and match results).
 * `[_now]` `Real,Undefined` Time value used for cooldown checks.
 * `[_filter]` `Struct,Undefined` Filter struct ({ tags_all, tags_any, tags_not, tags_prefer, prefer_weight, custom }).
 
-**Returns**: `Struct`
+**Returns**: `Array<Struct>`
 
 ---
 
@@ -413,7 +415,7 @@ Destroy and recreate all Whisper singletons (manager, verbs, inserts).
 
 * None.
 
-**Returns**: `Real` (ignored)
+**Returns**: `Undefined`
 
 ---
 
@@ -469,7 +471,7 @@ Explicitly set the current run/session id.
 
 * `_id` `Real` New run identifier.
 
-**Returns**: `Real` (ignored)
+**Returns**: `Undefined`
 
 ---
 
@@ -510,7 +512,7 @@ This keeps your storylets and pools; it only resets runtime counters/state.
 
 * `[_reset_auto_ids]` `Bool` If true, resets the auto id counter used by `WhisperLineSimple`.
 
-**Returns**: `Real` (ignored)
+**Returns**: `Undefined`
 
 ---
 
@@ -539,6 +541,11 @@ You can pass either a JSON string, or a struct (for example, produced by `json_p
 * `_json_data` `String,Struct` JSON string or parsed struct.
 
 **Returns**: `Bool`
+
+* **Additional details:**
+
+  * This restores runtime state only (usage counters, run id, tick state, and pool repeat suppression). It does not restore storylet content (text/tags/predicates), pool memberships, verbs, or insertions.
+  * Loading merges into the current runtime state: entries not present in the payload are not removed.
 
 ---
 
@@ -753,7 +760,7 @@ When enabled, cooldown time only advances when you call `WhisperTick(_dt)`.
 
 * `_enabled` `Bool` If true, enable manual ticking.
 
-**Returns**: `Real` (ignored)
+**Returns**: `Undefined`
 
 ---
 
@@ -765,7 +772,7 @@ Reset the manual tick counter used by `WhisperNow()` to 0.
 
 * None.
 
-**Returns**: `Real` (ignored)
+**Returns**: `Undefined`
 
 ---
 
@@ -777,7 +784,7 @@ Set the manual tick counter used by `WhisperNow()` to an explicit value.
 
 * `_num` `Real` New manual tick value.
 
-**Returns**: `Real` (ignored)
+**Returns**: `Undefined`
 
 ---
 
@@ -790,12 +797,12 @@ Register a verb callback.
 * `_name` `String` Verb name.
 * `_func` `Function` Callback taking (_ctx, _event).
 
-**Returns**: `Real` (ignored)
+**Returns**: `Undefined`
 
 * **Additional details:**
 
   * Verb callbacks run as `function(_ctx, _event)`.
-  * `_event` includes at least: `name`, `from_pos`, `to_pos` (cursor range in the resolved string).
+  * `_event` includes at least: `name`, `position`, `trigger`, `meta.args`.
 
 ---
 
@@ -818,11 +825,11 @@ Run verb events whose positions fall between the previous and new cursor.
 **Arguments**
 
 * `_events` `Array<Struct>` Events array from resolved text.
-* `_from_pos` `Real` Previous cursor position (inclusive lower bound).
+* `_from_pos` `Real` Previous cursor position (exclusive lower bound).
 * `_to_pos` `Real` New cursor position (inclusive upper bound).
 * `_ctx` `Struct` Context passed to verb callbacks.
 
-**Returns**: `Real` (ignored)
+**Returns**: `Undefined`
 
 * **Additional details:**
 

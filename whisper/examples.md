@@ -96,7 +96,7 @@ Hints are useful. Hints that repeat every five seconds are the fastest way to ma
 
 This example does three things: only provides hints when hint mode is on, has cooldowns so the same hint doesn't spam, and caps usage per run so hints don't dominate a whole play session.
 
-> By default, Whisper's cooldowns "tick" in seconds. You can take manual control of the tick by setting `WhisperTickManual(true)` and then calling `WhisperTick(_dt)` whenever you want time to advance (for turn-based systems, `WhisperTick(1)` is common).
+> By default, Whisper's cooldowns "tick" in seconds. You can take manual control of the tick by setting `WhisperTickManual(true)` and then calling `WhisperTick(_dt)` whenever you want time to advance (for turn-based systems, `WhisperTick(1)` is common). If you want the manual tick to start from 0, call `WhisperTickReset()` after enabling manual ticking.
 {: .note}
 
 Setup:
@@ -249,7 +249,7 @@ if (!is_undefined(_out)) {
 }
 ```
 
-What this gives you is a conversation that feels like it moves forward, but stays flexible. And because of the per-run limits, you won't get the same beat twice in the same conversation. I am slightly cheating by using story.chat_count here, 
+What this gives you is a conversation that feels like it moves forward, but stays flexible. And because of the per-run limits, you won't get the same beat twice in the same conversation. (I am slightly cheating by using `story.chat_count` as a simple progression counter.)
 
 ---
 
@@ -323,7 +323,7 @@ if (!is_undefined(_say)) {
 	// Store _say.events somewhere in your dialogue UI state.
 	global.dialogue_events = _say.events;
 	global.dialogue_ctx = _ctx;
-	global.dialogue_cursor = 0;
+	global.dialogue_cursor = -1;
 }
 ```
 
@@ -363,4 +363,4 @@ for (var i = 0; i < array_length(_rows); i++) {
 }
 ```
 
-This will usually reveal something obvious, like "predicate_failed" or "cooldown_active", and you'll fix it in two minutes instead of wandering around your codebase for an hour.
+This will usually reveal something obvious, like "predicate failed" or "cooldown is active", and you'll fix it in two minutes instead of wandering around your codebase for an hour.

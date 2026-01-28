@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Usage & Examples
+title: Usage
 parent: Whisper
 nav_order: 4
 ---
@@ -203,6 +203,9 @@ WhisperStorylet("bridge_smalltalk_01")
 	.AddToPool("npc_bridge");
 ```
 
+> GameMaker callbacks are not closures. Do not reference local variables from outside the callback. If a predicate (or hook/verb) needs values, pass them through `_ctx` or bind scope with `method(scope_struct_or_instance, function(...) { ... })`.
+{: .note}
+
 A few important knobs:
 
 * `SetPredicate(fn)` -> the "is this allowed right now?" function
@@ -270,6 +273,9 @@ If you want Whisper's default helpers to run on a manual "tick" clock (turns, st
 ```js
 WhisperTickManual(true);
 
+// Optional: start from 0 instead of seeding from the current time:
+WhisperTickReset();
+
 // When your game advances one tick:
 WhisperTick(1);
 ```
@@ -290,6 +296,9 @@ save_data.whisper = WhisperStateBuild();
 WhisperStateSave(); // writes "whisper_state.json" in the sandbox
 WhisperStateLoad(); // reads "whisper_state.json" and loads it
 ```
+
+> Important: Whisper state save/load only covers runtime counters/state (uses, cooldown timestamps, run id, pool repeat suppression, tick state, etc). It does NOT save your content (storylet texts/tags/predicates, pool memberships, verbs, insertions). You should still run your normal content registration before calling `WhisperStateLoad*()`. Loading also merges: entries not present in the payload are left as-is.
+{: .note}
 
 If you want to reset runtime counters without re-registering content, use:
 
