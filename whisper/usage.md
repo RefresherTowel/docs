@@ -1,10 +1,9 @@
 ---
-
 layout: default
 title: Usage & Examples
 parent: Whisper
-nav_order: 2
-------------
+nav_order: 4
+---
 
 <!--
 /// usage.md - Changelog:
@@ -16,10 +15,10 @@ nav_order: 2
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
-  {: .text-delta }
+{: .text-delta }
 
 1. TOC
-   {:toc}
+{:toc}
 
 </details>
 </div>
