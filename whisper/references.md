@@ -25,6 +25,7 @@ Everything here is listed in alphabetical order so you can Cmd+F your way to vic
 <!--
 /// references.md - Changelog:
 /// - 25-01-2026: Add manual tick functions (WhisperTick/WhisperTickManual).
+/// - 28-01-2026: Document state save/load helpers and resolved result shape.
 -->
 
 ---
@@ -122,7 +123,7 @@ Get the current run/session id.
 
 ---
 
-### `WhisperInsertAdd(_key, _value, _lang = "en")`
+### `WhisperAddInsert(_key, _value, _lang = "en")`
 
 Register an insertion value for a key.
 
@@ -418,7 +419,7 @@ Destroy and recreate all Whisper singletons (manager, verbs, inserts).
 
 ### `WhisperSaySimple(_pool_id, _ctx = undefined, _lang = "en")`
 
-Pick and fire a line from a pool and resolve its text. Returns { text, events, storylet } or undefined.
+Pick and fire a line from a pool and resolve its text. Returns { id, text, events, data } or undefined.
 
 **Arguments**
 
@@ -432,7 +433,7 @@ Pick and fire a line from a pool and resolve its text. Returns { text, events, s
 
 ### `WhisperSayTaggedSimple( _pool_id, _tags_any, _ctx = undefined, _lang = "en" )`
 
-Pick and fire a line from a pool using simple tag filters. Returns { text, events, storylet } or undefined.
+Pick and fire a line from a pool using simple tag filters. Returns { id, text, events, data } or undefined.
 
 **Arguments**
 
@@ -469,6 +470,89 @@ Explicitly set the current run/session id.
 * `_id` `Real` New run identifier.
 
 **Returns**: `Real` (ignored)
+
+---
+
+### `WhisperAddVerb(_name, _func)`
+
+Register a verb callback.
+
+**Arguments**
+
+* `_name` `String` Verb name.
+* `_func` `Function` Callback taking (_ctx, _event).
+
+**Returns**: `Undefined`
+
+---
+
+### `WhisperStateBuild()`
+
+Build a Whisper save payload (JSON-ready struct).
+
+This is intended for embedding into your own save system.
+
+**Arguments**
+
+* None.
+
+**Returns**: `Struct`
+
+---
+
+### `WhisperStateClear(_reset_auto_ids = false)`
+
+Clear Whisper runtime state (usage counters, run state, tick state, and pool repeat suppression).
+
+This keeps your storylets and pools; it only resets runtime counters/state.
+
+**Arguments**
+
+* `[_reset_auto_ids]` `Bool` If true, resets the auto id counter used by `WhisperLineSimple`.
+
+**Returns**: `Real` (ignored)
+
+---
+
+### `WhisperStateLoad(_filepath = "")`
+
+Load Whisper state from a file in the sandbox (or a custom path).
+
+If `_filepath` is `""`, this defaults to `"whisper_state.json"`.
+
+**Arguments**
+
+* `[_filepath]` `String` File path (relative to sandbox, or an absolute path on supported platforms).
+
+**Returns**: `Bool`
+
+---
+
+### `WhisperStateLoadJSON(_json_data)`
+
+Load a Whisper save payload from JSON.
+
+You can pass either a JSON string, or a struct (for example, produced by `json_parse`).
+
+**Arguments**
+
+* `_json_data` `String,Struct` JSON string or parsed struct.
+
+**Returns**: `Bool`
+
+---
+
+### `WhisperStateSave(_filepath = "")`
+
+Save Whisper state to a file in the sandbox (or a custom path).
+
+If `_filepath` is `""`, this defaults to `"whisper_state.json"`.
+
+**Arguments**
+
+* `[_filepath]` `String` File path (relative to sandbox, or an absolute path on supported platforms).
+
+**Returns**: `Bool`
 
 ---
 
@@ -528,47 +612,47 @@ Public factory to create or fetch a Whisper storylet.
 
     * `[_flag]` `Bool,Undefined` Enable/disable.
   * **Returns:** `Struct.__WhisperStorylet`
-* #### `SetCooldown(_cooldown)`: Set cooldown duration in seconds.
+* #### `SetCooldown(_cooldown)`: Set cooldown duration (uses the same units as `_now`).
 
   * **Arguments:**
 
-    * `_cooldown` `Real` Cooldown in seconds.
+    * `_cooldown` `Real` Cooldown amount.
   * **Returns:** `Struct.__WhisperStorylet`
-* #### `SetMaxUses(_max_uses)`: Set maximum total uses (ever).
+* #### `SetMaxUses(_max_uses)`: Set max total uses (ever). Use < 0 for unlimited.
 
   * **Arguments:**
 
-    * `_max_uses` `Real` Max uses (>= 0).
+    * `_max_uses` `Real` Max uses (< 0 means unlimited).
   * **Returns:** `Struct.__WhisperStorylet`
-* #### `SetMaxUsesPerRun(_max_uses)`: Set maximum uses per run/session.
+* #### `SetMaxUsesPerRun(_max_uses)`: Set max uses per run/session; < 0 for unlimited.
 
   * **Arguments:**
 
-    * `_max_uses` `Real` Max uses per run (>= 0).
+    * `_max_uses` `Real` Max uses per run (< 0 means unlimited).
   * **Returns:** `Struct.__WhisperStorylet`
 * #### `SetOnAvailable(_func)`: Set hook called when the storylet is eligible during query.
 
   * **Arguments:**
 
-    * `_func` `Function,Undefined` Callback signature: `function(_storylet, _ctx)`.
+    * `_func` `Function,Undefined` Callback signature: `function(_ctx, _storylet)`.
   * **Returns:** `Struct.__WhisperStorylet`
 * #### `SetOnFire(_func)`: Set hook called when the storylet fires (after selection).
 
   * **Arguments:**
 
-    * `_func` `Function,Undefined` Callback signature: `function(_storylet, _ctx)`.
+    * `_func` `Function,Undefined` Callback signature: `function(_ctx, _storylet)`.
   * **Returns:** `Struct.__WhisperStorylet`
-* #### `SetOnResolved(_func)`: Set hook called after text is resolved.
+* #### `SetOnResolved(_func)`: Alias for `SetOnFire`.
 
   * **Arguments:**
 
-    * `_func` `Function,Undefined` Callback signature: `function(_storylet, _ctx, _result)`.
+    * `_func` `Function,Undefined` Callback signature: `function(_ctx, _storylet)`.
   * **Returns:** `Struct.__WhisperStorylet`
 * #### `SetOnSelected(_func)`: Set hook called when the storylet is selected by a pick.
 
   * **Arguments:**
 
-    * `_func` `Function,Undefined` Callback signature: `function(_storylet, _ctx)`.
+    * `_func` `Function,Undefined` Callback signature: `function(_ctx, _storylet)`.
   * **Returns:** `Struct.__WhisperStorylet`
 * #### `SetOnce()`: Convenience: set max uses to 1 (ever).
 
@@ -588,25 +672,43 @@ Public factory to create or fetch a Whisper storylet.
 
     * `_weight` `Real` New base weight.
   * **Returns:** `Struct.__WhisperStorylet`
-* #### `TagAdd(_tag)`: Add a tag to this storylet.
+* #### `SetData(_data)`: Set arbitrary user data on this storylet.
+
+  * **Arguments:**
+
+    * `_data` `Any` Data payload (any type).
+  * **Returns:** `Struct.__WhisperStorylet`
+* #### `SetDataCloned(_data)`: Set arbitrary user data on this storylet, cloned via `variable_clone`.
+
+  * **Arguments:**
+
+    * `_data` `Any` Data payload (any type).
+  * **Returns:** `Struct.__WhisperStorylet`
+* #### `GetData()`: Get the user data stored on this storylet (may be undefined).
+
+  * **Arguments:**
+
+    * None.
+  * **Returns:** `Any`
+* #### `AddTag(_tag)`: Add a tag to this storylet.
 
   * **Arguments:**
 
     * `_tag` `String` Tag to add.
   * **Returns:** `Struct.__WhisperStorylet`
-* #### `TagsAddArray(_tags_array)`: Add multiple tags (skips duplicates already present).
+* #### `AddTagsArray(_tags_array)`: Add multiple tags (skips duplicates already present).
 
   * **Arguments:**
 
     * `_tags_array` `Array<String>` Tag list to add.
   * **Returns:** `Struct.__WhisperStorylet`
-* #### `TagsSet(_tags_array)`: Replace the entire tag array.
+* #### `SetTags(_tags_array)`: Replace the entire tag array.
 
   * **Arguments:**
 
     * `_tags_array` `Array<String>` Tag list.
   * **Returns:** `Struct.__WhisperStorylet`
-* #### `TextAdd(_string, _verb = undefined, _lang = "en")`: Add text variation to the main body.
+* #### `AddText(_string, _verb = undefined, _lang = "en")`: Add text variation to the main body.
 
   * **Arguments:**
 
@@ -614,13 +716,13 @@ Public factory to create or fetch a Whisper storylet.
     * `[_verb]` `String,Undefined` Verb to trigger on completion.
     * `[_lang]` `String` Language code.
   * **Returns:** `Struct.__WhisperStorylet`
-* #### `TextGet(_lang = "en")`: Convenience: get just the text of a random variation.
+* #### `GetText(_lang = "en")`: Convenience: get just the text of a random variation.
 
   * **Arguments:**
 
     * `_lang` `String` Language code.
   * **Returns:** `String,Undefined`
-* #### `TextResolve(_lang = "en")`: Resolve content to { text, events } for this storylet's body.
+* #### `TextResolve(_lang = "en")`: Resolve content to { id, text, events, data } for this storylet's body.
 
   * **Arguments:**
 
@@ -629,13 +731,13 @@ Public factory to create or fetch a Whisper storylet.
 
 ---
 
-### `WhisperTick()`
+### `WhisperTick(_dt)`
 
-Advance manual cooldown time by 1 tick (no-op unless manual ticking is enabled).
+Advance manual cooldown time by the provided tick amount (no-op unless manual ticking is enabled).
 
 **Arguments**
 
-* None.
+* `_dt` `Real` Tick amount (delta-time).
 
 **Returns**: `Real,Undefined`
 
@@ -645,7 +747,7 @@ Advance manual cooldown time by 1 tick (no-op unless manual ticking is enabled).
 
 Enable or disable manual ticking for `WhisperNow()`.
 
-When enabled, cooldown time only advances when you call `WhisperTick()`.
+When enabled, cooldown time only advances when you call `WhisperTick(_dt)`.
 
 **Arguments**
 
@@ -679,7 +781,7 @@ Set the manual tick counter used by `WhisperNow()` to an explicit value.
 
 ---
 
-### `WhisperVerbAdd(_name, _func)`
+### `WHISPER_VERB.AddVerb(_name, _func)`
 
 Register a verb callback.
 
@@ -700,18 +802,6 @@ Register a verb callback.
 ### `WhisperVerbInsert(_name)`
 
 Build an inline verb marker string for the given verb name, but only if it's registered. Returns "" if the verb isn't registered.
-
-**Arguments**
-
-* `_name` `String` Verb name.
-
-**Returns**: `String`
-
----
-
-### `WhisperVerbMarker(_name)`
-
-Build an inline verb marker string for the given verb name.
 
 **Arguments**
 

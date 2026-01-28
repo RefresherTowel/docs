@@ -96,7 +96,7 @@ Hints are useful. Hints that repeat every five seconds are the fastest way to ma
 
 This example does three things: only provides hints when hint mode is on, has cooldowns so the same hint doesn't spam, and caps usage per run so hints don't dominate a whole play session.
 
-> By default, Whispers cooldowns "tick" in seconds. You can take manual control of the tick by setting `WhisperTickManual(true)` and then calling `WhisperTick()` whenever you want a new "tick" to be counted (maybe on room entry, or "turn" if your game uses a turn system, etc).
+> By default, Whisper's cooldowns "tick" in seconds. You can take manual control of the tick by setting `WhisperTickManual(true)` and then calling `WhisperTick(_dt)` whenever you want time to advance (for turn-based systems, `WhisperTick(1)` is common).
 {: .note}
 
 Setup:
@@ -109,7 +109,7 @@ WhisperStorylet("hint_map")
 	.SetPredicate(function(_ctx) {
 		return _ctx.story.hints_enabled;
 	})
-	.TextAdd("If you're lost, open the map and look for the lit paths.")
+	.AddText("If you're lost, open the map and look for the lit paths.")
 	.AddToPool("hints");
 
 WhisperStorylet("hint_inventory")
@@ -119,7 +119,7 @@ WhisperStorylet("hint_inventory")
 	.SetPredicate(function(_ctx) {
 		return _ctx.story.hints_enabled;
 	})
-	.TextAdd("Some items have passive effects. Check your inventory details.")
+	.AddText("Some items have passive effects. Check your inventory details.")
 	.AddToPool("hints");
 
 WhisperStorylet("hint_dodge")
@@ -129,7 +129,7 @@ WhisperStorylet("hint_dodge")
 	.SetPredicate(function(_ctx) {
 		return _ctx.story.hints_enabled && _ctx.story.player_is_in_combat;
 	})
-	.TextAdd("Dodging costs stamina. Don't mash it, time it.")
+	.AddText("Dodging costs stamina. Don't mash it, time it.")
 	.AddToPool("hints");
 ```
 
@@ -171,8 +171,8 @@ WhisperStorylet("sewer_grate_nudge")
 		// This is the important part: the nudge only exists while unresolved.
 		return (_ctx.location == "sewers") && (!_ctx.story.sewer_grate_opened);
 	})
-	.TextAdd("A cold draft slips through the bars of a loose grate nearby.")
-	.TextAdd("You hear metal creak. Something in here isn't secured properly.")
+	.AddText("A cold draft slips through the bars of a loose grate nearby.")
+	.AddText("You hear metal creak. Something in here isn't secured properly.")
 	.AddToPool("sewer_ambient");
 ```
 
@@ -215,7 +215,7 @@ Setup:
 WhisperStorylet("eng_greeting")
 	.SetMaxUsesPerRun(1)
 	.SetWeight(10)
-	.TextAdd("Yeah? Make it quick. I'm in the middle of recalibrating the stabilisers.")
+	.AddText("Yeah? Make it quick. I'm in the middle of recalibrating the stabilisers.")
 	.AddToPool("eng_chat");
 
 WhisperStorylet("eng_problem")
@@ -224,7 +224,7 @@ WhisperStorylet("eng_problem")
 	.SetPredicate(function(_ctx) {
 		return _ctx.story.chat_count >= 1;
 	})
-	.TextAdd("The port thrusters keep drifting. It's not dangerous, it's just... annoying.")
+	.AddText("The port thrusters keep drifting. It's not dangerous, it's just... annoying.")
 	.AddToPool("eng_chat");
 
 WhisperStorylet("eng_soft_reveal")
@@ -233,7 +233,7 @@ WhisperStorylet("eng_soft_reveal")
 	.SetPredicate(function(_ctx) {
 		return _ctx.story.chat_count >= 2;
 	})
-	.TextAdd("Look, between you and me? This ship's held together with optimism and cable ties.")
+	.AddText("Look, between you and me? This ship's held together with optimism and cable ties.")
 	.AddToPool("eng_chat");
 ```
 
@@ -269,7 +269,7 @@ Use them in storylets:
 ```js
 WhisperStorylet("guard_greeting")
 	.SetWeight(3)
-	.TextAdd("Evening, ##player_name##. Keep your coin close in ##district##.")
+	.AddText("Evening, ##player_name##. Keep your coin close in ##district##.")
 	.AddToPool("city_guard");
 ```
 
@@ -297,7 +297,7 @@ Scenario: you have a dialogue UI with a typewriter effect. You want a small beep
 Register the verb:
 
 ```js
-WhisperVerbAdd("radio_beep", function(_ctx, _ev) {
+WhisperAddVerb("radio_beep", function(_ctx, _ev) {
 	audio_play_sound(snd_radio_beep, 1, false);
 });
 ```
@@ -307,7 +307,7 @@ Write a line with an inline verb marker:
 ```js
 WhisperStorylet("radio_message_1")
 	.SetMaxUsesPerRun(1)
-	.TextAdd("... ##player_name##? #?radio_beep## Come in. Are you there?")
+	.AddText("... ##player_name##? #?radio_beep## Come in. Are you there?")
 	.AddToPool("radio");
 ```
 

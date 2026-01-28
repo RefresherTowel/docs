@@ -207,8 +207,8 @@ Example: only allow this line if the player hasn't seen the well yet.
 ```js
 WhisperStorylet("gossip_well_hint")
 	.AddToPool("town_gossip")
-	.TagsAddArray(["town", "gossip"])
-	.TextAdd("Did you hear about the old well?")
+	.AddTagsArray(["town", "gossip"])
+	.AddText("Did you hear about the old well?")
 	.SetPredicate(function(_ctx) {
 		return !_ctx.story.has_seen_well;
 	});
@@ -230,7 +230,7 @@ Format: `##KEY##`
 Example:
 
 ```js
-WhisperInsertAdd("PLAYER_NAME", "Drew", "en");
+WhisperAddInsert("PLAYER_NAME", "Drew", "en");
 WhisperLineSimple("npc_greeter", "Hey, ##PLAYER_NAME##!", "greeting", 1);
 
 var _text = WhisperSayTextSimple("npc_greeter", {}, "en", "...");
@@ -245,7 +245,7 @@ Format: `#?verb_name##` (it looks weird because it's designed to be easy to scan
 You register verbs like this:
 
 ```js
-WhisperVerbAdd("SFX_BELL", function(_ctx, _event) {
+WhisperAddVerb("SFX_BELL", function(_ctx, _event) {
 	// play a sound, spawn VFX, advance a quest, whatever
 });
 ```

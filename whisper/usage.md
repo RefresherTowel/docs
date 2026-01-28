@@ -66,9 +66,10 @@ Notes:
 
 `WhisperSaySimple` picks and fires a storylet from a pool, then resolves it into:
 
+* `id` -> the chosen storylet id
 * `text` -> what you show to the player
 * `events` -> verb events (you can ignore this for now)
-* `storylet` -> the storylet that was chosen (optional extra info)
+* `data` -> optional user payload from the storylet (may be `undefined`)
 
 ```js
 /// Somewhere in your dialogue trigger
@@ -78,6 +79,8 @@ var _out = WhisperSaySimple("npc_bridge", _ctx);
 
 if (!is_undefined(_out)) {
 	ShowDialogue(_out.text);
+	// If you need the full storylet struct, fetch it by id:
+	// var _s = WhisperStorylet(_out.id);
 }
 ```
 
@@ -85,7 +88,7 @@ If nothing matches, it returns `undefined`. That's normal.
 
 ### 3. "Just give me text" (with a fallback)
 
-If you don't care about events or the chosen storylet, use `WhisperSayTextSimple`.
+If you only care about the text (and want a fallback), use `WhisperSayTextSimple`.
 
 ```js
 var _ctx  = WhisperContextMinimal(player_id, "bridge");
@@ -186,7 +189,7 @@ This is where Whisper stops being "random lines" and becomes "content that react
 
 ```js
 WhisperStorylet("bridge_smalltalk_01")
-	.TagsAddArray(["bridge", "npc:captain", "mood:neutral"])
+	.AddTagsArray(["bridge", "npc:captain", "mood:neutral"])
 	.SetWeight(2)
 	.SetCooldown(8)
 	.SetAvoidImmediateRepeat(true)
@@ -194,8 +197,8 @@ WhisperStorylet("bridge_smalltalk_01")
 		// Only valid when we're actually on the bridge
 		return _ctx.location == "bridge";
 	})
-	.TextAdd("Keep it steady out there.")
-	.TextAdd("All systems nominal. For now.")
+	.AddText("Keep it steady out there.")
+	.AddText("All systems nominal. For now.")
 	.AddToPool("npc_bridge");
 ```
 
@@ -222,7 +225,7 @@ Then on a storylet:
 ```js
 WhisperStorylet("bridge_hint_once_per_run")
 	.SetMaxUsesPerRun(1)
-	.TextAdd("If you're stuck, check the map.")
+	.AddText("If you're stuck, check the map.")
 	.AddToPool("npc_bridge");
 ```
 
@@ -267,12 +270,33 @@ If you want Whisper's default helpers to run on a manual "tick" clock (turns, st
 WhisperTickManual(true);
 
 // When your game advances one tick:
-WhisperTick();
+WhisperTick(1);
 ```
 
-While manual ticking is enabled, `WhisperNow()` returns the current tick counter and does not advance unless you call `WhisperTick()`.
+While manual ticking is enabled, `WhisperNow()` returns the current tick counter and does not advance unless you call `WhisperTick(_dt)`.
 
-### 5. Verbs and insertions (power features)
+### 5. Saving and loading state (runs, cooldowns, usage)
+
+Whisper lets you save/load its runtime state as JSON.
+
+Common patterns:
+
+```js
+// Embed into your own save payload:
+save_data.whisper = WhisperStateBuild();
+
+// Or save/load directly to disk:
+WhisperStateSave(); // writes "whisper_state.json" in the sandbox
+WhisperStateLoad(); // reads "whisper_state.json" and loads it
+```
+
+If you want to reset runtime counters without re-registering content, use:
+
+```js
+WhisperStateClear(); // keeps storylets/pools, resets counters and tick state
+```
+
+### 6. Verbs and insertions (power features)
 
 Whisper can:
 
@@ -286,10 +310,10 @@ This is big enough that it has its own page:
 But here's the short version so you know where it fits:
 
 ```js
-WhisperInsertAdd("player_name", "Drew");
+WhisperAddInsert("player_name", "Drew");
 
 WhisperStorylet("bridge_greeting")
-	.TextAdd("Hey, ##player_name##.")
+	.AddText("Hey, ##player_name##.")
 	.AddToPool("npc_bridge");
 ```
 
@@ -324,7 +348,7 @@ WhisperStorylet("hint_inventory")
 	.SetCooldown(20)
 	.SetMaxUsesPerRun(2)
 	.SetPredicate(function(_ctx) { return _ctx.story.hint_mode; })
-	.TextAdd("Try checking your inventory.")
+	.AddText("Try checking your inventory.")
 	.AddToPool("hints");
 ```
 

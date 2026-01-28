@@ -50,9 +50,9 @@ Yes, both end in `##`. The difference is the *start* marker: `##` vs `#?`.
 Define one or more variants for a key:
 
 ```js
-WhisperInsertAdd("name", "Captain");
-WhisperInsertAdd("name", "Chief");
-WhisperInsertAdd("name", "Boss");
+WhisperAddInsert("name", "Captain");
+WhisperAddInsert("name", "Chief");
+WhisperAddInsert("name", "Boss");
 ```
 
 Use it in any line:
@@ -80,8 +80,8 @@ WhisperInsertSetList("name", ["Captain", "Chief", "Boss"]);
 Insertions are stored per language. If you resolve in a language that does not exist for that key, Whisper falls back to `"en"`.
 
 ```js
-WhisperInsertAdd("name", "Captain", "en");
-WhisperInsertAdd("name", "Capitaine", "fr");
+WhisperAddInsert("name", "Captain", "en");
+WhisperAddInsert("name", "Capitaine", "fr");
 ```
 
 ### Advanced: insertions inside insertions
@@ -91,9 +91,9 @@ Insertion values can themselves contain insertion markers, and Whisper will reso
 Example:
 
 ```js
-WhisperInsertAdd("ship", "The ##ship_class## Horizon");
-WhisperInsertAdd("ship_class", "Scout");
-WhisperInsertAdd("ship_class", "Freighter");
+WhisperAddInsert("ship", "The ##ship_class## Horizon");
+WhisperAddInsert("ship_class", "Scout");
+WhisperAddInsert("ship_class", "Freighter");
 ```
 
 If you use `##ship##`, Whisper might produce:
@@ -121,7 +121,7 @@ If you want a verb, put the verb marker in the main template, not inside the ins
 A "verb" is just a named callback you register:
 
 ```js
-WhisperVerbAdd("give_xp", function(_ctx, _ev) {
+WhisperAddVerb("give_xp", function(_ctx, _ev) {
 	// do something
 });
 ```
@@ -149,7 +149,7 @@ When you add text to a storylet, you can supply a completion verb:
 ```js
 var _s = WhisperStorylet("bridge_reward_1");
 
-_s.TextAdd("Nice work out there.", "give_xp");
+_s.AddText("Nice work out there.", "give_xp");
 ```
 
 That creates an event with `trigger = "on_complete"` positioned at the end of the resolved text.
@@ -157,7 +157,7 @@ That creates an event with `trigger = "on_complete"` positioned at the end of th
 Define the verb callback:
 
 ```js
-WhisperVerbAdd("give_xp", function(_ctx, _ev) {
+WhisperAddVerb("give_xp", function(_ctx, _ev) {
 	if (!is_struct(_ctx)) return;
 	if (!struct_exists(_ctx, "xp")) _ctx.xp = 0;
 	_ctx.xp += 10;
@@ -167,7 +167,7 @@ WhisperVerbAdd("give_xp", function(_ctx, _ev) {
 How do you actually run it? You call `WhisperVerbRunRange` when your line is revealed (see the next section). If you reveal the whole line instantly, you can just run the full range once:
 
 ```js
-// _result is { text, events, storylet } from WhisperSaySimple / TextResolve
+// _result is { id, text, events, data } from WhisperSaySimple / TextResolve
 WhisperVerbRunRange(_result.events, -1, string_length(_result.text), _ctx);
 ```
 
@@ -250,7 +250,7 @@ Whisper parses each token:
 Inside the callback, read them from `meta.args`:
 
 ```js
-WhisperVerbAdd("shake", function(_ctx, _ev) {
+WhisperAddVerb("shake", function(_ctx, _ev) {
 	var _args = _ev.meta.args;
 	var _time = (array_length(_args) > 0) ? _args[0] : 0.2;
 	var _pow  = (array_length(_args) > 1) ? _args[1] : 4;
@@ -265,8 +265,9 @@ WhisperVerbAdd("shake", function(_ctx, _ev) {
 
 Sometimes you are building text in code and you want to inject a verb marker only if it exists.
 
-* `WhisperVerbMarker(name)` always returns the marker string.
 * `WhisperVerbInsert(name)` returns the marker string only if the verb is registered, otherwise it returns `""`.
+
+If you want to always inject a marker string, embed `#?name##` directly in your text (or build it manually with `WHISPER_VERB_BEGIN` + name + `WHISPER_VERB_END`).
 
 Example:
 
@@ -312,13 +313,13 @@ The inline verb will still fire at the right moment, even though "##name##" chan
 
 * Insertions:
 
-  * Define: `WhisperInsertAdd(key, value, [lang])`
+  * Define: `WhisperAddInsert(key, value, [lang])`
   * Define list: `WhisperInsertSetList(key, array, [lang])`
   * Use in text: `##key##`
 
 * Verbs:
 
-  * Define: `WhisperVerbAdd(name, callback)`
+  * Define: `WhisperAddVerb(name, callback)`
   * Inline in text: `#?name##` or `#?name:arg1,arg2##`
   * Run while revealing: `WhisperVerbRunRange(events, from_pos, to_pos, ctx)`
-  * Marker helpers: `WhisperVerbMarker(name)` and `WhisperVerbInsert(name)`
+  * Marker helper: `WhisperVerbInsert(name)`

@@ -67,23 +67,26 @@ Example (create a function like this with all your Whisper content inside it and
 
 function GameBootstrapWhisper() {
 	// Register verbs
-	WhisperVerbAdd("give_gold", function(_ctx, _ev) {
+	WhisperAddVerb("give_gold", function(_ctx, _ev) {
 		// Your game logic here
-		_ctx.subject.gold += real(_ev.args[0]);
+		var _args = _ev.meta.args;
+		if (array_length(_args) > 0) {
+			_ctx.subject.gold += _args[0];
+		}
 	});
 
 	// Register insertions (random text variants)
-	WhisperInsertAdd("creature", ["rat", "spider", "slime"]);
+	WhisperInsertSetList("creature", ["rat", "spider", "slime"]);
 
 	// Register storylets
 	WhisperStorylet("sewer_creature")
-		.TagAdd("sewers")
+		.AddTag("sewers")
 		.SetWeight(10)
 		.SetCooldown(30)
 		.SetPredicate(function(_ctx) {
 			return _ctx.location == "sewers";
 		})
-		.TextAdd("A ##creature## scurries past... " + WhisperVerbMarker("give_gold"))
+		.AddText("A ##creature## scurries past... #?give_gold:10##")
 		.AddToPool("sewer_events");
 }
 ```
@@ -118,7 +121,7 @@ var _ctx = WhisperContextSimple(player, "sewers");
 var _storylet = WhisperPoolPickAndFire("sewer_events", _ctx);
 
 if (!is_undefined(_storylet)) {
-	var _resolved = _storylet.TextResolve(); // returns { text, events }
+	var _resolved = _storylet.TextResolve(); // returns { id, text, events, data }
 	ShowDialogue(_resolved.text);
 
 	// If you are not doing a typewriter effect, you will typically fire
@@ -149,6 +152,8 @@ Useful calls:
 * `WhisperNewRun()` -> increments the run id (new run)
 * `WhisperGetRunId()` -> read current run id (useful for saving)
 * `WhisperSetRunId(id)` -> restore a run id (useful for loading)
+* `WhisperStateBuild()` -> build a JSON-ready save payload (includes run id)
+* `WhisperStateLoadJSON(data)` -> restore from a JSON string or parsed struct
 
 Practical pattern:
 
