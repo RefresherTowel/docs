@@ -3,15 +3,12 @@ layout: default
 title: Concepts
 parent: Whisper
 nav_order: 1
----
 
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
-{: .text-delta }
 
 1. TOC
-{:toc}
 
 </details>
 </div>
