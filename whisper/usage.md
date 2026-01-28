@@ -1,23 +1,25 @@
 ---
+
 layout: default
-title: Usage
+title: Usage & Examples
 parent: Whisper
-nav_order: 4
----
+nav_order: 2
+------------
 
 <!--
 /// usage.md - Changelog:
 /// - 25-01-2026: Initial Whisper usage docs.
 /// - 25-01-2026: Add manual tick time option.
+/// - 28-01-2026: Update resolved result shape and add state save/load notes.
 -->
 
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
-{: .text-delta }
+  {: .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 </details>
 </div>

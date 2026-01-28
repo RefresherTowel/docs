@@ -1,17 +1,18 @@
 ---
+
 layout: default
 title: Scripting Reference
 parent: Whisper
-nav_order: 5
----
+nav_order: 3
+------------
 
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
-{: .text-delta }
+  {: .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 </details>
 </div>

@@ -1,9 +1,10 @@
 ---
+
 layout: default
 title: Integration and Debugging
 parent: Whisper
-nav_order: 2
----
+nav_order: 3
+------------
 
 <!--
 / integration_debugging.md - Changelog:
@@ -13,10 +14,10 @@ nav_order: 2
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
-{: .text-delta }
+  {: .text-delta }
 
 1. TOC
-{:toc}
+   {:toc}
 
 </details>
 </div>
