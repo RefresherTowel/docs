@@ -35,7 +35,7 @@ Whisper exists to take that whole vibe and make it feel like you are writing con
 
 If you have never seen the word "storylet" before, don't stress. It isn't a fancy new genre. It's just a useful way to think about content.
 
-<iframe frameborder="0" src="https://itch.io/embed/4234087?linkback=true&amp;border_width=2&amp;bg_color=004140&amp;fg_color=ffffff&amp;link_color=5bfae2&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/whisper">Whisper (GameMaker Narrative Director) by RefresherTowel</a></iframe>
+<iframe frameborder="0" src="https://itch.io/embed/4234087?linkback=true&amp;border_width=2&amp;bg_color=004140&amp;fg_color=ffffff&amp;link_color=5bfae2&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/whisper">Whisper (GameMaker Dynamic, Reactive Narrative Manager) by RefresherTowel</a></iframe>
 
 ---
 
