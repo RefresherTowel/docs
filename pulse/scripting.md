@@ -837,17 +837,3 @@ Debug / tooling helpers:
 Each `PulseController` is independent: counts, queue, and listeners are per-bus. Choose this only when you need strict isolation (for example, UI vs gameplay events), otherwise the global bus is simpler.
 
 Pulse uses weak references for struct/instance subscribers and prunes dead listeners whenever it dispatches or cleans up a signal. Manual cleanup (for example, `PulseRemove` in Destroy events) remains a good habit, but Pulse will try to keep the bus tidy even if you forget occasionally.
-
----
-<!--
-#### `PulseVisualiserOpen(ui_root)`
-
-Open or create the Pulse Visualiser window inside the Echo Debug UI desktop.
-
-```js
-PulseVisualiserOpen(global.EchoDesktop);
-```
-
-- `ui_root`: `Struct` - the Echo Chamber root / desktop struct.
-- **Returns:** `Struct` - the created window, or `undefined` if `ui_root` is not a struct.
--- >
