@@ -65,7 +65,9 @@ If you like Quill, then be sure to check out my other libraries:
 An easy to use state manager that comes packed with a lot of awesome features.
 {: .text-center}
 
-[![Pulse icon](./assets/pulse_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/pulse)
+---
+
+[![Pulse icon](../assets/pulse_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/pulse)
 {: .text-center}
 
 [**Pulse**](https://refreshertowel.itch.io/pulse)
@@ -74,7 +76,9 @@ An easy to use state manager that comes packed with a lot of awesome features.
 A signals & queries manager that allows you to easily uncouple dependencies and simplify your code.
 {: .text-center}
 
-[![Catalyst icon](./assets/catalyst_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/catalyst)
+---
+
+[![Catalyst icon](../assets/catalyst_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/catalyst)
 {: .text-center}
 
 [**Catalyst**](https://refreshertowel.itch.io/catalyst)
@@ -83,7 +87,9 @@ A signals & queries manager that allows you to easily uncouple dependencies and 
 An extremely powerful stat manager, allowing you to quickly build stats for your games (such as attack power, or jump height) that can be easily modified and altered in a variety of ways. 
 {: .text-center}
 
-[![Whisper icon](./assets/whisper_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/whisper)
+---
+
+[![Whisper icon](../assets/whisper_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/whisper)
 {: .text-center}
 
 [**Whisper**](https://refreshertowel.itch.io/whisper)
@@ -92,7 +98,9 @@ An extremely powerful stat manager, allowing you to quickly build stats for your
 A narrative manager that allows you to create complex, dynamic storytelling by providing simple rules that sit along your dialog/story. The roguelite "Hades" famous reactive storytelling is an example of what Whisper can help you do.
 {: .text-center}
 
-[![Echo icon](./assets/echo_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/echo)
+---
+
+[![Echo icon](../assets/echo_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/echo)
 {: .text-center}
 
 [**Echo**](https://refreshertowel.itch.io/echo)
