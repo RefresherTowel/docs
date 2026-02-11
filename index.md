@@ -110,6 +110,21 @@ Struggling to keep your stats, buffs, and item effects under control as your gam
 
 ---
 
+[![Quill icon](./assets/quill_icon.png){: style="max-width: 256px;"}](/docs/quill/)
+{: .text-center }
+## [**QUILL**](/docs/quill/)
+{: .text-center }
+> #### *Let your players write with ease*
+
+Quill is an advanced text input library, designed to let you quickly and easily create interactable textboxes for your players. Quill automatically handles all the things that people expect when they encounter a textbox, such as caret movement, selection, clipboard, undo/redo, labels, right-click context menus, validation messaging, and proper theming including both basic primitives and sprites.
+
+<iframe frameborder="0" src="https://itch.io/embed/4164612?linkback=true&amp;border_width=2&amp;bg_color=450074&amp;fg_color=ffffff&amp;link_color=9080ff&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/catalyst">Catalyst (GameMaker Moddable Stats) by RefresherTowel</a></iframe>
+
+##### [**EXPLORE THE QUILL DOCS**](/docs/quill/)
+{: .text-center }
+
+---
+
 [![Whisper icon](./assets/whisper_icon.png){: style="max-width: 256px;"}](/docs/whisper/)
 {: .text-center }
 ## [**WHISPER**](/docs/whisper/)
