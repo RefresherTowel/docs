@@ -70,7 +70,7 @@ An easy to use state manager that comes packed with a lot of awesome features.
 [![Pulse icon](../assets/pulse_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/pulse)
 {: .text-center}
 
-[**Pulse**](https://refreshertowel.itch.io/pulse)
+### [**Pulse**](https://refreshertowel.itch.io/pulse)
 {: .text-center}
 
 A signals & queries manager that allows you to easily uncouple dependencies and simplify your code.
@@ -81,7 +81,7 @@ A signals & queries manager that allows you to easily uncouple dependencies and 
 [![Catalyst icon](../assets/catalyst_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/catalyst)
 {: .text-center}
 
-[**Catalyst**](https://refreshertowel.itch.io/catalyst)
+### [**Catalyst**](https://refreshertowel.itch.io/catalyst)
 {: .text-center}
 
 An extremely powerful stat manager, allowing you to quickly build stats for your games (such as attack power, or jump height) that can be easily modified and altered in a variety of ways. 
@@ -92,7 +92,7 @@ An extremely powerful stat manager, allowing you to quickly build stats for your
 [![Whisper icon](../assets/whisper_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/whisper)
 {: .text-center}
 
-[**Whisper**](https://refreshertowel.itch.io/whisper)
+### [**Whisper**](https://refreshertowel.itch.io/whisper)
 {: .text-center}
 
 A narrative manager that allows you to create complex, dynamic storytelling by providing simple rules that sit along your dialog/story. The roguelite "Hades" famous reactive storytelling is an example of what Whisper can help you do.
@@ -103,7 +103,7 @@ A narrative manager that allows you to create complex, dynamic storytelling by p
 [![Echo icon](../assets/echo_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/echo)
 {: .text-center}
 
-[**Echo**](https://refreshertowel.itch.io/echo)
+### [**Echo**](https://refreshertowel.itch.io/echo)
 {: .text-center}
 
 A debug manager that comes with a very fully featured Debug UI builder (in fact, Quill comes directly from the textboxes in Echo)
