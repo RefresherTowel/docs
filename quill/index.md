@@ -56,7 +56,7 @@ Quill also comes with a ton of advanced features, like multi-line text boxes, ta
 
 If you like Quill, then be sure to check out my other libraries:
 
-[![Statement icon](../assets/statement_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/statement)
+[![Statement icon](../assets/statement_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/statement)
 {: .text-center}
 
 ### [**Statement**](https://refreshertowel.itch.io/statement)
@@ -67,7 +67,7 @@ An easy to use state manager that comes packed with a lot of awesome features.
 
 ---
 
-[![Pulse icon](../assets/pulse_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/pulse)
+[![Pulse icon](../assets/pulse_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/pulse)
 {: .text-center}
 
 ### [**Pulse**](https://refreshertowel.itch.io/pulse)
@@ -78,7 +78,7 @@ A signals & queries manager that allows you to easily uncouple dependencies and 
 
 ---
 
-[![Catalyst icon](../assets/catalyst_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/catalyst)
+[![Catalyst icon](../assets/catalyst_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/catalyst)
 {: .text-center}
 
 ### [**Catalyst**](https://refreshertowel.itch.io/catalyst)
@@ -89,7 +89,7 @@ An extremely powerful stat manager, allowing you to quickly build stats for your
 
 ---
 
-[![Whisper icon](../assets/whisper_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/whisper)
+[![Whisper icon](../assets/whisper_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/whisper)
 {: .text-center}
 
 ### [**Whisper**](https://refreshertowel.itch.io/whisper)
@@ -100,7 +100,7 @@ A narrative manager that allows you to create complex, dynamic storytelling by p
 
 ---
 
-[![Echo icon](../assets/echo_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/echo)
+[![Echo icon](../assets/echo_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/echo)
 {: .text-center}
 
 ### [**Echo**](https://refreshertowel.itch.io/echo)
