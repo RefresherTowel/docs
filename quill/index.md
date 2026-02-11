@@ -56,9 +56,15 @@ Quill also comes with a ton of advanced features, like multi-line text boxes, ta
 
 If you like Quill, then be sure to check out my other libraries:
 
-* [![Statement icon](../assets/statement_icon.png){: style="max-width: 128px;"} **Statement**](https://refreshertowel.itch.io/statement) - An easy to use state manager that comes packed with a lot of awesome features.
+> [![Statement icon](../assets/statement_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/statement)
+> [**Statement**](https://refreshertowel.itch.io/statement)
+> An easy to use state manager that comes packed with a lot of awesome features.
+{: .text-center}
 
-* [![Pulse icon](./assets/pulse_icon.png){: style="max-width: 128px;"} **Pulse**](https://refreshertowel.itch.io/pulse) - A signals & queries manager that allows you to easily uncouple dependencies and simplify your code.
+> [![Pulse icon](./assets/pulse_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/pulse)
+> [**Pulse**](https://refreshertowel.itch.io/pulse)
+> A signals & queries manager that allows you to easily uncouple dependencies and simplify your code.
+{: .text-center}
 
 * [![Echo icon](./assets/echo_icon.png){: style="max-width: 128px;"} **Echo**](https://refreshertowel.itch.io/echo) - A debug manager that comes with a very fully featured Debug UI builder (in fact, Quill comes directly from the textboxes in Echo)
 
