@@ -56,9 +56,13 @@ Quill also comes with a ton of advanced features, like multi-line text boxes, ta
 
 If you like Quill, then be sure to check out my other libraries:
 
-> [![Statement icon](../assets/statement_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/statement)
-> [**Statement**](https://refreshertowel.itch.io/statement)
-> An easy to use state manager that comes packed with a lot of awesome features.
+[![Statement icon](../assets/statement_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/statement)
+{: .text-center}
+
+## [**Statement**](https://refreshertowel.itch.io/statement)
+{: .text-center}
+
+An easy to use state manager that comes packed with a lot of awesome features.
 {: .text-center}
 
 > [![Pulse icon](./assets/pulse_icon.png){: style="max-width: 128px;"}](https://refreshertowel.itch.io/pulse)
