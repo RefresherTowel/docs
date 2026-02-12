@@ -118,7 +118,7 @@ Struggling to keep your stats, buffs, and item effects under control as your gam
 
 Quill is an advanced text input library, designed to let you quickly and easily create interactable textboxes for your players. Quill automatically handles all the things that people expect when they encounter a textbox, such as caret movement, selection, clipboard, undo/redo, labels, right-click context menus, validation messaging, and proper theming including both basic primitives and sprites.
 
-<iframe frameborder="0" src="https://itch.io/embed/4164612?linkback=true&amp;border_width=2&amp;bg_color=450074&amp;fg_color=ffffff&amp;link_color=9080ff&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/catalyst">Catalyst (GameMaker Moddable Stats) by RefresherTowel</a></iframe>
+<iframe frameborder="0" src="https://itch.io/embed/4281829?linkback=true&amp;border_width=2&amp;bg_color=502700&amp;fg_color=ffffff&amp;link_color=ffcb49&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/quill">Quill (GameMaker Text Boxes) by RefresherTowel</a></iframe>
 
 ##### [**EXPLORE THE QUILL DOCS**](/docs/quill/)
 {: .text-center }
