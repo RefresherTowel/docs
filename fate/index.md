@@ -32,6 +32,8 @@ If you're new to Fate, or maybe aren't super confident in your advanced GM skill
 
 Start here: [Getting Started](./getting-started.md) -> [Beginner Workflow](./beginner-workflow.md) -> [Policies Guide](./policies.md) -> [Advanced Workflow](./advanced-workflow.md) -> [Simulation Testing](./simulation-testing.md) -> [API Reference](./api-reference.md)
 
+<iframe frameborder="0" src="https://itch.io/embed/4299009?border_width=2&amp;bg_color=610001&amp;fg_color=ffffff&amp;link_color=ff0909&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/fate">Fate - Advanced Weighted Drops for GameMaker by RefresherTowel</a></iframe>
+
 ## Quickstart
 
 Create a table, add entries, and roll values:
@@ -48,7 +50,7 @@ loot_table = new FateTable([_common, _rare])
 ```js
 // Anywhere you roll
 var _roll = FateRollValues(loot_table, 1);
-if (_roll.ok) {
+if (_roll.IsOk()) {
 	var _value = _roll.GetFirstDrop();
 	show_debug_message("Pulled: " + string(_value));
 }
