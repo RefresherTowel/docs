@@ -65,3 +65,71 @@ In other words, it wraps up pretty much everything you need for a weighted drop 
 Fate is intentionally split into two layers. The beginner layer is `FateRollValues`, `FateTrackTable`, `FateSaveSnapshotFile`, and the table `Enable*` policy helpers. The advanced layer adds policy constructors, detailed roll traces, and manual state bundle helpers.
 
 This lets you start simple, and gradually add complexity as you become more comfortable working with the library.
+
+## Other Cool Stuff
+
+If you like Quill, then be sure to check out my other libraries:
+
+[![Statement icon](../assets/statement_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/statement)
+{: .text-center}
+
+### [**Statement**](https://refreshertowel.itch.io/statement)
+{: .text-center}
+
+An easy to use state manager that comes packed with a lot of awesome features.
+{: .text-center}
+
+---
+
+[![Pulse icon](../assets/pulse_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/pulse)
+{: .text-center}
+
+### [**Pulse**](https://refreshertowel.itch.io/pulse)
+{: .text-center}
+
+A signals & queries manager that allows you to easily uncouple dependencies and simplify your code.
+{: .text-center}
+
+---
+
+[![Catalyst icon](../assets/catalyst_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/catalyst)
+{: .text-center}
+
+### [**Catalyst**](https://refreshertowel.itch.io/catalyst)
+{: .text-center}
+
+An extremely powerful stat manager, allowing you to quickly build stats for your games (such as attack power, or jump height) that can be easily modified and altered in a variety of ways. 
+{: .text-center}
+
+---
+
+[![Whisper icon](../assets/whisper_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/whisper)
+{: .text-center}
+
+### [**Whisper**](https://refreshertowel.itch.io/whisper)
+{: .text-center}
+
+A narrative manager that allows you to create complex, dynamic storytelling by providing simple rules that sit along your dialog/story. The roguelite "Hades" famous reactive storytelling is an example of what Whisper can help you do.
+{: .text-center}
+
+---
+
+[![Quill icon](../assets/quill_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/quill)
+{: .text-center}
+
+### [**Quill**](https://refreshertowel.itch.io/quill)
+{: .text-center}
+
+A free advanced text box creator for that automatically gives you text selection, right click context menus, cut/copy/paste, single-line or multi-line, tons of customisation options and a whole host of other features.
+{: .text-center}
+
+---
+
+[![Echo icon](../assets/echo_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/echo)
+{: .text-center}
+
+### [**Echo**](https://refreshertowel.itch.io/echo)
+{: .text-center}
+
+A debug manager that comes with a very fully featured Debug UI builder (in fact, Quill comes directly from the textboxes in Echo)
+{: .text-center}
