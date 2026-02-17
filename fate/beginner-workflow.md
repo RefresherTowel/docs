@@ -46,7 +46,7 @@ loot_table = new FateTable([_common, _rare])
 	.EnablePity(_rare, 90, 75, 0.06);
 ```
 
-Then roll through `FateRollValues(...)`.
+Then roll through `FateRollValues(loot_table, 1)`, with the table you want to get the drop from as the first argument, and the number of drops you want as the second.
 
 ## Recommended helper order
 
