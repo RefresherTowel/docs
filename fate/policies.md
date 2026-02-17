@@ -2,7 +2,7 @@
 layout: default
 title: Policies Guide
 parent: Fate
-nav_order: 3
+nav_order: 4
 ---
 
 <div class="sticky-toc" markdown="block">

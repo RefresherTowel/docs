@@ -2,7 +2,7 @@
 layout: default
 title: Advanced Workflow
 parent: Fate
-nav_order: 4
+nav_order: 3
 ---
 
 <div class="sticky-toc" markdown="block">
