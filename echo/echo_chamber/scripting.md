@@ -46,6 +46,12 @@ Important: you can use Echo Chamber without Echo, but they are designed to play 
 - `ROW`
 - `COLUMN`
 
+#### `eEchoChamberFieldLabelPlacement`
+- `AUTO`
+- `LEADING`
+- `ABOVE`
+- `NONE`
+
 #### `eEchoChamberInputCheck`
 - `PRESSED`
 - `DOWN`
@@ -407,12 +413,13 @@ Root container for debug UI panels and controls.
     - `_rect` `Struct` Optional `{x1,y1,x2,y2}` overlay rect used for clipping and hit testing.
     - `_owner_window` `Struct.EchoChamberWindow` Optional owner window used for theme overrides.
   - **Returns:** N/A
-- #### `OpenContextMenu(_items, _x, _y, _owner_window)`: Open a context menu overlay at a screen position.
+- #### `OpenContextMenu(_items, _x, _y, _owner_window, [_style_id])`: Open a context menu overlay at a screen position.
   - **Arguments:**
     - `_items` `Array` Array of item structs: `{ label, on_click, enabled, shortcut }` or `{ is_separator:true }`.
     - `_x` `Real` Screen X position (GUI space).
     - `_y` `Real` Screen Y position (GUI space).
     - `_owner_window` `Struct.EchoChamberWindow` Optional owner window for theme overrides.
+    - `_style_id` `String` Optional text-input style id used for context menu theming (defaults to `_default`).
   - **Returns:** N/A
   - **Additional details:**
     - `on_click` is a callback with signature `function()`.
@@ -483,13 +490,20 @@ Root container for debug UI panels and controls.
   - **Returns:** N/A
   - **Additional details:**
     - `_commit_fn` runs on blur after the final string is synced from the text source (if any).
-- #### `BlurTextInput(_id)`: Blur a focused text input by id.
+- #### `BlurTextInput(_id, [_cancel])`: Blur a focused text input by id.
   - **Arguments:**
     - `_id` `Any` Text input id to blur.
+    - `_cancel` `Bool` Optional cancel flag (`true` skips commit/submit callbacks and routes to cancel callbacks).
   - **Returns:** `String`
   - **Additional details:**
     - Returns `""` if the id is not currently focused.
-    - Commits the final value (after syncing from the text source) before returning.
+    - Commits the final value (after syncing from the text source) before returning unless `_cancel` is `true`.
+- #### `CancelTextInput(_id)`: Cancel and blur a focused text input by id.
+  - **Arguments:**
+    - `_id` `Any` Text input id to cancel.
+  - **Returns:** `String`
+  - **Additional details:**
+    - Equivalent to `BlurTextInput(_id, true)`.
 - #### `IsActiveTextInput(_id)`: Returns true if the given id is the currently focused text input.
   - **Arguments:**
     - `_id` `Any` Text input id to check.
@@ -904,6 +918,27 @@ Layout panel docked to an edge or fill.
   - **Arguments:**
     - `_value` `Real` Row height in pixels.
   - **Returns:** `Struct.EchoChamberPanel`
+- #### `SetFieldLabelPlacement(_placement)`: Set the default field label placement for controls in this panel.
+  - **Arguments:**
+    - `_placement` `eEchoChamberFieldLabelPlacement` Placement mode (`AUTO`, `LEADING`, `ABOVE`, or `NONE`).
+  - **Returns:** `Struct.EchoChamberPanel`
+- #### `SetFieldLabelGap(_px)`: Set the default field label gap for this panel.
+  - **Arguments:**
+    - `_px` `Real` Gap in pixels (`-1` uses theme defaults).
+  - **Returns:** `Struct.EchoChamberPanel`
+- #### `SetFieldLabelWidth(_px)`: Set the default field label column width for this panel.
+  - **Arguments:**
+    - `_px` `Real` Width in pixels (`-1` uses auto width).
+  - **Returns:** `Struct.EchoChamberPanel`
+- #### `SetFieldLabelWidthClamp(_min_px, [_max_px])`: Set min/max clamp values for auto field label column width.
+  - **Arguments:**
+    - `_min_px` `Real` Minimum width in pixels.
+    - `_max_px` `Real` Optional maximum width in pixels (defaults to `_min_px`).
+  - **Returns:** `Struct.EchoChamberPanel`
+- #### `SetFieldLabelStyleKey(_style_id)`: Set the panel default field label style key.
+  - **Arguments:**
+    - `_style_id` `Any` Style key in `theme.label_styles`.
+  - **Returns:** `Struct.EchoChamberPanel`
 - #### `SetCollapsedSize(_value)`: Set collapsed dock thickness for this panel.
   - **Arguments:**
     - `_value` `Real` Collapsed thickness in pixels.
@@ -1020,9 +1055,47 @@ Base type for all debug UI controls.
     - `_x` `Real` Horizontal margin in pixels.
     - `_y` `Real` Optional vertical margin (defaults to `_x`).
   - **Returns:** `Struct.EchoChamberControlBase`
-- #### `SetLabel(_text)`: Set the control's display label (used by controls that render a label).
+- #### `SetLabel(_text)` (Deprecated): Legacy caption setter for controls that render captions.
   - **Arguments:**
     - `_text` `Any` Label text (converted to string).
+  - **Returns:** `Struct.EchoChamberControlBase`
+  - **Additional details:**
+    - Deprecated: use `SetCaption()` in new code.
+    - Warning: `SetLabel()` will be removed in a future version.
+- #### `SetCaption(_text)`: Set the control's caption text (alias of `SetLabel`).
+  - **Arguments:**
+    - `_text` `Any` Caption text (converted to string).
+  - **Returns:** `Struct.EchoChamberControlBase`
+  - **Additional details:**
+    - Preferred API for caption text in new code.
+    - `SetLabel()` is deprecated and will be removed in a future version.
+- #### `SetFieldLabel(_text)`: Set the panel-drawn field label text for this control.
+  - **Arguments:**
+    - `_text` `Any` Field label text (converted to string).
+  - **Returns:** `Struct.EchoChamberControlBase`
+- #### `SetFieldLabelPlacement(_placement)`: Set where this control's field label is drawn.
+  - **Arguments:**
+    - `_placement` `eEchoChamberFieldLabelPlacement` Placement mode (`AUTO`, `LEADING`, `ABOVE`, or `NONE`).
+  - **Returns:** `Struct.EchoChamberControlBase`
+- #### `SetFieldLabelGap(_px)`: Set this control's field label spacing from the control body.
+  - **Arguments:**
+    - `_px` `Real` Gap in pixels (`-1` uses panel/theme defaults).
+  - **Returns:** `Struct.EchoChamberControlBase`
+- #### `SetFieldLabelWidth(_px)`: Set this control's field label width in pixels for leading labels.
+  - **Arguments:**
+    - `_px` `Real` Width in pixels (`-1` uses panel/theme defaults).
+  - **Returns:** `Struct.EchoChamberControlBase`
+- #### `SetFieldLabelStyleKey(_style_id)`: Set this control's field label style key.
+  - **Arguments:**
+    - `_style_id` `Any` Style key in `theme.label_styles`.
+  - **Returns:** `Struct.EchoChamberControlBase`
+- #### `SetFieldLabelAlign(_align)`: Set field label text alignment.
+  - **Arguments:**
+    - `_align` `Any` `"left"`, `"center"`, `"right"`, or `"auto"`.
+  - **Returns:** `Struct.EchoChamberControlBase`
+- #### `SetFieldLabelEnabled(_flag)`: Enable or disable panel-drawn field labels for this control.
+  - **Arguments:**
+    - `_flag` `Bool` Field label enabled flag.
   - **Returns:** `Struct.EchoChamberControlBase`
 - #### `SetTooltip(_text)`: Set the control tooltip (shown on hover where supported).
   - **Arguments:**
@@ -1247,6 +1320,37 @@ Single-line text input.
   - **Returns:** `Struct.EchoChamberTextInput`
   - **Additional details:**
     - Fired when the input is committed (blur or Enter).
+- #### `OnSubmit(_fn)`: Set a callback that runs when text is submitted (committed edit).
+  - **Arguments:**
+    - `_fn` `Function` Callback (signature: `function(_text)`).
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `OnCancel(_fn)`: Set a callback that runs when an edit is cancelled.
+  - **Arguments:**
+    - `_fn` `Function` Callback (signature: `function(_text, _initial_text)`).
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `OnFocus(_fn)`: Set a callback that runs when editing focus begins.
+  - **Arguments:**
+    - `_fn` `Function` Callback (signature: `function(_text)`).
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `OnBlur(_fn)`: Set a callback that runs when editing focus ends.
+  - **Arguments:**
+    - `_fn` `Function` Callback (signature: `function(_text, _was_cancelled)`).
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `OnLiveChange(_fn)`: Set a callback that runs while the user edits text.
+  - **Arguments:**
+    - `_fn` `Function` Callback (signature: `function(_text)`).
+  - **Returns:** `Struct.EchoChamberTextInput`
+  - **Additional details:**
+    - Triggers on typing, delete, paste, and undo/redo.
+- #### `SetLiveChangeRateMs(_ms)`: Set a throttle rate for live change callbacks.
+  - **Arguments:**
+    - `_ms` `Real` Throttle interval in milliseconds (`0` disables throttling).
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetOnLiveChange(_fn, [_rate_ms])`: Convenience helper to set live-change callback and rate.
+  - **Arguments:**
+    - `_fn` `Function` Callback (signature: `function(_text)`).
+    - `_rate_ms` `Real` Optional throttle interval in milliseconds.
+  - **Returns:** `Struct.EchoChamberTextInput`
 - #### `SetReadOnly(_flag)`: Toggle read-only mode.
   - **Arguments:**
     - `_flag` `Bool` Read-only flag.
@@ -1259,7 +1363,7 @@ Single-line text input.
   - **Arguments:**
     - `_chars` `String` Allowed characters (empty string allows all).
   - **Returns:** `Struct.EchoChamberTextInput`
-- `SetDeniedChars(_chars)`: Reject characters in the given set.
+- #### `SetDeniedChars(_chars)`: Reject characters in the given set.
   - **Arguments:**
     - `_chars` `String` Denied characters.
   - **Returns:** `Struct.EchoChamberTextInput`
@@ -1278,12 +1382,126 @@ Single-line text input.
     - `_fn` `Function` Filter callback (signature: `function(_insert_text) -> String`).
   - **Returns:** `Struct.EchoChamberTextInput`
   - **Additional details:**
-    - The filter runs before allow/deny/numeric constraints.
+    - Processing order is: `AddTransform` transforms, then auto transforms (`SetAutoTrim`, `SetAutoUpper`, `SetAutoLower`), then `SetFilter`, then built-in constraints.
     - Return an empty string to reject the insert.
+- #### `AddTransform(_fn)`: Add a text transform that runs before SetFilter and built-in constraints.
+  - **Arguments:**
+    - `_fn` `Function` Transform callback (signature: `function(_insert_text) -> String`).
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `ClearTransforms()`: Remove all insert transforms.
+  - **Arguments:** None.
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetAutoTrim(_flag)`: Enable or disable automatic trim for inserted text.
+  - **Arguments:**
+    - `_flag` `Bool` Trim flag.
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetAutoUpper(_flag)`: Enable or disable automatic uppercase conversion for inserted text.
+  - **Arguments:**
+    - `_flag` `Bool` Uppercase flag.
+  - **Returns:** `Struct.EchoChamberTextInput`
+  - **Additional details:**
+    - Enabling uppercase disables lowercase.
+- #### `SetAutoLower(_flag)`: Enable or disable automatic lowercase conversion for inserted text.
+  - **Arguments:**
+    - `_flag` `Bool` Lowercase flag.
+  - **Returns:** `Struct.EchoChamberTextInput`
+  - **Additional details:**
+    - Enabling lowercase disables uppercase.
 - #### `SetInvalid(_flag)`: Toggle invalid styling.
   - **Arguments:**
     - `_flag` `Bool` Invalid flag.
   - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetValidationMessage(_message, [_kind])`: Set a validation message and kind.
+  - **Arguments:**
+    - `_message` `Any` Message text (converted to string).
+    - `_kind` `String` Optional kind (`"error"`, `"warn"`, or `"info"`).
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `ClearValidationMessage()`: Clear any validation message.
+  - **Arguments:** None.
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetValidationVisible(_flag)`: Show or hide validation messaging.
+  - **Arguments:**
+    - `_flag` `Bool` Validation visibility flag.
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetValidationDisplay(_mode)`: Set how the validation message is displayed.
+  - **Arguments:**
+    - `_mode` `String` `"inline"`, `"tooltip"`, or `"auto"`.
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetInputMode(_mode)`: Set the input mode.
+  - **Arguments:**
+    - `_mode` `Real` One of `ECHO_TEXTMODE_TEXT`, `ECHO_TEXTMODE_INT`, `ECHO_TEXTMODE_FLOAT`, `ECHO_TEXTMODE_IDENTIFIER`, `ECHO_TEXTMODE_PATH`, `ECHO_TEXTMODE_CODE`, `ECHO_TEXTMODE_PASSWORD`.
+  - **Returns:** `Struct.EchoChamberTextInput`
+  - **Additional details:**
+    - Applies bundled behavior for numeric filtering, tab insertion, password masking, and code auto-indent.
+- #### `SetInputModeInt()`: Convenience helper for integer mode.
+  - **Arguments:** None.
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetInputModeFloat()`: Convenience helper for float mode.
+  - **Arguments:** None.
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetInputModeCode()`: Convenience helper for code mode.
+  - **Arguments:** None.
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetInputModePassword([_allow_copy])`: Convenience helper for password mode.
+  - **Arguments:**
+    - `_allow_copy` `Bool` Optional flag that allows copy/cut from masked text.
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetTabInserts(_flag)`: Enable or disable tab insertion while editing.
+  - **Arguments:**
+    - `_flag` `Bool` If true, Tab inserts into text instead of cycling focus.
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetTabUsesSpaces(_flag)`: Set whether Tab inserts spaces instead of a tab character.
+  - **Arguments:**
+    - `_flag` `Bool` Tab spacing mode.
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetTabSpaces(_count)`: Set how many spaces are inserted when Tab uses spaces.
+  - **Arguments:**
+    - `_count` `Real` Space count.
+  - **Returns:** `Struct.EchoChamberTextInput`
+- #### `SetTextAlign(_align)`: Set horizontal text alignment in the textbox viewport.
+  - **Arguments:**
+    - `_align` `Any` Alignment (`"left"`, `"center"`, `"right"`, or `"auto"`).
+  - **Returns:** `Struct.EchoChamberTextInput`
+
+---
+
+### `EchoChamberTextArea(_id)`
+Multi-line text input with scrolling, resize grip, and optional overlay editor.
+
+**Arguments**
+- `_id` `Any`
+
+**Returns**: `Struct.EchoChamberTextArea`
+
+**Public methods**
+- #### `SetWrap(_flag)`: Enable or disable word wrapping.
+  - **Arguments:**
+    - `_flag` `Bool` Wrap flag.
+  - **Returns:** `Struct.EchoChamberTextArea`
+- #### `SetVisibleRows(_rows)`: Set visible row count (height is derived from line height).
+  - **Arguments:**
+    - `_rows` `Real` Row count.
+  - **Returns:** `Struct.EchoChamberTextArea`
+- #### `SetMinHeight(_px)`: Set minimum pixel height.
+  - **Arguments:**
+    - `_px` `Real` Minimum height in pixels.
+  - **Returns:** `Struct.EchoChamberTextArea`
+- #### `SetMaxHeight(_px)`: Set maximum pixel height (`0` for unlimited).
+  - **Arguments:**
+    - `_px` `Real` Maximum height in pixels.
+  - **Returns:** `Struct.EchoChamberTextArea`
+- #### `SetResizable(_flag, [_min_h], [_max_h])`: Enable or disable resize grip behavior.
+  - **Arguments:**
+    - `_flag` `Bool` Resizable flag.
+    - `_min_h` `Real` Optional minimum resize height.
+    - `_max_h` `Real` Optional maximum resize height.
+  - **Returns:** `Struct.EchoChamberTextArea`
+- #### `SetUseOverlayEditor(_flag)`: Enable or disable the full overlay editor affordance.
+  - **Arguments:**
+    - `_flag` `Bool` Overlay editor flag.
+  - **Returns:** `Struct.EchoChamberTextArea`
+  - **Additional details:**
+    - Text area also supports all `EchoChamberTextInput` methods (binding, validation, input modes, live change, and tab settings).
 
 ---
 
@@ -1296,7 +1514,7 @@ Non-interactive separator line.
 **Returns**: `Struct.EchoChamberSeparator`
 
 **Public methods**
-- `SetOrientation(_ori)`: Set orientation ("horizontal" or "vertical").
+- #### `SetOrientation(_ori)`: Set orientation ("horizontal" or "vertical").
   - **Arguments:**
     - `_ori` `String` Orientation string.
   - **Returns:** `Struct.EchoChamberSeparator`
@@ -1655,6 +1873,18 @@ It outputs a struct with fields in roughly these buckets (names below are from t
 #### LABEL
 - `label_styles` (style keys include `font`, `text`, `text_alpha`, `text_disabled`, `text_disabled_alpha`)
 
+#### FIELD LABEL
+- `field_label_placement`
+- `field_label_gap`
+- `field_label_width`
+- `field_label_min_width`
+- `field_label_max_width`
+- `field_label_max_ratio`
+- `field_label_auto_min_control_w`
+- `field_label_style_id`
+- `field_label_align_leading`
+- `field_label_align_above`
+
 #### LIST
 - `list_row_styles` (style keys include `bg_*`, `text_*`, and `*_alpha` variants)
 
@@ -1690,6 +1920,8 @@ It outputs a struct with fields in roughly these buckets (names below are from t
 
 #### TEXTINPUT
 - `textinput_styles`
+  - Per-style `editor` block for TextArea overlay editor visuals/metrics.
+  - Per-style `menu` block for text-input context menu visuals/metrics.
 
 #### TOGGLE
 - `toggle_styles`
@@ -1729,6 +1961,7 @@ Most control styles are stored in a map of named styles (including `_default`). 
 
 **Control-specific keys**
 - `label_styles`: `font`, `text`, `text_alpha`, `text_disabled`, `text_disabled_alpha`.
+  - Field labels default to `label_styles._field` unless overridden.
 - `separator_styles`: `line`, `line_alpha`, `line_disabled`, `line_disabled_alpha`.
 - `list_row_styles`: `bg_normal`, `bg_hover`, `bg_selected`, `bg_pressed`, `bg_disabled`, `text_normal`, `text_hover`, `text_selected`, `text_pressed`, `text_disabled`, and matching `*_alpha` keys.
 - `toggle_styles`: `box_on`, `box_off`, `box_border`, plus `box_*_hover`, `box_*_pressed`, `box_*_disabled`, and matching `*_alpha` keys.
@@ -1741,6 +1974,8 @@ Most control styles are stored in a map of named styles (including `_default`). 
   - `selection_bg`, `selection_text`, `selection_bg_inactive`, `selection_text_inactive` with `*_alpha`
   - `caret_color`, `caret_alpha`, `caret_char`, `caret_blink_ms`, `caret_width`, `caret_height`, `caret_inset_x`, `caret_inset_y`
   - `placeholder`, `placeholder_alpha`, `align`
+  - `editor.*` keys for TextArea overlay editor visuals and sizing.
+  - `menu.*` keys for text-input context menu visuals and sizing.
 - `scrollbar_styles`: `track_bg`, `track_bg_hover`, `track_border`, `handle_bg`, `handle_bg_hover`, `handle_bg_pressed`, `handle_border`, each with `*_alpha`.
 
 ---

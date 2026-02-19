@@ -161,15 +161,31 @@ Catalyst ships with a global `CatalystModifierTracker` struct:
 
 - It is created automatically as `global.__catalyst_modifier_tracker`.
 - The macro `CATALYST_COUNTDOWN` points at this instance.
-- The helper script `CatalystModCountdown()` safely calls its `Countdown()` method.
+- The helper script `CatalystModCountdown(_step_size)` safely calls `Countdown(_step_size)` on the tracker.
 
 Any modifier with a positive `duration` will automatically register with the tracker.
 Call `CatalystModCountdown()` once per "tick" (step, turn, second, or whatever makes
-sense for your game) to advance all durations:
+sense for your game) to advance all durations. If you run a fractional time-step loop,
+pass your step size as an argument. Duration can be in ticks, seconds, milliseconds,
+or any other unit as long as your step size uses that same unit:
 
 ```js
-// obj_game_controller Step event (or wherever your game tick lives)
+// Fixed tick style (defaults _step_size to 1):
 CatalystModCountdown();
+
+// Fractional / delta-time style (example: seconds):
+CatalystModCountdown(_dt_seconds);
+```
+
+If you need global control over timed effects, use the tracker:
+
+```js
+// Pause all timed modifier countdowns
+CATALYST_COUNTDOWN.SetPaused(true);
+
+// Resume and run countdown at half speed
+CATALYST_COUNTDOWN.SetPaused(false);
+CATALYST_COUNTDOWN.SetTimeScale(0.5);
 ```
 
 Creating a timed buff looks like this:
@@ -186,6 +202,7 @@ stats.damage.AddModifier(_buff);
 - When `buff.duration` counts down to 0, the tracker will:
   - Remove it from the tracker itself, and
   - Remove it from `stats.damage`, marking the stat as altered.
+- Expired modifiers are deleted. Avoid keeping long-lived raw references to timed modifiers; re-query active modifiers by source/tag/id when needed.
 
 Setting `duration` to `-1` (the default) makes a modifier permanent
 (it will not be tracked or counted down).

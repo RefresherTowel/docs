@@ -93,7 +93,7 @@ A `CatalystModifier` describes *how* to change a stat.
 - **Amount** - `value`, the number you add or multiply with.
 - **Operation** - one of `eCatMathOps.ADD`, `eCatMathOps.MULTIPLY`,
   `eCatMathOps.FORCE_MIN`, or `eCatMathOps.FORCE_MAX`.
-- **Duration** - optional lifetime in "ticks", managed by the global `CatalystModifierTracker`.
+- **Duration** - optional lifetime in your chosen countdown units (ticks/steps by default), managed by the global `CatalystModifierTracker`.
 
 #### Advanced
 
@@ -146,8 +146,11 @@ Catalyst ships with one global tracker instance:
 You tick it in whatever time-step makes sense for your game loop:
 
 ```js
-// e.g. in a global controller object, once per turn / wave / second / step:
+// e.g. fixed tick loop (turn / wave / second / step):
 CatalystModCountdown();
+
+// e.g. fractional loop (pass your own delta step size):
+CatalystModCountdown(_dt_seconds);
 ```
 
 Any modifiers whose `duration` reaches 0 are removed from both the tracker
@@ -169,7 +172,7 @@ and their owning `CatalystStatistic`.
   - `TEMP`       - short-lived buffs and debuffs.
   - `GLOBAL`     - late-stage global effects and auras.
 - Timed modifiers with durations, tracked by a global `CatalystModifierTracker`
-  and advanced by `CatalystModCountdown()`.
+  and advanced by `CatalystModCountdown(_step_size)`.
 
 ### Advanced features
 

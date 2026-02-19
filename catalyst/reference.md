@@ -19,11 +19,9 @@ nav_order: 3
 
 ## Catalyst Scripting Reference
 
-Catalyst is a stat and modifier system built around GML 2.3+ structs and functions.
-
 Callback notes:
 - Bind explicit scope with `method(self, function(...) {})` for instance scope.
-- If you need additional scope, bind a struct that contains references to all the different scope you might want with `method(scope_struct, function(...) {})` (for instance, you might want to save the values from local variables alongside a reference to the owner).
+- If you need access to more than one scope, bind a struct that contains references to all the different scopes you might want with `method(scope_struct, function(...) {})` (for instance, you might want to save the values from local variables alongside a reference to the owner, or want to perform actions on another stat plus the owner).
 
 ---
 
@@ -35,9 +33,11 @@ Callback notes:
   - Adds `value * stacks` to the running value.
 - `MULTIPLY`
   - Multiplies the running value by `power(1 + value, stacks)`.
+  - Values less than or equal to `-1` are clamped to `-0.999999` before applying.
 - `FORCE_MIN`
   - Applied after all ADD and MULTIPLY layers.
   - If the current value is less than the modifier value, the value is raised to the modifier value.
+  - Stacks do not scale FORCE_MIN thresholds; raw `value` is used.
   - Excluded from family comparisons.
 - `FORCE_MAX`
   - Applied after all ADD, MULTIPLY, and FORCE_MIN passes.
@@ -72,7 +72,7 @@ Layers control when modifiers apply during evaluation. Catalyst processes layers
 Macro alias for the global tracker instance.
 
 - Definition: `#macro CATALYST_COUNTDOWN global.__catalyst_modifier_tracker`
-- Used by `CatalystModifier.ApplyDuration()` and `CatalystModCountdown()`.
+- Used by `CatalystModifier.ApplyDuration()` and `CatalystModCountdown(_step_size)`.
 
 ### `global.__catalyst_modifier_tracker`
 
@@ -132,6 +132,8 @@ Creates a numeric stat container with modifiers, clamping, rounding, and callbac
   - If `stack_func` is callable and a context is provided, stacks become `stack_func(stat, context)`.
   - If `stack_func` is callable and no context is provided, stacks become `0`.
   - If `max_stacks` is defined, stacks are clamped to `[0, max_stacks]`. If it is missing, stacks are only clamped to `>= 0`.
+- MULTIPLY values less than or equal to `-1` are clamped to `-0.999999` before applying.
+- FORCE_MIN and FORCE_MAX use raw `value` and do not scale by stacks.
 - Family stacking applies only when `family` is set and `family_mode` is `HIGHEST` or `LOWEST`.
   - Family comparisons are per layer and include both real modifiers and preview ops.
   - The strength comparison uses `abs(value * stacks)` for ADD and `abs(power(1 + value, stacks) - 1)` for MULTIPLY.
@@ -453,7 +455,7 @@ Creates a modifier that can be attached to a `CatalystStatistic`.
 **Arguments**
 - `_value` `Real` Modifier value.
 - `_math_operation` `eCatMathOps` How the value applies.
-- `_duration` `Real` Optional duration in ticks (`-1` for permanent).
+- `_duration` `Real` Optional duration in your chosen countdown units (`-1` for permanent).
 - `_source_label` `String` Optional human readable label.
 - `_source_id` `ID.Instance|Struct` Optional source handle.
 - `_source_meta` `Any` Optional metadata.
@@ -463,8 +465,8 @@ Creates a modifier that can be attached to a `CatalystStatistic`.
 **Core fields**
 - `value` `Real` Modifier value.
 - `operation` `eCatMathOps` Math operation.
-- `duration` `Real` Remaining duration (`-1` for permanent).
-- `duration_max` `Real` Original duration.
+- `duration` `Real` Remaining duration in the same units as `Countdown(_step_size)` (`-1` for permanent).
+- `duration_max` `Real` Original duration in the same units as `duration`.
 - `duration_applied` `Bool` Whether the modifier is tracked.
 - `stacks` `Real` Current stack count (default `1`).
 - `max_stacks` `Real` Max stack count (default `infinity`).
@@ -484,6 +486,7 @@ Creates a modifier that can be attached to a `CatalystStatistic`.
 - A positive duration registers the modifier with the global tracker.
 - A negative duration is permanent and not tracked.
 - A duration of `0` is not tracked when first created. If already tracked, it will expire on the next countdown.
+- Keep duration units matched with the countdown step size.
 - `ApplyDuration()` is called at the end of the constructor.
 
 **Public methods**
@@ -646,6 +649,7 @@ Creates a modifier that can be attached to a `CatalystStatistic`.
     - When `_remove_from_stat` is `true`, also detaches it from the owning stat.
     - When `_remove_from_stat` is `false`, the stat is not updated. Use this only when the stat is already handling its own removal.
     - The modifier is deleted and should not be used after this call.
+    - Do not keep long-lived raw references to temporary modifiers; query current modifiers by source/tag/id when needed.
 
 ---
 
@@ -657,6 +661,8 @@ Creates a tracker for timed modifiers.
 
 **Fields**
 - `modifiers` `Array<Struct.CatalystModifier>` Currently tracked modifiers.
+- `paused` `Bool` Whether countdown is paused.
+- `time_scale` `Real` Multiplier applied to countdown step sizes.
 
 **Public methods**
 
@@ -690,11 +696,43 @@ Creates a tracker for timed modifiers.
     - Removes the modifier from the tracker without touching its owning stat.
     - Sets `_mod.duration_applied = false`.
 
-- #### `Countdown()`
+- #### `SetPaused(_paused)`
+  - **Arguments:**
+    - `_paused` `Bool` True pauses countdown, false resumes.
+  - **Returns:** `Bool`
+  - **Additional details:**
+    - Sets and returns the current paused state.
+
+- #### `IsPaused()`
   - **Arguments:** None.
+  - **Returns:** `Bool`
+  - **Additional details:**
+    - Returns whether countdown is currently paused.
+
+- #### `SetTimeScale(_time_scale)`
+  - **Arguments:**
+    - `_time_scale` `Real` Countdown multiplier (minimum `0`).
+  - **Returns:** `Real`
+  - **Additional details:**
+    - Non-real values are ignored.
+    - The stored time scale is clamped to `>= 0`.
+
+- #### `GetTimeScale()`
+  - **Arguments:** None.
+  - **Returns:** `Real`
+  - **Additional details:**
+    - Returns the current countdown time scale.
+
+- #### `Countdown(_step_size)`
+  - **Arguments:**
+    - `_step_size` `Real` Optional decrement amount. Default `1`.
   - **Returns:** `Undefined`
   - **Additional details:**
-    - Decrements each tracked modifier duration by 1.
+    - Returns early when paused.
+    - Ignores the call when `_step_size` is not a real number or is less than or equal to 0.
+    - Applies `time_scale` to `_step_size` before decrementing durations.
+    - Returns early when effective step size is less than or equal to `0`.
+    - Decrements each tracked modifier duration by the effective step size.
     - Removes and deletes modifiers whose duration reaches 0 or lower.
 
 - #### `DebugDump()`
@@ -719,14 +757,16 @@ Creates a Catalyst themed `EchoChamberTheme` variant with a neon reactor palette
 
 ## Functions
 
-### `CatalystModCountdown()`
+### `CatalystModCountdown(_step_size)`
 
 Helper for driving the global modifier tracker.
 
-**Arguments**: None.
+**Arguments**
+- `_step_size` `Real` Optional decrement amount. Default `1`.
 
 **Returns**: `Undefined`
 
 **Additional details**
-- Calls `global.__catalyst_modifier_tracker.Countdown()` when the tracker exists and is a `CatalystModifierTracker`.
-- Safe to call once per Step or per tick in your game loop.
+- Calls `global.__catalyst_modifier_tracker.Countdown(_step_size)` when the tracker exists and is a `CatalystModifierTracker`.
+- Safe to call once per Step, per tick, or with fractional step sizes from your own delta-time system.
+- Tracker pause and time scale settings are respected.

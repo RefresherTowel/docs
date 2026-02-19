@@ -122,10 +122,10 @@ Echo Chamber controls are little structs. You create them, configure them, then 
 ### A toolbar button
 
 ```js
-// We create a button, give it some text (the label) and then provide it with a function it will
+// We create a button, give it some text (the caption) and then provide it with a function it will
 // run when it is clicked
 var _btn_console = new EchoChamberButton("btn_console")
-	.SetLabel("Console")
+	.SetCaption("Console")
 	.OnClick(method(self, function() {
 		EchoChamberOpenConsole(ui_root);
 		// ShowToast is a nice little feature on the root, that creates a little popup in the bottom right corner briefly
@@ -162,7 +162,7 @@ _panel_left.AddControl(_sep);
 // we can just read ui_settings.speed when we move the player, and the players movement speed will change
 // when we change the sliders value.
 var _sld_speed = new EchoChamberSlider("sld_speed")
-	.SetLabel("Speed")
+	.SetFieldLabel("Speed")
 	.SetRange(0, 12)
 	.SetStep(1)
 	.BindValue(ui_settings, "speed")
@@ -172,22 +172,51 @@ _panel_left.AddControl(_sld_speed);
 // Same goes for the rest of these settings, we bind them to one of the variables stored in ui_settings, and
 // they become linked.
 var _tgl_god = new EchoChamberToggle("tgl_god")
-	.SetLabel("God mode")
+	.SetFieldLabel("God mode")
 	.BindBool(ui_settings, "god_mode");
 _panel_left.AddControl(_tgl_god);
 
 var _txt_name = new EchoChamberTextInput("txt_name")
-	.SetLabel("Player name")
+	.SetFieldLabel("Player name")
 	.SetPlaceholder("Type a name...")
 	.BindText(ui_settings, "player_name");
 _panel_left.AddControl(_txt_name);
 
 var _dd_diff = new EchoChamberDropdownSelect("dd_diff")
-	.SetLabel("Difficulty")
+	.SetFieldLabel("Difficulty")
 	.SetOptions(["Easy", "Normal", "Hard", "Nightmare"])
 	.BindIndex(ui_settings, "difficulty_index");
 _panel_left.AddControl(_dd_diff);
 ```
+
+### Field labels
+
+`SetCaption()` is for a control's own caption text (for example, button text).  
+`SetFieldLabel()` is for the panel-drawn label that sits next to or above form controls.
+
+```js
+// 1) Set panel defaults once.
+_panel_left
+	.SetFieldLabelPlacement(eEchoChamberFieldLabelPlacement.AUTO)
+	.SetFieldLabelGap(8)
+	.SetFieldLabelWidthClamp(90, 220);
+
+// 2) Add controls with field labels.
+var _txt_player = new EchoChamberTextInput("txt_player")
+	.SetFieldLabel("Player name")
+	.SetPlaceholder("Type a name...")
+	.BindText(ui_settings, "player_name");
+_panel_left.AddControl(_txt_player);
+
+// 3) Optional: override one control.
+var _txt_seed = new EchoChamberTextInput("txt_seed")
+	.SetFieldLabel("World seed")
+	.SetFieldLabelPlacement(eEchoChamberFieldLabelPlacement.ABOVE)
+	.BindText(ui_settings, "world_seed");
+_panel_left.AddControl(_txt_seed);
+```
+
+With `AUTO`, labels flip between `LEADING` and `ABOVE` based on available space.
 
 A small note on tooltips:
 
@@ -323,7 +352,7 @@ ui_settings.theme_index = 0;
 
 // And we want a dropdown list that we can use to change the theme
 var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
-	.SetLabel("Theme")
+	.SetCaption("Theme")
 	// We give it an array of options to display
 	.SetOptions([
 		"Midnight Neon",
@@ -452,7 +481,7 @@ You can insert, reorder, and move controls between panels without rebuilding the
 
 ```js
 // Insert at a specific index
-_panel_top.InsertControl(new EchoChamberButton("btn_new").SetLabel("New"), 0);
+_panel_top.InsertControl(new EchoChamberButton("btn_new").SetCaption("New"), 0);
 
 // Reorder a direct child
 _panel_top.MoveControl("btn_console", 2);
@@ -604,10 +633,10 @@ var _panel_main = new EchoChamberPanel("main", eEchoChamberDock.FILL)
 	.SetFlowMode(eEchoChamberPanelFlow.COLUMN);
 ui_win.AddPanel(_panel_main);
 
-// We create a button, give it some text (the label) and then provide it with a function it will
+// We create a button, give it some text (the caption) and then provide it with a function it will
 // run when it is clicked
 var _btn_console = new EchoChamberButton("btn_console")
-	.SetLabel("Console")
+	.SetCaption("Console")
 	.OnClick(method(self, function() {
 		EchoChamberOpenConsole(ui_root);
 		// ShowToast is a nice little feature on the root, that creates a little popup in the bottom right corner briefly
@@ -636,7 +665,7 @@ _panel_left.AddControl(_sep);
 // we can just read ui_settings.speed when we move the player, and the players movement speed will change
 // when we change the sliders value.
 var _sld_speed = new EchoChamberSlider("sld_speed")
-	.SetLabel("Speed")
+	.SetFieldLabel("Speed")
 	.SetRange(0, 12)
 	.SetStep(1)
 	.BindValue(ui_settings, "speed")
@@ -646,18 +675,18 @@ _panel_left.AddControl(_sld_speed);
 // Same goes for the rest of these settings, we bind them to one of the variables stored in ui_settings, and
 // they become linked.
 var _tgl_god = new EchoChamberToggle("tgl_god")
-	.SetLabel("God mode")
+	.SetFieldLabel("God mode")
 	.BindBool(ui_settings, "god_mode");
 _panel_left.AddControl(_tgl_god);
 
 var _txt_name = new EchoChamberTextInput("txt_name")
-	.SetLabel("Player name")
+	.SetFieldLabel("Player name")
 	.SetPlaceholder("Type a name...")
 	.BindText(ui_settings, "player_name");
 _panel_left.AddControl(_txt_name);
 
 var _dd_diff = new EchoChamberDropdownSelect("dd_diff")
-	.SetLabel("Difficulty")
+	.SetFieldLabel("Difficulty")
 	.SetOptions(["Easy", "Normal", "Hard", "Nightmare"])
 	.BindIndex(ui_settings, "difficulty_index");
 _panel_left.AddControl(_dd_diff);
@@ -712,7 +741,7 @@ ui_settings.theme_index = 0;
 
 // And we want a dropdown list that we can use to change the theme
 var _dd_theme = new EchoChamberDropdownSelect("dd_theme")
-	.SetLabel("Theme")
+	.SetFieldLabel("Theme")
 	// We give it an array of options to display
 	.SetOptions([
 		"Midnight Neon",
@@ -775,7 +804,7 @@ _panel_main.AddControl(new EchoChamberLabel("lbl_c").SetText("C"));
 ui_win.EndLayoutBatch(); // fits once after the batch
 
 // Insert at a specific index
-_panel_top.InsertControl(new EchoChamberButton("btn_new").SetLabel("New"), 0);
+_panel_top.InsertControl(new EchoChamberButton("btn_new").SetCaption("New"), 0);
 
 // Reorder a direct child
 _panel_top.MoveControl("btn_console", 2);
@@ -946,7 +975,7 @@ When you override overlay hooks, you own the selection + close behavior. This pa
 ui_mode_labels = ["Safe", "Fast", "Insane"];
 
 ui_dd_mode = new EchoChamberDropdownSelect("dd_mode")
-	.SetLabel("Mode")
+	.SetCaption("Mode")
 	.SetOptions(ui_mode_labels)
 	.BindIndex(ui_settings, "mode_index");
 

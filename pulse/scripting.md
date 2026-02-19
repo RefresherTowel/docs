@@ -43,19 +43,42 @@ Enum that describes the outcome of subscription, unsubscription, and dispatch op
 
 Values include:
 
-- `ePulseResult.LST_ADDED`  
-- `ePulseResult.LST_REMOVED_FROM_SIGNAL`  
-- `ePulseResult.LST_REMOVED_COMPLETELY`  
-- `ePulseResult.LST_DOES_NOT_EXIST_IN_SIGNAL`  
-- `ePulseResult.LST_DOES_NOT_EXIST`  
-- `ePulseResult.SGL_DOES_NOT_EXIST`  
-- `ePulseResult.SGL_NOT_SENT_NO_SGL`  - the signal has no entry in the controller yet.  
-- `ePulseResult.SGL_NOT_SENT_NO_LST`  - the signal exists but currently has zero listeners.  
-- `ePulseResult.SGL_SENT`  
+- `ePulseResult.LST_ADDED`
+- `ePulseResult.LST_REMOVED_FROM_SIGNAL`
+- `ePulseResult.LST_REMOVED_COMPLETELY`
+- `ePulseResult.LST_DOES_NOT_EXIST_IN_SIGNAL`
+- `ePulseResult.LST_DOES_NOT_EXIST`
+- `ePulseResult.SGL_DOES_NOT_EXIST`
+- `ePulseResult.SGL_NOT_SENT_NO_SGL`  - the signal has no entry in the controller yet.
+- `ePulseResult.SGL_NOT_SENT_NO_LST`  - the signal exists but currently has zero listeners.
+- `ePulseResult.SGL_NOT_SENT_QUEUE_OVERFLOW`  - dispatch was deferred by a re-entrancy guard but the queue overflow policy dropped it.
+- `ePulseResult.SGL_DEFERRED_REENTRY`  - dispatch hit the re-entrancy depth cap and was queued for later flush.
+- `ePulseResult.SGL_SENT`
 
 You will see these returned from functions like `PulseUnsubscribe`, `PulseRemove`, and `PulseSend`.
 
 Subscribe functions like `PulseSubscribe` return a subscription handle struct; the `ePulseResult` for the subscribe attempt is available on that handle as `handle.result`.
+
+#### `ePulseScheduleResult`
+
+Enum that describes the outcome of delayed queue posts created with `PulsePostAfterFrames` / `PostAfterFrames`.
+
+Values include:
+
+- `ePulseScheduleResult.PENDING`
+- `ePulseScheduleResult.FIRED`
+- `ePulseScheduleResult.CANCELLED`
+- `ePulseScheduleResult.DROPPED_DEAD_FROM`
+- `ePulseScheduleResult.DROPPED_QUEUE_OVERFLOW`
+
+#### `ePulseOverflowPolicy`
+
+Enum that controls what Pulse does when a queue limit is set and a new event arrives while the queue is full.
+
+Values include:
+
+- `ePulseOverflowPolicy.DROP_NEWEST`
+- `ePulseOverflowPolicy.DROP_OLDEST`
 
 ---
 
@@ -71,10 +94,10 @@ PulseSubscribe(id, SIG_DAMAGE_TAKEN, function(_data) {
 });
 ```
 
-- `id`: `Id.Instance or Struct` - receiver; structs are weak-ref wrapped for GC.  
-- `signal`: `Any` - the signal identifier (usually a macro or enum).  
-- `callback`: `Function` - the function to invoke when the signal is dispatched.  
-- `from` *(optional)*: `Id.Instance or Struct` - sender filter; `noone` (default) means "accept from any sender".  
+- `id`: `Id.Instance or Struct` - receiver; structs are weak-ref wrapped for GC.
+- `signal`: `Any` - the signal identifier (usually a macro or enum).
+- `callback`: `Function` - the function to invoke when the signal is dispatched.
+- `from` *(optional)*: `Id.Instance or Struct` - sender filter; `noone` (default) means "accept from any sender".
 - **Returns:** `Struct.__PulseHandle` - a subscription handle with:
   - fields: `controller`, `uid`, `id`, `signal`, `from`, `once`, `tag`, `priority`, `enabled`, `active`, `result`
   - method: `Unsubscribe()`
@@ -100,7 +123,7 @@ PulseSubscribeOnce(id, SIG_LEVEL_UP, function(_data) {
 });
 ```
 
-- Parameters are the same as `PulseSubscribe`.  
+- Parameters are the same as `PulseSubscribe`.
 - **Returns:** `Struct.__PulseHandle` - subscription handle (same shape as `PulseSubscribe`).
 
 The listener is removed after the first time it receives a signal that matches both the `signal` and `from` filter.
@@ -122,10 +145,10 @@ PulseUnsubscribe(id, SIG_DAMAGE_TAKEN, boss_id);
 PulseUnsubscribe(id, SIG_DAMAGE_TAKEN, undefined, TAG_BOSS_INTRO);
 ```
 
-- `id`: `Id.Instance or Struct` - listener id/struct to remove.  
-- `signal`: `Any` - signal identifier.  
-- `from` *(optional)*: `Id.Instance or Struct` - if provided, only listeners bound to this sender are removed.  
-- `tag` *(optional)*: `Any` - if provided, only listeners with this tag are removed.  
+- `id`: `Id.Instance or Struct` - listener id/struct to remove.
+- `signal`: `Any` - signal identifier.
+- `from` *(optional)*: `Id.Instance or Struct` - if provided, only listeners bound to this sender are removed.
+- `tag` *(optional)*: `Any` - if provided, only listeners with this tag are removed.
 - **Returns:** `ePulseResult` - for example:
   - `LST_REMOVED_FROM_SIGNAL` - removed at least one matching listener.
   - `SGL_DOES_NOT_EXIST` - no such signal exists.
@@ -146,9 +169,9 @@ Completely remove an instance id from all signals it is currently listening to.
 PulseRemove(id);
 ```
 
-- `id`: `Id.Instance or Struct` - listener id/struct to remove.  
+- `id`: `Id.Instance or Struct` - listener id/struct to remove.
 - **Returns:** `ePulseResult` - either:
-  - `LST_REMOVED_COMPLETELY` - at least one listener was removed, or  
+  - `LST_REMOVED_COMPLETELY` - at least one listener was removed, or
   - `LST_DOES_NOT_EXIST` - this id was not subscribed to any signal.
 
 Recommended for use in Destroy events of parent objects to avoid dangling listeners. Pulse will prune dead weak references automatically, but explicit cleanup keeps things predictable.
@@ -166,20 +189,23 @@ var _payload = { amount: 10 };
 PulseSend(SIG_DAMAGE_TAKEN, _payload, id);
 ```
 
-- `signal`: `Any` - signal identifier.  
-- `data` *(optional)*: `Any` - payload passed to listeners.  
-- `from` *(optional)*: `Id.Instance or Struct` - sender id/struct used for `from` filtering; default `noone`.  
+- `signal`: `Any` - signal identifier.
+- `data` *(optional)*: `Any` - payload passed to listeners.
+- `from` *(optional)*: `Id.Instance or Struct` - sender id/struct used for `from` filtering; default `noone`.
 - **Returns:** `ePulseResult` - for example:
-  - `SGL_SENT` - at least one listener ran.  
-  - `SGL_NOT_SENT_NO_SGL` - no such signal exists.  
+  - `SGL_SENT` - at least one listener ran.
+  - `SGL_DEFERRED_REENTRY` - event was deferred into queue by the re-entrancy safeguard (flush later).
+  - `SGL_NOT_SENT_QUEUE_OVERFLOW` - deferred re-entrancy send was dropped by queue overflow policy.
+  - `SGL_NOT_SENT_NO_SGL` - no such signal exists.
   - `SGL_NOT_SENT_NO_LST` - signal exists, but has no listeners.
 
 **Dispatch rules:**
 
 - Listeners are run in **descending priority** order (higher `priority` first).  If priorities are the same, the listeners are run in order of subscription time (first subscriber runs first).
-- Each listener sees the same `signal`, `data`, and `from` values.  
-- If a listener returns `true`, or if a struct payload has `consumed == true`, remaining listeners are not invoked (cancellation). For the payload method, make sure the payload already includes a `consumed` field when you send it (for example `{ ..., consumed: false }`).  
+- Each listener sees the same `signal`, `data`, and `from` values.
+- If a listener returns `true`, or if a struct payload has `consumed == true`, remaining listeners are not invoked (cancellation). For the payload method, make sure the payload already includes a `consumed` field when you send it (for example `{ ..., consumed: false }`).
 - Subscriptions changed during dispatch take effect on the **next** send, not the current one.
+- Deep re-entrant send chains are depth-limited internally. If the limit is reached, Pulse defers additional sends into the queue (`source = "reentry_spill"`), then continues when you flush. Those sends return `SGL_DEFERRED_REENTRY` or `SGL_NOT_SENT_QUEUE_OVERFLOW`.
 - Listener errors are isolated. Exceptions are logged to Echo and dispatch continues with the next listener. When this happens, Pulse emits the `PULSE_ON_ERROR` signal with error details.
 
 #### `PULSE_ON_ERROR`
@@ -211,7 +237,7 @@ Payload fields include:
 
 Dispatch a signal immediately and store the payload as the latest sticky value for late subscribers.
 
-- Parameters are the same as `PulseSend`.  
+- Parameters are the same as `PulseSend`.
 - **Returns:** `ePulseResult` (same meanings as `PulseSend`).
 
 Sticky payloads are replayed only for listeners that opt in via `listener.Sticky(true)` (default is false).
@@ -220,7 +246,7 @@ Sticky payloads are replayed only for listeners that opt in via `listener.Sticky
 
 Clear the stored sticky payload for a signal.
 
-- `signal`: `Any` - signal identifier.  
+- `signal`: `Any` - signal identifier.
 - **Returns:** `Void`.
 
 ---
@@ -239,10 +265,43 @@ Enqueue a signal for **later** processing via `PulseFlushQueue`.
 PulsePost(SIG_ENEMY_DIED, { x: x, y: y }, id);
 ```
 
-- Parameters are the same as `PulseSend`.  
+- Parameters are the same as `PulseSend`.
 - **Returns:** `Undefined`.
 
 The event is added to an internal FIFO queue and will not run listeners until you call `PulseFlushQueue`.
+
+#### `PulsePostLatest(signal, [data], [from])`
+
+Enqueue a signal for deferred processing, but keep only the latest queued payload per `(signal, from)` pair.
+
+```js
+PulsePostLatest(SIG_CAMERA_TARGET, { x: x, y: y }, id);
+```
+
+- Parameters are the same as `PulseSend`.
+- **Returns:** `Undefined`.
+
+If a matching queued event already exists, Pulse updates that queued payload to the newest value instead of adding another entry.
+
+#### `PulsePostAfterFrames(frames, signal, [data], [from])`
+
+Enqueue a signal for later processing after a number of queue flush frames.
+
+```js
+var _h = PulsePostAfterFrames(2, SIG_RESPAWN, { id: enemy_id }, id);
+```
+
+- `frames`: `Real` - how many queue flush frames to wait before posting. Values <= 0 behave like `PulsePost`.
+- `signal`: `Any` - signal identifier.
+- `data` *(optional)*: `Any` - payload.
+- `from` *(optional)*: `Id.Instance or Struct` - sender value.
+- **Returns:** `Struct.__PulseScheduleHandle` with:
+  - `Cancel()` - cancel while pending (returns `Bool`).
+  - `IsActive()` - `true` while pending.
+  - `Result()` - `ePulseScheduleResult` terminal state (`FIRED`, `CANCELLED`, `DROPPED_DEAD_FROM`, or `DROPPED_QUEUE_OVERFLOW`).
+
+`PulsePostAfterFrames` is flush-driven. If you call `PulseFlushQueue` once per frame (recommended), the delay behaves like frame count.
+If queue overflow later evicts a queued scheduled event (for example under `DROP_OLDEST`), the handle result is downgraded to `DROPPED_QUEUE_OVERFLOW`.
 
 ---
 
@@ -255,10 +314,12 @@ Process queued signals in FIFO order, using the same rules as `PulseSend`.
 var _processed = PulseFlushQueue(128);
 ```
 
-- `max_events` *(optional)*: `Real` - maximum number of queued events to process this call; negative values (the default `-1`) process **all** pending events.  
+- `max_events` *(optional)*: `Real` - maximum number of queued events to process this call; negative values (the default `-1`) process **all** pending events.
 - **Returns:** `Real` - the number of events actually processed.
 
 Events posted during `PulseFlushQueue` are appended to the queue and will also be processed in the same call, as long as you have not hit `max_events`.
+
+If you set a frame budget with `PulseSetFrameEventBudget`, Pulse uses the lower of `max_events` and the configured budget for that flush.
 
 ---
 
@@ -288,6 +349,35 @@ var _pending = PulseQueueCount();
 
 ---
 
+#### `PulseSetFrameEventBudget(max_events_per_flush)`
+
+Set a queue processing cap per `PulseFlushQueue` call on the default bus.
+
+- `max_events_per_flush`: `Real` - values are floored and clamped to `>= 0`. Use `0` for unlimited.
+- **Returns:** `Undefined`.
+
+---
+
+#### `PulseSetQueueLimit(max_events)`
+
+Set a queue size limit on the default bus.
+
+- `max_events`: `Real` - values are floored and clamped to `>= 0`. Use `0` for unlimited.
+- **Returns:** `Undefined`.
+
+When the limit is reached, new posts follow the current overflow policy (`PulseSetOverflowPolicy`).
+
+---
+
+#### `PulseSetOverflowPolicy(policy)`
+
+Set overflow behavior for queue-limit situations on the default bus.
+
+- `policy`: `Real` - one of `ePulseOverflowPolicy.DROP_NEWEST` or `ePulseOverflowPolicy.DROP_OLDEST`. Invalid values fall back to `DROP_NEWEST`.
+- **Returns:** `Undefined`.
+
+---
+
 ### Listener Builder
 
 #### `PulseListener(id, signal, callback)`
@@ -302,19 +392,19 @@ var _l = PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
     .Priority(5);
 ```
 
-- `id`: `Id.Instance or Struct` - listener target; structs are weak-ref wrapped.  
-- `signal`: `Any` - signal identifier.  
-- `callback`: `Function` - function to invoke when the signal is dispatched.  
+- `id`: `Id.Instance or Struct` - listener target; structs are weak-ref wrapped.
+- `signal`: `Any` - signal identifier.
+- `callback`: `Function` - function to invoke when the signal is dispatched.
 - **Returns:** `Struct.__PulseListener` - a listener configuration object with fields:
-  - `ident`, `signal`, `callback`  
-  - `from`, `once`, `sticky`, `tag`, `priority`, `enabled`  
+  - `ident`, `signal`, `callback`
+  - `from`, `once`, `sticky`, `tag`, `priority`, `enabled`
   and methods:
-  - `.From(from_id)`  
-  - `.Once()`  
-  - `.Sticky(sticky)`  
-  - `.Tag(tag)`  
-  - `.Priority(priority)`  
-  - `.Enabled(enabled)` / `.Enable()` / `.Disable()`  
+  - `.From(from_id)`
+  - `.Once()`
+  - `.Sticky(sticky)`
+  - `.Tag(tag)`
+  - `.Priority(priority)`
+  - `.Enabled(enabled)` / `.Enable()` / `.Disable()`
   - `.Bus(bus)` - target a specific `PulseController`
   - `.Subscribe()`
 
@@ -330,7 +420,7 @@ Set a `from` filter on the listener configuration.
 listener.From(boss_id);
 ```
 
-- `from_id`: `Id.Instance or Struct`.  
+- `from_id`: `Id.Instance or Struct`.
 - **Returns:** `Struct.__PulseListener` - the same listener config (for chaining).
 
 ---
@@ -355,7 +445,7 @@ Set whether this listener should receive sticky replays on subscribe.
 listener.Sticky(true);
 ```
 
-- `sticky`: `Bool` - set true to receive the last sticky payload on subscribe.  
+- `sticky`: `Bool` - set true to receive the last sticky payload on subscribe.
 - **Returns:** `Struct.__PulseListener` - the same listener config.
 
 ---
@@ -368,7 +458,7 @@ Set an arbitrary tag on the listener configuration.
 listener.Tag(TAG_UI);
 ```
 
-- `tag`: `Any`.  
+- `tag`: `Any`.
 - **Returns:** `Struct.__PulseListener` - the same listener config.
 
 Tags are useful for grouping and selective removal via `PulseUnsubscribe`.
@@ -383,7 +473,7 @@ Set the listener's priority.
 listener.Priority(10);
 ```
 
-- `priority`: `Real` - higher values run earlier.  
+- `priority`: `Real` - higher values run earlier.
 - **Returns:** `Struct.__PulseListener` - the same listener config.
 
 ---
@@ -396,7 +486,7 @@ Set whether this listener config should be enabled when subscribed.
 listener.Enabled(true);
 ```
 
-- `enabled`: `Bool`.  
+- `enabled`: `Bool`.
 - **Returns:** `Struct.__PulseListener` - the same listener config.
 
 ---
@@ -472,7 +562,7 @@ var _cfg = PulseListener(id, SIG_DAMAGE_TAKEN, OnDamage)
 PulseSubscribeConfig(_cfg);
 ```
 
-- `listener`: `Struct.__PulseListener` - configuration from `PulseListener`.  
+- `listener`: `Struct.__PulseListener` - configuration from `PulseListener`.
 - **Returns:** `Struct.__PulseHandle` - subscription handle with `Unsubscribe()`, metadata, and `result`.
 
 This is the more explicit form of `listener.Subscribe()` and can be useful when you want to keep a config around for later use.
@@ -562,7 +652,7 @@ Return the number of listeners currently registered for a specific signal.
 var _damage_count = PulseCount(SIG_DAMAGE_TAKEN);
 ```
 
-- `signal`: `Any`.  
+- `signal`: `Any`.
 - **Returns:** `Real` - number of listeners for that signal.
 
 ---
@@ -575,7 +665,7 @@ Return the total number of active subscriptions held by an instance id across al
 var _my_subscriptions = PulseCountFor(id);
 ```
 
-- `id`: `Id.Instance or Struct`.  
+- `id`: `Id.Instance or Struct`.
 - **Returns:** `Real` - number of subscriptions for that id.
 
 ---
@@ -602,7 +692,7 @@ Output a debug dump of a single signal and its listeners via your debug logger.
 PulseDumpSignal(SIG_DAMAGE_TAKEN);
 ```
 
-- `signal`: `Any`.  
+- `signal`: `Any`.
 - **Returns:** `Undefined`.
 
 ---
@@ -615,8 +705,8 @@ Pulse can record tap events into a ring buffer for debugging.
 
 Start recording tap events on the default bus.
 
-- `max_events` *(optional)*: `Real` - ring buffer size (default 256).  
-- `kinds` *(optional)*: `String` or `Array<String>` - filter by tap kind (for example `"send"` or `["send", "query"]`).  
+- `max_events` *(optional)*: `Real` - ring buffer size (default 256).
+- `kinds` *(optional)*: `String` or `Array<String>` - filter by tap kind (for example `"send"` or `["send", "query"]`).
 - **Returns:** `Undefined`.
 
 #### `PulseTraceStop()`
@@ -655,24 +745,24 @@ Use metadata to register friendly names and categories for signals. This improve
 
 Register metadata for a signal on the default `PULSE` bus.
 
-- `signal`: `Any` - signal identifier.  
-- `name`: `String` - friendly display name.  
-- `category` *(optional)*: `String` - category label (for example `"UI"` or `"COMBAT"`).  
-- `schema` *(optional)*: `Any` - payload schema description or example.  
+- `signal`: `Any` - signal identifier.
+- `name`: `String` - friendly display name.
+- `category` *(optional)*: `String` - category label (for example `"UI"` or `"COMBAT"`).
+- `schema` *(optional)*: `Any` - payload schema description or example.
 - **Returns:** `Undefined`.
 
 #### `PulseSignalMetaGet(signal)`
 
 Get metadata for a signal on the default `PULSE` bus.
 
-- `signal`: `Any`.  
+- `signal`: `Any`.
 - **Returns:** `Struct` or `Undefined` if none is registered.
 
 #### `PulseSignalMetaClear(signal)`
 
 Clear metadata for a signal on the default `PULSE` bus.
 
-- `signal`: `Any`.  
+- `signal`: `Any`.
 - **Returns:** `Undefined`.
 
 Metadata is stored per bus. For custom buses, use the controller methods `SetSignalMeta`, `GetSignalMeta`, and `ClearSignalMeta`.
@@ -702,7 +792,7 @@ group.Add([
   - Defaults / factory: `Bus(bus)`, `Name(name)`, `From(from)`, `Tag(tag)`, `Priority(prio)`, `PriorityOffset(delta)`, `Phase(name)`, `PhaseBase(base)`
   - Enable/disable: `IsEnabled()`, `SetEnabled(bool)`, `Enable()`, `Disable()`
   - Subscribe via group: `Listener(id, signal, callback)`, `Subscribe(...)`, `SubscribeOnce(...)`, `SubscribeConfig(listener)`
-  - Bus passthrough: `Send(...)`, `SendSticky(...)`, `Post(...)`, `FlushQueue(...)`, `ClearQueue()`, `ClearSticky(...)`, `QueueCount()`, `Query(...)`, `QueryAll(...)`, `QueryFirst(...)`
+  - Bus passthrough: `Send(...)`, `SendSticky(...)`, `Post(...)`, `PostLatest(...)`, `PostAfterFrames(...)`, `FlushQueue(...)`, `ClearQueue()`, `ClearSticky(...)`, `QueueCount()`, `Query(...)`, `QueryAll(...)`, `QueryFirst(...)`
   - Debug: `Dump()`, `DumpManaged()`, counts (`Count()`, `CountActive()`, `CountEnabled()`)
 
 `Add(handle_or_array)` and `Track(handle_or_array)` require subscription handle structs built from `PulseSubscribe`, `PulseSubscribeOnce`, `PulseSubscribeConfig`, or `listener.Subscribe`.
@@ -792,10 +882,15 @@ Dispatch and queue:
 - `Send(signal, [data], [from])` - dispatch immediately on this bus (same rules as `PulseSend`).
 - `SendSticky(signal, [data], [from])` - dispatch and store sticky payload (same rules as `PulseSendSticky`).
 - `Post(signal, [data], [from])` - enqueue an event on this bus (same idea as `PulsePost`).
+- `PostLatest(signal, [data], [from])` - enqueue while coalescing by `(signal, from)` so only the latest queued payload remains.
+- `PostAfterFrames(frames, signal, [data], [from])` - enqueue an event after a number of queue flush frames.
 - `FlushQueue([max_events])` - process queued events for this bus (same as `PulseFlushQueue` but scoped to the bus).
 - `ClearQueue()` - clear this bus queue without dispatching.
 - `ClearSticky(signal)` - clear the stored sticky payload for a signal on this bus.
 - `QueueCount()` - number of events currently queued on this bus.
+- `SetFrameEventBudget(max_events_per_flush)` - set per-flush queue cap (`0` = unlimited).
+- `SetQueueLimit(max_events)` - set queue size limit (`0` = unlimited).
+- `SetOverflowPolicy(policy)` - set queue overflow behavior (`ePulseOverflowPolicy`).
 
 Query API:
 

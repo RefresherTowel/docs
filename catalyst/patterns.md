@@ -27,6 +27,7 @@ game that uses stats is a good use case for Catalyst.
 - Burning enemies increase move speed
 - Low HP damage boost
 - Crit-based stacking damage buff
+- Countdown units comparison
 - Highest-of-kind global movement aura
 - Tag-based dispels / cleanses
 - Derived base values
@@ -37,6 +38,47 @@ game that uses stats is a good use case for Catalyst.
 
 The rest of this page walks through these ideas as concrete snippets you can
 copy, tweak, or wrap in your own helper functions.
+
+---
+
+## Countdown units comparison
+
+`duration` and `CatalystModCountdown(_step_size)` are unit-agnostic.
+Pick one unit and keep it consistent.
+
+### 1. Normal ticks (default)
+
+```js
+// Duration is measured in ticks.
+var _buff_tick = new CatalystModifier(0.25, eCatMathOps.MULTIPLY, 5);
+
+// No argument needed: CatalystModCountdown() defaults _step_size to 1.
+CatalystModCountdown();
+```
+
+### 2. Seconds (delta_time)
+
+```js
+// Duration is measured in seconds.
+var _buff_seconds = new CatalystModifier(0.25, eCatMathOps.MULTIPLY, 2.5);
+
+// delta_time is in microseconds in GameMaker.
+CatalystModCountdown(delta_time * 0.000001);
+```
+
+### 3. Milliseconds (delta_time)
+
+```js
+// Duration is measured in milliseconds.
+var _buff_ms = new CatalystModifier(0.25, eCatMathOps.MULTIPLY, 2500);
+
+// delta_time is in microseconds in GameMaker.
+CatalystModCountdown(delta_time * 0.001);
+```
+
+- Keep units matched:
+  - If duration is in seconds, pass seconds to `CatalystModCountdown`.
+  - If duration is in milliseconds, pass milliseconds to `CatalystModCountdown`.
 
 ---
 
@@ -183,6 +225,9 @@ In a global controller (or similar), make sure you are calling the countdown:
 ```js
 // obj_game_controller Step event
 CatalystModCountdown();
+
+// Or pass a fractional step size from your own delta-time clock:
+// CatalystModCountdown(_dt_seconds);
 ```
 
 ### On crit
@@ -202,7 +247,7 @@ function Player_OnCrit(_attacker, _target, _damage_ctx) {
 - Each crit adds one stack, up to 5.
 - Every time you refresh the duration, the buff will last 5 more ticks
   from that point.
-- Once the duration reaches 0 (via `CatalystModCountdown()`), the tracker
+- Once the duration reaches 0 (via `CatalystModCountdown(_step_size)`), the tracker
   removes the modifier from the stat.
 
 ---

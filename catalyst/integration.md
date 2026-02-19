@@ -108,19 +108,20 @@ stats = {
 };
 
 state_machine = new Statement(self);
+var _owner = self;
 
 var _alive = new StatementState(self, "Alive")
-    .AddUpdate(function() {
+    .AddUpdate(method(_owner, function() {
         if (stats.hp.GetValue() <= 0) {
             state_machine.ChangeState("Dead");
         }
-    });
+    }));
 
 var _dead = new StatementState(self, "Dead")
-    .AddEnter(function() {
+    .AddEnter(method(_owner, function() {
         sprite_index = spr_enemy_dead;
         hspeed = vspeed = 0;
-    });
+    }));
 
 state_machine.AddState(_alive);
 state_machine.AddState(_dead);
@@ -142,9 +143,10 @@ stats = {
 };
 
 state_machine = new Statement(self);
+var _owner = self;
 
 var _overcharge = new StatementState(self, "Overcharge")
-    .AddEnter(function() {
+    .AddEnter(method(_owner, function() {
         // Pay stamina cost before entering the state
         stats.stamina.ChangeBaseValue(-25);
 
@@ -153,13 +155,13 @@ var _overcharge = new StatementState(self, "Overcharge")
             .SetLayer(eCatStatLayer.TEMP)
             .SetSourceLabel("Overcharge");
         stats.damage.AddModifier(_buff);
-    })
-    .AddUpdate(function() {
+    }))
+    .AddUpdate(method(_owner, function() {
         // Leave the state once the buff expires
         if (array_length(stats.damage.FindModifiersBySourceLabel("Overcharge")) == 0) {
             state_machine.ChangeState("Normal");
         }
-    });
+    }));
 
 var _normal = new StatementState(self, "Normal");
 
@@ -168,7 +170,7 @@ state_machine.AddState(_overcharge);
 state_machine.ChangeState("Normal");
 ```
 
-A separate controller drives `CatalystModCountdown()` each step. Catalyst
+A separate controller drives `CatalystModCountdown(_step_size)` each step. Catalyst
 tracks timing, Statement handles the behaviour.
 
 ---
@@ -186,9 +188,7 @@ Wrap stat adjustments in helpers that send signals:
 function ActorApplyDamage(_actor, _amount) {
     var _old_hp = _actor.stats.hp.GetValue();
 
-    var _mod = new CatalystModifier(-_amount, eCatMathOps.ADD)
-        .SetSourceLabel("Damage");
-    _actor.stats.hp.AddModifier(_mod);
+    _actor.stats.hp.ChangeBaseValue(-_amount);
 
     var _new_hp = _actor.stats.hp.GetValue();
 
@@ -214,7 +214,7 @@ PulseSubscribe(id, "stat_changed", function(_data) {
 ### Pattern 6 - Buff applied / expired events (Advanced)
 
 When you apply a buff, send a signal. When it expires (as determined by
-`CatalystModCountdown`), send another.
+`CatalystModCountdown(_step_size)`), send another.
 
 ```gml
 function ApplyShieldBuff(_actor) {
@@ -224,7 +224,6 @@ function ApplyShieldBuff(_actor) {
         .SetSourceLabel("ShieldBuff");
 
     _actor.stats.shield.AddModifier(_mod);
-    _mod.ApplyDuration();
 
     PulseSend("buff_applied", {
         actor : _actor,

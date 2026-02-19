@@ -19,7 +19,7 @@ var _toolbar_panel = new EchoChamberPanel("toolbar_panel", eEchoChamberDock.FILL
 	.SetFlowMode(eEchoChamberPanelFlow.ROW);
 
 var _ctrl_btn = new EchoChamberButton("toolbar_panel_btn")
-	.SetLabel("My button")
+	.SetCaption("My button")
 	.SetTooltip("A button you can click")
 	.OnClick(function() {
 		EchoDebugSevere("You clicked the button!");

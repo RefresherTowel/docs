@@ -234,6 +234,7 @@ Notes:
 - `PulseFlushQueue([max_events])` processes queued events in FIFO order.
   - Pass a negative or undefined `max_events` to flush everything.
   - Pass a positive number to cap how many events you handle per frame.
+- Pulse also uses this queue as a re-entrancy safeguard for very deep send chains (internal depth cap). In those rare cases, continue flushing to finish delivery.
 
 You can inspect the size of the queue for debugging:
 
@@ -244,7 +245,59 @@ draw_text(16, 16, "Pending Pulse events: " + string(_pending));
 
 `PulseClearQueue()` will drop everything without dispatching, which is occasionally useful when hard-resetting a game state.
 
-### 4. Cancellation: stopping propagation
+### 4. Coalesced queue posts with `PulsePostLatest`
+
+For noisy state-like signals (camera target, UI hover, cursor world position), you often only care about the latest value:
+
+```js
+PulsePostLatest(SIG_CAMERA_TARGET, { x: target_x, y: target_y }, id);
+```
+
+Notes:
+
+- Coalescing key is `(signal, from)`.
+- If a matching queued event already exists, Pulse updates that queued payload instead of adding another entry.
+- Use this for "latest state wins" updates.
+- Do not use this when every event matters (for example, damage ticks, combo hits, pickups).
+
+### 5. Delayed queue posts with `PulsePostAfterFrames`
+
+Sometimes you want "post this, but not yet". `PulsePostAfterFrames` schedules a post for later:
+
+```js
+/// Fire after 2 queue flush frames
+var _h = PulsePostAfterFrames(2, SIG_RESPAWN, { id: enemy_id }, id);
+```
+
+Notes:
+
+- This is still flush-driven. If you flush once per frame, `2` means "about two frames later".
+- `frames <= 0` behaves like `PulsePost`.
+- The returned handle supports:
+  - `_h.Cancel()` to cancel while pending.
+  - `_h.IsActive()` to check if pending.
+  - `_h.Result()` to inspect outcome (`PENDING`, `FIRED`, `CANCELLED`, `DROPPED_DEAD_FROM`, `DROPPED_QUEUE_OVERFLOW`).
+- If queue overflow later evicts a queued scheduled event (for example under `DROP_OLDEST`), the handle result becomes `DROPPED_QUEUE_OVERFLOW`.
+
+### 6. Frame pacing and queue overflow policy
+
+If you want safer frame pacing under event bursts, configure a queue budget and limit:
+
+```js
+PulseSetFrameEventBudget(128);
+PulseSetQueueLimit(1024);
+PulseSetOverflowPolicy(ePulseOverflowPolicy.DROP_NEWEST);
+```
+
+Notes:
+
+- `PulseSetFrameEventBudget(0)` means unlimited queue work per flush.
+- `PulseSetQueueLimit(0)` means unlimited queue size.
+- `DROP_NEWEST` keeps already queued events and drops incoming overflow.
+- `DROP_OLDEST` evicts oldest queued events to make room for incoming overflow.
+- `PulseFlushQueue(max_events)` still works; Pulse uses the lower of `max_events` and the configured frame budget.
+
+### 7. Cancellation: stopping propagation
 
 Sometimes the first listener that handles an event should prevent others from seeing it. Classic example: layered UI panels reacting to clicks.
 
@@ -281,7 +334,7 @@ Once consumed, lower-priority listeners for that signal will be skipped.
 
 You will see more details on priorities in the Advanced section; for now you can just imagine it as a queue, e.g. "top-level UI panels use higher priority; background stuff uses default priority".
 
-### 5. Simple introspection and debugging
+### 8. Simple introspection and debugging
 
 Pulse exposes a few helpers for checking what is currently wired up on the default bus.
 
@@ -348,6 +401,7 @@ Every `PulseController` instance has methods that mirror the global API, but onl
 - `Remove(id)`
 - `Send(signal, [data], [from])`
 - `Post(signal, [data], [from])`
+- `PostLatest(signal, [data], [from])`
 - `FlushQueue([max_events])`
 - `ClearQueue()`
 - `QueueCount()`
@@ -444,7 +498,7 @@ Additional group helpers (advanced):
 - Cleanup: `Prune()`
 - Counts: `Count()`, `CountActive()`, `CountEnabled()`
 - Debug: `Dump()`, `DumpManaged()`
-- Bus passthrough: `Send(signal, [data], [from])`, `Post(signal, [data], [from])`, `FlushQueue([max_events])`, `ClearQueue()`, `QueueCount()`
+- Bus passthrough: `Send(signal, [data], [from])`, `SendSticky(signal, [data], [from])`, `Post(signal, [data], [from])`, `PostLatest(signal, [data], [from])`, `PostAfterFrames(frames, signal, [data], [from])`, `FlushQueue([max_events])`, `ClearQueue()`, `ClearSticky(signal)`, `QueueCount()`
 - Query passthrough: `Query(signal, [payload], [from])`, `QueryAll(signal, [payload], [from])`, `QueryFirst(signal, [payload], [from], [default])`
 
 `Add(handle_or_array)` and `Track(handle_or_array)` require subscription handle structs built from `PulseSubscribe`, `PulseSubscribeOnce`, `PulseSubscribeConfig`, or `listener.Subscribe`.
