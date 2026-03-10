@@ -2,7 +2,7 @@
 layout: default
 title: Scripting Reference
 parent: Pulse
-nav_order: 3
+nav_order: 5
 ---
 
 <!--

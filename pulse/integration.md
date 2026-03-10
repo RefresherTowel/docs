@@ -2,7 +2,7 @@
 layout: default
 title: Using Pulse with Other Frameworks
 parent: Pulse
-nav_order: 5
+nav_order: 6
 ---
 
 # Using Pulse with Other Frameworks
@@ -25,8 +25,8 @@ frameworks.
 
 At a high level:
 
-- Use **Pulse** whenever something in the game should say “this happened” or
-  “please do this” without caring *who* handles it.
+- Use **Pulse** whenever something in the game should say "this happened" or
+  "please do this" without caring *who* handles it.
 - Use **Statement** to interpret those signals as state changes.
 - Use **Echo** to log signal traffic and hard-to-see behaviour.
 

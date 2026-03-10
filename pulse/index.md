@@ -7,7 +7,7 @@ has_children: true
 
 <!--
 /// index.md - Changelog:
-/// - 23-12-2025: Updated Pulse API notes for builders and handles.
+/// - 20-02-2026: Restructured docs into Quickstart -> Beginner -> Advanced -> Patterns.
 -->
 
 <div class="sticky-toc" markdown="block">
@@ -21,69 +21,51 @@ has_children: true
 </details>
 </div>
 
+
 ![Pulse icon](../assets/pulse_icon.png)
 {: .text-center}
 
-*The beating heart of your game!*
+*The beating heart of your game.*
 {: .text-center}
 
-You know that feeling when you change one tiny thing, and then 14 unrelated objects across your project suddenly need updates, or you get a brand new bug in a room you have not opened in three weeks?
+Pulse is a signal and event system for GameMaker.
 
-Yeah. That sucks. Luckily Pulse is here to save you from that pain!
-
-**Pulse** is a signal and event system for GameMaker. It lets you broadcast "something happened" and have anything that cares react to it, without everything needing to know about everything else.
-
-In other words: less coupling, less spaghetti, more "I can actually change my code without fear".
+If you want your UI, audio, VFX, and gameplay to react to the same moment without everything hard-calling everything else, this is the tool. You broadcast "something happened", and anyone who cares can respond.
 
 <iframe frameborder="0" src="https://itch.io/embed/4116520?linkback=true&amp;border_width=2&amp;bg_color=370028&amp;fg_color=ffffff&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/pulse">Pulse by RefresherTowel</a></iframe>
 
 ---
 
-## What Pulse is (in human terms)
+## Start here
 
-Pulse is basically a tiny in-game message bus:
+If you're brand new to Pulse, this is the path:
 
-* Something happens (player took damage, roll finished, button clicked).
-* You **send** a signal.
-* Anything that subscribed to that signal runs its callback.
-* Nobody has to directly call anyone else.
-
-The sender does not care who is listening.
-The listeners do not care who sent it.
-All anyone agrees on is the signal identifier (and maybe a payload).
-
-If you have ever thought "I wish my UI, VFX, audio, and gameplay could all react to the same moment without me wiring it all by hand" -> this is that.
+1. [Quickstart](quickstart) gets you running in a few minutes.
+2. [Beginner Implementation](beginner_implementation) explains the core ideas and the "basic" way to use Pulse in a project.
+3. [Advanced Implementation](advanced_implementation) covers queueing, sticky signals, custom buses, queries, and debugging tools.
+4. [Common Patterns and Recipes](patterns) is the copy-paste page. Real stuff you'll actually do in real games.
 
 ---
 
-## The 30 second API
+## Pulse in a nutshell
 
-If you only learn two things, learn these:
+Pulse is a tiny message bus living inside your game.
 
-* `PulseSubscribe(id, signal, callback, [from])`
-* `PulseSend(signal, [data], [from])`
+1. You pick a signal id (usually a macro or enum).
+2. Something sends that signal, optionally with a payload.
+3. Anything subscribed to that signal runs its callback.
 
-That is enough for Pulse to streamline and decouple your project.
+The sender doesn't need a pointer to the listeners. The listeners don't need a pointer to the sender. Everyone only agrees on the signal id and what the payload means.
 
-Everything else is "nice, but only when you actually need it".
+That one change tends to delete a whole lot of "this object has to know about that object" code.
 
 ---
 
-## Why you would actually want this
+## Two rules that keep you sane
 
-Pulse is for when you want your game to be:
+First, define your signals in one place. Don't scatter magic numbers/strings across random objects.
 
-* **Easier to change**
-  No more "this fountain needs to read the players inventory" nonsense.
-
-* **Easier to extend**
-  Add a new listener (UI tooltip, screen shake, analytics, tutorial popup) without touching the sender.
-
-* **Less fragile**
-  Your systems stop being a web of direct calls and special cases.
-
-* **More debuggable**
-  Pulse can tell you "what is listening to what" when you inevitably go "why the hell did that fire twice".
+Second, if you use any queued features (PulsePost, delayed posts, or if you ever hit deep re-entrancy), make sure you flush the queue once per frame. The Quickstart shows where to put that.
 
 ---
 
@@ -105,281 +87,6 @@ These frameworks are designed specifically to work together easily, to allow you
 
 > Pulse ships with [**Echo**](../echo/) (a minimalist, yet powerful, debug logging framework) for free!
 {: .important}
-
----
-
-## What Pulse gives you
-
-### Core stuff you will use constantly
-
-* **A global bus by default**
-  Pulse ships with an autocreated global controller (via the `PULSE` macro). You do not have to manage anything to start using it.
-
-* **Subscribe and send, nice and clean**
-  Subscribe listeners (instances or structs), then send signals from anywhere.
-
-* **One-shot listeners**
-  Subscribe something that should run once and then disappear (tutorial popups, one-time cutscene triggers, "first time only" rewards).
-
-* **Sender filtering (`from`)**
-  Listen to a signal from anyone, or only from a specific sender (boss only, this UI panel only, this one controller only).
-
-* **Safe cleanup**
-  Remove one subscription, or wipe an id from every signal it is on (hello, Destroy event).
-
-* **Callbacks run in the listener's context**
-  Callbacks run inside a `with (id)` for the subscriber, so `self` and scope behave how you intuitively expect.
-
-* **Weak references for listeners**
-  Pulse uses weak references so dead listeners can be pruned as you dispatch, instead of being kept alive forever because you forgot to unsubscribe.
-
-### The "ok now we are cooking" features
-
-These are optional, but they are where Pulse stops being "just a signal script" and starts being a real tool:
-
-* **Query signals (ask the room, get answers back)**
-  Sometimes you do not want "fire and forget". You want "who has an offer for this item?" or "what target should I pick?"
-  Pulse has a query API: `PulseQuery`, plus helpers like `PulseQueryAll` and `PulseQueryFirst`.
-  Send a question out to your game, and have everything that might want to answer supply a response back!
-
-* **Priorities**
-  Higher priority listeners run first. Great for "gameplay first, UI second, VFX last".
-
-* **Tags**
-  Tag subscriptions so you can identify/filter them later (UI, debug, rune procs, tutorial, etc). For precise cleanup, prefer tracking subscription handles (or `PulseGroup()`) and unsubscribing those.
-
-* **Cancellation / consumption**
-  A listener can stop propagation (either by returning `true`, or by using a struct payload that includes a `consumed` flag and setting it to `true`).
-
-* **Listener error isolation**
-  Listener exceptions are logged to Echo and dispatch continues. Errors emit the `PULSE_ON_ERROR` signal for tooling.
-
-* **Queued dispatch (post now, process later)**
-  Use `PulsePost()` to enqueue events, then process them later with `PulseFlushQueue()`.
-  Also includes `PulseQueueCount()` and `PulseClearQueue()` for sanity and resets.
-
-* **Listener builder (for readability)**
-  `PulseListener(id, signal, callback)` gives you a config struct you can chain:
-  `.From()`, `.Once()`, `.Sticky()`, `.Tag()`, `.Priority()`, `.Enabled()`, and `.Bus()` for custom controllers, then `.Subscribe()` or `PulseSubscribeConfig(listener)`.
-  `PulseSubscribeConfig` requires a config struct built from `PulseListener`.
-
-* **Subscription handles and groups**
-  Subscribe calls return handles with an `Unsubscribe()` method.
-  If you have a bunch of subscriptions, `PulseGroup()` lets you track them and clean them up together.
-
-* **Custom buses when you want isolation**
-  Most projects can live on the global bus.
-  But if you want strict separation (UI bus vs gameplay bus, or per-system buses), you can create controllers with `PulseBusCreate()` (or `new PulseController()`) and use the same API on that bus.
-
-* **Introspection and debug dumping**
-  Count listeners (`PulseCount`, `PulseCountFor`) and dump wiring (`PulseDump`, `PulseDumpSignal`) when things get weird.
-
-* **Signal metadata registry**
-  Register signal names and categories to improve `PulseDump` output and Vitals labels.
-
-* **Trace recorder**
-  Record tap events into a ring buffer and dump them with `PulseTraceDump()`.
-
----
-
-## Quick Start
-
-Minimal example: enemy sends damage, player reacts.
-
-```js
-// Somewhere shared (macros, enums, whatever):
-#macro SIG_DAMAGE_TAKEN 0
-```
-
-```js
-/// obj_player Create
-PulseSubscribe(id, SIG_DAMAGE_TAKEN, function(_data) {
-    var _amount = is_struct(_data) ? _data.amount : _data;
-    hp -= _amount;
-});
-```
-
-```js
-/// obj_enemy: when it hits the player
-PulseSend(SIG_DAMAGE_TAKEN, { amount: 5 }, id);
-```
-
-That is it. You now have decoupled damage handling.
-
----
-
-## A slightly more "real game" example
-
-### Only react to a specific sender (boss damage only)
-
-```js
-PulseSubscribe(id, SIG_DAMAGE_TAKEN, function(_ev) {
-    hp -= _ev.amount;
-}, boss_id);
-```
-
-### Stop other listeners from reacting (consume the event)
-
-```js
-PulseSubscribe(id, SIG_INPUT_CLICK, function(_ev) {
-    if (hit_my_button(_ev.x, _ev.y)) {
-        DoButtonThing();
-        return true; // stop propagation
-    }
-});
-```
-
-### Post now, apply later (queued events)
-
-```js
-/// somewhere deep in gameplay code
-PulsePost(SIG_ENEMY_DIED, { x: x, y: y }, id);
-
-/// controller Step
-PulseFlushQueue(128);
-```
-
-### Ask a question instead of sending an event (query)
-
-```js
-var _offers = PulseQueryAll(SIG_GET_OFFERS, { item_id: item_id });
-
-if (array_length(_offers) > 0) {
-    var _best = _offers[0];
-    // do something with it
-}
-```
-
----
-
-## FAQ (Core)
-
-### Do I have to use the builder (`PulseListener`)?
-
-No. The builder is entirely optional.
-
-For most simple cases you can stick to:
-
-- `PulseSubscribe(id, signal, callback, [from])`
-- `PulseSubscribeOnce(id, signal, callback, [from])`
-- `PulseSend(signal, [data], [from])`
-
-The builder exists to make advanced cases (tags, priorities, one-shots, filters) easier to read and maintain.
-
----
-
-### What does the `from` parameter actually do?
-
-Every listener stores a `from` filter:
-
-- `noone` (the default) means "accept events from any sender".  
-- A specific id (for example `other.id` or `enemy_id`) means "only accept events when that id is passed as the `from` argument to `PulseSend` / `PulsePost`".
-
-This is helpful when you only want to react to events coming from a specific source (for example, "only take damage from this boss, not from every enemy").
-
----
-
-### What value does `PulseSubscribe` return?
-
-`PulseSubscribe` (and `PulseSubscribeOnce`, `PulseSubscribeConfig`, `listener.Subscribe()`) returns a **subscription handle struct**, not an enum value.
-
-That handle includes an `Unsubscribe()` method and metadata like `id`, `signal`, `from`, etc. The result of the subscribe attempt is available on the handle as `handle.result` (an `ePulseResult` value), for example:
-
-- `ePulseResult.LST_ADDED`
-
-Other operations like `PulseUnsubscribe`, `PulseRemove`, and `PulseSend` return an `ePulseResult` value directly.
-
-In the current Pulse codebase, subscribing always reports `handle.result == ePulseResult.LST_ADDED` (including duplicates). If you add a duplicate listener tuple (same id + signal + from + tag), Pulse logs a warning in debug builds but still adds the subscription.
-
-For simple usage you can ignore these, but they become handy in tools, debug builds, or when you want to assert particular outcomes.
-
-Handles created via `PulseSubscribeConfig` or `PulseGroup.SubscribeConfig` also include `SetEnabled(enabled)`, `Enable()`, `Disable()`, and `IsEnabled()` for listener gating.
-
----
-
-## FAQ (Advanced)
-
-### When should I use queued events instead of `PulseSend`?
-
-Use `PulsePost` + `PulseFlushQueue` when:
-
-- You want to decouple *when* an event is sent from *when* its effects apply.  
-- You want to avoid deep call stacks or re-entrancy issues (for example, signals that trigger more signals).  
-- You want to process a batch of events at a specific point in your Step pipeline.
-
-Use `PulseSend` when:
-
-- You need immediate reactions and you know you are at a safe point in your logic.
-
-A common pattern is:
-
-```js
-/// obj_controller Step
-var _processed = PulseFlushQueue(128); // process up to 128 events per step
-```
-
-and use `PulsePost` elsewhere for "next-frame" style work.
-
----
-
-### How does cancellation work?
-
-Inside a listener callback you can stop further propagation in two ways:
-
-1. **Return true** from the callback:
-
-   ```js
-   PulseSubscribe(id, SIG_INPUT_CLICK, function(_data) {
-       if (hit_my_ui_button(_data)) {
-           handle_button_click();
-           return true; // stop; do not notify lower-priority listeners
-       }
-   }, noone);
-   ```
-
-2. **Use a struct payload with a `consumed` flag**:
-
-   ```js
-   var _ev = { x: mouse_x, y: mouse_y, consumed: false };
-   PulseSend(SIG_INPUT_CLICK, _ev);
-
-   // Somewhere else
-   PulseSubscribe(id, SIG_INPUT_CLICK, function(_ev) {
-       if (hit_something(_ev)) {
-           _ev.consumed = true;
-       }
-   });
-   ```
-
-After each callback, Pulse checks both:
-
-- the callback's return value, and  
-- the `consumed` field (for struct payloads).
-
-If either indicates consumption, Pulse stops notifying remaining listeners for that signal send.
-
----
-
-### What happens if I subscribe or unsubscribe inside a callback?
-
-Pulse protects itself by taking a **snapshot** of the listener list before dispatching:
-
-- Changes to subscriptions during a dispatch do **not** affect the current delivery.
-- They take effect on the **next** signal delivery.
-
-This means:
-
-- If a listener unsubscribes itself during a callback, it still receives the current event, but not future ones.
-- If a listener unsubscribes a different listener, that other listener will still run once for the current event, but not future ones.
-
-This behaviour is predictable and avoids "modified the list I am iterating" crashes.
-
----
-
-## Notes and requirements
-
-* Pulse expects a modern GameMaker that supports struct constructors and methods.
-* Debug dumps use your debug logger functions (Echo style). If you do not care about dumps, those can be simple no-ops.
 
 ---
 

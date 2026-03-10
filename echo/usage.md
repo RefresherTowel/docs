@@ -31,14 +31,16 @@ You can use either one on its own, but together they turn "show_debug_message he
 Add `scr_echo.gml` to your project and then log something:
 
 ```js
-EchoDebugInfo("Hello from Echo!");
-EchoDebugWarn("This smells suspicious...", "AI");
-EchoDebugSevere("Something exploded.", ["Combat", "Damage"]);
+EchoDebugInfo("Hello from Echo!", "UI", make_color_rgb(120, 210, 255));
+EchoDebugWarn("This smells suspicious...", "AI", make_color_rgb(255, 210, 90));
+EchoDebugSevere("Something exploded.", ["Combat", "Damage"], make_color_rgb(255, 120, 120));
 ```
 
 - `EchoDebugInfo` and `EchoDebugWarn` are just convenience wrappers.
 - `EchoDebugSevere` includes a stack trace (and in COMPLETE mode, WARNING/SEVERE do too, see levels below).
-- The third argument can be a single tag string or an array of tag strings.
+- The second argument can be a single tag string or an array of tag strings.
+- All `EchoDebug*` wrappers support an optional third argument for colour metadata.
+- Echo Console uses that metadata when drawing each log line.
 
 ### Picking a log level (so you are not drowning)
 

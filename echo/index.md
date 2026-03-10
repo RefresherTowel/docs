@@ -63,9 +63,9 @@ So instead of "I hope I spot the right line in the output" you get "I can filter
 
 If you only learn three calls, learn these:
 
-- EchoDebugInfo(message, [tag_or_tags])
-- EchoDebugWarn(message, [tag_or_tags])
-- EchoDebugSevere(message, [tag_or_tags])
+- EchoDebugInfo(message, [tag_or_tags], [colour])
+- EchoDebugWarn(message, [tag_or_tags], [colour])
+- EchoDebugSevere(message, [tag_or_tags], [colour])
 
 SEVERE always includes a stack trace (and in COMPLETE mode, WARNING/SEVERE include stack traces; INFO does not).
 

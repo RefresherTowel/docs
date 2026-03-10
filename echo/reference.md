@@ -39,31 +39,35 @@ Echo is the logger: it decides what to print, what to store, and how to filter i
 - `SEVERE`
 
 ### Functions
-### `EchoDebug(_message, _urgency = eEchoDebugUrgency.WARNING, _tag = "")`
+### `EchoDebug(_message, _urgency = eEchoDebugUrgency.WARNING, _tag = "", _colour = undefined)`
 Send a message to the debug logger with a specific urgency level. Returns true if the message meets current debug level critera, false if not.
 **Parameters**
 - `_message` `String`: The message to send to the debug logger
 - `[_urgency]` `Real`: The level of urgency of the debug message (pick an entry from the eEchoDebugUrgency enum)
 - `[_tag]` `String,Array<String>`: Optional tag or tags to filter on (e.g., "UI", ["Physics","Jump"]). Empty or empty array allows all.
+- `[_colour]` `Real`: Optional text colour metadata for structured history and Echo Console rendering.
 **Returns**: `Boolean`
 
-### `EchoDebugInfo(_message, _tag = "")`
+### `EchoDebugInfo(_message, _tag = "", _colour = undefined)`
 Logs a debug message with an INFO urgency level
 **Parameters**
 - `_message` `String`
 - `[_tag]` `String,Array<String>`
+- `[_colour]` `Real`
 
-### `EchoDebugWarn(_message, _tag = "")`
+### `EchoDebugWarn(_message, _tag = "", _colour = undefined)`
 Logs a debug message with a WARNING urgency level
 **Parameters**
 - `_message` `String`
 - `[_tag]` `String,Array<String>`
+- `[_colour]` `Real`
 
-### `EchoDebugSevere(_message, _tag = "")`
+### `EchoDebugSevere(_message, _tag = "", _colour = undefined)`
 Logs a debug message with a SEVERE urgency level (includes stack trace)
 **Parameters**
 - `_message` `String`
 - `[_tag]` `String,Array<String>`
+- `[_colour]` `Real`
 
 ### `EchoDebugSetLevel(_level)`
 Sets the debug logging level, which determines what urgency criteria messages must meet in order to be logged.
@@ -111,6 +115,7 @@ Returns the current log revision number. This increments whenever history change
 
 ### `EchoDebugGetStructuredHistory()`
 Returns a new array of structured history entries for UI rendering.
+Entries include optional `colour` metadata when provided during logging.
 **Returns**: `Array<Struct>,Boolean` - False if debug is disabled.
 
 ### `EchoDebugSetTags(_tags)`
