@@ -70,7 +70,7 @@ This lets you start simple, and gradually add complexity as you become more comf
 
 ## Other Cool Stuff
 
-If you like Quill, then be sure to check out my other libraries:
+If you like Fate, then be sure to check out my other libraries:
 
 [![Statement icon](../assets/statement_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/statement)
 {: .text-center}
