@@ -35,6 +35,14 @@ EnableStandardGachaRules(_five_star_entries, _featured_entries = undefined, _pit
 
 These methods take direct `FateEntry` targets (a single entry or an array), which removes callback complexity for the common cases. This is likely all you need to create nice feeling loot tables that respect the player in the majority of cases. The rest of the policy functionality is for when you have very specific targeted tweaks you want to make.
 
+## Multi-roll progression
+
+Pity and featured rate-up advance once for each selected slot. That means `Roll(10, ctx, rng)` progresses those policies the same way as ten `Roll(1, ctx, rng)` calls, as long as the scope, starting policy state, and RNG values are the same.
+
+Batch guarantees are different on purpose. They are batch-scoped rules, so they still look at the whole requested batch size. Inside the batch, they evaluate the number of remaining slots and only hard force when the remaining slots are needed to satisfy the guarantee.
+
+`EnableStandardGachaRules(...)` uses pity and featured rate-up, so its pity and featured behavior also advances per selected slot.
+
 ## Common beginner examples
 
 ### Pity

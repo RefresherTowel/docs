@@ -52,6 +52,8 @@ Then roll through `FateRollValues(loot_table, 1)`, with the table you want to ge
 
 When you're stacking helper policies, a solid default order is pity first, then rate-up (if you have featured targets, an example being a limited time promotion when "Beastly" monsters should drop more often during halloween or something), then duplicate protection (if repeats are a problem), and finally any multi-pull guarantee rules (`EnableTenPullGuarantee(...)` or `EnableBatchGuarantee(...)`).
 
+Pity and rate-up advance once per selected slot, so one multi-pull progresses those policies like the same number of single pulls. Batch guarantees stay batch-scoped and only hard force when the remaining slots in the batch require it.
+
 If you want a quick baseline for gacha tables, use:
 
 ```js

@@ -80,6 +80,8 @@ loot_table.EnablePity(_rare, 90, 75, 0.06);
 
 To outline what the above code does, it sets hard pity at 90 misses (i.e. a guaranteed drop), soft pity starting at 75 misses, and then +0.06 weight per miss after the soft start.
 
+Pity advances once per selected slot. A `Roll(10)` call moves pity the same way as ten `Roll(1)` calls when the scope, starting state, and RNG order are the same.
+
 ## 5. Track and save snapshot state
 
 If you want save/load behavior, register the table once and then use snapshot file helpers.

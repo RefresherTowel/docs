@@ -350,7 +350,7 @@ All mutating methods return `Struct.FateTable` for chaining unless noted.
 		- `_soft_step` `Real`
 		- `_scope_context_key` `String|Undefined`
 	- **Returns:** `Struct.FateTable`
-	- **Additional Notes:** Pity raises consistency for rare targets by increasing effective chance after repeated misses. Use scope keys when pity should be tracked separately per profile or account.
+	- **Additional Notes:** Pity raises consistency for rare targets by increasing effective chance after repeated misses. Pity advances once per selected slot, so `Roll(10)` progresses pity like ten `Roll(1)` calls when scope, starting state, and RNG order are the same. Use scope keys when pity should be tracked separately per profile or account.
 
 - #### `EnableRateUp(_featured_entries, _rate_up_mult = 1.5, _hard_at = undefined, _reset_on_any_hit = false, _scope_context_key = undefined)`
 	- **Arguments:**
@@ -360,7 +360,7 @@ All mutating methods return `Struct.FateTable` for chaining unless noted.
 		- `_reset_on_any_hit` `Bool`
 		- `_scope_context_key` `String|Undefined`
 	- **Returns:** `Struct.FateTable`
-	- **Additional Notes:** Rate-up is useful for featured banners where a subset of targets should appear more often. A hard threshold can be used when featured fairness must be guaranteed.
+	- **Additional Notes:** Rate-up is useful for featured banners where a subset of targets should appear more often. Featured miss counters advance once per selected slot. A hard threshold can be used when featured fairness must be guaranteed.
 
 - #### `EnableDuplicateProtection(_window = 1, _mode = "penalize", _penalty_mult = 0.25, _key_mode = "entry_id", _intra_roll_unique = true)`
 	- **Arguments:**
@@ -380,7 +380,7 @@ All mutating methods return `Struct.FateTable` for chaining unless noted.
 		- `_soft_mult` `Real`
 		- `_allow_bypass_filters` `Bool`
 	- **Returns:** `Struct.FateTable`
-	- **Additional Notes:** Batch guarantee enforces minimum target hits across a multi-roll size. This is useful for ten-pull style promises and other package fairness rules.
+	- **Additional Notes:** Batch guarantee enforces minimum target hits across a multi-roll size. It remains batch-scoped, but hard forcing is based on the remaining slots inside the batch. This is useful for ten-pull style promises and other package fairness rules.
 
 - #### `EnableTenPullGuarantee(_target_entries, _min_count = 1, _soft_mult = 1, _allow_bypass_filters = true, _roll_count = 10)`
 	- **Arguments:**
@@ -400,7 +400,7 @@ All mutating methods return `Struct.FateTable` for chaining unless noted.
 		- `_pity_soft_start` `Real`
 		- `_rate_up_mult` `Real`
 	- **Returns:** `Struct.FateTable`
-	- **Additional Notes:** This helper installs a practical baseline policy set quickly. It is a good starting point before tuning individual policy constructors.
+	- **Additional Notes:** This helper installs a practical baseline policy set quickly. Its pity and featured behavior advances once per selected slot, so a multi-pull progresses like the same number of single pulls. It is a good starting point before tuning individual policy constructors.
 
 ### Roll/query surface
 
