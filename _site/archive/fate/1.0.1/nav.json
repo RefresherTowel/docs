@@ -1,0 +1,30 @@
+{
+  "library": "fate",
+  "version": "1.0.1",
+  "items": [
+    {
+      "title": "Getting Started",
+      "path": "getting-started.html"
+    },
+    {
+      "title": "Beginner Workflow",
+      "path": "beginner-workflow.html"
+    },
+    {
+      "title": "Advanced Workflow",
+      "path": "advanced-workflow.html"
+    },
+    {
+      "title": "Policies Guide",
+      "path": "policies.html"
+    },
+    {
+      "title": "Simulation Testing",
+      "path": "simulation-testing.html"
+    },
+    {
+      "title": "Scripting Reference",
+      "path": "api-reference.html"
+    }
+  ]
+}

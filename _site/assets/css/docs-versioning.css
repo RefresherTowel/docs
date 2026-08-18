@@ -1,0 +1,36 @@
+.docs-version-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0.75rem;
+  white-space: nowrap;
+  font-size: 0.78rem;
+}
+
+.docs-version-picker label {
+  color: inherit;
+  opacity: 0.7;
+}
+
+.docs-version-picker select {
+  min-width: 7.25rem;
+  padding: 0.32rem 1.8rem 0.32rem 0.55rem;
+  color: inherit;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.docs-version-picker select:hover,
+.docs-version-picker select:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+  outline: none;
+}
+
+@media (max-width: 66rem) {
+  .docs-version-picker {
+    margin: 0.4rem 0;
+  }
+}

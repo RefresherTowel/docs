@@ -1,0 +1,26 @@
+{
+  "library": "catalyst",
+  "version": "1.1.0",
+  "items": [
+    {
+      "title": "Quickstart",
+      "path": "quickstart.html"
+    },
+    {
+      "title": "Advanced Topics",
+      "path": "advanced.html"
+    },
+    {
+      "title": "Scripting Reference",
+      "path": "reference.html"
+    },
+    {
+      "title": "Patterns & Recipes",
+      "path": "patterns.html"
+    },
+    {
+      "title": "Using Catalyst with Other Frameworks",
+      "path": "integration.html"
+    }
+  ]
+}

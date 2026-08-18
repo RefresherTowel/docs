@@ -1,0 +1,22 @@
+{
+  "library": "statement",
+  "version": "1.3.7",
+  "items": [
+    {
+      "title": "Scripting Reference",
+      "path": "scripting.html"
+    },
+    {
+      "title": "Usage & Examples",
+      "path": "usage.html"
+    },
+    {
+      "title": "Statement Lens (Visual Debugger Guide)",
+      "path": "visual_debugger_guide.html"
+    },
+    {
+      "title": "Using Statement with Other Frameworks",
+      "path": "integration.html"
+    }
+  ]
+}

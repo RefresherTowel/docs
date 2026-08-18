@@ -1,0 +1,51 @@
+{
+  "catalyst": {
+    "name": "Catalyst",
+    "current_root": "/catalyst/",
+    "versions": [
+      { "id": "1.1.0", "label": "v1.1.0", "root": "/archive/catalyst/1.1.0/" }
+    ]
+  },
+  "echo": {
+    "name": "Echo",
+    "current_root": "/echo/",
+    "versions": [
+      { "id": "2.3.1", "label": "v2.3.1", "root": "/archive/echo/2.3.1/" }
+    ]
+  },
+  "pulse": {
+    "name": "Pulse",
+    "current_root": "/pulse/",
+    "versions": [
+      { "id": "2.0.0", "label": "v2.0.0", "root": "/archive/pulse/2.0.0/" }
+    ]
+  },
+  "statement": {
+    "name": "Statement",
+    "current_root": "/statement/",
+    "versions": [
+      { "id": "1.3.7", "label": "v1.3.7", "root": "/archive/statement/1.3.7/" }
+    ]
+  },
+  "whisper": {
+    "name": "Whisper",
+    "current_root": "/whisper/",
+    "versions": [
+      { "id": "1.0.5", "label": "v1.0.5", "root": "/archive/whisper/1.0.5/" }
+    ]
+  },
+  "fate": {
+    "name": "Fate",
+    "current_root": "/fate/",
+    "versions": [
+      { "id": "1.0.1", "label": "v1.0.1", "root": "/archive/fate/1.0.1/" }
+    ]
+  },
+  "quill": {
+    "name": "Quill",
+    "current_root": "/quill/",
+    "versions": [
+      { "id": "1.0.3", "label": "v1.0.3", "root": "/archive/quill/1.0.3/" }
+    ]
+  }
+}

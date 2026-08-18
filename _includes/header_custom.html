@@ -1,0 +1,32 @@
+{% assign path_parts = page.url | split: '/' %}
+{% assign library_id = nil %}
+{% assign active_version = 'current' %}
+
+{% if path_parts[1] == 'archive' %}
+  {% assign library_id = path_parts[2] %}
+  {% assign active_version = path_parts[3] %}
+{% else %}
+  {% assign library_id = path_parts[1] %}
+{% endif %}
+
+{% assign version_data = site.data.doc_versions[library_id] %}
+{% if version_data %}
+  {% assign active_root = version_data.current_root | relative_url %}
+  {% if active_version != 'current' %}
+    {% for item in version_data.versions %}
+      {% if item.id == active_version %}
+        {% assign active_root = item.root | relative_url %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  <div class="docs-version-picker" data-active-root="{{ active_root }}" data-current-root="{{ version_data.current_root | relative_url }}" data-active-version="{{ active_version }}">
+    <label for="docs-version-select">{{ version_data.name }} docs</label>
+    <select id="docs-version-select" aria-label="Choose documentation version">
+      <option value="{{ version_data.current_root | relative_url }}"{% if active_version == 'current' %} selected{% endif %}>Current</option>
+      {% for item in version_data.versions %}
+        <option value="{{ item.root | relative_url }}"{% if item.id == active_version %} selected{% endif %}>{{ item.label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+{% endif %}
