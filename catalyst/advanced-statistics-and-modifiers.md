@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Advanced Statistics & Modifiers
-parent: Catalyst
+parent: Catalyst 2
 nav_order: 7
 redirect_from:
   - /catalyst/advanced.html

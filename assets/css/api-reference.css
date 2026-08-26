@@ -1,0 +1,188 @@
+/* API reference prototype styling.
+   Loaded directly from head_custom.html so it does not depend on the theme's Sass pipeline. */
+
+/* -------------------------------------------------------------------------- */
+/* Type and method summary                                                    */
+/* -------------------------------------------------------------------------- */
+
+.main-content .api-type-title {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.main-content .api-methods code,
+.main-content .sticky-toc code {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+}
+
+.main-content .api-methods a {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.main-content .api-methods a:hover {
+  text-decoration: underline;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Individual methods                                                         */
+/* -------------------------------------------------------------------------- */
+
+.main-content .api-method-entry {
+  margin-top: 2.4rem;
+  padding-top: 1.8rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.main-content .api-method-name {
+  margin: 0 0 0.4rem;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 1.18rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+}
+
+.main-content .api-method-summary {
+  margin: 0 0 1.5rem;
+  line-height: 1.55;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Arguments / Returns / Example                                              */
+/* -------------------------------------------------------------------------- */
+
+.main-content .api-detail-section {
+  margin-top: 1.45rem;
+}
+
+.main-content .api-detail-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.main-content .api-detail-heading::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.11);
+}
+
+/* Each argument is a small definition row, not a table. */
+.main-content .api-argument {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.65fr) minmax(0, 1.35fr);
+  grid-template-areas:
+    "name type"
+    ". description";
+  column-gap: 1.25rem;
+  row-gap: 0.28rem;
+  padding: 0.2rem 0 0.9rem;
+}
+
+.main-content .api-argument + .api-argument {
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.065);
+}
+
+.main-content .api-argument-topline {
+  display: contents;
+}
+
+.main-content .api-argument-name {
+  grid-area: name;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-weight: 600;
+}
+
+.main-content .api-argument-type {
+  grid-area: type;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.main-content .api-argument-description {
+  grid-area: description;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.main-content .api-optional {
+  margin-left: 0.45rem;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-style: italic;
+  font-weight: 400;
+  opacity: 0.55;
+}
+
+/* Returns use the same visual language, but the type gets its own line so
+   longer return types never crash into the explanation. */
+.main-content .api-return-row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.65fr) minmax(0, 1.35fr);
+  column-gap: 1.25rem;
+  align-items: baseline;
+  padding: 0.2rem 0 0.35rem;
+}
+
+.main-content .api-return-type {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.main-content .api-return-description {
+  min-width: 0;
+  line-height: 1.5;
+}
+
+/* Full examples keep the strong code-block treatment. */
+.main-content pre.api-example {
+  margin: 0;
+  padding: 0.95rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: #0e0e11;
+  overflow: auto;
+}
+
+.main-content pre.api-example code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+@media (max-width: 700px) {
+  .main-content .api-argument {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "name"
+      "type"
+      "description";
+    row-gap: 0.18rem;
+  }
+
+  .main-content .api-return-row {
+    grid-template-columns: 1fr;
+    row-gap: 0.25rem;
+  }
+}

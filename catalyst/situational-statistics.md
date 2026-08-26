@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Situational Statistics
-parent: Catalyst
+parent: Catalyst 2
 nav_order: 3
 ---
 

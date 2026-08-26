@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Catalyst
+title: Catalyst 2
 nav_order: 4
 has_children: true
 redirect_from:

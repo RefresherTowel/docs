@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Resource Flows
-parent: Catalyst
+parent: Catalyst 2
 nav_order: 4
 ---
 

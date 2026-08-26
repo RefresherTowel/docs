@@ -1,3 +1,6 @@
-<script src="{{ '/assets/js/toc-scrollspy.js' | relative_url }}" defer></script>
+{% if page.api_reference %}
+<link rel="stylesheet" href="{{ '/assets/css/api-reference.css' | relative_url }}?v=3">
+{% endif %}
 <link rel="stylesheet" href="{{ '/assets/css/docs-versioning.css' | relative_url }}">
+<script src="{{ '/assets/js/toc-scrollspy.js' | relative_url }}" defer></script>
 <script src="{{ '/assets/js/docs-versioning.js' | relative_url }}" defer></script>

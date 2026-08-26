@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Sets & Previews
-parent: Catalyst
+parent: Catalyst 2
 nav_order: 6
 ---
 

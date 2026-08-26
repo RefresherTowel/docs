@@ -4,30 +4,32 @@ title: Home
 nav_order: 1
 ---
 
-[![Framework icon](./assets/framework_bundle_icon.png){: style="width: 416px;" }]()
+[![Libraries icon](./assets/full_suite_pass_icon.png){: style="width: 416px;" }]()
 {: .text-center }
-# Frameworks
+# RTG Libraries
 {: .text-center}
 *All you need in one bundle!*
 {: .text-center}
 
-Welcome to the hub for all documentation related to the GameMaker focused frameworks created by RefresherTowel Games.
+Welcome to the hub for all documentation related to the GameMaker focused libraries created by RefresherTowel Games.
 
-Each framework is built to solve a specific pain point, with a clean API, full Feather support, and detailed docs.
+Each library is built to solve a specific pain point, with a clean API, full Feather support, and detailed docs.
 
 ---
 
 - **Statement** decides what the game is doing.
 - **Pulse** describes what just happened to anything listening.
-- **Catalyst** deals with the numbers in your game, health, stats, buffs, etc.
+- **Catalyst 2** makes the numbers in your game, like health, stats, buffs, fun.
 - **Whisper** tells your game when it should show what dialogue, so it can feel reactive and alive.
 - **Echo** tells you, in plain text, what all of the above actually did.
+- **Quill** lets your players enter text in-game quickly and easily.
+- **Fate** decides how your game plays out, with weighted random chance.
 
 ---
 
-[![Statement icon](./assets/statement_icon.png){: style="max-width: 256px;"}](/docs/statement/)
+[![Statement icon](./assets/statement_icon.png){: style="max-width: 256px;"}](/statement/)
 {: .text-center }
-## [**STATEMENT**](/docs/statement/)
+## [**STATEMENT**](/statement/)
 {: .text-center }
 > #### *Turn your states into a Statement!*
 
@@ -36,41 +38,41 @@ Sick of juggling `if` chains, tangled transitions, and forgetting where the spec
 **Statement** is a clean, powerful state machine library for GameMaker that makes your game logic *not suck*. It gives each object (or struct!) its own brain, with clearly named states that handle `Enter`, `Update`, `Exit`, and optional `Draw` logic, all in one tidy place.
 
 * **Built-in visual debugger:** Statement Lens lets you *see* your state machines live in-game...Inspect flow, watch transitions, set breakpoints, step frame by frame, even drive them manually. It’s wild.
-* **Simple to start:** one machine, a few named states, one `Update()` call in Step. That's it.
+* **Simple to start:** one machine, a few named states, one `Update()` call in Step is all you need.
 * **Scales when you need it:** opt into advanced features like queued transitions, state stacks, history, transition payloads, per-state timers, and non-interruptible states.
 * **Debug-friendly by design:** full API introspection, transition history, heatmaps, and logging (via the included Echo debug console).
 * **Works with structs or instances**, so it plays nice with all your systems.
 
 Use it for players, AI, UI, abilities, cutscenes. Anywhere things need to behave like... well, states.
 
-Statement handles the boilerplate so you can focus on the behavior.
-It’s the state machine library I wanted, so I built it for everyone.
+I built out Statement for it to handle the annoying state machine boilerplate so you can simply focus on the behavior you want.
+
 
 
 <iframe frameborder="0" src="https://itch.io/embed/4088827?linkback=true&amp;border_width=2&amp;bg_color=132f4b&amp;fg_color=ffffff&amp;link_color=007992&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/statement">Statement by RefresherTowel</a></iframe>
 
-##### [**EXPLORE THE STATEMENT DOCS**](/docs/statement/)
+##### [**EXPLORE THE STATEMENT DOCS**](/statement/)
 {: .text-center }
 
 ---
 
-[![Pulse icon](./assets/pulse_icon.png){: style="max-width: 256px;"}](/docs/pulse/)
+[![Pulse icon](./assets/pulse_icon.png){: style="max-width: 256px;"}](/pulse/)
 {: .text-center }
-## [**PULSE**](/docs/pulse/)
+## [**PULSE**](/pulse/)
 {: .text-center }
 > #### *The beating heart of your game*
 
-Want your damage event to update the health bar, play a sound, spawn some particles, and poke the AI... without wiring a dozen scripts / instances together by hand?
+Want your damage event to update the health bar, play a sound, spawn some particles, and poke the AI... without wiring a dozen fragile instance references together by hand?
 
 **Pulse** is a signals / events layer for GameMaker that lets your game shout "something happened" and anything that cares to can listen in and react.
 
-For small projects, it's dead simple:
+For small projects, it's simple and easy to use:
 
 * Subscribe once and stop passing instance ids all over your code.
 * Fire a signal and let UI, audio, VFX, and gameplay all react in their own space.
-* Keep things decoupled so you can swap or remove systems without a "squash all the bugs caused by coupling" session.
+* Keep things decoupled so you can swap or remove systems without a "squash all the bugs caused by coupling" accompanying session.
 
-For bigger, messier projects, Pulse quietly scales up with you:
+For bigger, messier projects, Pulse scales up with you:
 
 * Priorities and consumable signals so the right listener wins and can cancel the rest.
 * Optional queued dispatch so you can post events now and flush them at a safe time later.
@@ -84,35 +86,35 @@ If you want your whole project to sit on a clean, debuggable event layer, Pulse 
 
 <iframe frameborder="0" src="https://itch.io/embed/4116520?linkback=true&amp;border_width=2&amp;bg_color=370028&amp;fg_color=ffffff&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/pulse">Pulse by RefresherTowel</a></iframe>
 
-##### [**EXPLORE THE PULSE DOCS**](/docs/pulse/)
+##### [**EXPLORE THE PULSE DOCS**](/pulse/)
 {: .text-center }
 
 ---
 
-[![Catalyst icon](./assets/catalyst_icon.png){: style="max-width: 256px;"}](/docs/catalyst/)
+[![Catalyst icon](./assets/catalyst_icon.png){: style="max-width: 256px;"}](/catalyst/)
 {: .text-center }
-## [**CATALYST**](/docs/catalyst/)
+## [**CATALYST 2**](/catalyst/)
 {: .text-center }
 > #### *Turn raw numbers into reactions*
 
-Struggling to keep your stats, buffs, and item effects under control as your game grows?
+Are your stats boring? Do they just sit around doing nothing? Well in that case **Catalyst 2** is the library you want!
 
-**Catalyst** is a feature rich yet easy to use stats and modifiers framework for GameMaker. It treats stats as living systems instead of isolated numbers.
+**Catalyst 2** is a feature rich yet easy to use stats, resources and effects framework for GameMaker. It treats numbers in your game as living systems instead of isolated digits.
 
 - Handle health, damage, stats, resistances, buffs, debuffs, item bonuses, and more in one consistent way.
 - Stack and combine effects without writing a new special case every time.
 - Built for weird ideas: context aware modifiers, derived stats, and complex interactions without tearing up your code.
 
-<iframe frameborder="0" src="https://itch.io/embed/4164612?linkback=true&amp;border_width=2&amp;bg_color=450074&amp;fg_color=ffffff&amp;link_color=9080ff&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/catalyst">Catalyst (GameMaker Moddable Stats) by RefresherTowel</a></iframe>
+<iframe frameborder="0" src="https://itch.io/embed/4164612?linkback=true&amp;border_width=2&amp;bg_color=450074&amp;fg_color=ffffff&amp;link_color=9080ff&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/catalyst">Catalyst 2 (GameMaker Moddable Stats) by RefresherTowel</a></iframe>
 
-##### [**EXPLORE THE CATALYST DOCS**](/docs/catalyst/)
+##### [**EXPLORE THE CATALYST DOCS**](/catalyst/)
 {: .text-center }
 
 ---
 
-[![Quill icon](./assets/quill_icon.png){: style="max-width: 256px;"}](/docs/quill/)
+[![Quill icon](./assets/quill_icon.png){: style="max-width: 256px;"}](/quill/)
 {: .text-center }
-## [**QUILL**](/docs/quill/)
+## [**QUILL**](/quill/)
 {: .text-center }
 > #### *Let your players write with ease*
 
@@ -120,14 +122,14 @@ Quill is an advanced text input library, designed to let you quickly and easily 
 
 <iframe frameborder="0" src="https://itch.io/embed/4281829?linkback=true&amp;border_width=2&amp;bg_color=502700&amp;fg_color=ffffff&amp;link_color=ffcb49&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/quill">Quill (GameMaker Text Boxes) by RefresherTowel</a></iframe>
 
-##### [**EXPLORE THE QUILL DOCS**](/docs/quill/)
+##### [**EXPLORE THE QUILL DOCS**](/quill/)
 {: .text-center }
 
 ---
 
-[![Whisper icon](./assets/whisper_icon.png){: style="max-width: 256px;"}](/docs/whisper/)
+[![Whisper icon](./assets/whisper_icon.png){: style="max-width: 256px;"}](/whisper/)
 {: .text-center }
-## [**WHISPER**](/docs/whisper/)
+## [**WHISPER**](/whisper/)
 {: .text-center }
 > #### *Make your narrative scream with Whisper!*
 
@@ -139,14 +141,14 @@ Whisper is a narrative manager built around the concept of "storylets". In essen
 
 <iframe frameborder="0" src="https://itch.io/embed/4234087?linkback=true&amp;border_width=2&amp;bg_color=004140&amp;fg_color=ffffff&amp;link_color=5bfae2&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/whisper">Whisper (GameMaker Narrative Director) by RefresherTowel</a></iframe>
 
-##### [**EXPLORE THE WHISPER DOCS**](/docs/whisper/)
+##### [**EXPLORE THE WHISPER DOCS**](/whisper/)
 {: .text-center }
 
 ---
 
-[![Echo icon](./assets/echo_icon.png){: style="max-width: 256px;"}](/docs/echo/)
+[![Echo icon](./assets/echo_icon.png){: style="max-width: 256px;"}](/echo/)
 {: .text-center }
-## [**ECHO**](/docs/echo/)
+## [**ECHO**](/echo/)
 {: .text-center }
 > #### *Hear what your game is telling you*
 
@@ -162,5 +164,5 @@ Echo ships free with all available frameworks and integrates cleanly with their 
 
 <iframe frameborder="0" src="https://itch.io/embed/4089088?border_width=2&amp;bg_color=1d471e&amp;fg_color=ffffff&amp;link_color=109200&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/echo">Echo by RefresherTowel</a></iframe>
 
-##### [**EXPLORE THE ECHO DOCS**](/docs/echo/)
+##### [**EXPLORE THE ECHO DOCS**](/echo/)
 {: .text-center }

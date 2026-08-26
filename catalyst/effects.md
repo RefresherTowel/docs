@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Effects
-parent: Catalyst
+parent: Catalyst 2
 nav_order: 5
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: "default"
 title: "API Reference"
-parent: "Catalyst"
+parent: "Catalyst 2"
 nav_order: 10
 library_id: "catalyst"
 doc_version: "current"

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Patterns and recipes
-parent: Catalyst
+parent: Catalyst 2
 nav_order: 9
 redirect_from:
   - /catalyst/patterns.html
@@ -591,5 +591,5 @@ These recipes use different Catalyst pieces because the underlying game behaviou
 - If several related Catalyst values form **one gameplay model**, coordinate them with a `CatalystSet`.
 - If several Modifiers form **one reusable package** for previewing or applying, put them in a `CatalystModifierSet`.
 
-Those aren't rigid genre rules. A population count and an ammunition magazine can both be Resources, immigration and shield regeneration can both be Flows, and a city blackout and a poisoned character can both be Effects. Catalyst cares about the behaviour of the number, not what genre the game belongs to.
+Try not to think in rigid genre rules. A population count and an ammunition magazine can both be Resources, immigration and shield regeneration can both be Flows, and a city blackout and a poisoned character can both be Effects. Catalyst cares about the behaviour of the number, not what genre the game belongs to.
 
