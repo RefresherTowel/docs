@@ -1,0 +1,64 @@
+# Shared data for the footer included at the bottom of each CURRENT library index.
+#
+# IMPORTANT:
+# - Fill in the blank Discord invite URLs before using the footer on those libraries.
+# - Each Discord invite should point to that library's specific Discord channel.
+# - Keep this file as the single source of truth for support links and the
+#   "Other Cool Stuff" descriptions shown across the current docs.
+
+statement:
+  name: Statement
+  github: https://github.com/RefresherTowel/Statement
+  discord: https://discord.gg/8spFZdyvkb
+  itch: https://refreshertowel.itch.io/statement
+  icon: /assets/statement_icon.png
+  description: An easy-to-use state manager with a wide range of tools for structuring game state.
+  requirements_note: Statement also ships with the Echo scripts it uses for logging and diagnostics. Statement Lens additionally uses the bundled Echo Chamber UI.
+
+pulse:
+  name: Pulse
+  github: https://github.com/RefresherTowel/Pulse
+  discord: https://discord.gg/acAqBcYHgV
+  itch: https://refreshertowel.itch.io/pulse
+  icon: /assets/pulse_icon.png
+  description: A signals and queries manager that helps uncouple dependencies and simplify communication between your game systems.
+
+catalyst:
+  name: Catalyst
+  github: https://github.com/RefresherTowel/Catalyst
+  discord: "https://discord.gg/qx6GtfVWJR"
+  itch: https://refreshertowel.itch.io/catalyst
+  icon: /assets/catalyst_icon.png
+  description: A powerful stat manager for building values such as attack power, movement speed, health, or anything else that needs to be modified and recalculated as the game changes.
+
+whisper:
+  name: Whisper
+  github: https://github.com/RefresherTowel/Whisper
+  discord: "https://discord.gg/E6APnx7fB5"
+  itch: https://refreshertowel.itch.io/whisper
+  icon: /assets/whisper_icon.png
+  description: A narrative manager for building reactive storytelling from small pieces of authored content and the rules that decide when each piece is relevant.
+
+fate:
+  name: Fate
+  github: https://github.com/RefresherTowel/Fate
+  discord: "https://discord.gg/tafsfNAzWm"
+  itch: https://refreshertowel.itch.io/fate
+  icon: /assets/fate_icon.png
+  description: A weighted roll library for building everything from simple random choices to nested, policy-driven reward and selection systems.
+
+quill:
+  name: Quill
+  github: https://github.com/RefresherTowel/Quill
+  discord: "https://discord.gg/QJQ4cRHPx9"
+  itch: https://refreshertowel.itch.io/quill
+  icon: /assets/quill_icon.png
+  description: A free advanced text box system with text selection, right-click context menus, cut/copy/paste, single-line and multi-line editing, and extensive customisation.
+
+echo:
+  name: Echo / Echo Chamber
+  github: https://github.com/RefresherTowel/Echo
+  discord: "https://discord.gg/w5NWDBwNta"
+  itch: https://refreshertowel.itch.io/echo
+  icon: /assets/echo_icon.png
+  description: A debug manager with a fully featured debug UI builder for creating your own in-game development tools.

@@ -1,8 +1,11 @@
 ---
 layout: default
-title: Catalyst          # children will use this as `parent:`
-nav_order: 4              # order among top-level items
-has_children: true        # marks this as a section (still supported)
+title: Catalyst
+nav_order: 4
+has_children: true
+redirect_from:
+  - /catalyst/quickstart.html
+  - /catalyst/integration.html
 ---
 
 <div class="sticky-toc" markdown="block">
@@ -19,187 +22,106 @@ has_children: true        # marks this as a section (still supported)
 ![Catalyst icon](../assets/catalyst_icon.png)
 {: .text-center}
 
-*Make your stats react*
+*Make your game numbers react*
 {: .text-center}
 
-**Catalyst** is a flexible statistics and modifier engine for GameMaker.
+**Catalyst 2** is the new version of Catalyst. It now manages statistics, resources and effects for your gameplay! 
 
-It sits between your *base stats* and all the gear, augments, buffs, auras, and debuffs in your game and gives you a clean, predictable way to get the final value.
+What are statistics and resources?
 
-Catalyst is part of the **RefresherTowel Games** suite of reusable frameworks for GameMaker.
+Things like damage, armour, movement speed, health, mana, and stamina: numbers that often start as plain and simple values, then become harder and harder to manage as your game starts to demand more from them (things like multiple modifiers that can be added or removed, or groups of statistic affecting things like damage over time effects, or other frequently encountered game design scenarios like that).
 
-Think of Catalyst as:
+At the centre of Catalyst are five numerical building blocks:
 
-> A tiny math-reactor that takes a base value, runs it through layered modifiers,
-> conditions, stacks, and soft caps, and hands you back the result.
+- A **Statistic** calculates a value such as damage, armour, movement speed, or maximum health.
+- A **Modifier** represents one thing currently changing a Statistic, such as a weapon bonus, curse, upgrade, or temporary buff.
+- A **Resource** stores a current amount inside a range, such as HP, mana, stamina, ammunition, or charge.
+- A **Resource Flow** makes resources dynamically reactive, such as HP regen, poison effects, power consumption, etc.
+- An **Effect** bundles everything together into one coherent package, with a defined lifetime and grouped behaviour.
 
-Catalyst is designed to be:
+They all work together. Statistics calculate the numbers your rules need, Modifiers describe where changes to those numbers come from, Resources hold the values that get spent and restored during play, Resource Flows tell Resources how to behave and Effects make full gameplay behaviours, like a timed poison or ammo recharge, easy to deal with.
 
-- **Game-focused** - built for typical action / roguelike / RPG stat needs.
-- **Composable** - layers, families, tags, sources and context let you express complex rules cleanly.
-- **Safe to query** - supports previews and context-based evaluation without mutating state.
-- **Engine-agnostic inside GameMaker** - works with structs and methods, no object-type assumptions.
+I encourage you not to pigeon-hole these concepts into "RPG". A platformer can use them for things like jump height increases, or running speed increases, a city builder can use them for things like population and population growth, a roguelike can use them for augments or long term character growth, and so on. Anytime a game reaches for a number, there's a chance that Catalyst can make it flexible and exciting.
+
+You don't need to do a lot of boilerplate setup to get Catalyst working, it's designed to be simple to use for beginners and extremely flexible for whatever advanced situations your game design requires.
+
+>Catalyst is part of the **RefresherTowel Games** suite of libraries for GameMaker.
+{: .note}
 
 ---
 
-## Core concepts
+## Your first Catalyst setup
 
-Catalyst has three main building blocks:
+Suppose the player starts with 10 damage and an enemy starts with 100 HP, let's see how we would set that up:
 
-### 1. `CatalystStatistic` (the stat)
-
-A `CatalystStatistic` represents a single numeric stat: damage, cooldown, max HP,
-move speed, crit chance, armor, etc.
-
-It knows about:
-
-#### Core
-
-- `base_value` - your starting value.
-- `min_value` / `max_value` - optional clamping bounds.
-- `rounded` - whether to round to integer when returning values.
-- Attached `CatalystModifier` instances that change the value.
-
-You ask a stat for its value via:
-
+**Players Create Event**
 ```js
-// canonical, cached value
-var dmg = stats.damage.GetValue();
-
-// situational value for a specific context
-var dmg_hit = stats.damage.GetValue(hit_ctx);
+damage = new CatalystStatistic(10);
 ```
 
-#### Advanced
-
-- **Layers** - the order in which groups of modifiers apply
-  (`eCatStatLayer.BASE_BONUS`, `EQUIPMENT`, `AUGMENTS`, `TEMP`, `GLOBAL`).
-- **Derived base** - `base_func(stat, context)` to compute the base from other stats
-  (for example, max HP from vitality and level).
-- **Post-processing** - `post_process(stat, raw_value, context)` for soft caps and curves.
-- **Tags** - labels on the stat itself for grouping and rules.
-- **On-change callbacks** - functions invoked when the cached value changes.
-- **Context-aware evaluation** - every condition / stack / base / post function can
-  receive an optional `_context` you pass into `GetValue(context)`.
-
----
-
-### 2. `CatalystModifier` (the change)
-
-A `CatalystModifier` describes *how* to change a stat.
-
-#### Core
-
-- **Amount** - `value`, the number you add or multiply with.
-- **Operation** - one of `eCatMathOps.ADD`, `eCatMathOps.MULTIPLY`,
-  `eCatMathOps.FORCE_MIN`, or `eCatMathOps.FORCE_MAX`.
-- **Duration** - optional lifetime in your chosen countdown units (ticks/steps by default), managed by the global `CatalystModifierTracker`.
-
-#### Advanced
-
-- **Layer** - where in the pipeline it applies (`eCatStatLayer.BASE_BONUS`, `EQUIPMENT`,
-  `AUGMENTS`, `TEMP`, `GLOBAL`).
-- **Stacks** - `stacks` and `max_stacks` control how many times it applies
-  (default `max_stacks` is `infinity`).
-- **Condition** - `condition(stat, context)` decides whether it applies at all.
-- **Context-driven stacks** - `stack_func(stat, context)` computes effective stacks
-  from the current situation.
-- **Families** - `family` and `family_mode` (`STACK_ALL`, `HIGHEST`, `LOWEST`)
-  control how modifiers of the same "kind" combine.
-- **Tags** - labels like `"buff"`, `"debuff"`, `"fire"`, `"movement"` used for querying
-  and bulk remove / find.
-- **Sources** - three separate ways to track where a modifier came from:
-  - `source_label` - human-readable label (for example `"Bronze Wand"`).
-  - `source_id` - handle (instance, owner struct, inventory item, etc.).
-  - `source_meta` - arbitrary metadata (often a struct) for custom logic.
-  The stat API includes helpers to find / test / remove modifiers by any of these.
-- **Previews** - the stat can simulate modifiers as if they were applied,
-  without actually attaching them, via `PreviewChange` and `PreviewChanges`.
-
-Modifiers are attached to a `CatalystStatistic`:
-
+**Enemies Create Event**
 ```js
-var damage = new CatalystStatistic(10).SetName("Damage");
-
-var wand_bonus = new CatalystModifier(5, eCatMathOps.ADD)
-    .SetLayer(eCatStatLayer.EQUIPMENT)
-    .SetSourceLabel("Bronze Wand")
-    .AddTag("wand");
-
-damage.AddModifier(wand_bonus);
+hp = new CatalystResource(100);
 ```
 
----
-
-### 3. `CatalystModifierTracker` (the timer)
-
-`CatalystModifierTracker` is a small helper that tracks duration-based modifiers
-and counts them down.
-
-Catalyst ships with one global tracker instance:
-
-- `global.__catalyst_modifier_tracker` - created for you at startup.
-- The macro `CATALYST_COUNTDOWN` points at this instance.
-- Timed `CatalystModifier` instances register with it automatically
-  when their `duration` is greater than 0.
-
-You tick it in whatever time-step makes sense for your game loop:
+Now suppose the player equips a sword that adds 5 damage:
 
 ```js
-// e.g. fixed tick loop (turn / wave / second / step):
-CatalystModCountdown();
-
-// e.g. fractional loop (pass your own delta step size):
-CatalystModCountdown(_dt_seconds);
+sword_bonus = new CatalystModifier(5, eCatMathOps.ADD);
+damage.AddModifier(sword_bonus);
 ```
 
-Any modifiers whose `duration` reaches 0 are removed from both the tracker
-and their owning `CatalystStatistic`.
+When the player attacks, ask the Statistic for the damage it currently calculates, then use that result to change the enemy's HP Resource:
+
+```js
+var _damage = damage.GetValue(); // 15
+_enemy.hp.Decrease(_damage);
+
+var _remaining_hp = _enemy.hp.GetCurrent(); // 85
+```
+
+You can see that setup and use is quite simple.
+
+If the sword is unequipped, remove its Modifier:
+
+```js
+damage.DestroyModifier(sword_bonus);
+
+var _damage = damage.GetValue(); // 10
+```
+
+This is obviously a quite simple scenario, but you can already see how easy Catalyst makes this kind of thing. Normally, there would be a lot of boilerplate you would have to write to allow this kind of thing, and you'd often need to rewrite and rewrite the system as you figure out new things you might want to do with your game.
+
+Catalyst takes care of all of that for you.
+
+You don't have to keep track of any `base_damage` values, or worry about whether you've permanently changed damage and can't remove the sword modifier, and you can add or remove as many modifiers as you like, while always having the end result be mathematically accurate.
 
 ---
 
-## Features at a glance
+## Effects tie related changes together
 
-### Core features
+As game rules become more involved, several Catalyst pieces may belong to one "gameplay state" (an "effect" in other words).
 
-- Simple numeric stats via `CatalystStatistic`.
-- Flat and multiplicative modifiers via `CatalystModifier`
-  (`ADD`, `MULTIPLY`, `FORCE_MIN`, `FORCE_MAX`).
-- Ordered layers so different sources of power stack predictably:
-  - `BASE_BONUS` - attributes, level scaling, ancestry.
-  - `EQUIPMENT`  - weapons, wands, gear.
-  - `AUGMENTS`   - runes, talents, gems, passive trees.
-  - `TEMP`       - short-lived buffs and debuffs.
-  - `GLOBAL`     - late-stage global effects and auras.
-- Timed modifiers with durations, tracked by a global `CatalystModifierTracker`
-  and advanced by `CatalystModCountdown(_step_size)`.
+An enemy with **burning** applied, for example, might damage HP over time, reduce a defence Statistic, last for five seconds, carry a `fire` tag that a cleanse can recognise, and needs to remove all of those changes when the burn ends.
 
-### Advanced features
+Catalyst **Effects** allow you to group related temporary changes under one simple lifetime. Instead of your burn code separately remembering the damage-over-time rule, defence penalty, timer, and cleanup, the Effect becomes the thing they belong to. When the burn ends, its related changes end with it.
 
-- Context-aware evaluation via `GetValue(context)`.
-- Stateful stacks and context-driven stacks (`stack_func(stat, context)`).
-- Conditional modifiers (`condition(stat, context)`).
-- Modifier families with stacking rules (`STACK_ALL`, `HIGHEST`, `LOWEST`).
-- Derived base values via `base_func(stat, context)`.
-- Soft caps and curves via `post_process(stat, raw_value, context)`.
-- Source-aware management:
-  - Track modifiers by `source_label`, `source_id`, or `source_meta`.
-  - Find, test, and remove modifiers based on where they came from.
-- Tags on both stats and modifiers for grouping, UI, and rule logic.
-- Safe "what-if" previews:
-  - `PreviewChange(...)` for a single hypothetical modifier.
-  - `PreviewChanges([...])` for batches of hypothetical changes.
+Later you'll also meet **Resource Flows**, which are Catalyst's way of moving Resources over time (think health regen, stamina drain, city growth, or even a plants watering meter). Effects can combine all of these to create easily composable behaviours that allow a huge amount of design expression in your games with a relatively small amount of code.
 
 ---
 
-## Typical use cases
+## What to look at next
 
-Catalyst is intended for things like:
+This documentation builds outward from those core pieces as new problems appear and teaches you how to use Catalyst from the ground up.
 
-- Damage calculation with gear, runes, augments, and elemental modifiers.
-- Movement speed modified by buffs, debuffs, and environment.
-- Cooldowns that shrink with combo stacks.
-- HP, armor, and resistance systems with diminishing returns.
-- "Highest-of-kind" auras where only the strongest effect applies.
-- Mouseover previews when hovering items: `20 -> 28 damage`.
+Start with **[Statistics & Modifiers](statistics-and-modifiers)** to learn how calculated values change through equipment, buffs, debuffs, stacking, layers, limits, and rounding.
 
+Then move to **[Resources](resources)** for values with a current amount that gets spent and restored. Once Statistics and Resources are familiar, **[Situational Statistics](situational-statistics)** shows how calculated values can react to ongoing game state or to one particular question, including publishing Resource state into Oracle facts.
+
+**[Resource Flows](resource-flows)** combine both ideas: a Flow changes a Resource over time, while the Flow's rate is itself a Statistic that can use Modifiers and situational rules.
+
+**[Effects](effects)** bring those pieces together into gameplay states with shared duration and cleanup. The later guides cover Sets and previews, advanced Statistic rules, saving and loading, and complete gameplay patterns.
+
+---
+
+{% include library-footer.html %}

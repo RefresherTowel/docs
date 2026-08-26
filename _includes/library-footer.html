@@ -1,0 +1,83 @@
+{% comment %}
+Shared footer for live/current library index pages.
+
+Usage:
+  {% include library-footer.html %}
+
+The include first uses page.docs_library (used by the versioning system). If that
+is not present, it falls back to the first directory in page.url, so the same
+one-line include works on ordinary /statement/, /fate/, etc. index pages too.
+{% endcomment %}
+
+{% assign library_key = page.docs_library %}
+{% if library_key == nil or library_key == "" %}
+  {% assign url_parts = page.url | split: "/" %}
+  {% assign library_key = url_parts[1] %}
+{% endif %}
+{% assign library = site.data.library_footer[library_key] %}
+
+{% if library %}
+<hr>
+
+<h2 id="requirements">Requirements</h2>
+
+<p>{{ library.name }} requires a GameMaker version with support for:</p>
+
+<ul>
+  <li>struct constructors;</li>
+  <li><code>method()</code>;</li>
+  <li>the array and struct functions used by the library.</li>
+</ul>
+
+{% if library.requirements_note and library.requirements_note != "" %}
+<p>{{ library.requirements_note }}</p>
+{% endif %}
+
+<hr>
+
+<h2 id="help-support">Help &amp; Support</h2>
+
+<h3 id="bug-reports-and-feature-requests">Bug reports and feature requests</h3>
+
+<p>The best place to report bugs or request features is GitHub Issues:</p>
+
+<p><a href="{{ library.github }}/issues"><strong>{{ library.name }} issues</strong></a></p>
+
+<p>If you're reporting a problem, a small reproduction or code snippet and the relevant {{ library.name }} calls usually make it much easier to track down.</p>
+
+{% if library.discord and library.discord != "" %}
+<p>If you'd rather not use GitHub, you can also post in the Discord:</p>
+
+<p><a href="{{ library.discord }}"><strong>RefresherTowel Discord</strong></a></p>
+
+<h3 id="questions-and-discussion">Questions and discussion</h3>
+
+<p>For implementation questions, examples, or general discussion:</p>
+
+<p><a href="{{ library.discord }}"><strong>RefresherTowel Discord</strong></a></p>
+{% endif %}
+
+<hr>
+
+<h2 id="other-cool-stuff">Other Cool Stuff</h2>
+
+<p>If you like {{ library.name }}, be sure to check out my other libraries:</p>
+
+{% for item in site.data.library_footer %}
+  {% assign other_key = item[0] %}
+  {% assign other = item[1] %}
+  {% unless other_key == library_key %}
+<p class="text-center">
+  <a href="{{ other.itch }}"><img src="{{ other.icon | relative_url }}" alt="{{ other.name }} icon" style="max-width: 256px;"></a>
+</p>
+
+<h3 class="text-center"><a href="{{ other.itch }}"><strong>{{ other.name }}</strong></a></h3>
+
+<p class="text-center">{{ other.description }}</p>
+
+<hr>
+  {% endunless %}
+{% endfor %}
+{% else %}
+<!-- library-footer.html: no entry found in _data/library_footer.yml for '{{ library_key }}' -->
+{% endif %}
