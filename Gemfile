@@ -1,6 +1,3 @@
 source "https://rubygems.org"
 
-gem "jekyll"
-gem "jekyll-remote-theme"
-gem "just-the-docs"
-gem "jekyll-redirect-from"
+gem "github-pages", "~> 232", group: :jekyll_plugins

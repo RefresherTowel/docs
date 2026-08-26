@@ -10,7 +10,9 @@ Then you need a buff that only lasts five seconds. Then another bonus that shoul
 
 I've been through that enough times that I got fed up and built Catalyst instead.
 
-## The basic pattern easy
+> **Existing Catalyst 1 users:** Catalyst 2 is a breaking redesign rather than a drop-in update. Check the v2 changelog before replacing Catalyst 1 in an existing project.
+
+## The basic pattern is easy
 
 ```js
 damage = new CatalystStatistic(10);
@@ -18,6 +20,7 @@ damage = new CatalystStatistic(10);
 var _damage = damage.GetValue(); // _damage holds 10
 
 sword_bonus = new CatalystModifier(5, eCatMathOps.ADD);
+
 damage.AddModifier(sword_bonus); // Add a simple modifier
 
 var _damage = damage.GetValue(); // _damage now holds 15
@@ -33,7 +36,7 @@ Catalyst 2 builds outward from that same idea into a much broader set of tools f
 
 Statistics are calculated numbers such as damage, armour, movement speed, jump height, power supply, crop yield or maximum health that you might want to modify in some way during gameplay.
 
-Modifiers represent the individual things *currently* changing those values.
+Modifiers represent the individual things **currently** changing those values.
 
 Catalyst handles:
 
@@ -60,6 +63,7 @@ Catalyst 2 introduces **Resources**: Health, mana, stamina, ammunition, populati
 
 ```js
 hp = new CatalystResource(100);
+
 hp.Decrease(20);
 
 var _hp = hp.GetCurrent(); // 80
@@ -67,7 +71,7 @@ var _hp = hp.GetCurrent(); // 80
 
 Again, a super simple starting point, but Catalyst gives you a lot of tools to make those Resources dynamic and exciting.
 
-For instance, Resource limits are themselves be driven by Statistics, so maximum health, carrying capacity, battery capacity or any similar bound can change with all the tools outlined for Statistics above.
+For instance, Resource limits can themselves be driven by Statistics, so maximum health, carrying capacity, battery capacity or any similar bound can change with all the tools outlined for Statistics above.
 
 Then **Resource Flows** enter the scene. They handle amounts that move over time:
 
@@ -104,6 +108,12 @@ Effects own Modifiers and Resource Flows, handle durations and ticking, use appl
 When the Effect ends, Catalyst cleans up everything automatically.
 
 The same system works not just for obvious things like poison, rage and stun, but also storms, blackouts, festivals, factory breakdowns, match-wide rules, temporary difficulty changes or anything else that represents one temporary state with several consequences.
+
+## Want the broader gameplay toolkit?
+
+Catalyst is also available as part of the **[Ignition Kit](https://itch.io/s/176065/ignition-kit)** alongside **Pulse** and **Statement**, with **Echo** included.
+
+If you want the entire RefresherTowel toolkit collection instead, the **[Full Suite Pass](https://refreshertowel.itch.io/full-suite-pass)** includes all current and future RefresherTowel Games tools. Its price increases as more tools are released, so earlier purchases get the largest discount over buying everything separately.
 
 ## Make rules react to the rest of the game
 
@@ -168,23 +178,18 @@ A platformer can use it for movement speed and jump upgrades. A city builder can
 
 Catalyst only cares about how the number behaves, not what genre the game belongs to.
 
-## Echo included free
+## Also included: Echo
 
 A purchase of Catalyst also includes **Echo**, my GameMaker debugging toolkit, at no additional cost.
 
 Echo provides level-based logging, tags, filtering, optional stack traces, history, file dumps and in-game debugging tools.
 
-## Bundles
-
-You can also get Catalyst as part of the **Ignition Kit**, alongside Pulse and Statement, for a discount.
-
-Or grab the **Full Suite Pass** to get access to all current and future RefresherTowel Games tools. The Full Suite Pass increases in price as more tools are released, so earlier purchases get the largest discount over buying everything separately.
-
 ## Documentation
 
-Catalyst has full online documentation written to take you from the basic Statistic and Modifier pattern through Resources, Flows, situational rules, Effects, Sets, previews, saving and loading, and complete gameplay recipes.
+Catalyst has full online documentation written to take you from zero to hero when using Catalyst. If you're on the fence, I **highly** recommend having a look through the documentation, as it will help you figure out if you like the library much quicker than any itch sales page can.
 
 **Catalyst Documentation:**
+
 https://refreshertowel.github.io/docs/catalyst/
 
 ## Requirements
@@ -196,22 +201,21 @@ GameMaker 2024.8 or later.
 If you run into a bug, want to request a feature, or just need help figuring out how to build something:
 
 **GitHub Issues:**
+
 https://github.com/RefresherTowel/Catalyst/issues
 
 **Discord:**
+
 https://discord.gg/qx6GtfVWJR
 
-## Part of the RefresherTowel Games Toolkits
+## Works well alongside Catalyst
 
-Catalyst is part of a growing collection of GameMaker libraries designed to work well together:
+**[Pulse](https://refreshertowel.itch.io/pulse)** - signals, events and queries for communication between game systems. Catalyst can manage the changing gameplay values while Pulse lets other systems react without hard-wiring everything together.
 
-* **Whisper** - reactive narrative and dialogue systems inspired by games like Hades and Crusader Kings III.
-* **Pulse** - signals, events and queries for communication between game systems.
-* **Statement** - a state machine framework with a fully visual in-game debugger.
-* **Fate** - weighted selection and drop systems, from simple loot tables to much more advanced setups.
-* **Quill** - a free text box system with selection, context menus, multiline editing and more.
-* **Echo** - advanced logging and in-game debug UI tools, included free with Catalyst.
+**[Statement](https://refreshertowel.itch.io/statement)** - a state machine framework with a fully visual in-game debugger for character, AI and gameplay state.
 
-Get **Pulse, Catalyst, Statement and Echo** together through the Ignition Kit, or grab the **Full Suite Pass** for the entire toolkit collection.
+## Get the broader toolkit
 
-> **Existing Catalyst 1 users:** Catalyst 2 is a breaking redesign rather than a drop-in update. Check the v2 changelog before replacing Catalyst 1 in an existing project.
+Want Catalyst, Pulse and Statement together? Get all three through the **[Ignition Kit](https://itch.io/s/176065/ignition-kit)**, with Echo included.
+
+Or grab the **[Full Suite Pass](https://refreshertowel.itch.io/full-suite-pass)** for access to all current and future RefresherTowel Games tools.
