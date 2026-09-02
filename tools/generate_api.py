@@ -1171,8 +1171,12 @@ def generate(manifest_path: Path, source_root: Path, output_path: Path | None, d
     for section in manifest.get("enum_sections") or []:
         lines.append(f'## {section["title"]}')
         lines.append('')
-        for group in section.get("groups") or []:
+        for group_index, group in enumerate(section.get("groups") or []):
             lines.append(f'### {group["title"]}')
+            subsection_classes = ".api-function-subsection-title"
+            if group_index == 0:
+                subsection_classes += " .api-function-subsection-title-first"
+            lines.append(f'{{: {subsection_classes} }}')
             lines.append('')
             for name in group.get("enums") or []:
                 lines.extend(render_enum(name, enums[name], manifest, exact, bare))
@@ -1188,8 +1192,12 @@ def generate(manifest_path: Path, source_root: Path, output_path: Path | None, d
         if section.get("intro"):
             lines.append(str(section["intro"]))
             lines.append('')
-        for group in section.get("groups") or []:
+        for group_index, group in enumerate(section.get("groups") or []):
             lines.append(f'### {group["title"]}')
+            subsection_classes = ".api-function-subsection-title"
+            if group_index == 0:
+                subsection_classes += " .api-function-subsection-title-first"
+            lines.append(f'{{: {subsection_classes} }}')
             lines.append('')
             macro_role = group.get("role", section.get("role"))
             for name in group.get("macros") or []:

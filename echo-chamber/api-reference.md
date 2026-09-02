@@ -2,8 +2,8 @@
 layout: "default"
 title: "API Reference"
 parent: "Echo Chamber"
-nav_order: 5
-library_id: "echo-chamber"
+nav_order: 6
+library_id: "echo_chamber"
 doc_version: "current"
 api_reference: true
 ---
@@ -9729,388 +9729,441 @@ new EchoChamberThemeMangoMint()
 
 ## Macros
 
-### Version and Console setup
+### Version
 
-<div class="api-method-entry" id="macro-echo-chamber-version">
+<div class="api-method-entry api-macro-entry api-macro-metadata" id="macro-echo-chamber-version">
   <div class="api-method-name">ECHO_CHAMBER_VERSION</div>
-  <p class="api-method-summary">Current Echo Chamber source version string.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Value</div>
     <pre class="api-example"><code>&quot;1.0.0&quot;</code></pre>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-chamber-console-enabled">
+### Console setup
+
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-chamber-console-enabled">
   <div class="api-method-name">ECHO_CHAMBER_CONSOLE_ENABLED</div>
-  <p class="api-method-summary">Compile-time switch controlling whether Echo Console is enabled.</p>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>1</code></pre>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-chamber-console-key">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-chamber-console-key">
   <div class="api-method-name">ECHO_CHAMBER_CONSOLE_KEY</div>
-  <p class="api-method-summary">Default keyboard key used to open Echo Console.</p>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>vk_f1</code></pre>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-chamber-launch-on-startup">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-chamber-launch-on-startup">
   <div class="api-method-name">ECHO_CHAMBER_LAUNCH_ON_STARTUP</div>
-  <p class="api-method-summary">Controls whether Echo Console opens automatically at startup.</p>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>false</code></pre>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-chamber-debug-theme">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-chamber-debug-theme">
   <div class="api-method-name">ECHO_CHAMBER_DEBUG_THEME</div>
-  <p class="api-method-summary">Selects the built-in debugger theme used by Echo Console and specialist debug windows.</p>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>eEchoChamberDebugTheme.EMERALD_ULTRAVIOLET</code></pre>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#enum-e-echo-chamber-debug-theme"><code>eEchoChamberDebugTheme</code></a></div>
   </div>
 </div>
 
 ### Core input action ids
 
-<div class="api-method-entry" id="macro-echo-ui-action-cancel">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-ui-action-cancel">
   <div class="api-method-name">ECHO_UI_ACTION_CANCEL</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;echo.ui.cancel&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-input-context-bind-action"><code>EchoChamberInputContext.BindAction</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-action-accept">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-ui-action-accept">
   <div class="api-method-name">ECHO_UI_ACTION_ACCEPT</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;echo.ui.accept&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-input-context-bind-action"><code>EchoChamberInputContext.BindAction</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-action-tab-next">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-ui-action-tab-next">
   <div class="api-method-name">ECHO_UI_ACTION_TAB_NEXT</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;echo.ui.tab_next&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-input-context-bind-action"><code>EchoChamberInputContext.BindAction</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-action-tab-prev">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-ui-action-tab-prev">
   <div class="api-method-name">ECHO_UI_ACTION_TAB_PREV</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;echo.ui.tab_prev&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-input-context-bind-action"><code>EchoChamberInputContext.BindAction</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-action-nav-up">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-ui-action-nav-up">
   <div class="api-method-name">ECHO_UI_ACTION_NAV_UP</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;echo.ui.nav_up&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-input-context-bind-action"><code>EchoChamberInputContext.BindAction</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-action-nav-down">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-ui-action-nav-down">
   <div class="api-method-name">ECHO_UI_ACTION_NAV_DOWN</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;echo.ui.nav_down&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-input-context-bind-action"><code>EchoChamberInputContext.BindAction</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-action-page-up">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-ui-action-page-up">
   <div class="api-method-name">ECHO_UI_ACTION_PAGE_UP</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;echo.ui.page_up&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-input-context-bind-action"><code>EchoChamberInputContext.BindAction</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-action-page-down">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-ui-action-page-down">
   <div class="api-method-name">ECHO_UI_ACTION_PAGE_DOWN</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;echo.ui.page_down&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-input-context-bind-action"><code>EchoChamberInputContext.BindAction</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-action-home">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-ui-action-home">
   <div class="api-method-name">ECHO_UI_ACTION_HOME</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;echo.ui.home&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-input-context-bind-action"><code>EchoChamberInputContext.BindAction</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-action-end">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-ui-action-end">
   <div class="api-method-name">ECHO_UI_ACTION_END</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;echo.ui.end&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-input-context-bind-action"><code>EchoChamberInputContext.BindAction</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-action-restore-windows">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-ui-action-restore-windows">
   <div class="api-method-name">ECHO_UI_ACTION_RESTORE_WINDOWS</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;echo.ui.restore_windows&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-input-context-bind-action"><code>EchoChamberInputContext.BindAction</code></a></div>
   </div>
 </div>
 
 ### Default core bindings
 
-<div class="api-method-entry" id="macro-echo-ui-bind-cancel">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-ui-bind-cancel">
   <div class="api-method-name">ECHO_UI_BIND_CANCEL</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>new EchoChamberInputBindingKey(vk_escape)</code></pre>
   </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#macro-echo-ui-action-cancel"><code>ECHO_UI_ACTION_CANCEL</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a></div>
+  </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-bind-accept">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-ui-bind-accept">
   <div class="api-method-name">ECHO_UI_BIND_ACCEPT</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>new EchoChamberInputBindingKey(vk_enter)</code></pre>
   </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#macro-echo-ui-action-accept"><code>ECHO_UI_ACTION_ACCEPT</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a></div>
+  </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-bind-tab-next">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-ui-bind-tab-next">
   <div class="api-method-name">ECHO_UI_BIND_TAB_NEXT</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>new EchoChamberInputBindingFunc(function() { return keyboard_check_pressed(vk_tab) &amp;&amp; !keyboard_check(vk_shift); })</code></pre>
   </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#macro-echo-ui-action-tab-next"><code>ECHO_UI_ACTION_TAB_NEXT</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a></div>
+  </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-bind-tab-prev">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-ui-bind-tab-prev">
   <div class="api-method-name">ECHO_UI_BIND_TAB_PREV</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>new EchoChamberInputBindingFunc(function() { return keyboard_check_pressed(vk_tab) &amp;&amp; keyboard_check(vk_shift); })</code></pre>
   </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#macro-echo-ui-action-tab-prev"><code>ECHO_UI_ACTION_TAB_PREV</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a></div>
+  </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-bind-nav-up">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-ui-bind-nav-up">
   <div class="api-method-name">ECHO_UI_BIND_NAV_UP</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>new EchoChamberInputBindingKey(vk_up)</code></pre>
   </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#macro-echo-ui-action-nav-up"><code>ECHO_UI_ACTION_NAV_UP</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a></div>
+  </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-bind-nav-down">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-ui-bind-nav-down">
   <div class="api-method-name">ECHO_UI_BIND_NAV_DOWN</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>new EchoChamberInputBindingKey(vk_down)</code></pre>
   </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#macro-echo-ui-action-nav-down"><code>ECHO_UI_ACTION_NAV_DOWN</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a></div>
+  </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-bind-page-up">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-ui-bind-page-up">
   <div class="api-method-name">ECHO_UI_BIND_PAGE_UP</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>new EchoChamberInputBindingKey(vk_pageup)</code></pre>
   </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#macro-echo-ui-action-page-up"><code>ECHO_UI_ACTION_PAGE_UP</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a></div>
+  </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-bind-page-down">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-ui-bind-page-down">
   <div class="api-method-name">ECHO_UI_BIND_PAGE_DOWN</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>new EchoChamberInputBindingKey(vk_pagedown)</code></pre>
   </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#macro-echo-ui-action-page-down"><code>ECHO_UI_ACTION_PAGE_DOWN</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a></div>
+  </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-bind-home">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-ui-bind-home">
   <div class="api-method-name">ECHO_UI_BIND_HOME</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>new EchoChamberInputBindingKey(vk_home)</code></pre>
   </div>
-</div>
-
-<div class="api-method-entry" id="macro-echo-ui-bind-end">
-  <div class="api-method-name">ECHO_UI_BIND_END</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>new EchoChamberInputBindingKey(vk_end)</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#macro-echo-ui-action-home"><code>ECHO_UI_ACTION_HOME</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-ui-bind-restore-windows">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-ui-bind-end">
+  <div class="api-method-name">ECHO_UI_BIND_END</div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Default</div>
+    <pre class="api-example"><code>new EchoChamberInputBindingKey(vk_end)</code></pre>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#macro-echo-ui-action-end"><code>ECHO_UI_ACTION_END</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a></div>
+  </div>
+</div>
+
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-ui-bind-restore-windows">
   <div class="api-method-name">ECHO_UI_BIND_RESTORE_WINDOWS</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>new EchoChamberInputBindingKey(vk_f12)</code></pre>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#macro-echo-ui-action-restore-windows"><code>ECHO_UI_ACTION_RESTORE_WINDOWS</code></a> <span aria-hidden="true">·</span> <a href="#echo-chamber-root-bind-core-input-action"><code>EchoChamberRoot.BindCoreInputAction</code></a></div>
   </div>
 </div>
 
 ### Built-in debug window ids
 
-<div class="api-method-entry" id="macro-echo-debug-window-inspector">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-debug-window-inspector">
   <div class="api-method-name">ECHO_DEBUG_WINDOW_INSPECTOR</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;inspector&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-console-open-window"><code>EchoConsoleOpenWindow</code></a> <span aria-hidden="true">·</span> <a href="#echo-console-manager-open-window"><code>EchoConsoleManager.OpenWindow</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-debug-window-watches">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-debug-window-watches">
   <div class="api-method-name">ECHO_DEBUG_WINDOW_WATCHES</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;watches&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-console-open-window"><code>EchoConsoleOpenWindow</code></a> <span aria-hidden="true">·</span> <a href="#echo-console-manager-open-window"><code>EchoConsoleManager.OpenWindow</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-debug-window-game">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-debug-window-game">
   <div class="api-method-name">ECHO_DEBUG_WINDOW_GAME</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;game&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-console-open-window"><code>EchoConsoleOpenWindow</code></a> <span aria-hidden="true">·</span> <a href="#echo-console-manager-open-window"><code>EchoConsoleManager.OpenWindow</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-debug-window-runtime">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-debug-window-runtime">
   <div class="api-method-name">ECHO_DEBUG_WINDOW_RUNTIME</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;runtime&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-console-open-window"><code>EchoConsoleOpenWindow</code></a> <span aria-hidden="true">·</span> <a href="#echo-console-manager-open-window"><code>EchoConsoleManager.OpenWindow</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-debug-window-data-structures">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-debug-window-data-structures">
   <div class="api-method-name">ECHO_DEBUG_WINDOW_DATA_STRUCTURES</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;data_structures&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-console-open-window"><code>EchoConsoleOpenWindow</code></a> <span aria-hidden="true">·</span> <a href="#echo-console-manager-open-window"><code>EchoConsoleManager.OpenWindow</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-debug-window-command-help">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-debug-window-command-help">
   <div class="api-method-name">ECHO_DEBUG_WINDOW_COMMAND_HELP</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;command_help&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-console-open-window"><code>EchoConsoleOpenWindow</code></a> <span aria-hidden="true">·</span> <a href="#echo-console-manager-open-window"><code>EchoConsoleManager.OpenWindow</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-debug-window-input">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-debug-window-input">
   <div class="api-method-name">ECHO_DEBUG_WINDOW_INPUT</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;input&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-console-open-window"><code>EchoConsoleOpenWindow</code></a> <span aria-hidden="true">·</span> <a href="#echo-console-manager-open-window"><code>EchoConsoleManager.OpenWindow</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-debug-window-crash">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-debug-window-crash">
   <div class="api-method-name">ECHO_DEBUG_WINDOW_CRASH</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;crash&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-console-open-window"><code>EchoConsoleOpenWindow</code></a> <span aria-hidden="true">·</span> <a href="#echo-console-manager-open-window"><code>EchoConsoleManager.OpenWindow</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-debug-window-snapshot">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-debug-window-snapshot">
   <div class="api-method-name">ECHO_DEBUG_WINDOW_SNAPSHOT</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>&quot;snapshot&quot;</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-console-open-window"><code>EchoConsoleOpenWindow</code></a> <span aria-hidden="true">·</span> <a href="#echo-console-manager-open-window"><code>EchoConsoleManager.OpenWindow</code></a></div>
   </div>
 </div>
 
 ### Console limits
 
-<div class="api-method-entry" id="macro-echo-console-room-scan-limit">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-console-room-scan-limit">
   <div class="api-method-name">ECHO_CONSOLE_ROOM_SCAN_LIMIT</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>100</code></pre>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-console-ds-scan-limit">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-console-ds-scan-limit">
   <div class="api-method-name">ECHO_CONSOLE_DS_SCAN_LIMIT</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>10000</code></pre>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-console-open-data-structure-scanner"><code>EchoConsoleOpenDataStructureScanner</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-console-ds-inspect-limit">
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-console-ds-inspect-limit">
   <div class="api-method-name">ECHO_CONSOLE_DS_INSPECT_LIMIT</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>200</code></pre>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-console-open-data-structure-scanner"><code>EchoConsoleOpenDataStructureScanner</code></a></div>
   </div>
 </div>
 
 ### Text input modes
 
-<div class="api-method-entry" id="macro-echo-textmode-text">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-textmode-text">
   <div class="api-method-name">ECHO_TEXTMODE_TEXT</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>0</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-text-input-set-input-mode"><code>EchoChamberTextInput.SetInputMode</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-textmode-int">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-textmode-int">
   <div class="api-method-name">ECHO_TEXTMODE_INT</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>1</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-text-input-set-input-mode"><code>EchoChamberTextInput.SetInputMode</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-textmode-float">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-textmode-float">
   <div class="api-method-name">ECHO_TEXTMODE_FLOAT</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>2</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-text-input-set-input-mode"><code>EchoChamberTextInput.SetInputMode</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-textmode-identifier">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-textmode-identifier">
   <div class="api-method-name">ECHO_TEXTMODE_IDENTIFIER</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>3</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-text-input-set-input-mode"><code>EchoChamberTextInput.SetInputMode</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-textmode-path">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-textmode-path">
   <div class="api-method-name">ECHO_TEXTMODE_PATH</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>4</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-text-input-set-input-mode"><code>EchoChamberTextInput.SetInputMode</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-textmode-code">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-textmode-code">
   <div class="api-method-name">ECHO_TEXTMODE_CODE</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>5</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-text-input-set-input-mode"><code>EchoChamberTextInput.SetInputMode</code></a></div>
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-textmode-password">
+<div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-textmode-password">
   <div class="api-method-name">ECHO_TEXTMODE_PASSWORD</div>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>6</code></pre>
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-chamber-text-input-set-input-mode"><code>EchoChamberTextInput.SetInputMode</code></a></div>
   </div>
 </div>
 

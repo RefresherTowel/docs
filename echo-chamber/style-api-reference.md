@@ -2,8 +2,8 @@
 layout: "default"
 title: "Style API Reference"
 parent: "Echo Chamber"
-nav_order: 6
-library_id: "echo-chamber"
+nav_order: 7
+library_id: "echo_chamber"
 doc_version: "current"
 api_reference: true
 ---

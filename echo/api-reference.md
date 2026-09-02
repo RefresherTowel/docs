@@ -2,7 +2,7 @@
 layout: "default"
 title: "API Reference"
 parent: "Echo"
-nav_order: 2
+nav_order: 3
 library_id: "echo"
 doc_version: "current"
 api_reference: true
@@ -433,7 +433,9 @@ Complete reference for Echo's logging, filtering, history, and tag APIs. For exp
 
 ## Macros
 
-<div class="api-method-entry" id="macro-echo-version">
+### Version
+
+<div class="api-method-entry api-macro-entry api-macro-metadata" id="macro-echo-version">
   <div class="api-method-name">ECHO_VERSION</div>
   <p class="api-method-summary">Current Echo source version string.</p>
   <div class="api-detail-section">
@@ -442,12 +444,18 @@ Complete reference for Echo's logging, filtering, history, and tag APIs. For exp
   </div>
 </div>
 
-<div class="api-method-entry" id="macro-echo-debug-enabled">
+### Debug setup
+
+<div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-debug-enabled">
   <div class="api-method-name">ECHO_DEBUG_ENABLED</div>
   <p class="api-method-summary">Compile-time Echo debug on/off switch. When set to 0, public <a href="#echo-debug"><code>EchoDebug</code></a>* calls return false. Use <a href="#echo-debug-set-level"><code>EchoDebugSetLevel()</code></a> when you need to change logging verbosity at runtime.</p>
   <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
+    <div class="api-detail-heading">Default</div>
     <pre class="api-example"><code>1</code></pre>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#echo-debug-set-level"><code>EchoDebugSetLevel</code></a> <span aria-hidden="true">·</span> <a href="#enum-e-echo-debug-level"><code>eEchoDebugLevel</code></a></div>
   </div>
 </div>
 
