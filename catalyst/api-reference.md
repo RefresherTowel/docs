@@ -175,9 +175,8 @@ new CatalystStatistic(value, min_value, max_value)
   <p class="api-method-summary">Returns a new array containing the configured evaluation-layer order.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Any&gt;</span>
-      <span class="api-return-description">layer identities in evaluation order.</span>
     </div>
   </div>
 </div>
@@ -206,9 +205,8 @@ new CatalystStatistic(value, min_value, max_value)
   <p class="api-method-summary">Returns how ADD and MULTIPLY Modifiers are ordered inside each configured layer.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description"><a href="#enum-e-cat-modifier-order"><code>eCatModifierOrder</code></a> value.</span>
     </div>
   </div>
 </div>
@@ -226,9 +224,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the layer exists.</span>
     </div>
   </div>
 </div>
@@ -269,9 +266,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it was attached.</span>
     </div>
   </div>
 </div>
@@ -289,9 +285,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it was attached and destroyed.</span>
     </div>
   </div>
 </div>
@@ -320,9 +315,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Number destroyed.</span>
     </div>
   </div>
 </div>
@@ -340,9 +334,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Number destroyed.</span>
     </div>
   </div>
 </div>
@@ -360,9 +353,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Number destroyed.</span>
     </div>
   </div>
 </div>
@@ -380,9 +372,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Number destroyed.</span>
     </div>
   </div>
 </div>
@@ -392,9 +383,8 @@ new CatalystStatistic(value, min_value, max_value)
   <p class="api-method-summary">Returns a new array containing every Modifier currently attached to this Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-modifier">CatalystModifier</a>&gt;</span>
-      <span class="api-return-description">Attached modifiers.</span>
     </div>
   </div>
 </div>
@@ -412,9 +402,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-modifier">CatalystModifier</a>&gt;</span>
-      <span class="api-return-description">Matching modifiers.</span>
     </div>
   </div>
 </div>
@@ -432,9 +421,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-modifier">CatalystModifier</a>&gt;</span>
-      <span class="api-return-description">Matching modifiers.</span>
     </div>
   </div>
 </div>
@@ -452,9 +440,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-modifier">CatalystModifier</a>&gt;</span>
-      <span class="api-return-description">Matching modifiers.</span>
     </div>
   </div>
 </div>
@@ -472,9 +459,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether a match exists.</span>
     </div>
   </div>
 </div>
@@ -492,9 +478,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether a match exists.</span>
     </div>
   </div>
 </div>
@@ -512,9 +497,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether a match exists.</span>
     </div>
   </div>
 </div>
@@ -532,9 +516,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it is attached.</span>
     </div>
   </div>
 </div>
@@ -544,9 +527,8 @@ new CatalystStatistic(value, min_value, max_value)
   <p class="api-method-summary">Recalculates the Statistic now and runs OnChange callbacks if its value changed.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic-refresh-result">CatalystStatisticRefreshResult</a></span>
-      <span class="api-return-description">Refresh result.</span>
     </div>
   </div>
 </div>
@@ -556,9 +538,8 @@ new CatalystStatistic(value, min_value, max_value)
   <p class="api-method-summary">Returns the current Statistic value, recalculating it first when needed.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Current value.</span>
     </div>
   </div>
 </div>
@@ -576,9 +557,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">One-off value.</span>
     </div>
   </div>
 </div>
@@ -596,9 +576,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic-evaluation">CatalystStatisticEvaluation</a></span>
-      <span class="api-return-description">Details showing how the value was calculated.</span>
     </div>
   </div>
 </div>
@@ -621,9 +600,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Preview value.</span>
     </div>
   </div>
 </div>
@@ -646,9 +624,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Preview value.</span>
     </div>
   </div>
 </div>
@@ -666,9 +643,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-subscription">CatalystSubscription</a>,Undefined</span>
-      <span class="api-return-description">Subscription you can later Unsubscribe(), or undefined if the callback was not valid.</span>
     </div>
   </div>
 </div>
@@ -708,9 +684,8 @@ new CatalystStatistic(value, min_value, max_value)
   <p class="api-method-summary">Returns the currently bound FactView.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.OracleFactView,Undefined</span>
-      <span class="api-return-description">Bound FactView, or undefined.</span>
     </div>
   </div>
 </div>
@@ -818,9 +793,8 @@ new CatalystStatistic(value, min_value, max_value)
   <p class="api-method-summary">Returns the statistic name.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String</span>
-      <span class="api-return-description">Current name.</span>
     </div>
   </div>
 </div>
@@ -849,9 +823,8 @@ new CatalystStatistic(value, min_value, max_value)
   <p class="api-method-summary">Returns the statistic&#x27;s ID.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">Current ID, or undefined.</span>
     </div>
   </div>
 </div>
@@ -1027,9 +1000,8 @@ new CatalystStatistic(value, min_value, max_value)
   <p class="api-method-summary">Returns the original constructor value.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Starting value.</span>
     </div>
   </div>
 </div>
@@ -1039,9 +1011,8 @@ new CatalystStatistic(value, min_value, max_value)
   <p class="api-method-summary">Returns the stored base value before modifiers.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Base value.</span>
     </div>
   </div>
 </div>
@@ -1051,9 +1022,8 @@ new CatalystStatistic(value, min_value, max_value)
   <p class="api-method-summary">Returns the maximum used when SetClamped(true) is enabled.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Maximum.</span>
     </div>
   </div>
 </div>
@@ -1063,9 +1033,8 @@ new CatalystStatistic(value, min_value, max_value)
   <p class="api-method-summary">Returns the minimum used when SetClamped(true) is enabled.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Minimum.</span>
     </div>
   </div>
 </div>
@@ -1121,9 +1090,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the tag exists.</span>
     </div>
   </div>
 </div>
@@ -1162,9 +1130,8 @@ new CatalystStatistic(value, min_value, max_value)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-fact-binding">CatalystFactBinding</a>,Undefined</span>
-      <span class="api-return-description">Binding that keeps the Fact updated, or undefined if the Oracle target or key was invalid.</span>
     </div>
   </div>
   <div class="api-detail-section">
@@ -1176,13 +1143,6 @@ new CatalystStatistic(value, min_value, max_value)
 <div class="api-method-entry" id="catalyst-statistic-debug-describe">
   <div class="api-method-name">DebugDescribe()</div>
   <p class="api-method-summary">Writes the Statistic and its Explain() details to Echo debug output.</p>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
-      <span class="api-return-type">Undefined</span>
-      <span class="api-return-description">No return value.</span>
-    </div>
-  </div>
 </div>
 
 ### CatalystModifier
@@ -1312,9 +1272,8 @@ new CatalystModifier(value, math_operation, duration, source_label, source_id, s
   <p class="api-method-summary">Returns the modifier&#x27;s optional ID.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">The configured ID, or undefined.</span>
     </div>
   </div>
 </div>
@@ -1343,9 +1302,8 @@ new CatalystModifier(value, math_operation, duration, source_label, source_id, s
   <p class="api-method-summary">Returns the Statistic ID <a href="#catalyst-set"><code>CatalystSet</code></a> uses to decide which Statistic this Modifier should attach to.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">The target ID, or undefined.</span>
     </div>
   </div>
 </div>
@@ -1488,9 +1446,8 @@ new CatalystModifier(value, math_operation, duration, source_label, source_id, s
   <p class="api-method-summary">Returns the multiplicative stack mode.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Current <a href="#enum-e-cat-stack-mode"><code>eCatStackMode</code></a> value.</span>
     </div>
   </div>
 </div>
@@ -1709,9 +1666,8 @@ new CatalystModifier(value, math_operation, duration, source_label, source_id, s
   <p class="api-method-summary">Returns the standalone countdown tracker assigned to this modifier.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-countdown-tracker">CatalystCountdownTracker</a>,Noone</span>
-      <span class="api-return-description">Assigned tracker, or noone.</span>
     </div>
   </div>
 </div>
@@ -1729,9 +1685,8 @@ new CatalystModifier(value, math_operation, duration, source_label, source_id, s
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-modifier">CatalystModifier</a>,Undefined</span>
-      <span class="api-return-description">Self, or undefined when the attached modifier expires immediately.</span>
     </div>
   </div>
 </div>
@@ -1741,9 +1696,8 @@ new CatalystModifier(value, math_operation, duration, source_label, source_id, s
   <p class="api-method-summary">Resets the remaining time to this Modifier&#x27;s configured maximum duration. If that maximum is zero and the Modifier is attached, it expires immediately.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-modifier">CatalystModifier</a>,Undefined</span>
-      <span class="api-return-description">Self, or undefined when the configured duration expires immediately.</span>
     </div>
   </div>
 </div>
@@ -1799,9 +1753,8 @@ new CatalystModifier(value, math_operation, duration, source_label, source_id, s
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the tag exists.</span>
     </div>
   </div>
 </div>
@@ -1828,13 +1781,6 @@ new CatalystModifier(value, math_operation, duration, source_label, source_id, s
       <span class="api-argument-description">true to remove the Modifier from its Statistic before destroying it. Defaults to true.</span>
     </div>
   </div>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
-      <span class="api-return-type">Undefined</span>
-      <span class="api-return-description">No return value.</span>
-    </div>
-  </div>
 </div>
 
 ### CatalystStatisticRefreshResult
@@ -1855,9 +1801,8 @@ Stores the before-and-after values from Statistic.Refresh(), along with whether 
   <p class="api-method-summary">Returns whether the value changed.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the value changed.</span>
     </div>
   </div>
 </div>
@@ -1867,9 +1812,8 @@ Stores the before-and-after values from Statistic.Refresh(), along with whether 
   <p class="api-method-summary">Returns the value before the refresh.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Previous value.</span>
     </div>
   </div>
 </div>
@@ -1879,9 +1823,8 @@ Stores the before-and-after values from Statistic.Refresh(), along with whether 
   <p class="api-method-summary">Returns the value after the refresh.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Current value.</span>
     </div>
   </div>
 </div>
@@ -1909,9 +1852,8 @@ Describes what happened to one Modifier while Catalyst calculated a Statistic, i
   <p class="api-method-summary">Returns the Modifier these calculation details belong to.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-modifier">CatalystModifier</a></span>
-      <span class="api-return-description">The modifier.</span>
     </div>
   </div>
 </div>
@@ -1921,9 +1863,8 @@ Describes what happened to one Modifier while Catalyst calculated a Statistic, i
   <p class="api-method-summary">Returns whether the Modifier affected the calculation.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it applied.</span>
     </div>
   </div>
 </div>
@@ -1933,9 +1874,8 @@ Describes what happened to one Modifier while Catalyst calculated a Statistic, i
   <p class="api-method-summary">Returns why this Modifier did not affect the Statistic. Returns <a href="#enum-e-cat-modifier-skip-reason"><code>eCatModifierSkipReason</code></a>.NONE when it was not skipped.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description"><a href="#enum-e-cat-modifier-skip-reason"><code>eCatModifierSkipReason</code></a> value.</span>
     </div>
   </div>
 </div>
@@ -1945,9 +1885,8 @@ Describes what happened to one Modifier while Catalyst calculated a Statistic, i
   <p class="api-method-summary">Returns the number of Modifier stacks Catalyst actually used for this calculation.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Effective stacks.</span>
     </div>
   </div>
 </div>
@@ -1957,9 +1896,8 @@ Describes what happened to one Modifier while Catalyst calculated a Statistic, i
   <p class="api-method-summary">Returns whether the family rules allowed this Modifier to apply.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">True if the Modifier won its family or did not need to compete.</span>
     </div>
   </div>
 </div>
@@ -1969,9 +1907,8 @@ Describes what happened to one Modifier while Catalyst calculated a Statistic, i
   <p class="api-method-summary">Returns how much this Modifier changed the value at its point in the calculation.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Value after minus value before.</span>
     </div>
   </div>
 </div>
@@ -1981,9 +1918,8 @@ Describes what happened to one Modifier while Catalyst calculated a Statistic, i
   <p class="api-method-summary">Returns the value immediately before this Modifier was applied.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Value before.</span>
     </div>
   </div>
 </div>
@@ -1993,9 +1929,8 @@ Describes what happened to one Modifier while Catalyst calculated a Statistic, i
   <p class="api-method-summary">Returns the value immediately after this Modifier was applied.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Value after.</span>
     </div>
   </div>
 </div>
@@ -2017,9 +1952,8 @@ Groups the calculation details for all Modifiers that were processed in one Stat
   <p class="api-method-summary">Returns this Layer ID.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real</span>
-      <span class="api-return-description">Layer ID.</span>
     </div>
   </div>
 </div>
@@ -2029,9 +1963,8 @@ Groups the calculation details for all Modifiers that were processed in one Stat
   <p class="api-method-summary">Returns the Modifier details for this layer.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-modifier-evaluation">CatalystModifierEvaluation</a>&gt;</span>
-      <span class="api-return-description">Modifier details.</span>
     </div>
   </div>
 </div>
@@ -2055,9 +1988,8 @@ Contains the final Statistic value plus a breakdown of the base value, layers, a
   <p class="api-method-summary">Returns the final evaluated value.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Final value.</span>
     </div>
   </div>
 </div>
@@ -2067,9 +1999,8 @@ Contains the final Statistic value plus a breakdown of the base value, layers, a
   <p class="api-method-summary">Returns the base number Catalyst started with for this calculation, after SetBaseFunc() was used if one is configured.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Base number used for this calculation.</span>
     </div>
   </div>
 </div>
@@ -2079,9 +2010,8 @@ Contains the final Statistic value plus a breakdown of the base value, layers, a
   <p class="api-method-summary">Returns the details for every Modifier in this calculation.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-modifier-evaluation">CatalystModifierEvaluation</a>&gt;</span>
-      <span class="api-return-description">Modifier details.</span>
     </div>
   </div>
 </div>
@@ -2091,9 +2021,8 @@ Contains the final Statistic value plus a breakdown of the base value, layers, a
   <p class="api-method-summary">Returns the layer details in evaluation order.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-statistic-layer-evaluation">CatalystStatisticLayerEvaluation</a>&gt;</span>
-      <span class="api-return-description">Layer details.</span>
     </div>
   </div>
 </div>
@@ -2225,9 +2154,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns the Resource ID.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">Current ID, or undefined.</span>
     </div>
   </div>
 </div>
@@ -2256,9 +2184,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns the resource name.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String</span>
-      <span class="api-return-description">Current name.</span>
     </div>
   </div>
 </div>
@@ -2268,9 +2195,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns the current amount. If a HARD minimum or maximum Statistic changed since the last check, Catalyst first moves current back inside those absolute bounds.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Current Resource value.</span>
     </div>
   </div>
 </div>
@@ -2280,9 +2206,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns the Resource&#x27;s current minimum after its minimum Statistic has been calculated.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Minimum value.</span>
     </div>
   </div>
 </div>
@@ -2292,9 +2217,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns the current maximum. If the minimum rises above it, the minimum wins.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Maximum value.</span>
     </div>
   </div>
 </div>
@@ -2323,9 +2247,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns how the minimum constrains current.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description"><a href="#enum-e-cat-resource-bound-mode"><code>eCatResourceBoundMode</code></a> value.</span>
     </div>
   </div>
 </div>
@@ -2354,9 +2277,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns how the maximum constrains current.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description"><a href="#enum-e-cat-resource-bound-mode"><code>eCatResourceBoundMode</code></a> value.</span>
     </div>
   </div>
 </div>
@@ -2366,9 +2288,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns the Resource&#x27;s position between its minimum and maximum as a number from 0 to 1. Values below the minimum return 0, values above the maximum return 1, and a Resource whose minimum equals its maximum returns 1.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Fraction from 0 to 1, where 0 is at the minimum and 1 is at the maximum.</span>
     </div>
   </div>
 </div>
@@ -2378,9 +2299,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns how much could be added before current reaches the Resource&#x27;s current maximum. Returns zero if current is already at or above the maximum.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Missing amount.</span>
     </div>
   </div>
 </div>
@@ -2390,9 +2310,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns how far current is above the Resource&#x27;s current maximum.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Overflow amount, or zero when current is not above maximum.</span>
     </div>
   </div>
 </div>
@@ -2402,9 +2321,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns how far current is below the Resource&#x27;s current minimum.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Underflow amount, or zero when current is not below minimum.</span>
     </div>
   </div>
 </div>
@@ -2414,9 +2332,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns whether current is at or below the Resource&#x27;s current minimum.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the resource is empty.</span>
     </div>
   </div>
 </div>
@@ -2426,9 +2343,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns whether current is at or above the Resource&#x27;s current maximum.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the resource is full.</span>
     </div>
   </div>
 </div>
@@ -2451,9 +2367,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-change">CatalystResourceChange</a></span>
-      <span class="api-return-description">Resulting change.</span>
     </div>
   </div>
 </div>
@@ -2476,9 +2391,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-change">CatalystResourceChange</a></span>
-      <span class="api-return-description">Resulting change.</span>
     </div>
   </div>
 </div>
@@ -2501,9 +2415,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-change">CatalystResourceChange</a></span>
-      <span class="api-return-description">Resulting change.</span>
     </div>
   </div>
 </div>
@@ -2526,9 +2439,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-change">CatalystResourceChange</a></span>
-      <span class="api-return-description">Resulting change.</span>
     </div>
   </div>
 </div>
@@ -2551,9 +2463,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-change">CatalystResourceChange</a></span>
-      <span class="api-return-description">Resulting change.</span>
     </div>
   </div>
 </div>
@@ -2576,9 +2487,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-change">CatalystResourceChange</a></span>
-      <span class="api-return-description">Resulting change.</span>
     </div>
   </div>
 </div>
@@ -2601,9 +2511,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-change">CatalystResourceChange</a></span>
-      <span class="api-return-description">Resulting change.</span>
     </div>
   </div>
 </div>
@@ -2621,9 +2530,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-change">CatalystResourceChange</a></span>
-      <span class="api-return-description">Resulting change.</span>
     </div>
   </div>
 </div>
@@ -2641,9 +2549,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-change">CatalystResourceChange</a></span>
-      <span class="api-return-description">Resulting change.</span>
     </div>
   </div>
 </div>
@@ -2653,9 +2560,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Recalculates the minimum and maximum Statistics, then checks current against the latest HARD bounds. Use this when bound Statistics may have changed and you want the Resource updated immediately.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-change">CatalystResourceChange</a></span>
-      <span class="api-return-description">Result of checking the Resource against its latest bounds, including when nothing changed.</span>
     </div>
   </div>
 </div>
@@ -2763,9 +2669,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns whether the minimum Statistic is using an external Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it is external.</span>
     </div>
   </div>
 </div>
@@ -2775,9 +2680,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns whether the maximum Statistic is using an external Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it is external.</span>
     </div>
   </div>
 </div>
@@ -2787,9 +2691,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns the Statistic currently supplying this Resource&#x27;s minimum.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic">CatalystStatistic</a></span>
-      <span class="api-return-description">Minimum Statistic.</span>
     </div>
   </div>
 </div>
@@ -2799,9 +2702,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns the Statistic currently supplying this Resource&#x27;s maximum.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic">CatalystStatistic</a></span>
-      <span class="api-return-description">Maximum Statistic.</span>
     </div>
   </div>
 </div>
@@ -2838,9 +2740,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it was attached.</span>
     </div>
   </div>
 </div>
@@ -2877,9 +2778,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it was attached.</span>
     </div>
   </div>
 </div>
@@ -2889,9 +2789,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns the most recent Resource change, including changes caused by its bounds.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-change">CatalystResourceChange</a>,Undefined</span>
-      <span class="api-return-description">Last change, or undefined before one is recorded.</span>
     </div>
   </div>
 </div>
@@ -2909,9 +2808,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-subscription">CatalystSubscription</a>,Undefined</span>
-      <span class="api-return-description">Subscription you can later Unsubscribe(), or undefined if the callback was not valid.</span>
     </div>
   </div>
 </div>
@@ -2952,9 +2850,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it was detached.</span>
     </div>
   </div>
 </div>
@@ -2972,9 +2869,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it was attached.</span>
     </div>
   </div>
 </div>
@@ -2992,9 +2888,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it is attached.</span>
     </div>
   </div>
 </div>
@@ -3004,9 +2899,8 @@ new CatalystResource(maximum, current, minimum)
   <p class="api-method-summary">Returns every Flow currently changing this Resource, including standalone Flows attached directly and Flows owned by active Effects.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-resource-flow">CatalystResourceFlow</a>&gt;</span>
-      <span class="api-return-description">Attached flows.</span>
     </div>
   </div>
 </div>
@@ -3034,9 +2928,8 @@ new CatalystResource(maximum, current, minimum)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-fact-binding">CatalystFactBinding</a>,Undefined</span>
-      <span class="api-return-description">Active binding, or undefined when the target is invalid.</span>
     </div>
   </div>
 </div>
@@ -3071,9 +2964,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns true if the Resource value, minimum, or maximum changed.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether current Resource state changed.</span>
     </div>
   </div>
 </div>
@@ -3083,9 +2975,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns whether the resource operation was accepted.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it succeeded.</span>
     </div>
   </div>
 </div>
@@ -3095,9 +2986,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns the recorded <a href="#enum-e-cat-resource-operation"><code>eCatResourceOperation</code></a>.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Operation value.</span>
     </div>
   </div>
 </div>
@@ -3107,9 +2997,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns the Resource value before the change.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Previous value.</span>
     </div>
   </div>
 </div>
@@ -3119,9 +3008,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns the caller-requested amount when the operation has one.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real,Undefined</span>
-      <span class="api-return-description">Requested amount.</span>
     </div>
   </div>
 </div>
@@ -3131,9 +3019,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns the value the operation tried to reach before Resource bound rules changed or limited it.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Target value.</span>
     </div>
   </div>
 </div>
@@ -3143,9 +3030,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns how much current actually changed after Resource bounds were applied. Positive means an increase and negative means a decrease.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Applied amount.</span>
     </div>
   </div>
 </div>
@@ -3155,9 +3041,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns the Resource value after the change.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Current value.</span>
     </div>
   </div>
 </div>
@@ -3167,9 +3052,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns the minimum value Catalyst was using before the change.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Previous minimum value.</span>
     </div>
   </div>
 </div>
@@ -3179,9 +3063,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns the maximum value Catalyst was using before the change.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Previous maximum value.</span>
     </div>
   </div>
 </div>
@@ -3191,9 +3074,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns the minimum value Catalyst used for this operation.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Minimum value.</span>
     </div>
   </div>
 </div>
@@ -3203,9 +3085,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns the maximum value Catalyst used for this operation.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Maximum value.</span>
     </div>
   </div>
 </div>
@@ -3215,9 +3096,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns optional reason supplied by your project.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Any</span>
-      <span class="api-return-description">Reason value.</span>
     </div>
   </div>
 </div>
@@ -3227,9 +3107,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns the optional source responsible for the operation.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Any</span>
-      <span class="api-return-description">Source value.</span>
     </div>
   </div>
 </div>
@@ -3239,9 +3118,8 @@ Describes one Resource update. It records the value before and after, what was r
   <p class="api-method-summary">Returns any extra project data supplied with this Resource change.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Any</span>
-      <span class="api-return-description">Extra project data stored with this change.</span>
     </div>
   </div>
 </div>
@@ -3344,9 +3222,8 @@ new CatalystResourceFlow(rate, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns the flow&#x27;s optional ID.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">Current ID, or undefined.</span>
     </div>
   </div>
 </div>
@@ -3375,9 +3252,8 @@ new CatalystResourceFlow(rate, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns the flow name.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String</span>
-      <span class="api-return-description">Current name.</span>
     </div>
   </div>
 </div>
@@ -3436,9 +3312,8 @@ new CatalystResourceFlow(rate, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns whether the active rate Statistic is using an external Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it is external.</span>
     </div>
   </div>
 </div>
@@ -3448,9 +3323,8 @@ new CatalystResourceFlow(rate, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns the Statistic currently supplying this Flow&#x27;s rate.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic">CatalystStatistic</a></span>
-      <span class="api-return-description">Rate Statistic.</span>
     </div>
   </div>
 </div>
@@ -3479,9 +3353,8 @@ new CatalystResourceFlow(rate, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns whether this Flow is currently allowed to move its Resource when countdown time passes.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it is active.</span>
     </div>
   </div>
 </div>
@@ -3510,9 +3383,8 @@ new CatalystResourceFlow(rate, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns whether delay remains.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether delay remains.</span>
     </div>
   </div>
 </div>
@@ -3522,9 +3394,8 @@ new CatalystResourceFlow(rate, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns remaining delay.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Remaining delay amount.</span>
     </div>
   </div>
 </div>
@@ -3564,9 +3435,8 @@ new CatalystResourceFlow(rate, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns the tracker assigned to this flow.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-countdown-tracker">CatalystCountdownTracker</a>,Noone</span>
-      <span class="api-return-description">Assigned tracker, or noone.</span>
     </div>
   </div>
 </div>
@@ -3631,13 +3501,6 @@ new CatalystResourceFlow(rate, source_label, source_id, source_meta)
 <div class="api-method-entry" id="catalyst-resource-flow-destroy">
   <div class="api-method-name">Destroy()</div>
   <p class="api-method-summary">Destroys this Flow. If it is attached directly to a Resource, Catalyst detaches it first. If an Effect owns it, the Effect handles the removal so its ownership stays consistent.</p>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
-      <span class="api-return-type">Undefined</span>
-      <span class="api-return-description">No return value.</span>
-    </div>
-  </div>
 </div>
 
 ### CatalystResourceFlowResult
@@ -3663,9 +3526,8 @@ Describes one Resource movement produced by an Effect-owned Flow during a succes
   <p class="api-method-summary">Returns whether the Resource change succeeded.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it succeeded.</span>
     </div>
   </div>
 </div>
@@ -3675,9 +3537,8 @@ Describes one Resource movement produced by an Effect-owned Flow during a succes
   <p class="api-method-summary">Returns the flow that requested movement.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-flow">CatalystResourceFlow</a></span>
-      <span class="api-return-description">Flow that requested the movement.</span>
     </div>
   </div>
 </div>
@@ -3687,9 +3548,8 @@ Describes one Resource movement produced by an Effect-owned Flow during a succes
   <p class="api-method-summary">Returns the moved Resource.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource">CatalystResource</a></span>
-      <span class="api-return-description">Resource that was changed.</span>
     </div>
   </div>
 </div>
@@ -3699,9 +3559,8 @@ Describes one Resource movement produced by an Effect-owned Flow during a succes
   <p class="api-method-summary">Returns the amount of Flow time used for this movement after any delay.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Countdown amount.</span>
     </div>
   </div>
 </div>
@@ -3711,9 +3570,8 @@ Describes one Resource movement produced by an Effect-owned Flow during a succes
   <p class="api-method-summary">Returns the rate used for this movement. Positive means the Resource increases; negative means it decreases.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Evaluated rate.</span>
     </div>
   </div>
 </div>
@@ -3723,9 +3581,8 @@ Describes one Resource movement produced by an Effect-owned Flow during a succes
   <p class="api-method-summary">Returns the applied effect-tick multiplier.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Multiplier.</span>
     </div>
   </div>
 </div>
@@ -3735,9 +3592,8 @@ Describes one Resource movement produced by an Effect-owned Flow during a succes
   <p class="api-method-summary">Returns the movement requested from the Resource before its bounds were applied. Positive means increase; negative means decrease.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Requested movement.</span>
     </div>
   </div>
 </div>
@@ -3747,9 +3603,8 @@ Describes one Resource movement produced by an Effect-owned Flow during a succes
   <p class="api-method-summary">Returns the exact Resource change result.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-change">CatalystResourceChange</a></span>
-      <span class="api-return-description">Resource change.</span>
     </div>
   </div>
 </div>
@@ -3894,9 +3749,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns the Effect ID.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">Current ID.</span>
     </div>
   </div>
 </div>
@@ -3925,9 +3779,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns the Effect family value.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">Family value.</span>
     </div>
   </div>
 </div>
@@ -3956,9 +3809,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns the current reapplication policy.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description"><a href="#enum-e-cat-effect-reapply-policy"><code>eCatEffectReapplyPolicy</code></a> value.</span>
     </div>
   </div>
 </div>
@@ -3976,9 +3828,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-effect">CatalystEffect</a>,Undefined</span>
-      <span class="api-return-description">Self, or undefined when an active zero duration removes the Effect.</span>
     </div>
   </div>
 </div>
@@ -3988,9 +3839,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   <p class="api-method-summary">Resets the Effect&#x27;s remaining time to its configured maximum duration.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-effect">CatalystEffect</a>,Undefined</span>
-      <span class="api-return-description">Self, or undefined when the maximum is zero and removal occurs.</span>
     </div>
   </div>
 </div>
@@ -4019,9 +3869,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns the countdown tracker assigned to this Effect.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-countdown-tracker">CatalystCountdownTracker</a>,Noone</span>
-      <span class="api-return-description">Assigned tracker, or noone.</span>
     </div>
   </div>
 </div>
@@ -4080,9 +3929,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns whether application chance is using an external Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it is external.</span>
     </div>
   </div>
 </div>
@@ -4092,9 +3940,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns the active application-chance Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic">CatalystStatistic</a></span>
-      <span class="api-return-description">Chance Statistic.</span>
     </div>
   </div>
 </div>
@@ -4134,9 +3981,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns the positive interval, or a negative value when ticking is disabled.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Tick interval.</span>
     </div>
   </div>
 </div>
@@ -4195,9 +4041,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns whether per-tick chance is using an external Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it is external.</span>
     </div>
   </div>
 </div>
@@ -4207,9 +4052,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   <p class="api-method-summary">Returns the active per-tick chance Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic">CatalystStatistic</a></span>
-      <span class="api-return-description">Chance Statistic.</span>
     </div>
   </div>
 </div>
@@ -4371,9 +4215,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it was owned.</span>
     </div>
   </div>
 </div>
@@ -4415,9 +4258,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it was owned.</span>
     </div>
   </div>
 </div>
@@ -4473,9 +4315,8 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it exists.</span>
     </div>
   </div>
 </div>
@@ -4500,13 +4341,6 @@ new CatalystEffect(identity, duration, source_label, source_id, source_meta)
       <span class="api-argument-name">reason <span class="api-optional">optional</span></span>
       <span class="api-argument-type">Any</span>
       <span class="api-argument-description">Optional value describing why the Effect was removed. Catalyst passes it to OnRemove callbacks but otherwise leaves it untouched.</span>
-    </div>
-  </div>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
-      <span class="api-return-type">Undefined</span>
-      <span class="api-return-description">No return value.</span>
     </div>
   </div>
 </div>
@@ -4587,9 +4421,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-effect-manager">CatalystEffectManager</a></span>
-      <span class="api-return-description">This struct, so calls can be chained.</span>
     </div>
   </div>
 </div>
@@ -4599,9 +4432,8 @@ new CatalystEffectManager(owner)
   <p class="api-method-summary">Returns the manager ID.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">Current ID, or undefined.</span>
     </div>
   </div>
 </div>
@@ -4619,9 +4451,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-effect-manager">CatalystEffectManager</a></span>
-      <span class="api-return-description">This struct, so calls can be chained.</span>
     </div>
   </div>
 </div>
@@ -4631,9 +4462,8 @@ new CatalystEffectManager(owner)
   <p class="api-method-summary">Returns the manager name.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String</span>
-      <span class="api-return-description">Current name.</span>
     </div>
   </div>
 </div>
@@ -4643,9 +4473,8 @@ new CatalystEffectManager(owner)
   <p class="api-method-summary">Returns the owner value that was given to this EffectManager when it was created.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Any</span>
-      <span class="api-return-description">Owner value.</span>
     </div>
   </div>
 </div>
@@ -4663,9 +4492,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-effect-manager">CatalystEffectManager</a></span>
-      <span class="api-return-description">This struct, so calls can be chained.</span>
     </div>
   </div>
 </div>
@@ -4675,9 +4503,8 @@ new CatalystEffectManager(owner)
   <p class="api-method-summary">Restores GameMaker random(1) as the manager&#x27;s random source.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-effect-manager">CatalystEffectManager</a></span>
-      <span class="api-return-description">This struct, so calls can be chained.</span>
     </div>
   </div>
 </div>
@@ -4695,9 +4522,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-subscription">CatalystSubscription</a>,Undefined</span>
-      <span class="api-return-description">Subscription you can later Unsubscribe(), or undefined if the callback was not valid.</span>
     </div>
   </div>
 </div>
@@ -4715,9 +4541,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-subscription">CatalystSubscription</a>,Undefined</span>
-      <span class="api-return-description">Subscription you can later Unsubscribe(), or undefined if the callback was not valid.</span>
     </div>
   </div>
 </div>
@@ -4740,9 +4565,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-effect-application-result">CatalystEffectApplicationResult</a></span>
-      <span class="api-return-description">Application result.</span>
     </div>
   </div>
   <div class="api-detail-section">
@@ -4769,9 +4593,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether removal happened now or an exact deferred request was accepted.</span>
     </div>
   </div>
 </div>
@@ -4789,9 +4612,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it is active here.</span>
     </div>
   </div>
 </div>
@@ -4801,9 +4623,8 @@ new CatalystEffectManager(owner)
   <p class="api-method-summary">Returns the currently active Effects in the order they were applied.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-effect">CatalystEffect</a>&gt;</span>
-      <span class="api-return-description">New array containing active Effects.</span>
     </div>
   </div>
 </div>
@@ -4821,9 +4642,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-effect">CatalystEffect</a>&gt;</span>
-      <span class="api-return-description">Matching Effects.</span>
     </div>
   </div>
 </div>
@@ -4841,9 +4661,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether a match exists.</span>
     </div>
   </div>
 </div>
@@ -4866,9 +4685,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Number removed now or queued to be removed after the current Effect change finishes.</span>
     </div>
   </div>
 </div>
@@ -4886,9 +4704,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-effect">CatalystEffect</a>&gt;</span>
-      <span class="api-return-description">Matching Effects.</span>
     </div>
   </div>
 </div>
@@ -4906,9 +4723,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether a match exists.</span>
     </div>
   </div>
 </div>
@@ -4926,9 +4742,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-effect">CatalystEffect</a>&gt;</span>
-      <span class="api-return-description">Matching Effects.</span>
     </div>
   </div>
 </div>
@@ -4951,9 +4766,8 @@ new CatalystEffectManager(owner)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Number removed now or queued to be removed after the current Effect change finishes.</span>
     </div>
   </div>
 </div>
@@ -4961,13 +4775,6 @@ new CatalystEffectManager(owner)
 <div class="api-method-entry" id="catalyst-effect-manager-destroy">
   <div class="api-method-name">Destroy()</div>
   <p class="api-method-summary">Destroys the EffectManager after removing all active Effects and stopping its event subscriptions. If Destroy() is called while the manager is already applying or removing an Effect, cleanup completes as soon as that current operation finishes.</p>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
-      <span class="api-return-type">Undefined</span>
-      <span class="api-return-description">No return value.</span>
-    </div>
-  </div>
 </div>
 
 ### CatalystEffectTickResult
@@ -4995,9 +4802,8 @@ Stores everything Catalyst decided for one completed Effect tick. ResolveTick ca
   <p class="api-method-summary">Returns whether this tick will currently succeed. ResolveTick can change this value with SetSucceeded().</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the tick succeeds.</span>
     </div>
   </div>
 </div>
@@ -5026,9 +4832,8 @@ Stores everything Catalyst decided for one completed Effect tick. ResolveTick ca
   <p class="api-method-summary">Returns the multiplier that will be applied to Resource movement from this Effect&#x27;s owned Flows when the tick succeeds.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Current multiplier.</span>
     </div>
   </div>
 </div>
@@ -5057,9 +4862,8 @@ Stores everything Catalyst decided for one completed Effect tick. ResolveTick ca
   <p class="api-method-summary">Returns the Effect this tick belongs to.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-effect">CatalystEffect</a></span>
-      <span class="api-return-description">Effect for this tick.</span>
     </div>
   </div>
 </div>
@@ -5069,9 +4873,8 @@ Stores everything Catalyst decided for one completed Effect tick. ResolveTick ca
   <p class="api-method-summary">Returns the completed interval duration.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Tick duration.</span>
     </div>
   </div>
 </div>
@@ -5081,9 +4884,8 @@ Stores everything Catalyst decided for one completed Effect tick. ResolveTick ca
   <p class="api-method-summary">Returns the evaluated per-tick chance.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Chance value.</span>
     </div>
   </div>
 </div>
@@ -5093,9 +4895,8 @@ Stores everything Catalyst decided for one completed Effect tick. ResolveTick ca
   <p class="api-method-summary">Returns the random number Catalyst used for the normal per-tick chance check, or undefined when the chance did not require a random roll.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real,Undefined</span>
-      <span class="api-return-description">Roll, or undefined.</span>
     </div>
   </div>
 </div>
@@ -5105,9 +4906,8 @@ Stores everything Catalyst decided for one completed Effect tick. ResolveTick ca
   <p class="api-method-summary">Returns the chance result from before ResolveTick changed anything.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Ordinary chance result.</span>
     </div>
   </div>
 </div>
@@ -5117,9 +4917,8 @@ Stores everything Catalyst decided for one completed Effect tick. ResolveTick ca
   <p class="api-method-summary">Returns a new array containing concrete flow movement results produced by this tick.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-resource-flow-result">CatalystResourceFlowResult</a>&gt;</span>
-      <span class="api-return-description">Flow results.</span>
     </div>
   </div>
 </div>
@@ -5147,9 +4946,8 @@ Describes the result of EffectManager.AddEffect(), including whether the Effect 
   <p class="api-method-summary">Returns true when AddEffect() handled the request successfully. This includes cases where the incoming Effect did not become active because the current Effect was ignored, refreshed, or extended instead.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the request succeeded.</span>
     </div>
   </div>
 </div>
@@ -5159,9 +4957,8 @@ Describes the result of EffectManager.AddEffect(), including whether the Effect 
   <p class="api-method-summary">Returns whether the exact Effect passed to AddEffect() became active.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the incoming Effect applied.</span>
     </div>
   </div>
 </div>
@@ -5171,9 +4968,8 @@ Describes the result of EffectManager.AddEffect(), including whether the Effect 
   <p class="api-method-summary">Returns true when the manager was already changing its active Effects and saved this request to process immediately afterward.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it was queued.</span>
     </div>
   </div>
 </div>
@@ -5183,9 +4979,8 @@ Describes the result of EffectManager.AddEffect(), including whether the Effect 
   <p class="api-method-summary">Returns the specific <a href="#enum-e-cat-effect-application-outcome"><code>eCatEffectApplicationOutcome</code></a> explaining what AddEffect() did.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Outcome value.</span>
     </div>
   </div>
 </div>
@@ -5195,9 +4990,8 @@ Describes the result of EffectManager.AddEffect(), including whether the Effect 
   <p class="api-method-summary">Returns the Effect supplied by the caller.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Any</span>
-      <span class="api-return-description">Value that was passed to AddEffect().</span>
     </div>
   </div>
 </div>
@@ -5207,9 +5001,8 @@ Describes the result of EffectManager.AddEffect(), including whether the Effect 
   <p class="api-method-summary">Returns the active Effect produced or affected by this request.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-effect">CatalystEffect</a>,Noone</span>
-      <span class="api-return-description">Active Effect, or noone.</span>
     </div>
   </div>
 </div>
@@ -5219,9 +5012,8 @@ Describes the result of EffectManager.AddEffect(), including whether the Effect 
   <p class="api-method-summary">Returns the evaluated application chance when chance resolution was reached.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real,Undefined</span>
-      <span class="api-return-description">Chance value.</span>
     </div>
   </div>
 </div>
@@ -5231,9 +5023,8 @@ Describes the result of EffectManager.AddEffect(), including whether the Effect 
   <p class="api-method-summary">Returns the random roll when a non-guaranteed chance required one.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real,Undefined</span>
-      <span class="api-return-description">Roll, or undefined.</span>
     </div>
   </div>
 </div>
@@ -5358,9 +5149,8 @@ new CatalystSet(identity)
   <p class="api-method-summary">Returns the Set ID.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">ID value.</span>
     </div>
   </div>
 </div>
@@ -5389,9 +5179,8 @@ new CatalystSet(identity)
   <p class="api-method-summary">Returns the Set name.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String</span>
-      <span class="api-return-description">Name value.</span>
     </div>
   </div>
 </div>
@@ -5420,9 +5209,8 @@ new CatalystSet(identity)
   <p class="api-method-summary">Returns the extra project data previously stored with SetMeta().</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Any</span>
-      <span class="api-return-description">Extra project data previously stored with SetMeta().</span>
     </div>
   </div>
 </div>
@@ -5432,9 +5220,8 @@ new CatalystSet(identity)
   <p class="api-method-summary">Collects the Catalyst data in this Set into a save-friendly struct. Call Succeeded() on the result before using GetState(); functions and other runtime-only values may require repair when the state is restored.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-state-capture-result">CatalystStateCaptureResult</a></span>
-      <span class="api-return-description">Result containing the saved state when capture succeeds, or a report explaining why it could not be captured.</span>
     </div>
   </div>
   <div class="api-detail-section">
@@ -5456,9 +5243,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-state-restore-result">CatalystStateRestoreResult</a></span>
-      <span class="api-return-description">Restore result, including diagnostics when the state cannot be applied.</span>
     </div>
   </div>
   <div class="api-detail-section">
@@ -5499,9 +5285,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it was a member.</span>
     </div>
   </div>
 </div>
@@ -5519,9 +5304,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether a direct member exists.</span>
     </div>
   </div>
 </div>
@@ -5539,9 +5323,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic">CatalystStatistic</a>,Undefined</span>
-      <span class="api-return-description">Statistic or undefined.</span>
     </div>
   </div>
 </div>
@@ -5551,9 +5334,8 @@ new CatalystSet(identity)
   <p class="api-method-summary">Returns a new array containing direct Statistic members.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-statistic">CatalystStatistic</a>&gt;</span>
-      <span class="api-return-description">Statistics.</span>
     </div>
   </div>
 </div>
@@ -5590,9 +5372,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it was a member.</span>
     </div>
   </div>
 </div>
@@ -5610,9 +5391,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether a direct member exists.</span>
     </div>
   </div>
 </div>
@@ -5630,9 +5410,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource">CatalystResource</a>,Undefined</span>
-      <span class="api-return-description">Resource or undefined.</span>
     </div>
   </div>
 </div>
@@ -5642,9 +5421,8 @@ new CatalystSet(identity)
   <p class="api-method-summary">Returns a new array containing direct Resource members.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-resource">CatalystResource</a>&gt;</span>
-      <span class="api-return-description">Resources.</span>
     </div>
   </div>
 </div>
@@ -5681,9 +5459,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it was a member.</span>
     </div>
   </div>
 </div>
@@ -5701,9 +5478,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether a direct member exists.</span>
     </div>
   </div>
 </div>
@@ -5721,9 +5497,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-effect-manager">CatalystEffectManager</a>,Undefined</span>
-      <span class="api-return-description">Manager or undefined.</span>
     </div>
   </div>
 </div>
@@ -5733,9 +5508,8 @@ new CatalystSet(identity)
   <p class="api-method-summary">Returns a new array containing direct Effect Manager members.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-effect-manager">CatalystEffectManager</a>&gt;</span>
-      <span class="api-return-description">Managers.</span>
     </div>
   </div>
 </div>
@@ -5775,9 +5549,8 @@ new CatalystSet(identity)
   <p class="api-method-summary">Returns the stored Fact View.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.OracleFactView,Undefined</span>
-      <span class="api-return-description">Fact View or undefined.</span>
     </div>
   </div>
 </div>
@@ -5817,9 +5590,8 @@ new CatalystSet(identity)
   <p class="api-method-summary">Returns the layer order stored by this Set, or undefined when none is set.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Any&gt;,Undefined</span>
-      <span class="api-return-description">layer order or undefined.</span>
     </div>
   </div>
 </div>
@@ -5842,9 +5614,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-set-preview-result">CatalystSetPreviewResult</a></span>
-      <span class="api-return-description">Preview result.</span>
     </div>
   </div>
   <div class="api-detail-section">
@@ -5876,9 +5647,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-set-preview-result">CatalystSetPreviewResult</a></span>
-      <span class="api-return-description">Preview result.</span>
     </div>
   </div>
   <div class="api-detail-section">
@@ -5900,9 +5670,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-set-apply-result">CatalystSetApplyResult</a></span>
-      <span class="api-return-description">Apply result.</span>
     </div>
   </div>
   <div class="api-detail-section">
@@ -5929,9 +5698,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-set-apply-result">CatalystSetApplyResult</a></span>
-      <span class="api-return-description">Apply result.</span>
     </div>
   </div>
   <div class="api-detail-section">
@@ -5945,9 +5713,8 @@ new CatalystSet(identity)
   <p class="api-method-summary">Recalculates every Statistic managed by this Set, including Catalyst-owned Statistics inside Resources, Flows, and active Effects. It then refreshes Resources so changed minimum/maximum values are applied.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-set-refresh-result">CatalystSetRefreshResult</a></span>
-      <span class="api-return-description">Result listing which Statistics and Resources changed.</span>
     </div>
   </div>
 </div>
@@ -5965,9 +5732,8 @@ new CatalystSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-set-details">CatalystSetDetails</a></span>
-      <span class="api-return-description">Details struct.</span>
     </div>
   </div>
 </div>
@@ -5975,13 +5741,6 @@ new CatalystSet(identity)
 <div class="api-method-entry" id="catalyst-set-destroy">
   <div class="api-method-name">Destroy()</div>
   <p class="api-method-summary">Destroys the Set container and removes its membership/configuration links. The Statistics, Resources, EffectManagers, Modifiers, Effects, and Flows themselves stay alive.</p>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
-      <span class="api-return-type">Undefined</span>
-      <span class="api-return-description">No return value.</span>
-    </div>
-  </div>
 </div>
 
 ### CatalystModifierSet
@@ -6053,9 +5812,8 @@ new CatalystModifierSet(identity)
   <p class="api-method-summary">Returns the package ID.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">ID value.</span>
     </div>
   </div>
 </div>
@@ -6084,9 +5842,8 @@ new CatalystModifierSet(identity)
   <p class="api-method-summary">Returns the package name.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String</span>
-      <span class="api-return-description">Name value.</span>
     </div>
   </div>
 </div>
@@ -6115,9 +5872,8 @@ new CatalystModifierSet(identity)
   <p class="api-method-summary">Returns the extra project data previously stored with SetMeta().</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Any</span>
-      <span class="api-return-description">Extra project data previously stored with SetMeta().</span>
     </div>
   </div>
 </div>
@@ -6154,9 +5910,8 @@ new CatalystModifierSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it was present.</span>
     </div>
   </div>
 </div>
@@ -6174,9 +5929,8 @@ new CatalystModifierSet(identity)
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">True when the Modifier is in this package.</span>
     </div>
   </div>
 </div>
@@ -6186,9 +5940,8 @@ new CatalystModifierSet(identity)
   <p class="api-method-summary">Returns the Modifiers in this package.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-modifier">CatalystModifier</a>&gt;</span>
-      <span class="api-return-description">Packaged Modifiers.</span>
     </div>
   </div>
 </div>
@@ -6196,13 +5949,6 @@ new CatalystModifierSet(identity)
 <div class="api-method-entry" id="catalyst-modifier-set-destroy">
   <div class="api-method-name">Destroy()</div>
   <p class="api-method-summary">Clears this ModifierSet. The Modifiers themselves are not destroyed and any existing Statistic attachments stay unchanged.</p>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
-      <span class="api-return-type">Undefined</span>
-      <span class="api-return-description">No return value.</span>
-    </div>
-  </div>
 </div>
 
 ### CatalystSetPreviewResult
@@ -6224,9 +5970,8 @@ Stores the result of Preview() or PreviewSwap(). It tells you whether all reques
   <p class="api-method-summary">Returns the overall preview status.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description"><a href="#enum-e-cat-set-preview-status"><code>eCatSetPreviewStatus</code></a> value.</span>
     </div>
   </div>
 </div>
@@ -6236,9 +5981,8 @@ Stores the result of Preview() or PreviewSwap(). It tells you whether all reques
   <p class="api-method-summary">Returns whether every Modifier in the preview could be matched to a valid target Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether status is SUCCESS.</span>
     </div>
   </div>
 </div>
@@ -6248,9 +5992,8 @@ Stores the result of Preview() or PreviewSwap(). It tells you whether all reques
   <p class="api-method-summary">Returns a new array containing preview entries.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-set-preview-entry">CatalystSetPreviewEntry</a>&gt;</span>
-      <span class="api-return-description">Preview entries.</span>
     </div>
   </div>
 </div>
@@ -6260,9 +6003,8 @@ Stores the result of Preview() or PreviewSwap(). It tells you whether all reques
   <p class="api-method-summary">Returns the problems Catalyst found while matching Modifiers to target Statistics.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-route-diagnostic">CatalystRouteDiagnostic</a>&gt;</span>
-      <span class="api-return-description">Problems Catalyst found while matching Modifiers to target Statistics.</span>
     </div>
   </div>
 </div>
@@ -6288,9 +6030,8 @@ Shows how one Statistic would change during <a href="#catalyst-set-preview"><cod
   <p class="api-method-summary">Returns the target Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic">CatalystStatistic</a></span>
-      <span class="api-return-description">Statistic reference.</span>
     </div>
   </div>
 </div>
@@ -6300,9 +6041,8 @@ Shows how one Statistic would change during <a href="#catalyst-set-preview"><cod
   <p class="api-method-summary">Returns this Statistic&#x27;s value before the proposed ModifierSet change.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Current value.</span>
     </div>
   </div>
 </div>
@@ -6312,9 +6052,8 @@ Shows how one Statistic would change during <a href="#catalyst-set-preview"><cod
   <p class="api-method-summary">Returns what this Statistic&#x27;s value would be after the proposed ModifierSet change.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Preview value.</span>
     </div>
   </div>
 </div>
@@ -6324,9 +6063,8 @@ Shows how one Statistic would change during <a href="#catalyst-set-preview"><cod
   <p class="api-method-summary">Returns Explain-style details showing exactly how Catalyst calculated this Statistic&#x27;s preview value.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic-evaluation">CatalystStatisticEvaluation</a></span>
-      <span class="api-return-description">Details showing how the preview value was calculated.</span>
     </div>
   </div>
 </div>
@@ -6336,9 +6074,8 @@ Shows how one Statistic would change during <a href="#catalyst-set-preview"><cod
   <p class="api-method-summary">Returns a new array containing the Modifiers that would be removed by this preview.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-modifier">CatalystModifier</a>&gt;</span>
-      <span class="api-return-description">Outgoing modifiers.</span>
     </div>
   </div>
 </div>
@@ -6348,9 +6085,8 @@ Shows how one Statistic would change during <a href="#catalyst-set-preview"><cod
   <p class="api-method-summary">Returns a new array containing the Modifiers that would be added by this preview.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-modifier">CatalystModifier</a>&gt;</span>
-      <span class="api-return-description">Incoming modifiers.</span>
     </div>
   </div>
 </div>
@@ -6374,9 +6110,8 @@ Describes one problem found while a <a href="#catalyst-set"><code>CatalystSet</c
   <p class="api-method-summary">Returns the <a href="#enum-e-cat-route-outcome"><code>eCatRouteOutcome</code></a> value that explains what went wrong.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description"><a href="#enum-e-cat-route-outcome"><code>eCatRouteOutcome</code></a> value.</span>
     </div>
   </div>
 </div>
@@ -6386,9 +6121,8 @@ Describes one problem found while a <a href="#catalyst-set"><code>CatalystSet</c
   <p class="api-method-summary">Returns the Modifier or other Catalyst value involved in this problem.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Any</span>
-      <span class="api-return-description">Subject value.</span>
     </div>
   </div>
 </div>
@@ -6398,9 +6132,8 @@ Describes one problem found while a <a href="#catalyst-set"><code>CatalystSet</c
   <p class="api-method-summary">Returns the requested Statistic ID.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">Target ID.</span>
     </div>
   </div>
 </div>
@@ -6410,9 +6143,8 @@ Describes one problem found while a <a href="#catalyst-set"><code>CatalystSet</c
   <p class="api-method-summary">Returns the Statistic Catalyst found before the operation failed, or noone if no Statistic was found.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic">CatalystStatistic</a>,Noone</span>
-      <span class="api-return-description">Statistic or noone.</span>
     </div>
   </div>
 </div>
@@ -6435,9 +6167,8 @@ Stores the result of Apply() or ApplySwap(). These operations are all-or-nothing
   <p class="api-method-summary">Returns whether the complete apply or swap was performed.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether it succeeded.</span>
     </div>
   </div>
 </div>
@@ -6447,9 +6178,8 @@ Stores the result of Apply() or ApplySwap(). These operations are all-or-nothing
   <p class="api-method-summary">Returns the problems Catalyst found while matching Modifiers to target Statistics.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-route-diagnostic">CatalystRouteDiagnostic</a>&gt;</span>
-      <span class="api-return-description">Problems Catalyst found while matching Modifiers to target Statistics.</span>
     </div>
   </div>
 </div>
@@ -6459,9 +6189,8 @@ Stores the result of Apply() or ApplySwap(). These operations are all-or-nothing
   <p class="api-method-summary">Returns a new array containing refresh results for touched Statistics.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-statistic-refresh-result">CatalystStatisticRefreshResult</a>&gt;</span>
-      <span class="api-return-description">Refresh results.</span>
     </div>
   </div>
 </div>
@@ -6484,9 +6213,8 @@ Reports what changed when a <a href="#catalyst-set"><code>CatalystSet</code></a>
   <p class="api-method-summary">Returns whether any refreshed Statistic or Resource changed current value.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether anything changed.</span>
     </div>
   </div>
 </div>
@@ -6496,9 +6224,8 @@ Reports what changed when a <a href="#catalyst-set"><code>CatalystSet</code></a>
   <p class="api-method-summary">Returns the Statistic refresh results.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-set-statistic-refresh-entry">CatalystSetStatisticRefreshEntry</a>&gt;</span>
-      <span class="api-return-description">Statistic refresh entries.</span>
     </div>
   </div>
 </div>
@@ -6508,9 +6235,8 @@ Reports what changed when a <a href="#catalyst-set"><code>CatalystSet</code></a>
   <p class="api-method-summary">Returns the Resource refresh results.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-set-resource-refresh-entry">CatalystSetResourceRefreshEntry</a>&gt;</span>
-      <span class="api-return-description">Resource refresh entries.</span>
     </div>
   </div>
 </div>
@@ -6532,9 +6258,8 @@ Pairs one refreshed Statistic with the result of that refresh.
   <p class="api-method-summary">Returns the refreshed Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic">CatalystStatistic</a></span>
-      <span class="api-return-description">Statistic reference.</span>
     </div>
   </div>
 </div>
@@ -6544,9 +6269,8 @@ Pairs one refreshed Statistic with the result of that refresh.
   <p class="api-method-summary">Returns this Statistic&#x27;s refresh result.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic-refresh-result">CatalystStatisticRefreshResult</a></span>
-      <span class="api-return-description">Refresh result.</span>
     </div>
   </div>
 </div>
@@ -6568,9 +6292,8 @@ Pairs one refreshed Resource with its change result.
   <p class="api-method-summary">Returns the refreshed Resource.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource">CatalystResource</a></span>
-      <span class="api-return-description">Resource reference.</span>
     </div>
   </div>
 </div>
@@ -6580,9 +6303,8 @@ Pairs one refreshed Resource with its change result.
   <p class="api-method-summary">Returns this Resource&#x27;s refresh result.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-resource-change">CatalystResourceChange</a></span>
-      <span class="api-return-description">Resource change result.</span>
     </div>
   </div>
 </div>
@@ -6605,9 +6327,8 @@ Contains the Catalyst values currently managed by a Set for inspection or debug 
   <p class="api-method-summary">Returns the Statistic inspection details.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-set-statistic-detail">CatalystSetStatisticDetail</a>&gt;</span>
-      <span class="api-return-description">Evaluation entries.</span>
     </div>
   </div>
 </div>
@@ -6617,9 +6338,8 @@ Contains the Catalyst values currently managed by a Set for inspection or debug 
   <p class="api-method-summary">Returns direct Resource members.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-resource">CatalystResource</a>&gt;</span>
-      <span class="api-return-description">Resources.</span>
     </div>
   </div>
 </div>
@@ -6629,9 +6349,8 @@ Contains the Catalyst values currently managed by a Set for inspection or debug 
   <p class="api-method-summary">Returns direct Effect Manager members.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-effect-manager">CatalystEffectManager</a>&gt;</span>
-      <span class="api-return-description">Managers.</span>
     </div>
   </div>
 </div>
@@ -6653,9 +6372,8 @@ Keeps a Statistic together with the Explain() details showing how its current va
   <p class="api-method-summary">Returns the inspected Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic">CatalystStatistic</a></span>
-      <span class="api-return-description">Statistic reference.</span>
     </div>
   </div>
 </div>
@@ -6665,9 +6383,8 @@ Keeps a Statistic together with the Explain() details showing how its current va
   <p class="api-method-summary">Returns Explain() details showing how this Statistic&#x27;s value was calculated.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-statistic-evaluation">CatalystStatisticEvaluation</a></span>
-      <span class="api-return-description">Details showing how the preview value was calculated.</span>
     </div>
   </div>
 </div>
@@ -6691,9 +6408,8 @@ Returned by OnChange() and similar methods when you subscribe to an event. Keep 
   <p class="api-method-summary">Stops this subscription, so its callback will no longer run. Calling Unsubscribe() again is safe and returns false because it is already stopped.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">True when an active subscription was removed.</span>
     </div>
   </div>
 </div>
@@ -6703,9 +6419,8 @@ Returned by OnChange() and similar methods when you subscribe to an event. Keep 
   <p class="api-method-summary">Returns whether this subscription is still active and able to receive callbacks.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the subscription is active.</span>
     </div>
   </div>
 </div>
@@ -6739,9 +6454,8 @@ Represents a live connection between a Catalyst Statistic or Resource and an Ora
   <p class="api-method-summary">Stops keeping the Oracle Fact updated. The Fact value already stored in Oracle is left in place.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">True when an active binding was removed.</span>
     </div>
   </div>
 </div>
@@ -6751,9 +6465,8 @@ Represents a live connection between a Catalyst Statistic or Resource and an Ora
   <p class="api-method-summary">Returns whether this binding is still publishing changes.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the binding is active.</span>
     </div>
   </div>
 </div>
@@ -6828,9 +6541,8 @@ new CatalystCountdownTracker()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-countdown-tracker">CatalystCountdownTracker</a></span>
-      <span class="api-return-description">This tracker, so calls can be chained.</span>
     </div>
   </div>
 </div>
@@ -6840,9 +6552,8 @@ new CatalystCountdownTracker()
   <p class="api-method-summary">Returns the optional ID used to reconnect this custom countdown tracker during save/restore.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">Current tracker ID, or undefined when none is set.</span>
     </div>
   </div>
 </div>
@@ -6860,9 +6571,8 @@ new CatalystCountdownTracker()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-countdown-tracker">CatalystCountdownTracker</a></span>
-      <span class="api-return-description">The tracker, for chaining.</span>
     </div>
   </div>
 </div>
@@ -6880,9 +6590,8 @@ new CatalystCountdownTracker()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the flow was detached.</span>
     </div>
   </div>
 </div>
@@ -6900,9 +6609,8 @@ new CatalystCountdownTracker()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the flow is tracked.</span>
     </div>
   </div>
 </div>
@@ -6920,9 +6628,8 @@ new CatalystCountdownTracker()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-countdown-tracker">CatalystCountdownTracker</a></span>
-      <span class="api-return-description">The tracker, for chaining.</span>
     </div>
   </div>
 </div>
@@ -6940,9 +6647,8 @@ new CatalystCountdownTracker()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the effect was detached.</span>
     </div>
   </div>
 </div>
@@ -6960,9 +6666,8 @@ new CatalystCountdownTracker()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the effect is tracked.</span>
     </div>
   </div>
 </div>
@@ -6980,9 +6685,8 @@ new CatalystCountdownTracker()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-countdown-tracker">CatalystCountdownTracker</a></span>
-      <span class="api-return-description">The tracker, for chaining.</span>
     </div>
   </div>
 </div>
@@ -7000,9 +6704,8 @@ new CatalystCountdownTracker()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the modifier was detached.</span>
     </div>
   </div>
 </div>
@@ -7020,9 +6723,8 @@ new CatalystCountdownTracker()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the modifier is tracked.</span>
     </div>
   </div>
 </div>
@@ -7040,9 +6742,8 @@ new CatalystCountdownTracker()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Current paused state.</span>
     </div>
   </div>
 </div>
@@ -7052,9 +6753,8 @@ new CatalystCountdownTracker()
   <p class="api-method-summary">Returns whether countdown is currently paused.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Current paused state.</span>
     </div>
   </div>
 </div>
@@ -7072,9 +6772,8 @@ new CatalystCountdownTracker()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Current time scale.</span>
     </div>
   </div>
 </div>
@@ -7084,9 +6783,8 @@ new CatalystCountdownTracker()
   <p class="api-method-summary">Returns the multiplier applied to every countdown step.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Current time scale.</span>
     </div>
   </div>
 </div>
@@ -7104,9 +6802,8 @@ new CatalystCountdownTracker()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-countdown-tracker">CatalystCountdownTracker</a></span>
-      <span class="api-return-description">The tracker, for chaining.</span>
     </div>
   </div>
 </div>
@@ -7116,9 +6813,8 @@ new CatalystCountdownTracker()
   <p class="api-method-summary">Stops automatic countdown without detaching tracked flows, effects, or modifiers.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-countdown-tracker">CatalystCountdownTracker</a></span>
-      <span class="api-return-description">The tracker, for chaining.</span>
     </div>
   </div>
 </div>
@@ -7128,9 +6824,8 @@ new CatalystCountdownTracker()
   <p class="api-method-summary">Returns whether this tracker is currently advancing itself automatically each frame.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether automatic countdown is active.</span>
     </div>
   </div>
 </div>
@@ -7140,9 +6835,8 @@ new CatalystCountdownTracker()
   <p class="api-method-summary">Returns the tracker&#x27;s current countdown mode.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Real</span>
-      <span class="api-return-description">Current countdown mode (<a href="#enum-e-cat-countdown-mode"><code>eCatCountdownMode</code></a>).</span>
     </div>
   </div>
 </div>
@@ -7158,37 +6852,16 @@ new CatalystCountdownTracker()
       <span class="api-argument-description">Amount of countdown time to pass. Defaults to 1.</span>
     </div>
   </div>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
-      <span class="api-return-type">Undefined</span>
-      <span class="api-return-description">No return value.</span>
-    </div>
-  </div>
 </div>
 
 <div class="api-method-entry" id="catalyst-countdown-tracker-debug-dump">
   <div class="api-method-name">DebugDump()</div>
   <p class="api-method-summary">Writes separate summaries of tracked standalone flows, timed effects, and timed modifiers to debug output.</p>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
-      <span class="api-return-type">Undefined</span>
-      <span class="api-return-description">No return value.</span>
-    </div>
-  </div>
 </div>
 
 <div class="api-method-entry" id="catalyst-countdown-tracker-destroy">
   <div class="api-method-name">Destroy()</div>
   <p class="api-method-summary">Destroys this tracker and stops its automatic timing. Tracked values are detached from the tracker but are not otherwise destroyed. If called during Countdown(), cleanup finishes after the current countdown pass.</p>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
-      <span class="api-return-type">Undefined</span>
-      <span class="api-return-description">No return value.</span>
-    </div>
-  </div>
 </div>
 
 ## Saving and loading
@@ -7211,9 +6884,8 @@ Result returned by <a href="#catalyst-set-capture-state"><code>CatalystSet.Captu
   <p class="api-method-summary">Returns true when CaptureState() produced complete save data that can be passed to GetState().</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether capture succeeded.</span>
     </div>
   </div>
 </div>
@@ -7223,9 +6895,8 @@ Result returned by <a href="#catalyst-set-capture-state"><code>CatalystSet.Captu
   <p class="api-method-summary">Returns the complete captured state when capture succeeded.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct,Undefined</span>
-      <span class="api-return-description">Captured state, or undefined when capture failed.</span>
     </div>
   </div>
 </div>
@@ -7235,9 +6906,8 @@ Result returned by <a href="#catalyst-set-capture-state"><code>CatalystSet.Captu
   <p class="api-method-summary">Returns a plain-data report describing whether capture succeeded and, if it failed, what Catalyst could not save. The report is safe to include in JSON or debug output.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct</span>
-      <span class="api-return-description">Capture diagnostic report.</span>
     </div>
   </div>
   <div class="api-detail-section">
@@ -7310,9 +6980,8 @@ Prepared restore handle returned by <a href="#catalyst-set-restore-state"><code>
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-state-restore-result">CatalystStateRestoreResult</a></span>
-      <span class="api-return-description">This restore result.</span>
     </div>
   </div>
 </div>
@@ -7330,9 +6999,8 @@ Prepared restore handle returned by <a href="#catalyst-set-restore-state"><code>
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-state-restore-result">CatalystStateRestoreResult</a></span>
-      <span class="api-return-description">This restore result.</span>
     </div>
   </div>
 </div>
@@ -7342,9 +7010,8 @@ Prepared restore handle returned by <a href="#catalyst-set-restore-state"><code>
   <p class="api-method-summary">Returns every callback that is still preventing Complete() from loading the captured state. Each requirement tells you what Catalyst value needs the callback and lets you Resolve() it directly.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-state-callback-requirement">CatalystStateCallbackRequirement</a>&gt;</span>
-      <span class="api-return-description">Missing callback requirements.</span>
     </div>
   </div>
 </div>
@@ -7354,9 +7021,8 @@ Prepared restore handle returned by <a href="#catalyst-set-restore-state"><code>
   <p class="api-method-summary">Returns every saved value that is still waiting to be reconnected to a custom <a href="#catalyst-countdown-tracker"><code>CatalystCountdownTracker</code></a> before Complete() can succeed.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;Struct.<a href="#catalyst-state-countdown-tracker-requirement">CatalystStateCountdownTrackerRequirement</a>&gt;</span>
-      <span class="api-return-description">Missing countdown tracker requirements.</span>
     </div>
   </div>
 </div>
@@ -7366,9 +7032,8 @@ Prepared restore handle returned by <a href="#catalyst-set-restore-state"><code>
   <p class="api-method-summary">Tells the restore to skip any temporary saved Effect, Flow, or Modifier that still cannot be repaired. Direct Set members and other permanent structure are never skipped, so unresolved permanent requirements will still block Complete().</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-state-restore-result">CatalystStateRestoreResult</a></span>
-      <span class="api-return-description">This restore result.</span>
     </div>
   </div>
 </div>
@@ -7378,9 +7043,8 @@ Prepared restore handle returned by <a href="#catalyst-set-restore-state"><code>
   <p class="api-method-summary">Returns a plain-data report describing the current restore stage, unresolved requirements, ignored temporary values, and any failures. The report is safe to include in JSON or debug output.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct</span>
-      <span class="api-return-description">Restore diagnostic report.</span>
     </div>
   </div>
   <div class="api-detail-section">
@@ -7437,9 +7101,8 @@ Prepared restore handle returned by <a href="#catalyst-set-restore-state"><code>
   <p class="api-method-summary">Returns whether Complete() has successfully applied the captured state to the live <a href="#catalyst-set"><code>CatalystSet</code></a>.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether restoration is complete.</span>
     </div>
   </div>
 </div>
@@ -7449,9 +7112,8 @@ Prepared restore handle returned by <a href="#catalyst-set-restore-state"><code>
   <p class="api-method-summary">Applies the prepared save data to the existing <a href="#catalyst-set"><code>CatalystSet</code></a> once all required callbacks and custom countdown trackers have been repaired or deliberately ignored. The load is gameplay-silent: Catalyst does not treat restored values as ordinary gameplay changes or fire normal change/apply/remove callbacks.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">true if the state is now fully applied; false if repair requirements or another restore blocker remain.</span>
     </div>
   </div>
 </div>
@@ -7493,9 +7155,8 @@ Represents one missing callback requirement returned by <a href="#catalyst-state
   <p class="api-method-summary">Returns which kind of Catalyst value is missing a callback, such as &quot;statistic&quot;, &quot;modifier&quot;, or &quot;effect&quot;.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String</span>
-      <span class="api-return-description">Catalyst value type.</span>
     </div>
   </div>
 </div>
@@ -7505,9 +7166,8 @@ Represents one missing callback requirement returned by <a href="#catalyst-state
   <p class="api-method-summary">Returns the ID of the Catalyst value whose callback needs to be supplied again.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">Catalyst value ID, or undefined when that value has no ID.</span>
     </div>
   </div>
 </div>
@@ -7517,9 +7177,8 @@ Represents one missing callback requirement returned by <a href="#catalyst-state
   <p class="api-method-summary">Tells you which part of the Catalyst value owns the missing callback. For example, &quot;self&quot; means the main value, while &quot;rate&quot;, &quot;minimum&quot;, or &quot;chance_per_tick&quot; refers to an owned Statistic inside it.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String</span>
-      <span class="api-return-description">Component name.</span>
     </div>
   </div>
 </div>
@@ -7529,9 +7188,8 @@ Represents one missing callback requirement returned by <a href="#catalyst-state
   <p class="api-method-summary">Returns a text path showing where this missing callback came from inside the captured state. This is mainly useful for debugging a restore problem.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String</span>
-      <span class="api-return-description">Saved-state path.</span>
     </div>
   </div>
 </div>
@@ -7541,9 +7199,8 @@ Represents one missing callback requirement returned by <a href="#catalyst-state
   <p class="api-method-summary">Returns whether you are allowed to skip the temporary saved Effect, Flow, or Modifier that needs this callback. Permanent Set members cannot be skipped.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether Ignore() is available.</span>
     </div>
   </div>
 </div>
@@ -7553,9 +7210,8 @@ Represents one missing callback requirement returned by <a href="#catalyst-state
   <p class="api-method-summary">Marks the temporary saved Effect, Flow, or Modifier containing this missing callback to be skipped when Complete() applies the restore. Use CanIgnore() first.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the restore root was marked to be ignored.</span>
     </div>
   </div>
 </div>
@@ -7565,9 +7221,8 @@ Represents one missing callback requirement returned by <a href="#catalyst-state
   <p class="api-method-summary">Returns the kind of temporary saved Catalyst value that Ignore() would skip, such as an Effect, Flow, or Modifier.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Undefined</span>
-      <span class="api-return-description">Kind of saved value that would be skipped, or undefined when it cannot be ignored.</span>
     </div>
   </div>
 </div>
@@ -7577,9 +7232,8 @@ Represents one missing callback requirement returned by <a href="#catalyst-state
   <p class="api-method-summary">Returns the ID of the temporary saved Catalyst value that Ignore() would skip.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">ID of the saved value that would be skipped, or undefined when it cannot be ignored.</span>
     </div>
   </div>
 </div>
@@ -7589,9 +7243,8 @@ Represents one missing callback requirement returned by <a href="#catalyst-state
   <p class="api-method-summary">Returns the Catalyst value this missing-callback requirement belongs to. This lets advanced repair code inspect the value directly if needed.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct</span>
-      <span class="api-return-description">Catalyst struct.</span>
     </div>
   </div>
 </div>
@@ -7601,9 +7254,8 @@ Represents one missing callback requirement returned by <a href="#catalyst-state
   <p class="api-method-summary">Returns the names of callbacks that this Catalyst value still needs before the restore can complete.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Array&lt;String&gt;</span>
-      <span class="api-return-description">Missing callback slot names.</span>
     </div>
   </div>
 </div>
@@ -7621,9 +7273,8 @@ Represents one missing callback requirement returned by <a href="#catalyst-state
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the callback is still required.</span>
     </div>
   </div>
 </div>
@@ -7641,9 +7292,8 @@ Represents one missing callback requirement returned by <a href="#catalyst-state
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Undefined</span>
-      <span class="api-return-description">Saved function name, or undefined when none was available.</span>
     </div>
   </div>
 </div>
@@ -7666,9 +7316,8 @@ Represents one missing callback requirement returned by <a href="#catalyst-state
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the callback was accepted.</span>
     </div>
   </div>
 </div>
@@ -7707,9 +7356,8 @@ Represents one missing custom countdown tracker requirement returned by <a href=
   <p class="api-method-summary">Returns which kind of Catalyst value is waiting for a custom <a href="#catalyst-countdown-tracker"><code>CatalystCountdownTracker</code></a>, such as an Effect, Flow, or Modifier.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String</span>
-      <span class="api-return-description">Catalyst value type.</span>
     </div>
   </div>
 </div>
@@ -7719,9 +7367,8 @@ Represents one missing custom countdown tracker requirement returned by <a href=
   <p class="api-method-summary">Returns the ID of the Catalyst value that needs to be reconnected to a custom countdown tracker.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">Catalyst value ID, or undefined when it has no ID.</span>
     </div>
   </div>
 </div>
@@ -7731,9 +7378,8 @@ Represents one missing custom countdown tracker requirement returned by <a href=
   <p class="api-method-summary">Returns the ID of the custom <a href="#catalyst-countdown-tracker"><code>CatalystCountdownTracker</code></a> this saved value used before it was captured.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real</span>
-      <span class="api-return-description">Countdown tracker identity.</span>
     </div>
   </div>
 </div>
@@ -7743,9 +7389,8 @@ Represents one missing custom countdown tracker requirement returned by <a href=
   <p class="api-method-summary">Returns the saved-state path containing the missing countdown tracker.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String</span>
-      <span class="api-return-description">Saved-state path.</span>
     </div>
   </div>
 </div>
@@ -7755,9 +7400,8 @@ Represents one missing custom countdown tracker requirement returned by <a href=
   <p class="api-method-summary">Returns whether you are allowed to skip the temporary saved Effect, Flow, or Modifier that needs this tracker. Permanent Set members cannot be skipped.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether Ignore() is available.</span>
     </div>
   </div>
 </div>
@@ -7767,9 +7411,8 @@ Represents one missing custom countdown tracker requirement returned by <a href=
   <p class="api-method-summary">Marks the temporary saved Effect, Flow, or Modifier containing this tracker to be skipped when Complete() applies the restore. Use CanIgnore() first.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the saved temporary value was marked to be skipped.</span>
     </div>
   </div>
 </div>
@@ -7779,9 +7422,8 @@ Represents one missing custom countdown tracker requirement returned by <a href=
   <p class="api-method-summary">Returns the kind of temporary saved Catalyst value that Ignore() would skip, such as an Effect, Flow, or Modifier.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Undefined</span>
-      <span class="api-return-description">Kind of saved value that would be skipped, or undefined when it cannot be ignored.</span>
     </div>
   </div>
 </div>
@@ -7791,9 +7433,8 @@ Represents one missing custom countdown tracker requirement returned by <a href=
   <p class="api-method-summary">Returns the ID of the temporary saved Catalyst value that Ignore() would skip.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">String,Real,Undefined</span>
-      <span class="api-return-description">ID of the saved value that would be skipped, or undefined when it cannot be ignored.</span>
     </div>
   </div>
 </div>
@@ -7803,9 +7444,8 @@ Represents one missing custom countdown tracker requirement returned by <a href=
   <p class="api-method-summary">Returns the Catalyst value this missing-tracker requirement belongs to. This lets advanced repair code inspect the value directly if needed.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct</span>
-      <span class="api-return-description">Catalyst value.</span>
     </div>
   </div>
 </div>
@@ -7823,9 +7463,8 @@ Represents one missing custom countdown tracker requirement returned by <a href=
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Bool</span>
-      <span class="api-return-description">Whether the tracker was accepted.</span>
     </div>
   </div>
 </div>
@@ -7865,9 +7504,8 @@ new CatalystRepair()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair">CatalystRepair</a></span>
-      <span class="api-return-description">This repair table, so calls can be chained.</span>
     </div>
   </div>
 </div>
@@ -7885,9 +7523,8 @@ new CatalystRepair()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-statistic">__CatalystRepairStatistic</a>,Undefined</span>
-      <span class="api-return-description">Statistic repair row, or undefined for an invalid identity.</span>
     </div>
   </div>
 </div>
@@ -7905,9 +7542,8 @@ new CatalystRepair()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-resource">__CatalystRepairResource</a>,Undefined</span>
-      <span class="api-return-description">Resource repair row, or undefined for an invalid identity.</span>
     </div>
   </div>
 </div>
@@ -7925,9 +7561,8 @@ new CatalystRepair()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-flow">__CatalystRepairFlow</a>,Undefined</span>
-      <span class="api-return-description">Flow repair row, or undefined for an invalid identity.</span>
     </div>
   </div>
 </div>
@@ -7945,9 +7580,8 @@ new CatalystRepair()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-modifier">__CatalystRepairModifier</a>,Undefined</span>
-      <span class="api-return-description">Modifier repair row, or undefined for an invalid identity.</span>
     </div>
   </div>
 </div>
@@ -7965,9 +7599,8 @@ new CatalystRepair()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-effect">__CatalystRepairEffect</a>,Undefined</span>
-      <span class="api-return-description">Effect repair row, or undefined for an invalid identity.</span>
     </div>
   </div>
 </div>
@@ -7985,9 +7618,8 @@ new CatalystRepair()
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-effect-manager">__CatalystRepairEffectManager</a>,Undefined</span>
-      <span class="api-return-description">EffectManager repair row, or undefined for an invalid identity.</span>
     </div>
   </div>
 </div>
@@ -8019,9 +7651,8 @@ Repair row created by <a href="#catalyst-repair-add-statistic"><code>CatalystRep
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-statistic">__CatalystRepairStatistic</a></span>
-      <span class="api-return-description">This repair row.</span>
     </div>
   </div>
 </div>
@@ -8039,9 +7670,8 @@ Repair row created by <a href="#catalyst-repair-add-statistic"><code>CatalystRep
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-statistic">__CatalystRepairStatistic</a></span>
-      <span class="api-return-description">This repair row.</span>
     </div>
   </div>
 </div>
@@ -8065,9 +7695,8 @@ Repair row created by <a href="#catalyst-repair-add-resource"><code>CatalystRepa
   <p class="api-method-summary">Opens the repair entry for callbacks belonging to this Resource&#x27;s minimum Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-statistic">__CatalystRepairStatistic</a></span>
-      <span class="api-return-description">Minimum Statistic repair row.</span>
     </div>
   </div>
 </div>
@@ -8077,9 +7706,8 @@ Repair row created by <a href="#catalyst-repair-add-resource"><code>CatalystRepa
   <p class="api-method-summary">Opens the repair entry for callbacks belonging to this Resource&#x27;s maximum Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-statistic">__CatalystRepairStatistic</a></span>
-      <span class="api-return-description">Maximum Statistic repair row.</span>
     </div>
   </div>
 </div>
@@ -8102,9 +7730,8 @@ Repair row created by <a href="#catalyst-repair-add-flow"><code>CatalystRepair.A
   <p class="api-method-summary">Opens the repair entry for callbacks belonging to this Flow&#x27;s rate Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-statistic">__CatalystRepairStatistic</a></span>
-      <span class="api-return-description">Rate Statistic repair row.</span>
     </div>
   </div>
 </div>
@@ -8136,9 +7763,8 @@ Repair row created by <a href="#catalyst-repair-add-modifier"><code>CatalystRepa
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-modifier">__CatalystRepairModifier</a></span>
-      <span class="api-return-description">This repair row.</span>
     </div>
   </div>
 </div>
@@ -8156,9 +7782,8 @@ Repair row created by <a href="#catalyst-repair-add-modifier"><code>CatalystRepa
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-modifier">__CatalystRepairModifier</a></span>
-      <span class="api-return-description">This repair row.</span>
     </div>
   </div>
 </div>
@@ -8194,9 +7819,8 @@ Repair row created by <a href="#catalyst-repair-add-effect"><code>CatalystRepair
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-effect">__CatalystRepairEffect</a></span>
-      <span class="api-return-description">This repair row.</span>
     </div>
   </div>
 </div>
@@ -8214,9 +7838,8 @@ Repair row created by <a href="#catalyst-repair-add-effect"><code>CatalystRepair
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-effect">__CatalystRepairEffect</a></span>
-      <span class="api-return-description">This repair row.</span>
     </div>
   </div>
 </div>
@@ -8234,9 +7857,8 @@ Repair row created by <a href="#catalyst-repair-add-effect"><code>CatalystRepair
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-effect">__CatalystRepairEffect</a></span>
-      <span class="api-return-description">This repair row.</span>
     </div>
   </div>
 </div>
@@ -8254,9 +7876,8 @@ Repair row created by <a href="#catalyst-repair-add-effect"><code>CatalystRepair
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-effect">__CatalystRepairEffect</a></span>
-      <span class="api-return-description">This repair row.</span>
     </div>
   </div>
 </div>
@@ -8266,9 +7887,8 @@ Repair row created by <a href="#catalyst-repair-add-effect"><code>CatalystRepair
   <p class="api-method-summary">Opens the repair entry for callbacks belonging to this Effect&#x27;s chance-to-apply Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-statistic">__CatalystRepairStatistic</a></span>
-      <span class="api-return-description">Chance-to-apply Statistic repair row.</span>
     </div>
   </div>
 </div>
@@ -8278,9 +7898,8 @@ Repair row created by <a href="#catalyst-repair-add-effect"><code>CatalystRepair
   <p class="api-method-summary">Opens the repair entry for callbacks belonging to this Effect&#x27;s chance-per-tick Statistic.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-statistic">__CatalystRepairStatistic</a></span>
-      <span class="api-return-description">Chance-per-tick Statistic repair row.</span>
     </div>
   </div>
 </div>
@@ -8311,9 +7930,8 @@ Repair row created by <a href="#catalyst-repair-add-effect-manager"><code>Cataly
   </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
+    <div class="api-return-row api-return-only">
       <span class="api-return-type">Struct.<a href="#catalyst-repair-effect-manager">__CatalystRepairEffectManager</a></span>
-      <span class="api-return-description">This repair row.</span>
     </div>
   </div>
 </div>
@@ -8331,482 +7949,431 @@ Repair row created by <a href="#catalyst-repair-add-effect-manager"><code>Cataly
       <span class="api-argument-description">Amount of countdown time to pass. Defaults to 1.</span>
     </div>
   </div>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Returns</div>
-    <div class="api-return-row">
-      <span class="api-return-type">Undefined</span>
-      <span class="api-return-description">No return value.</span>
-    </div>
-  </div>
 </div>
 
 ## Enums
 
 ### Statistics and modifiers
+{: .api-function-subsection-title .api-function-subsection-title-first }
 
 <div class="api-enum-entry" id="enum-e-cat-math-ops">
   <div class="api-enum-name">eCatMathOps</div>
-  <p>Chooses how a Modifier changes a Statistic. ADD adds or subtracts a value, MULTIPLY scales it, and FORCE_MIN/FORCE_MAX set lower or upper limits.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">ADD</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">MULTIPLY</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">FORCE_MIN</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">FORCE_MAX</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Chooses how a Modifier changes a Statistic. ADD adds or subtracts a value, MULTIPLY scales it, and FORCE_MIN/FORCE_MAX set lower or upper limits.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">ADD</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">MULTIPLY</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">FORCE_MIN</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">FORCE_MAX</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="api-enum-entry" id="enum-e-cat-modifier-order">
   <div class="api-enum-name">eCatModifierOrder</div>
-  <p>Chooses the order used for ADD and MULTIPLY Modifiers inside each Statistic layer.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">ADD_FIRST</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">MULTIPLY_FIRST</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">ATTACHMENT_ORDER</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Chooses the order used for ADD and MULTIPLY Modifiers inside each Statistic layer.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">ADD_FIRST</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">MULTIPLY_FIRST</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">ATTACHMENT_ORDER</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="api-enum-entry" id="enum-e-cat-stat-layer">
   <div class="api-enum-name">eCatStatLayer</div>
-  <p>Ready-made Statistic layer IDs. You can use these or provide your own string or number layer IDs.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">BASE_BONUS</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">EQUIPMENT</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">AUGMENTS</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">TEMP</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">GLOBAL</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Ready-made Statistic layer IDs. You can use these or provide your own string or number layer IDs.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">BASE_BONUS</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">EQUIPMENT</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">AUGMENTS</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">TEMP</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">GLOBAL</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="api-enum-entry" id="enum-e-cat-stack-mode">
   <div class="api-enum-name">eCatStackMode</div>
-  <p>Chooses how multiple stacks of a MULTIPLY Modifier combine. COMPOUND multiplies once per stack; ADDITIVE combines the percentage first.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">COMPOUND</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">ADDITIVE</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Chooses how multiple stacks of a MULTIPLY Modifier combine. COMPOUND multiplies once per stack; ADDITIVE combines the percentage first.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">COMPOUND</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">ADDITIVE</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="api-enum-entry" id="enum-e-cat-family-mode">
   <div class="api-enum-name">eCatFamilyMode</div>
-  <p>Chooses what happens when several Modifiers belong to the same family: use all of them, only the strongest, or only the weakest.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">STACK_ALL</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">STRONGEST</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">WEAKEST</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Chooses what happens when several Modifiers belong to the same family: use all of them, only the strongest, or only the weakest.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">STACK_ALL</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">STRONGEST</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">WEAKEST</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="api-enum-entry" id="enum-e-cat-family-scope">
   <div class="api-enum-name">eCatFamilyScope</div>
-  <p>Chooses where Modifier family rules apply. LAYER compares family members only inside the same layer; STATISTIC compares them across the whole Statistic.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">LAYER</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">STATISTIC</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Chooses where Modifier family rules apply. LAYER compares family members only inside the same layer; STATISTIC compares them across the whole Statistic.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">LAYER</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">STATISTIC</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="api-enum-entry" id="enum-e-cat-modifier-skip-reason">
   <div class="api-enum-name">eCatModifierSkipReason</div>
-  <p>Explains why a Modifier did not affect a Statistic calculation, such as a failed condition, zero stacks, losing its family comparison, or using an unknown layer.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">NONE</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">CONDITION_FAILED</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">ZERO_STACKS</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">FAMILY_LOST</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">UNKNOWN_LAYER</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Explains why a Modifier did not affect a Statistic calculation, such as a failed condition, zero stacks, losing its family comparison, or using an unknown layer.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NONE</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">CONDITION_FAILED</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">ZERO_STACKS</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">FAMILY_LOST</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">UNKNOWN_LAYER</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 ### Resources
+{: .api-function-subsection-title }
 
 <div class="api-enum-entry" id="enum-e-cat-resource-bound-mode">
   <div class="api-enum-name">eCatResourceBoundMode</div>
-  <p>Chooses how a Resource minimum or maximum behaves. HARD never allows the value past the bound, SOFT blocks ordinary movement past it but can be crossed explicitly, and OPEN does not restrict the value.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">HARD</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">SOFT</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">OPEN</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Chooses how a Resource minimum or maximum behaves. HARD never allows the value past the bound, SOFT blocks ordinary movement past it but can be crossed explicitly, and OPEN does not restrict the value.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">HARD</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">SOFT</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">OPEN</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="api-enum-entry" id="enum-e-cat-resource-operation">
   <div class="api-enum-name">eCatResourceOperation</div>
-  <p>Identifies the kind of Resource change recorded in a <a href="#catalyst-resource-change"><code>CatalystResourceChange</code></a> result.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">SET</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">CHANGE</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">INCREASE</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">DECREASE</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">FILL</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">EMPTY</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">RECONCILE</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Identifies the kind of Resource change recorded in a <a href="#catalyst-resource-change"><code>CatalystResourceChange</code></a> result.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">SET</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">CHANGE</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">INCREASE</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">DECREASE</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">FILL</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">EMPTY</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">RECONCILE</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 ### Effects
+{: .api-function-subsection-title }
 
 <div class="api-enum-entry" id="enum-e-cat-effect-reapply-policy">
   <div class="api-enum-name">eCatEffectReapplyPolicy</div>
-  <p>Chooses what an EffectManager does when an Effect is applied while another active Effect has the same ID.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">STACK</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">IGNORE</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">REPLACE</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">REFRESH</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">EXTEND</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Chooses what an EffectManager does when an Effect is applied while another active Effect has the same ID.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">STACK</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">IGNORE</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">REPLACE</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">REFRESH</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">EXTEND</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="api-enum-entry" id="enum-e-cat-effect-application-outcome">
   <div class="api-enum-name">eCatEffectApplicationOutcome</div>
-  <p>Explains what happened when <a href="#catalyst-effect-manager-add-effect"><code>CatalystEffectManager.AddEffect()</code></a> tried to apply an Effect.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">ADDED</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">QUEUED</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">FAILED_CHANCE</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">IGNORED</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">REPLACED</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">REFRESHED</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">EXTENDED</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">INVALID_EFFECT</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">MANAGER_DESTROYING</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">ALREADY_MANAGED</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">EXPIRED</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">TRACKER_DESTROYING</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Explains what happened when <a href="#catalyst-effect-manager-add-effect"><code>CatalystEffectManager.AddEffect()</code></a> tried to apply an Effect.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">ADDED</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">QUEUED</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">FAILED_CHANCE</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">IGNORED</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">REPLACED</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">REFRESHED</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">EXTENDED</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">INVALID_EFFECT</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">MANAGER_DESTROYING</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">ALREADY_MANAGED</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">EXPIRED</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">TRACKER_DESTROYING</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 ### Sets and routing
+{: .api-function-subsection-title }
 
 <div class="api-enum-entry" id="enum-e-cat-set-preview-status">
   <div class="api-enum-name">eCatSetPreviewStatus</div>
-  <p>Summarises whether a <a href="#catalyst-set"><code>CatalystSet</code></a> preview could route every requested Modifier, only some of them, or none of them.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">SUCCESS</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">PARTIAL</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">FAILED</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Summarises whether a <a href="#catalyst-set"><code>CatalystSet</code></a> preview could route every requested Modifier, only some of them, or none of them.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">SUCCESS</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">PARTIAL</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">FAILED</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="api-enum-entry" id="enum-e-cat-route-outcome">
   <div class="api-enum-name">eCatRouteOutcome</div>
-  <p>Explains why a <a href="#catalyst-set"><code>CatalystSet</code></a> could or could not match a Modifier to its target Statistic and perform the requested apply or swap.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">INVALID_TARGET_SET</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">INVALID_INCOMING_SET</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">INVALID_OUTGOING_SET</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">INVALID_MODIFIER</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">DUPLICATE_REFERENCE</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">MISSING_TARGET_IDENTITY</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">TARGET_NOT_FOUND</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">UNKNOWN_TARGET_LAYER</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">MODIFIER_ALREADY_PRESENT</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">MODIFIER_ATTACHED_ELSEWHERE</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">MODIFIER_EFFECT_OWNED</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">OUTGOING_MODIFIER_NOT_ATTACHED</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">OUTGOING_TARGET_NOT_IN_SET</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">OUTGOING_TARGET_IDENTITY_MISMATCH</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">MODIFIER_EXPIRED</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">MODIFIER_TRACKER_DESTROYING</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Explains why a <a href="#catalyst-set"><code>CatalystSet</code></a> could or could not match a Modifier to its target Statistic and perform the requested apply or swap.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">INVALID_TARGET_SET</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">INVALID_INCOMING_SET</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">INVALID_OUTGOING_SET</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">INVALID_MODIFIER</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">DUPLICATE_REFERENCE</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">MISSING_TARGET_IDENTITY</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">TARGET_NOT_FOUND</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">UNKNOWN_TARGET_LAYER</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">MODIFIER_ALREADY_PRESENT</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">MODIFIER_ATTACHED_ELSEWHERE</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">MODIFIER_EFFECT_OWNED</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">OUTGOING_MODIFIER_NOT_ATTACHED</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">OUTGOING_TARGET_NOT_IN_SET</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">OUTGOING_TARGET_IDENTITY_MISMATCH</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">MODIFIER_EXPIRED</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">MODIFIER_TRACKER_DESTROYING</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 ### Timing
+{: .api-function-subsection-title }
 
 <div class="api-enum-entry" id="enum-e-cat-countdown-mode">
   <div class="api-enum-name">eCatCountdownMode</div>
-  <p>Chooses how automatic countdown measures time. FRAMES counts one unit per game frame, while DELTA_TIME uses elapsed real time.</p>
-  <div class="api-enum-members">
-    <div class="api-enum-row">
-      <span class="api-enum-member">MANUAL</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">FRAMES</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">DELTA_TIME</span>
-      <span class="api-enum-description"></span>
-    </div>
-    <div class="api-enum-row">
-      <span class="api-enum-member">NUM</span>
-      <span class="api-enum-description"></span>
+  <p class="api-enum-summary">Chooses how automatic countdown measures time. FRAMES counts one unit per game frame, while DELTA_TIME uses elapsed real time.</p>
+  <div class="api-detail-section api-enum-values">
+    <div class="api-detail-heading">Values</div>
+    <div class="api-enum-members">
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">MANUAL</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">FRAMES</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">DELTA_TIME</span>
+      </div>
+      <div class="api-enum-row api-enum-row-compact">
+        <span class="api-enum-member">NUM</span>
+      </div>
     </div>
   </div>
 </div>
 
 ## Package globals
 
-<div class="api-method-entry" id="macro-catalyst-countdown">
+<div class="api-method-entry api-macro-entry api-macro-handle" id="macro-catalyst-countdown">
   <div class="api-method-name">CATALYST_COUNTDOWN</div>
   <p class="api-method-summary">Global default <a href="#catalyst-countdown-tracker"><code>CatalystCountdownTracker</code></a> used by timed Catalyst values unless you assign a custom tracker. Catalyst creates it at package startup and runs it automatically in frame mode. Use a custom tracker when one model needs an independent timing source.</p>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>global.__catalyst_countdown_tracker</code></pre>
-  </div>
   <div class="api-detail-section">
     <div class="api-detail-heading">Type</div>
     <div class="api-return-row api-return-only"><span class="api-return-type">Struct.<a href="#catalyst-countdown-tracker">CatalystCountdownTracker</a></span></div>
