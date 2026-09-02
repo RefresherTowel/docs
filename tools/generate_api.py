@@ -705,15 +705,14 @@ def render_detail(symbol: Symbol, manifest: dict[str, Any], exact: dict[str, str
             lines.append(f'      <span class="api-argument-description">{linkify(p.description, exact, bare)}</span>')
             lines.append('    </div>')
         lines.append('  </div>')
-    if symbol.return_type and symbol.return_type != "Undefined" or symbol.return_description:
+    # The generated reference uses return types as the lookup surface. Return prose
+    # remains useful in source/JSDoc and IDE tooltips, but repeating it here adds
+    # noise on long API pages. Undefined/no-return functions omit the section.
+    if symbol.return_type and symbol.return_type != "Undefined":
         lines.append('  <div class="api-detail-section">')
         lines.append('    <div class="api-detail-heading">Returns</div>')
-        rdesc = manual.get("return_description", symbol.return_description)
-        row_class = "api-return-row" if rdesc else "api-return-row api-return-only"
-        lines.append(f'    <div class="{row_class}">')
+        lines.append('    <div class="api-return-row api-return-only">')
         lines.append(f'      <span class="api-return-type">{type_html(symbol.return_type, bare)}</span>')
-        if rdesc:
-            lines.append(f'      <span class="api-return-description">{linkify(rdesc, exact, bare)}</span>')
         lines.append('    </div>')
         lines.append('  </div>')
     notes = manual.get("notes")
@@ -924,19 +923,27 @@ def collect_represented(manifest: dict[str, Any]) -> tuple[set[str], set[str], s
 def render_enum(name: str, enum: EnumDef, manifest: dict[str, Any], exact: dict[str, str], bare: dict[str, str]) -> list[str]:
     cfg = ((manifest.get("enums") or {}).get(name) or {})
     member_docs = cfg.get("members") or {}
-    lines = [f'<div class="api-enum-entry" id="{enum_anchor(name)}">', f'  <div class="api-enum-name">{html.escape(name)}</div>']
+    lines = [
+        f'<div class="api-enum-entry" id="{enum_anchor(name)}">',
+        f'  <div class="api-enum-name">{html.escape(name)}</div>',
+    ]
     desc = cfg.get("description", enum.description)
     if desc:
-        lines.append(f'  <p>{linkify(str(desc), exact, bare)}</p>')
-    lines.append('  <div class="api-enum-members">')
+        lines.append(f'  <p class="api-enum-summary">{linkify(str(desc), exact, bare)}</p>')
+    lines.append('  <div class="api-detail-section api-enum-values">')
+    lines.append('    <div class="api-detail-heading">Values</div>')
+    lines.append('    <div class="api-enum-members">')
     for member, value in enum.members:
         mcfg = member_docs.get(member, {}) if isinstance(member_docs, dict) else {}
         desc = mcfg.get("description", "") if isinstance(mcfg, dict) else str(mcfg)
+        row_class = "api-enum-row" if desc else "api-enum-row api-enum-row-compact"
         value_text = f' = {html.escape(value)}' if value else ''
-        lines.append('    <div class="api-enum-row">')
-        lines.append(f'      <span class="api-enum-member">{html.escape(member)}{value_text}</span>')
-        lines.append(f'      <span class="api-enum-description">{linkify(desc, exact, bare)}</span>')
-        lines.append('    </div>')
+        lines.append(f'      <div class="{row_class}">')
+        lines.append(f'        <span class="api-enum-member">{html.escape(member)}{value_text}</span>')
+        if desc:
+            lines.append(f'        <span class="api-enum-description">{linkify(desc, exact, bare)}</span>')
+        lines.append('      </div>')
+    lines.append('    </div>')
     lines.append('  </div>')
     lines.append('</div>')
     return lines
@@ -980,7 +987,7 @@ def render_macro(
     desc = cfg.get("description", macro.description)
     if desc:
         lines.append(f'  <p class="api-method-summary">{linkify(str(desc), exact, bare)}</p>')
-    if role != "symbol":
+    if role not in {"symbol", "handle"}:
         value_heading = "Default" if role == "setting" else "Value"
         lines.append('  <div class="api-detail-section">')
         lines.append(f'    <div class="api-detail-heading">{value_heading}</div>')
@@ -1023,7 +1030,7 @@ def validate(
         elif macros[name].hidden:
             errors.append(f"Ignored/internal macro cannot be represented: {name}")
 
-    valid_macro_roles = {"value", "setting", "symbol", "metadata"}
+    valid_macro_roles = {"value", "setting", "symbol", "handle", "metadata"}
     for section in manifest.get("macro_sections") or []:
         section_role = section.get("role")
         if section_role is not None and str(section_role).strip().lower() not in valid_macro_roles:
