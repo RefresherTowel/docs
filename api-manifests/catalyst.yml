@@ -2,6 +2,7 @@ library:
   id: catalyst
   name: Catalyst
   symbol_prefix: Catalyst
+  macro_prefix: CATALYST_
 
 # Catalyst ships Echo, Echo Chamber, and Oracle, plus internal smoke/probe scripts.
 # Restrict generation to Catalyst's actual public implementation scripts so those
@@ -19,6 +20,7 @@ source_globs:
   - scripts/scr_catalyst_set/**/*.gml
 
 require_public_coverage: true
+require_macro_coverage: true
 
 page:
   layout: default
@@ -98,15 +100,14 @@ function_sections:
 macro_sections:
   - title: Package globals
     macros:
-      - name: CATALYST_COUNTDOWN
-        type: Struct.CatalystCountdownTracker
-        description: >-
-          The global default CatalystCountdownTracker. Catalyst creates it when the
-          package initialises and starts it automatically in frame mode. Use a custom
-          CatalystCountdownTracker when one model needs an independent timing source.
-        see_also:
-          - CatalystCountdownTracker
-          - CatalystCountdown
+      - CATALYST_COUNTDOWN
+
+macros:
+  CATALYST_COUNTDOWN:
+    type: Struct.CatalystCountdownTracker
+    see_also:
+      - CatalystCountdownTracker
+      - CatalystCountdown
 
 enum_sections:
   - title: Enums
@@ -590,10 +591,6 @@ types:
 
   CatalystStateRestoreResult:
     opaque: true
-    description: >-
-      Pending restore handle returned by CatalystSet.RestoreState(). Use it to
-      supply missing runtime values, inspect restore diagnostics, and explicitly
-      Complete() the prepared load.
     require_grouping: true
     method_groups:
       Repair:
@@ -609,9 +606,6 @@ types:
 
   CatalystStateCallbackRequirement:
     opaque: true
-    description: >-
-      One missing callback requirement returned by
-      CatalystStateRestoreResult.GetMissingCallbacks().
     method_groups:
       Identification:
         - GetType
@@ -632,9 +626,6 @@ types:
 
   CatalystStateCountdownTrackerRequirement:
     opaque: true
-    description: >-
-      One missing custom countdown tracker requirement returned by
-      CatalystStateRestoreResult.GetMissingCountdownTrackers().
     method_groups:
       Identification:
         - GetType
@@ -653,44 +644,26 @@ types:
   __CatalystRepairStatistic:
     opaque: true
     display_name: Statistic repair row
-    description: >-
-      Repair row returned by CatalystRepair.AddStatistic() and by owned Statistic
-      repair helpers. It supplies runtime-only Statistic callbacks before a restore.
 
   __CatalystRepairResource:
     opaque: true
     display_name: Resource repair row
-    description: >-
-      Repair row returned by CatalystRepair.AddResource(). It opens repair rows for
-      the Resource's owned minimum and maximum Statistics.
 
   __CatalystRepairFlow:
     opaque: true
     display_name: Resource Flow repair row
-    description: >-
-      Repair row returned by CatalystRepair.AddFlow(). It opens the repair row for
-      the Flow's owned rate Statistic.
 
   __CatalystRepairModifier:
     opaque: true
     display_name: Modifier repair row
-    description: >-
-      Repair row returned by CatalystRepair.AddModifier(). It supplies runtime-only
-      Modifier callbacks before a restore.
 
   __CatalystRepairEffect:
     opaque: true
     display_name: Effect repair row
-    description: >-
-      Repair row returned by CatalystRepair.AddEffect(). It supplies Effect
-      callbacks and opens repair rows for its owned chance Statistics.
 
   __CatalystRepairEffectManager:
     opaque: true
     display_name: Effect Manager repair row
-    description: >-
-      Repair row returned by CatalystRepair.AddEffectManager(). It supplies the
-      manager's runtime random function before a restore.
 
 symbols:
   CatalystStatistic.AddModifier:

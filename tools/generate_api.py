@@ -42,6 +42,7 @@ class Symbol:
     source_file: str = ""
     source_line: int = 0
     order: int = 0
+    hidden: bool = False
 
     @property
     def key(self) -> str:
@@ -54,6 +55,7 @@ class EnumDef:
     members: list[tuple[str, str | None]]
     source_file: str
     source_line: int
+    description: str = ""
 
 
 @dataclasses.dataclass
@@ -218,6 +220,29 @@ def parse_doc_block(block: list[str]) -> dict[str, Any]:
     return data
 
 
+def preceding_doc_block(lines: list[str], line_idx: int) -> list[str]:
+    """Return the contiguous /// block immediately above line_idx."""
+    start = line_idx - 1
+    while start >= 0 and lines[start].lstrip().startswith("///"):
+        start -= 1
+    return lines[start + 1:line_idx]
+
+
+def doc_block_description(block: list[str]) -> str:
+    """Read @desc text, or plain /// prose used by lightweight enum docs."""
+    if not block:
+        return ""
+    parsed = parse_doc_block(block)
+    if parsed.get("desc"):
+        return str(parsed["desc"])
+    prose: list[str] = []
+    for raw in block:
+        text = raw.lstrip()[3:].strip()
+        if text and not text.startswith("@"):
+            prose.append(text)
+    return " ".join(prose).strip()
+
+
 def strip_line_comment(line: str) -> str:
     """Remove // comments while preserving string contents for signature parsing."""
     out: list[str] = []
@@ -288,7 +313,7 @@ def constructor_ranges(lines: list[str]) -> list[tuple[int, int, str, str | None
         return max(0, bisect.bisect_right(line_starts, char_offset) - 1)
 
     ranges: list[tuple[int, int, str, str | None]] = []
-    for m in re.finditer(r"(?m)^\s*function\s+([A-Za-z_]\w*)\s*\(", text):
+    for m in re.finditer(r"(?m)^[ \t]*function\s+([A-Za-z_]\w*)\s*\(", text):
         name = m.group(1)
         param_open = text.find("(", m.start())
         param_end = find_matching(text, param_open)
@@ -416,7 +441,13 @@ def parse_gml(source_root: Path, globs: list[str]) -> tuple[dict[str, Symbol], d
                     if mm:
                         members.append((mm.group(1), mm.group(2).strip() if mm.group(2) else None))
                 j += 1
-            enums[name] = EnumDef(name=name, members=members, source_file=str(path.relative_to(source_root)), source_line=i + 1)
+            enums[name] = EnumDef(
+                name=name,
+                members=members,
+                source_file=str(path.relative_to(source_root)),
+                source_line=i + 1,
+                description=doc_block_description(preceding_doc_block(lines, i)),
+            )
             i = j
 
         # JSDoc symbols
@@ -465,6 +496,34 @@ def parse_gml(source_root: Path, globs: list[str]) -> tuple[dict[str, Symbol], d
                 order=order,
             )
             symbols[sym.key] = sym
+
+        # Keep ignored/internal constructors in the source model as hidden type stubs.
+        # A manifest can explicitly document one as opaque (for example, a returned
+        # handle) without making its constructor part of the public API.
+        for constructor_start, _, constructor_name, parent_name in ranges:
+            if constructor_name in symbols:
+                continue
+            parsed = parse_signature_at(lines, constructor_start)
+            if not parsed:
+                continue
+            name, actual_params, is_constructor, parent = parsed
+            if not is_constructor:
+                continue
+            block = preceding_doc_block(lines, constructor_start)
+            doc = parse_doc_block(block) if block else {"params": []}
+            params = merge_doc_params(actual_params, doc.get("params", []))
+            order += 1
+            symbols[name] = Symbol(
+                name=name,
+                kind="type",
+                description=doc.get("desc", doc_block_description(block)),
+                params=params,
+                parent=parent if parent is not None else parent_name,
+                source_file=str(path.relative_to(source_root)),
+                source_line=constructor_start + 1,
+                order=order,
+                hidden=True,
+            )
     return symbols, enums, macros, parents
 
 
@@ -683,27 +742,9 @@ def render_detail(symbol: Symbol, manifest: dict[str, Any], exact: dict[str, str
         lines.append('  </div>')
     see_also = manual.get("see_also") or []
     if see_also:
-        links: list[str] = []
-        for target in see_also:
-            if isinstance(target, str):
-                label = target
-                if target in exact:
-                    links.append(f'<a href="#{exact[target]}"><code>{html.escape(target)}</code></a>')
-                elif target in bare:
-                    links.append(f'<a href="#{bare[target]}"><code>{html.escape(target)}</code></a>')
-                else:
-                    links.append(html.escape(target))
-            else:
-                label = str(target.get("label", target.get("href", "")))
-                href = str(target.get("href", "#"))
-                if href.startswith("/"):
-                    rendered_href = "{{ '" + html.escape(href, quote=True) + "' | relative_url }}"
-                else:
-                    rendered_href = html.escape(href, quote=True)
-                links.append(f'<a href="{rendered_href}">{html.escape(label)}</a>')
         lines.append('  <div class="api-detail-section">')
         lines.append('    <div class="api-detail-heading">See also</div>')
-        lines.append(f'    <div class="api-see-also">{" <span aria-hidden=\"true\">·</span> ".join(links)}</div>')
+        lines.append(f'    <div class="api-see-also">{render_see_also(see_also, exact, bare)}</div>')
         lines.append('  </div>')
     lines.append('</div>')
     return lines
@@ -751,9 +792,13 @@ def render_type(type_name: str, manifest: dict[str, Any], symbols: dict[str, Sym
     excluded = set(cfg.get("exclude_methods") or [])
     methods = [m for m in methods if m.name not in excluded]
     lines: list[str] = []
-    lines.append(f'### {type_name}')
+    display_name = str(cfg.get("display_name", type_name))
+    lines.append(f'### {display_name}')
     lines.append(f'{{: #{type_anchor(type_name)} .api-type-title }}')
     lines.append('')
+    if display_name != type_name:
+        lines.append(f'Returned as `{type_name}`.')
+        lines.append('')
     desc = cfg.get("description", sym.description)
     if desc:
         lines.append(linkify(desc, exact, bare))
@@ -761,29 +806,30 @@ def render_type(type_name: str, manifest: dict[str, Any], symbols: dict[str, Sym
     if sym.parent and sym.parent in bare:
         lines.append(f'Inherits from [`{sym.parent}`](#{bare[sym.parent]}).')
         lines.append('')
-    # Constructor signature is source-derived. Keep it visually strong but valid-looking.
-    required_args = [p.name for p in sym.params if not p.optional]
-    optional_args = [p.name for p in sym.params if p.optional]
-    call_args = required_args + optional_args
-    call = f'new {sym.name}({", ".join(call_args)})'
-    lines.append('```gml')
-    lines.append(call)
-    lines.append('```')
-    lines.append('')
-    if sym.params:
-        lines.append('<div class="api-constructor-meta">')
-        lines.append('  <div class="api-detail-section">')
-        lines.append('    <div class="api-detail-heading">Arguments</div>')
-        for p in sym.params:
-            opt = ' <span class="api-optional">optional</span>' if p.optional else ''
-            lines.append('    <div class="api-argument">')
-            lines.append(f'      <span class="api-argument-name">{html.escape(p.name)}{opt}</span>')
-            lines.append(f'      <span class="api-argument-type">{type_html(p.type, bare)}</span>')
-            lines.append(f'      <span class="api-argument-description">{linkify(p.description, exact, bare)}</span>')
-            lines.append('    </div>')
-        lines.append('  </div>')
-        lines.append('</div>')
+    if not cfg.get("opaque"):
+        # Constructor signature is source-derived. Keep it visually strong but valid-looking.
+        required_args = [p.name for p in sym.params if not p.optional]
+        optional_args = [p.name for p in sym.params if p.optional]
+        call_args = required_args + optional_args
+        call = f'new {sym.name}({", ".join(call_args)})'
+        lines.append('```gml')
+        lines.append(call)
+        lines.append('```')
         lines.append('')
+        if sym.params:
+            lines.append('<div class="api-constructor-meta">')
+            lines.append('  <div class="api-detail-section">')
+            lines.append('    <div class="api-detail-heading">Arguments</div>')
+            for p in sym.params:
+                opt = ' <span class="api-optional">optional</span>' if p.optional else ''
+                lines.append('    <div class="api-argument">')
+                lines.append(f'      <span class="api-argument-name">{html.escape(p.name)}{opt}</span>')
+                lines.append(f'      <span class="api-argument-type">{type_html(p.type, bare)}</span>')
+                lines.append(f'      <span class="api-argument-description">{linkify(p.description, exact, bare)}</span>')
+                lines.append('    </div>')
+            lines.append('  </div>')
+            lines.append('</div>')
+            lines.append('')
     if methods:
         lines.append('#### Methods')
         lines.append('')
@@ -822,6 +868,35 @@ def render_type(type_name: str, manifest: dict[str, Any], symbols: dict[str, Sym
     return lines
 
 
+def normalize_macro_manifest(manifest: dict[str, Any]) -> None:
+    """Normalize legacy inline macro metadata into the top-level macros mapping."""
+    macro_meta = dict(manifest.get("macros") or {})
+
+    def normalize_entries(entries: list[Any]) -> list[str]:
+        names: list[str] = []
+        for entry in entries:
+            if isinstance(entry, str):
+                names.append(entry)
+                continue
+            if not isinstance(entry, dict) or not entry.get("name"):
+                continue
+            name = str(entry["name"])
+            inline = {k: v for k, v in entry.items() if k != "name"}
+            # Explicit top-level metadata wins over the legacy inline form.
+            macro_meta[name] = {**inline, **(macro_meta.get(name) or {})}
+            names.append(name)
+        return names
+
+    for section in manifest.get("macro_sections") or []:
+        if section.get("macros"):
+            section["macros"] = normalize_entries(section.get("macros") or [])
+        for group in section.get("groups") or []:
+            if group.get("macros"):
+                group["macros"] = normalize_entries(group.get("macros") or [])
+    if macro_meta:
+        manifest["macros"] = macro_meta
+
+
 def collect_represented(manifest: dict[str, Any]) -> tuple[set[str], set[str], set[str]]:
     represented: set[str] = set()
     for section in manifest.get("sections") or []:
@@ -847,8 +922,9 @@ def render_enum(name: str, enum: EnumDef, manifest: dict[str, Any], exact: dict[
     cfg = ((manifest.get("enums") or {}).get(name) or {})
     member_docs = cfg.get("members") or {}
     lines = [f'<div class="api-enum-entry" id="{enum_anchor(name)}">', f'  <div class="api-enum-name">{html.escape(name)}</div>']
-    if cfg.get("description"):
-        lines.append(f'  <p>{linkify(str(cfg["description"]), exact, bare)}</p>')
+    desc = cfg.get("description", enum.description)
+    if desc:
+        lines.append(f'  <p>{linkify(str(desc), exact, bare)}</p>')
     lines.append('  <div class="api-enum-members">')
     for member, value in enum.members:
         mcfg = member_docs.get(member, {}) if isinstance(member_docs, dict) else {}
@@ -863,6 +939,27 @@ def render_enum(name: str, enum: EnumDef, manifest: dict[str, Any], exact: dict[
     return lines
 
 
+def render_see_also(see_also: list[Any], exact: dict[str, str], bare: dict[str, str]) -> str:
+    links: list[str] = []
+    for target in see_also:
+        if isinstance(target, str):
+            if target in exact:
+                links.append(f'<a href="#{exact[target]}"><code>{html.escape(target)}</code></a>')
+            elif target in bare:
+                links.append(f'<a href="#{bare[target]}"><code>{html.escape(target)}</code></a>')
+            else:
+                links.append(html.escape(target))
+        else:
+            label = str(target.get("label", target.get("href", "")))
+            href = str(target.get("href", "#"))
+            if href.startswith("/"):
+                rendered_href = "{{ '" + html.escape(href, quote=True) + "' | relative_url }}"
+            else:
+                rendered_href = html.escape(href, quote=True)
+            links.append(f'<a href="{rendered_href}">{html.escape(label)}</a>')
+    return ' <span aria-hidden="true">·</span> '.join(links)
+
+
 def render_macro(name: str, macro: MacroDef, manifest: dict[str, Any], exact: dict[str, str], bare: dict[str, str]) -> list[str]:
     cfg = ((manifest.get("macros") or {}).get(name) or {})
     lines = [f'<div class="api-method-entry" id="{macro_anchor(name)}">', f'  <div class="api-method-name">{html.escape(name)}</div>']
@@ -873,6 +970,18 @@ def render_macro(name: str, macro: MacroDef, manifest: dict[str, Any], exact: di
     lines.append('    <div class="api-detail-heading">Value</div>')
     lines.append(f'    <pre class="api-example"><code>{html.escape(macro.value)}</code></pre>')
     lines.append('  </div>')
+    macro_type = cfg.get("type")
+    if macro_type:
+        lines.append('  <div class="api-detail-section">')
+        lines.append('    <div class="api-detail-heading">Type</div>')
+        lines.append(f'    <div class="api-return-row api-return-only"><span class="api-return-type">{type_html(str(macro_type), bare)}</span></div>')
+        lines.append('  </div>')
+    see_also = cfg.get("see_also") or []
+    if see_also:
+        lines.append('  <div class="api-detail-section">')
+        lines.append('    <div class="api-detail-heading">See also</div>')
+        lines.append(f'    <div class="api-see-also">{render_see_also(see_also, exact, bare)}</div>')
+        lines.append('  </div>')
     lines.append('</div>')
     return lines
 
@@ -898,6 +1007,8 @@ def validate(
     for type_name, cfg in (manifest.get("types") or {}).items():
         if type_name not in symbols:
             continue
+        if symbols[type_name].hidden and not cfg.get("opaque"):
+            errors.append(f"Ignored/internal constructor must be opaque when represented: {type_name}")
         existing = {m.name for m in resolve_type_methods(type_name, symbols)}
         assigned: list[str] = []
         for names in (cfg.get("method_groups") or {}).values():
@@ -923,7 +1034,7 @@ def validate(
     prefix = str(manifest.get("library", {}).get("symbol_prefix", ""))
     if manifest.get("require_public_coverage") and prefix:
         for key, sym in symbols.items():
-            if sym.owner:
+            if sym.owner or sym.hidden:
                 continue
             if not sym.name.startswith(prefix):
                 continue
@@ -942,6 +1053,7 @@ def validate(
 
 def generate(manifest_path: Path, source_root: Path, output_path: Path | None, dump_model: Path | None) -> int:
     manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
+    normalize_macro_manifest(manifest)
     globs = manifest.get("source_globs") or ["scripts/**/*.gml"]
     source_symbols, enums, macros, parents = parse_gml(source_root, globs)
     symbols = expand_inherited_methods(manifest, source_symbols, parents)

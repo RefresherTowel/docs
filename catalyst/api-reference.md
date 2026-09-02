@@ -7277,7 +7277,7 @@ Result returned by <a href="#catalyst-set-capture-state"><code>CatalystSet.Captu
 ### CatalystStateRestoreResult
 {: #catalyst-state-restore-result .api-type-title }
 
-Pending restore handle returned by <a href="#catalyst-set-restore-state"><code>CatalystSet.RestoreState()</code></a>. Use it to supply missing runtime values, inspect restore diagnostics, and explicitly Complete() the prepared load.
+Prepared restore handle returned by <a href="#catalyst-set-restore-state"><code>CatalystSet.RestoreState()</code></a>. Use it to repair runtime-only dependencies and call Complete() when the load is ready.
 
 #### Methods
 
@@ -7459,7 +7459,7 @@ Pending restore handle returned by <a href="#catalyst-set-restore-state"><code>C
 ### CatalystStateCallbackRequirement
 {: #catalyst-state-callback-requirement .api-type-title }
 
-One missing callback requirement returned by <a href="#catalyst-state-restore-result-get-missing-callbacks"><code>CatalystStateRestoreResult.GetMissingCallbacks()</code></a>.
+Represents one missing callback requirement returned by <a href="#catalyst-state-restore-result-get-missing-callbacks"><code>CatalystStateRestoreResult.GetMissingCallbacks()</code></a>.
 
 #### Methods
 
@@ -7676,7 +7676,7 @@ One missing callback requirement returned by <a href="#catalyst-state-restore-re
 ### CatalystStateCountdownTrackerRequirement
 {: #catalyst-state-countdown-tracker-requirement .api-type-title }
 
-One missing custom countdown tracker requirement returned by <a href="#catalyst-state-restore-result-get-missing-countdown-trackers"><code>CatalystStateRestoreResult.GetMissingCountdownTrackers()</code></a>.
+Represents one missing custom countdown tracker requirement returned by <a href="#catalyst-state-restore-result-get-missing-countdown-trackers"><code>CatalystStateRestoreResult.GetMissingCountdownTrackers()</code></a>.
 
 #### Methods
 
@@ -7997,7 +7997,7 @@ new CatalystRepair()
 
 Returned as `__CatalystRepairStatistic`.
 
-Repair row returned by <a href="#catalyst-repair-add-statistic"><code>CatalystRepair.AddStatistic()</code></a> and by owned Statistic repair helpers. It supplies runtime-only Statistic callbacks before a restore.
+Repair row created by <a href="#catalyst-repair-add-statistic"><code>CatalystRepair.AddStatistic()</code></a> or an owned-Statistic helper. It carries runtime-only Statistic callbacks for a pending restore.
 
 #### Methods
 
@@ -8051,7 +8051,7 @@ Repair row returned by <a href="#catalyst-repair-add-statistic"><code>CatalystRe
 
 Returned as `__CatalystRepairResource`.
 
-Repair row returned by <a href="#catalyst-repair-add-resource"><code>CatalystRepair.AddResource()</code></a>. It opens repair rows for the Resource&#x27;s owned minimum and maximum Statistics.
+Repair row created by <a href="#catalyst-repair-add-resource"><code>CatalystRepair.AddResource()</code></a>. It exposes repair rows for the Resource&#x27;s owned minimum and maximum Statistics.
 
 #### Methods
 
@@ -8089,7 +8089,7 @@ Repair row returned by <a href="#catalyst-repair-add-resource"><code>CatalystRep
 
 Returned as `__CatalystRepairFlow`.
 
-Repair row returned by <a href="#catalyst-repair-add-flow"><code>CatalystRepair.AddFlow()</code></a>. It opens the repair row for the Flow&#x27;s owned rate Statistic.
+Repair row created by <a href="#catalyst-repair-add-flow"><code>CatalystRepair.AddFlow()</code></a>. It exposes the repair row for the Flow&#x27;s owned rate Statistic.
 
 #### Methods
 
@@ -8114,7 +8114,7 @@ Repair row returned by <a href="#catalyst-repair-add-flow"><code>CatalystRepair.
 
 Returned as `__CatalystRepairModifier`.
 
-Repair row returned by <a href="#catalyst-repair-add-modifier"><code>CatalystRepair.AddModifier()</code></a>. It supplies runtime-only Modifier callbacks before a restore.
+Repair row created by <a href="#catalyst-repair-add-modifier"><code>CatalystRepair.AddModifier()</code></a>. It carries runtime-only Modifier callbacks for a pending restore.
 
 #### Methods
 
@@ -8168,7 +8168,7 @@ Repair row returned by <a href="#catalyst-repair-add-modifier"><code>CatalystRep
 
 Returned as `__CatalystRepairEffect`.
 
-Repair row returned by <a href="#catalyst-repair-add-effect"><code>CatalystRepair.AddEffect()</code></a>. It supplies Effect callbacks and opens repair rows for its owned chance Statistics.
+Repair row created by <a href="#catalyst-repair-add-effect"><code>CatalystRepair.AddEffect()</code></a>. It carries runtime-only Effect callbacks and exposes its owned chance Statistics for repair.
 
 #### Methods
 
@@ -8290,7 +8290,7 @@ Repair row returned by <a href="#catalyst-repair-add-effect"><code>CatalystRepai
 
 Returned as `__CatalystRepairEffectManager`.
 
-Repair row returned by <a href="#catalyst-repair-add-effect-manager"><code>CatalystRepair.AddEffectManager()</code></a>. It supplies the manager&#x27;s runtime random function before a restore.
+Repair row created by <a href="#catalyst-repair-add-effect-manager"><code>CatalystRepair.AddEffectManager()</code></a>. It carries the EffectManager&#x27;s runtime random function for a pending restore.
 
 #### Methods
 
@@ -8337,25 +8337,6 @@ Repair row returned by <a href="#catalyst-repair-add-effect-manager"><code>Catal
       <span class="api-return-type">Undefined</span>
       <span class="api-return-description">No return value.</span>
     </div>
-  </div>
-</div>
-
-## Package globals
-
-<div class="api-method-entry" id="macro-catalyst-countdown">
-  <div class="api-method-name">CATALYST_COUNTDOWN</div>
-  <p class="api-method-summary">The global default <a href="#catalyst-countdown-tracker"><code>CatalystCountdownTracker</code></a>. Catalyst creates it when the package initialises and starts it automatically in frame mode. Use a custom <a href="#catalyst-countdown-tracker"><code>CatalystCountdownTracker</code></a> when one model needs an independent timing source.</p>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Value</div>
-    <pre class="api-example"><code>global.__catalyst_countdown_tracker</code></pre>
-  </div>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">Type</div>
-    <div class="api-return-row api-return-only"><span class="api-return-type">Struct.<a href="#catalyst-countdown-tracker">CatalystCountdownTracker</a></span></div>
-  </div>
-  <div class="api-detail-section">
-    <div class="api-detail-heading">See also</div>
-    <div class="api-see-also"><a href="#catalyst-countdown-tracker"><code>CatalystCountdownTracker</code></a> <span aria-hidden="true">·</span> <a href="#catalyst-countdown"><code>CatalystCountdown</code></a></div>
   </div>
 </div>
 
@@ -8814,6 +8795,25 @@ Repair row returned by <a href="#catalyst-repair-add-effect-manager"><code>Catal
       <span class="api-enum-member">NUM</span>
       <span class="api-enum-description"></span>
     </div>
+  </div>
+</div>
+
+## Package globals
+
+<div class="api-method-entry" id="macro-catalyst-countdown">
+  <div class="api-method-name">CATALYST_COUNTDOWN</div>
+  <p class="api-method-summary">Global default <a href="#catalyst-countdown-tracker"><code>CatalystCountdownTracker</code></a> used by timed Catalyst values unless you assign a custom tracker. Catalyst creates it at package startup and runs it automatically in frame mode. Use a custom tracker when one model needs an independent timing source.</p>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Value</div>
+    <pre class="api-example"><code>global.__catalyst_countdown_tracker</code></pre>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Type</div>
+    <div class="api-return-row api-return-only"><span class="api-return-type">Struct.<a href="#catalyst-countdown-tracker">CatalystCountdownTracker</a></span></div>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#catalyst-countdown-tracker"><code>CatalystCountdownTracker</code></a> <span aria-hidden="true">·</span> <a href="#catalyst-countdown"><code>CatalystCountdown</code></a></div>
   </div>
 </div>
 
