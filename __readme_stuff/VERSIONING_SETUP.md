@@ -192,6 +192,7 @@ Valid library ids are:
 ```text
 catalyst
 echo
+echo-chamber
 pulse
 statement
 whisper

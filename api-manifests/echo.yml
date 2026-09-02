@@ -1,0 +1,84 @@
+library:
+  id: echo
+  name: Echo
+  symbol_prefix: Echo
+  macro_prefix: ECHO_
+source_globs:
+- scripts/scr_echo/*.gml
+require_public_coverage: true
+require_macro_coverage: true
+page:
+  layout: default
+  title: API Reference
+  heading: API Reference
+  parent: Echo
+  nav_order: 2
+  doc_version: current
+  intro: Complete reference for Echo's logging, filtering, history, and tag APIs. For explanations and worked examples,
+    start with the teaching pages; this page is for looking up exact capabilities.
+function_sections:
+- title: Functions
+  subsections:
+  - title: Logging
+    functions:
+    - EchoDebug
+    - EchoDebugInfo
+    - EchoDebugWarn
+    - EchoDebugSevere
+  - title: Debug level
+    functions:
+    - EchoDebugSetLevel
+    - EchoDebugGetLevel
+  - title: History and capture
+    functions:
+    - EchoDebugDumpLog
+    - EchoDebugGetHistorySize
+    - EchoDebugSetHistorySize
+    - EchoDebugSetRawHistoryCapture
+    - EchoDebugGetRawHistoryCapture
+    - EchoDebugClearHistory
+    - EchoDebugGetHistory
+    - EchoDebugGetRevision
+    - EchoDebugGetStructuredHistory
+  - title: Tags
+    functions:
+    - EchoDebugSetTags
+    - EchoDebugClearTags
+    - EchoDebugGetTags
+enum_sections:
+- title: Enums
+  enums:
+  - eEchoDebugLevel
+  - eEchoDebugUrgency
+macro_sections:
+- title: Macros
+  macros:
+  - ECHO_VERSION
+  - ECHO_DEBUG_ENABLED
+enums:
+  eEchoDebugLevel:
+    description: Controls which messages pass into Echo's normal output and filtered history. Raw capture is separate
+      and can remember messages before this filter is applied.
+    members:
+      NONE: Nothing passes into normal output or filtered history.
+      SEVERE_ONLY: Only severe messages pass.
+      COMPREHENSIVE: Warnings and severe messages pass. This is the default.
+      COMPLETE: Info, warning, and severe messages pass.
+      NUM: Enum sentinel used internally for validation. Don't use it as a debug level.
+  eEchoDebugUrgency:
+    description: Describes how important one message is.
+    members:
+      INFO: Normal information.
+      WARNING: Something looks wrong, but the game can probably continue.
+      SEVERE: Something is broken enough that you should investigate it immediately.
+      NUM: Enum sentinel used internally for validation. Don't use it as a message urgency.
+symbols:
+  EchoDebugDumpLog:
+    see_also:
+    - EchoDebugGetHistory
+    - EchoDebugSetRawHistoryCapture
+    - EchoDebugGetRawHistoryCapture
+  EchoDebugGetStructuredHistory:
+    see_also:
+    - EchoDebugGetHistory
+    - EchoDebugGetRevision

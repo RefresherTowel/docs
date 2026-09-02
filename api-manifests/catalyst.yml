@@ -1,0 +1,804 @@
+library:
+  id: catalyst
+  name: Catalyst
+  symbol_prefix: Catalyst
+
+# Catalyst ships Echo, Echo Chamber, and Oracle, plus internal smoke/probe scripts.
+# Restrict generation to Catalyst's actual public implementation scripts so those
+# bundled dependencies and test entry points do not leak into the Catalyst API page.
+source_globs:
+  - scripts/scr_catalyst_core/**/*.gml
+  - scripts/scr_catalyst_countdown_tracker/**/*.gml
+  - scripts/scr_catalyst_effect/**/*.gml
+  - scripts/scr_catalyst_effect_manager/**/*.gml
+  - scripts/scr_catalyst_macro/**/*.gml
+  - scripts/scr_catalyst_modifier/**/*.gml
+  - scripts/scr_catalyst_persistence/**/*.gml
+  - scripts/scr_catalyst_resource/**/*.gml
+  - scripts/scr_catalyst_resource_flow/**/*.gml
+  - scripts/scr_catalyst_set/**/*.gml
+
+require_public_coverage: true
+
+page:
+  layout: default
+  title: API Reference
+  heading: API Reference
+  parent: Catalyst
+  nav_order: 10
+  doc_version: current
+  intro: >-
+    Complete reference for Catalyst's public API. For explanations and worked
+    examples, start with the teaching pages; this page is for looking up exact
+    constructors, methods, return values, enums, and package-level helpers.
+
+sections:
+  - title: Statistics and modifiers
+    types:
+      - CatalystStatistic
+      - CatalystModifier
+      - CatalystStatisticRefreshResult
+      - CatalystModifierEvaluation
+      - CatalystStatisticLayerEvaluation
+      - CatalystStatisticEvaluation
+
+  - title: Resources and flows
+    types:
+      - CatalystResource
+      - CatalystResourceChange
+      - CatalystResourceFlow
+      - CatalystResourceFlowResult
+
+  - title: Effects
+    types:
+      - CatalystEffect
+      - CatalystEffectManager
+      - CatalystEffectTickResult
+      - CatalystEffectApplicationResult
+
+  - title: Sets and previews
+    types:
+      - CatalystSet
+      - CatalystModifierSet
+      - CatalystSetPreviewResult
+      - CatalystSetPreviewEntry
+      - CatalystRouteDiagnostic
+      - CatalystSetApplyResult
+      - CatalystSetRefreshResult
+      - CatalystSetStatisticRefreshEntry
+      - CatalystSetResourceRefreshEntry
+      - CatalystSetDetails
+      - CatalystSetStatisticDetail
+
+  - title: Observation, facts, and timing
+    types:
+      - CatalystSubscription
+      - CatalystFactBinding
+      - CatalystCountdownTracker
+
+  - title: Saving and loading
+    types:
+      - CatalystStateCaptureResult
+      - CatalystStateRestoreResult
+      - CatalystStateCallbackRequirement
+      - CatalystStateCountdownTrackerRequirement
+      - CatalystRepair
+      - __CatalystRepairStatistic
+      - __CatalystRepairResource
+      - __CatalystRepairFlow
+      - __CatalystRepairModifier
+      - __CatalystRepairEffect
+      - __CatalystRepairEffectManager
+
+function_sections:
+  - title: Global functions
+    functions:
+      - CatalystCountdown
+
+macro_sections:
+  - title: Package globals
+    macros:
+      - name: CATALYST_COUNTDOWN
+        type: Struct.CatalystCountdownTracker
+        description: >-
+          The global default CatalystCountdownTracker. Catalyst creates it when the
+          package initialises and starts it automatically in frame mode. Use a custom
+          CatalystCountdownTracker when one model needs an independent timing source.
+        see_also:
+          - CatalystCountdownTracker
+          - CatalystCountdown
+
+enum_sections:
+  - title: Enums
+    enums:
+      - eCatCountdownMode
+      - eCatMathOps
+      - eCatModifierOrder
+      - eCatStatLayer
+      - eCatStackMode
+      - eCatFamilyMode
+      - eCatFamilyScope
+      - eCatModifierSkipReason
+      - eCatResourceBoundMode
+      - eCatResourceOperation
+      - eCatEffectReapplyPolicy
+      - eCatEffectApplicationOutcome
+      - eCatSetPreviewStatus
+      - eCatRouteOutcome
+    groups:
+      - title: Statistics and modifiers
+        enums:
+          - eCatMathOps
+          - eCatModifierOrder
+          - eCatStatLayer
+          - eCatStackMode
+          - eCatFamilyMode
+          - eCatFamilyScope
+          - eCatModifierSkipReason
+      - title: Resources
+        enums:
+          - eCatResourceBoundMode
+          - eCatResourceOperation
+      - title: Effects
+        enums:
+          - eCatEffectReapplyPolicy
+          - eCatEffectApplicationOutcome
+      - title: Sets and routing
+        enums:
+          - eCatSetPreviewStatus
+          - eCatRouteOutcome
+      - title: Timing
+        enums:
+          - eCatCountdownMode
+
+types:
+  CatalystStatistic:
+    require_grouping: true
+    method_groups:
+      Identity and tags:
+        - SetIdentity
+        - GetIdentity
+        - SetName
+        - GetName
+        - AddTag
+        - RemoveTag
+        - HasTag
+        - ClearTags
+      Layers and modifier order:
+        - SetLayerOrder
+        - GetLayerOrder
+        - SetModifierOrder
+        - GetModifierOrder
+        - HasLayer
+      Modifier management:
+        - AddModifier
+        - DetachModifier
+        - DestroyModifier
+        - DestroyAllModifiers
+        - DestroyModifiersBySourceLabel
+        - DestroyModifiersBySourceId
+        - DestroyModifiersBySourceMeta
+        - DestroyModifiersByTag
+        - GetModifiers
+        - FindModifiersBySourceId
+        - FindModifiersBySourceLabel
+        - FindModifiersBySourceMeta
+        - HasModifierFromSourceId
+        - HasModifierFromSourceLabel
+        - HasModifierFromSourceMeta
+        - HasModifier
+      Evaluation and observation:
+        - Refresh
+        - GetValue
+        - Evaluate
+        - Explain
+        - Preview
+        - PreviewModifiers
+        - OnChange
+      Facts and post-processing:
+        - SetFactView
+        - ClearFactView
+        - GetFactView
+        - SetPostProcess
+        - ClearPostProcess
+        - SetClamped
+        - SetRoundingStep
+        - ClearRounding
+        - PublishToFact
+      Base value and bounds:
+        - SetBaseValue
+        - SetBaseFunc
+        - ClearBaseFunc
+        - SetMaxValue
+        - SetMinValue
+        - ChangeBaseValue
+        - ChangeMaxValue
+        - ChangeMinValue
+        - ResetToStarting
+        - ResetAll
+        - GetStartingValue
+        - GetBaseValue
+        - GetMaxValue
+        - GetMinValue
+      Debugging:
+        - DebugDescribe
+
+  CatalystModifier:
+    require_grouping: true
+    method_groups:
+      Identity and routing:
+        - SetIdentity
+        - GetIdentity
+        - SetTargetIdentity
+        - GetTargetIdentity
+        - SetLayer
+      Value and stacks:
+        - SetValue
+        - SetMathsOp
+        - SetStacks
+        - AddStacks
+        - SetMaxStacks
+        - SetStackMode
+        - GetStackMode
+        - SetStackFunc
+        - ClearStackFunc
+      Conditions and families:
+        - SetCondition
+        - ClearCondition
+        - SetFamily
+        - ClearFamily
+        - SetFamilyMode
+        - SetFamilyScope
+      Source metadata and tags:
+        - SetSourceLabel
+        - SetSourceId
+        - SetSourceMeta
+        - AddTag
+        - RemoveTag
+        - HasTag
+        - ClearTags
+      Timing:
+        - SetCountdownTracker
+        - GetCountdownTracker
+        - SetDuration
+        - ResetDuration
+      Lifecycle:
+        - Destroy
+
+  CatalystResource:
+    require_grouping: true
+    method_groups:
+      Identity:
+        - SetIdentity
+        - GetIdentity
+        - SetName
+        - GetName
+      Values and bounds:
+        - GetCurrent
+        - GetMinimum
+        - GetMaximum
+        - SetMinimumBoundMode
+        - GetMinimumBoundMode
+        - SetMaximumBoundMode
+        - GetMaximumBoundMode
+        - GetFraction
+        - GetMissing
+        - GetOverflow
+        - GetUnderflow
+        - IsEmpty
+        - IsFull
+        - SetCurrent
+        - Change
+        - ChangePastBounds
+        - Increase
+        - IncreasePastMaximum
+        - Decrease
+        - DecreasePastMinimum
+        - Fill
+        - Empty
+        - Refresh
+        - SetMinimum
+        - SetMaximum
+      Dynamic bounds:
+        - BindMinimumStatistic
+        - BindMaximumStatistic
+        - UnbindMinimumStatistic
+        - UnbindMaximumStatistic
+        - IsMinimumBound
+        - IsMaximumBound
+        - GetMinimumStatistic
+        - GetMaximumStatistic
+        - AddMinimumModifier
+        - DestroyMinimumModifier
+        - AddMaximumModifier
+        - DestroyMaximumModifier
+      Observation and facts:
+        - GetLastChange
+        - OnChange
+        - PublishToFact
+      Flows:
+        - AddFlow
+        - RemoveFlow
+        - DestroyFlow
+        - HasFlow
+        - GetFlows
+
+  CatalystResourceFlow:
+    require_grouping: true
+    method_groups:
+      Identity and source:
+        - SetIdentity
+        - GetIdentity
+        - SetName
+        - GetName
+        - SetSourceLabel
+        - SetSourceId
+        - SetSourceMeta
+      Rate:
+        - SetRate
+        - BindRateStatistic
+        - UnbindRateStatistic
+        - IsRateBound
+        - GetRateStatistic
+      State and timing:
+        - SetActive
+        - IsActive
+        - Delay
+        - IsDelayed
+        - GetDelayRemaining
+        - ClearDelay
+        - SetCountdownTracker
+        - GetCountdownTracker
+      Lifecycle:
+        - Destroy
+
+  CatalystEffect:
+    require_grouping: true
+    method_groups:
+      Identity and reapplication:
+        - SetIdentity
+        - GetIdentity
+        - SetFamily
+        - GetFamily
+        - SetReapplyPolicy
+        - GetReapplyPolicy
+      Duration and timing source:
+        - SetDuration
+        - ResetDuration
+        - SetCountdownTracker
+        - GetCountdownTracker
+      Application chance:
+        - SetChanceToApply
+        - BindChanceToApplyStatistic
+        - UnbindChanceToApplyStatistic
+        - IsChanceToApplyBound
+        - GetChanceToApplyStatistic
+      Ticking:
+        - SetTickInterval
+        - ClearTickInterval
+        - GetTickInterval
+        - SetChancePerTick
+        - BindChancePerTickStatistic
+        - UnbindChancePerTickStatistic
+        - IsChancePerTickBound
+        - GetChancePerTickStatistic
+      Callbacks:
+        - SetOnApply
+        - ClearOnApply
+        - SetResolveTick
+        - ClearResolveTick
+        - SetOnTick
+        - ClearOnTick
+        - SetOnRemove
+        - ClearOnRemove
+      Flows and modifiers:
+        - AddFlow
+        - RemoveFlow
+        - AddModifier
+        - RemoveModifier
+      Tags:
+        - AddTag
+        - RemoveTag
+        - HasTag
+        - ClearTags
+      Lifecycle:
+        - Destroy
+
+  CatalystEffectManager:
+    require_grouping: true
+    method_groups:
+      Identity and owner:
+        - SetIdentity
+        - GetIdentity
+        - SetName
+        - GetName
+        - GetOwner
+      Randomness and observation:
+        - SetRandomFunction
+        - ClearRandomFunction
+        - OnEffectApplied
+        - OnEffectRemoved
+      Effect management:
+        - AddEffect
+        - RemoveEffect
+        - HasEffect
+        - GetEffects
+      Lookup and removal:
+        - GetEffectsByIdentity
+        - HasEffectIdentity
+        - RemoveEffectsByIdentity
+        - GetEffectsByFamily
+        - HasTag
+        - GetEffectsTagged
+        - RemoveEffectsTagged
+      Lifecycle:
+        - Destroy
+
+  CatalystSet:
+    require_grouping: true
+    method_groups:
+      Identity and metadata:
+        - SetIdentity
+        - GetIdentity
+        - SetName
+        - GetName
+        - SetMeta
+        - GetMeta
+      Saving and loading:
+        - CaptureState
+        - RestoreState
+      Statistics:
+        - AddStatistic
+        - RemoveStatistic
+        - HasStatistic
+        - GetStatistic
+        - GetStatistics
+      Resources:
+        - AddResource
+        - RemoveResource
+        - HasResource
+        - GetResource
+        - GetResources
+      Effect managers:
+        - AddEffectManager
+        - RemoveEffectManager
+        - HasEffectManager
+        - GetEffectManager
+        - GetEffectManagers
+      Facts and layers:
+        - SetFactView
+        - ClearFactView
+        - GetFactView
+        - SetLayerOrder
+        - ClearLayerOrder
+        - GetLayerOrder
+      Preview and apply:
+        - Preview
+        - PreviewSwap
+        - Apply
+        - ApplySwap
+      Refresh and inspection:
+        - Refresh
+        - GetDetails
+      Lifecycle:
+        - Destroy
+
+  CatalystModifierSet:
+    require_grouping: true
+    method_groups:
+      Identity and metadata:
+        - SetIdentity
+        - GetIdentity
+        - SetName
+        - GetName
+        - SetMeta
+        - GetMeta
+      Modifiers:
+        - AddModifier
+        - RemoveModifier
+        - HasModifier
+        - GetModifiers
+      Lifecycle:
+        - Destroy
+
+  CatalystCountdownTracker:
+    require_grouping: true
+    method_groups:
+      Identity:
+        - SetIdentity
+        - GetIdentity
+      Tracked flows:
+        - AddFlow
+        - DetachFlow
+        - IsTrackingFlow
+      Tracked effects:
+        - AddEffect
+        - DetachEffect
+        - IsTrackingEffect
+      Tracked modifiers:
+        - AddModifier
+        - DetachModifier
+        - IsTrackingModifier
+      Timing:
+        - SetPaused
+        - IsPaused
+        - SetTimeScale
+        - GetTimeScale
+        - StartAutomatic
+        - StopAutomatic
+        - IsAutomatic
+        - GetCountdownMode
+        - Countdown
+      Debugging and lifecycle:
+        - DebugDump
+        - Destroy
+
+  CatalystRepair:
+    require_grouping: true
+    method_groups:
+      Runtime repair:
+        - AddCountdownTracker
+        - AddStatistic
+        - AddResource
+        - AddFlow
+        - AddModifier
+        - AddEffect
+        - AddEffectManager
+
+  # Returned handles/result objects are part of the public API but are not useful
+  # constructors for users. Hide their constructor call and document the methods.
+  CatalystSubscription:
+    opaque: true
+  CatalystFactBinding:
+    opaque: true
+  CatalystStatisticRefreshResult:
+    opaque: true
+  CatalystModifierEvaluation:
+    opaque: true
+  CatalystStatisticLayerEvaluation:
+    opaque: true
+  CatalystStatisticEvaluation:
+    opaque: true
+  CatalystResourceChange:
+    opaque: true
+  CatalystResourceFlowResult:
+    opaque: true
+  CatalystEffectTickResult:
+    opaque: true
+  CatalystEffectApplicationResult:
+    opaque: true
+  CatalystRouteDiagnostic:
+    opaque: true
+  CatalystSetPreviewEntry:
+    opaque: true
+  CatalystSetPreviewResult:
+    opaque: true
+  CatalystSetApplyResult:
+    opaque: true
+  CatalystSetStatisticRefreshEntry:
+    opaque: true
+  CatalystSetResourceRefreshEntry:
+    opaque: true
+  CatalystSetRefreshResult:
+    opaque: true
+  CatalystSetStatisticDetail:
+    opaque: true
+  CatalystSetDetails:
+    opaque: true
+  CatalystStateCaptureResult:
+    opaque: true
+
+  CatalystStateRestoreResult:
+    opaque: true
+    description: >-
+      Pending restore handle returned by CatalystSet.RestoreState(). Use it to
+      supply missing runtime values, inspect restore diagnostics, and explicitly
+      Complete() the prepared load.
+    require_grouping: true
+    method_groups:
+      Repair:
+        - Repair
+        - ResolveCallbacks
+        - GetMissingCallbacks
+        - GetMissingCountdownTrackers
+        - IgnoreMissing
+      Status and completion:
+        - GetReport
+        - IsComplete
+        - Complete
+
+  CatalystStateCallbackRequirement:
+    opaque: true
+    description: >-
+      One missing callback requirement returned by
+      CatalystStateRestoreResult.GetMissingCallbacks().
+    method_groups:
+      Identification:
+        - GetType
+        - GetIdentity
+        - GetComponent
+        - GetPath
+        - GetStruct
+      Missing callbacks:
+        - GetCallbacks
+        - Needs
+        - GetSavedCallbackName
+        - Resolve
+      Optional salvage:
+        - CanIgnore
+        - Ignore
+        - GetIgnoreType
+        - GetIgnoreIdentity
+
+  CatalystStateCountdownTrackerRequirement:
+    opaque: true
+    description: >-
+      One missing custom countdown tracker requirement returned by
+      CatalystStateRestoreResult.GetMissingCountdownTrackers().
+    method_groups:
+      Identification:
+        - GetType
+        - GetIdentity
+        - GetTrackerIdentity
+        - GetPath
+        - GetStruct
+      Resolution:
+        - Resolve
+      Optional salvage:
+        - CanIgnore
+        - Ignore
+        - GetIgnoreType
+        - GetIgnoreIdentity
+
+  __CatalystRepairStatistic:
+    opaque: true
+    display_name: Statistic repair row
+    description: >-
+      Repair row returned by CatalystRepair.AddStatistic() and by owned Statistic
+      repair helpers. It supplies runtime-only Statistic callbacks before a restore.
+
+  __CatalystRepairResource:
+    opaque: true
+    display_name: Resource repair row
+    description: >-
+      Repair row returned by CatalystRepair.AddResource(). It opens repair rows for
+      the Resource's owned minimum and maximum Statistics.
+
+  __CatalystRepairFlow:
+    opaque: true
+    display_name: Resource Flow repair row
+    description: >-
+      Repair row returned by CatalystRepair.AddFlow(). It opens the repair row for
+      the Flow's owned rate Statistic.
+
+  __CatalystRepairModifier:
+    opaque: true
+    display_name: Modifier repair row
+    description: >-
+      Repair row returned by CatalystRepair.AddModifier(). It supplies runtime-only
+      Modifier callbacks before a restore.
+
+  __CatalystRepairEffect:
+    opaque: true
+    display_name: Effect repair row
+    description: >-
+      Repair row returned by CatalystRepair.AddEffect(). It supplies Effect
+      callbacks and opens repair rows for its owned chance Statistics.
+
+  __CatalystRepairEffectManager:
+    opaque: true
+    display_name: Effect Manager repair row
+    description: >-
+      Repair row returned by CatalystRepair.AddEffectManager(). It supplies the
+      manager's runtime random function before a restore.
+
+symbols:
+  CatalystStatistic.AddModifier:
+    see_also:
+      - CatalystModifier
+      - CatalystStatistic.Preview
+      - label: Statistics & Modifiers
+        href: /catalyst/statistics-and-modifiers
+
+  CatalystStatistic.PublishToFact:
+    see_also:
+      - CatalystFactBinding
+      - label: Situational Statistics
+        href: /catalyst/situational-statistics
+
+  CatalystResource.AddFlow:
+    see_also:
+      - CatalystResourceFlow
+      - label: Resource Flows
+        href: /catalyst/resource-flows
+
+  CatalystEffectManager.AddEffect:
+    see_also:
+      - CatalystEffect
+      - CatalystEffectApplicationResult
+      - label: Effects
+        href: /catalyst/effects
+
+  CatalystSet.Preview:
+    see_also:
+      - CatalystSetPreviewResult
+      - CatalystSet.Apply
+      - label: Sets & Previews
+        href: /catalyst/sets-and-previews
+
+  CatalystSet.PreviewSwap:
+    see_also:
+      - CatalystSetPreviewResult
+      - CatalystSet.ApplySwap
+      - label: Sets & Previews
+        href: /catalyst/sets-and-previews
+
+  CatalystSet.Apply:
+    see_also:
+      - CatalystSetApplyResult
+      - CatalystSet.Preview
+
+  CatalystSet.ApplySwap:
+    see_also:
+      - CatalystSetApplyResult
+      - CatalystSet.PreviewSwap
+
+  CatalystSet.CaptureState:
+    see_also:
+      - CatalystStateCaptureResult
+      - CatalystSet.RestoreState
+      - label: Saving & Loading
+        href: /catalyst/saving-and-loading
+
+  CatalystSet.RestoreState:
+    see_also:
+      - CatalystStateRestoreResult
+      - CatalystRepair
+      - CatalystSet.CaptureState
+      - label: Saving & Loading
+        href: /catalyst/saving-and-loading
+
+  CatalystStateCaptureResult.GetReport:
+    fields:
+      - name: report_version
+        type: Real
+        description: Version of the diagnostic report format.
+      - name: success
+        type: Bool
+        description: Whether capture succeeded.
+      - name: stage
+        type: String
+        description: Capture stage represented by this report.
+      - name: failures
+        type: Array<Struct>
+        description: Plain-data descriptions of values Catalyst could not capture.
+      - name: set_identity
+        type: String,Real,Undefined
+        description: Set identity when one was available.
+
+  CatalystStateRestoreResult.GetReport:
+    fields:
+      - name: report_version
+        type: Real
+        description: Version of the diagnostic report format.
+      - name: success
+        type: Bool
+        description: Whether the prepared state has been completely applied.
+      - name: stage
+        type: String
+        description: Current restore stage, such as prepare, pending, ready, apply, or complete.
+      - name: salvaged
+        type: Bool
+        description: Whether temporary saved values were deliberately ignored so the restore could proceed.
+      - name: failures
+        type: Array<Struct>
+        description: Plain-data descriptions of unresolved or failed restore requirements.
+      - name: ignored
+        type: Array<Struct>
+        description: Temporary saved values deliberately skipped by the restore.
+      - name: set_identity
+        type: String,Real,Undefined
+        description: Live Set identity when available.
+      - name: saved_set_identity
+        type: String,Real,Undefined
+        description: Identity stored in the captured state when available.

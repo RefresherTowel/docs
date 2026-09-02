@@ -22,6 +22,7 @@ Each library is built to solve a specific pain point, with a clean API, full Fea
 - **Catalyst 2** makes the numbers in your game, like health, stats, buffs, fun.
 - **Whisper** tells your game when it should show what dialogue, so it can feel reactive and alive.
 - **Echo** tells you, in plain text, what all of the above actually did.
+- **Echo Chamber** turns that debugging work into in-game consoles, inspectors, and custom development tools.
 - **Quill** lets your players enter text in-game quickly and easily.
 - **Fate** decides how your game plays out, with weighted random chance.
 
@@ -162,7 +163,12 @@ Plain debug logs are fine at first, but quickly become noise once your project g
 
 Echo ships free with all available frameworks and integrates cleanly with their designs. Or you can purchase it for cheap on its own.
 
+Echo also ships with [**Echo Chamber**](/echo-chamber/), the in-game debug UI framework used to build Echo Console and custom development tools.
+
 <iframe frameborder="0" src="https://itch.io/embed/4089088?border_width=2&amp;bg_color=1d471e&amp;fg_color=ffffff&amp;link_color=109200&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/echo">Echo by RefresherTowel</a></iframe>
 
 ##### [**EXPLORE THE ECHO DOCS**](/echo/)
+{: .text-center }
+
+##### [**EXPLORE THE ECHO CHAMBER DOCS**](/echo-chamber/)
 {: .text-center }

@@ -4,17 +4,26 @@ Shared footer for live/current library index pages.
 Usage:
   {% include library-footer.html %}
 
-The include first uses page.docs_library (used by the versioning system). If that
-is not present, it falls back to the first directory in page.url, so the same
+The include first uses page.docs_library or page.library_id when provided. If neither
+is present, it falls back to the first directory in page.url, so the same
 one-line include works on ordinary /statement/, /fate/, etc. index pages too.
+
+Libraries that share one distributed product can set product_group in
+_data/library_footer.yml. Entries with the same product_group are not advertised
+to each other under Other Cool Stuff. show_in_other_stuff: false hides a companion
+entry from that promotion list everywhere while still allowing it to use this footer.
 {% endcomment %}
 
 {% assign library_key = page.docs_library %}
+{% if library_key == nil or library_key == "" %}
+  {% assign library_key = page.library_id %}
+{% endif %}
 {% if library_key == nil or library_key == "" %}
   {% assign url_parts = page.url | split: "/" %}
   {% assign library_key = url_parts[1] %}
 {% endif %}
 {% assign library = site.data.library_footer[library_key] %}
+{% assign library_group = library.product_group | default: library_key %}
 
 {% if library %}
 <hr>
@@ -66,7 +75,10 @@ one-line include works on ordinary /statement/, /fate/, etc. index pages too.
 {% for item in site.data.library_footer %}
   {% assign other_key = item[0] %}
   {% assign other = item[1] %}
+  {% assign other_group = other.product_group | default: other_key %}
   {% unless other_key == library_key %}
+  {% unless other_group == library_group %}
+  {% unless other.show_in_other_stuff == false %}
 <p class="text-center">
   <a href="{{ other.itch }}"><img src="{{ other.icon | relative_url }}" alt="{{ other.name }} icon" style="max-width: 256px;"></a>
 </p>
@@ -76,6 +88,8 @@ one-line include works on ordinary /statement/, /fate/, etc. index pages too.
 <p class="text-center">{{ other.description }}</p>
 
 <hr>
+  {% endunless %}
+  {% endunless %}
   {% endunless %}
 {% endfor %}
 {% else %}

@@ -17,7 +17,7 @@ import shutil
 import sys
 from pathlib import Path, PurePosixPath
 
-LIBRARIES = {"catalyst", "echo", "pulse", "statement", "whisper", "fate", "quill"}
+LIBRARIES = {"catalyst", "echo", "echo-chamber", "pulse", "statement", "whisper", "fate", "quill"}
 
 
 def split_frontmatter(text: str) -> tuple[str, str]:
@@ -81,7 +81,7 @@ def rewrite_target(target: str, current_rel: PurePosixPath, library: str, versio
     # Cross-library links should point at the archived version that existed when
     # this initial snapshot was made, rather than silently taking old readers to
     # breaking current documentation.
-    cross = re.match(r"^\.\./(catalyst|echo|pulse|statement|whisper|fate|quill)(?:/(.*))?$", stripped)
+    cross = re.match(r"^\.\./(catalyst|echo|echo-chamber|pulse|statement|whisper|fate|quill)(?:/(.*))?$", stripped)
     if cross and cross.group(1) != library:
         other_library = cross.group(1)
         rest = cross.group(2) or ""

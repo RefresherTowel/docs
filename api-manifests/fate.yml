@@ -1,0 +1,378 @@
+library:
+  id: fate
+  name: Fate
+  symbol_prefix: Fate
+
+source_globs:
+  - scripts/**/*.gml
+
+require_public_coverage: true
+
+page:
+  layout: default
+  title: API Reference
+  heading: API Reference
+  parent: Fate
+  nav_order: 6
+  doc_version: current
+  intro: >-
+    Complete reference for Fate's public API. For explanations and worked examples,
+    start with the teaching pages; this page is for looking up exact capabilities.
+
+sections:
+  - title: Tables and entries
+    types:
+      - FateTable
+      - FateEntry
+      - FateValueEntry
+      - FateTableEntry
+      - FateFactoryEntry
+
+  - title: Rolling and Preview
+    types:
+      - FateRollRequest
+      - FateRollResult
+      - FatePreviewRequest
+      - FatePreviewResult
+
+  - title: Policies
+    types:
+      - FatePolicy
+      - FatePityPolicyConfig
+      - FatePityPolicy
+      - FateFeaturedRateUpPolicyConfig
+      - FateFeaturedRateUpPolicy
+      - FateDuplicateProtectionPolicyConfig
+      - FateDuplicateProtectionPolicy
+      - FateShuffleBagPolicyConfig
+      - FateShuffleBagPolicy
+      - FateBatchGuaranteePolicyConfig
+      - FateBatchGuaranteePolicy
+      - FateWeightModifierPolicyConfig
+      - FateWeightModifierPolicy
+
+  - title: RNG
+    types:
+      - FateRng
+      - FateRngState
+      - FateRngStateResult
+
+  - title: Persistence and validation
+    types:
+      - FateStateRecord
+      - FateTableState
+      - FateSnapshotState
+      - FatePityPolicyState
+      - FateFeaturedRateUpPolicyState
+      - FateDuplicateProtectionPolicyState
+      - FateShuffleBagPolicyState
+      - FateValidationReturn
+      - FateSnapshotResult
+      - FateRestoreResult
+      - FateFileResult
+
+  - title: Simulation
+    types:
+      - FateStateAdapter
+      - FateSimulationConfig
+      - FateSimulationResult
+      - FateSimulationChecks
+
+function_sections:
+  - title: Global functions
+    subsections:
+      - title: Strictness
+        functions:
+          - FateSetDefaultStrictness
+          - FateGetDefaultStrictness
+      - title: Persistence
+        functions:
+          - FateTrackGraph
+          - FateUntrackGraph
+          - FateListTrackedGraphs
+          - FateTrackRng
+          - FateUntrackRng
+          - FateCaptureSnapshot
+          - FateRestoreSnapshot
+          - FateFinalizeRestore
+          - FateSaveSnapshotFile
+          - FateLoadSnapshotFile
+      - title: Simulation and testing
+        functions:
+          - FateTestSimulate
+          - FateTestSimulationAssert
+          - FateTestSimulationRunAndAssert
+          - FateTests_RunAll
+          - FateTests_RunAndAssert
+
+enum_sections:
+  - title: Enums
+    enums:
+      - FateStrictness
+      - eFateExhaustionReason
+      - eFateRollError
+      - eFateRngStateReason
+      - eFateSelectionSource
+      - eFatePreviewReason
+      - eFateDuplicateProtectionMode
+      - eFateDuplicateKeyMode
+      - eFateSimulationCollectMode
+      - eFateSimulationMetric
+      - eFateSimulationTableMetric
+    groups:
+      - title: Core
+        enums:
+          - FateStrictness
+          - eFateExhaustionReason
+          - eFateRollError
+          - eFateRngStateReason
+          - eFateSelectionSource
+          - eFatePreviewReason
+      - title: Policies
+        enums:
+          - eFateDuplicateProtectionMode
+          - eFateDuplicateKeyMode
+      - title: Simulation
+        enums:
+          - eFateSimulationCollectMode
+          - eFateSimulationMetric
+          - eFateSimulationTableMetric
+
+types:
+  FateTable:
+    require_grouping: true
+    method_groups:
+      Table setup:
+        - GetTableId
+        - SetStrictness
+        - GetStrictness
+        - AddEntry
+        - AddValue
+        - AddTable
+        - AddFactory
+        - GetEntries
+      Policies:
+        - AddPolicy
+        - ClearPolicies
+        - GetPolicies
+        - EnablePity
+        - EnableRateUp
+        - EnableDuplicateProtection
+        - EnableBatchGuarantee
+        - EnableTenPullGuarantee
+        - EnableShuffleBag
+        - EnableStandardGachaRules
+      Rolling and Preview:
+        - Roll
+        - Preview
+      State and validation:
+        - Validate
+        - GetState
+        - ValidateState
+        - SetState
+
+  FateEntry:
+    require_grouping: true
+    method_groups:
+      Identity and availability:
+        - SetKey
+        - GetKey
+        - GetStateType
+        - SetEnabled
+        - GetEnabled
+      Selection rules:
+        - SetWeight
+        - GetWeight
+        - SetGuaranteed
+        - GetGuaranteed
+        - SetGuaranteedPriority
+        - GetGuaranteedPriority
+        - SetUnique
+        - GetUnique
+        - SetUniqueKey
+        - GetUniqueKey
+      Resolution and callbacks:
+        - SetResolver
+        - SetOnSelected
+        - SetOnRollFinished
+        - ResolveForRoll
+        - OnSelected
+        - OnRollFinished
+      State and Preview:
+        - SetPreviewTransition
+        - SetPreviewFinishTransition
+        - GetState
+        - SetState
+        - GetPreviewState
+        - CanAdvancePreviewState
+        - AdvancePreviewState
+        - CanFinishPreviewState
+        - FinishPreviewState
+
+  FateRollResult:
+    method_groups:
+      Status:
+        - IsOk
+        - GetError
+        - IsComplete
+        - IsPartial
+        - IsEmpty
+        - GetRequestedCount
+        - GetSelectedCount
+        - GetMissingCount
+        - GetExhaustionReason
+      Results:
+        - GetEntries
+        - GetValues
+        - GetEntry
+        - GetValue
+      Details:
+        - GetDiagnostics
+        - GetSelectedEvents
+        - GetTableSummaries
+        - GetTableSummary
+
+  FateSimulationChecks:
+    method_groups:
+      Entry metrics:
+        - SetEntryMetricMin
+        - SetEntryMetricMax
+        - SetEntryMetricNear
+        - SetFinalEntryMetricMin
+        - SetFinalEntryMetricMax
+        - SetFinalEntryMetricNear
+      Table and exhaustion metrics:
+        - SetTableMetricMin
+        - SetTableMetricMax
+        - SetTableMetricNear
+        - SetRootExhaustionMax
+        - SetAllTableExhaustionMax
+      Determinism:
+        - SetExpectedSelectionHash
+        - SetExpectedReportHash
+
+symbols:
+  FateTable.Roll:
+    example: |-
+      var _result = loot_table.Roll(new FateRollRequest().SetCount(3))
+    see_also:
+      - FateTable.Preview
+      - FateRollRequest
+      - FateRollResult
+      - label: Rolling multiple rewards
+        href: /fate/beginner-workflow/#rolling-more-than-one-result
+
+  FateTable.Preview:
+    see_also:
+      - FateTable.Roll
+      - FatePreviewRequest
+      - FatePreviewResult
+
+  FateRollResult.GetTableSummary:
+    notes:
+      - >-
+        Table summaries are only retained when the roll request enables detailed capture.
+        The returned struct describes one completed table call, including nested calls.
+    fields:
+      - name: roll_id
+        type: Real
+        description: ID shared by every table call made by the same root roll.
+      - name: table_call_id
+        type: Real
+        description: ID for this particular table call.
+      - name: table
+        type: Struct.FateTable
+        description: The live table that was called.
+      - name: table_id
+        type: Real
+        description: Runtime ID of the table that was called.
+      - name: table_key
+        type: String,Undefined
+        description: Stable key of the table, when one has been assigned.
+      - name: parent_entry_id
+        type: Real,Undefined
+        description: Runtime ID of the nested-table entry that led to this call.
+      - name: nested_depth
+        type: Real
+        description: Zero for the root table, increasing for nested table calls.
+      - name: requested_count
+        type: Real
+        description: Number of direct selections requested from this table call.
+      - name: selected_count
+        type: Real
+        description: Number of direct selections this table actually made.
+      - name: missing_count
+        type: Real
+        description: Number of requested direct selections that could not be filled.
+      - name: is_partial
+        type: Bool
+        description: Whether the table made some, but not all, requested selections.
+      - name: is_empty
+        type: Bool
+        description: Whether the table made no selections.
+      - name: error
+        type: eFateRollError
+        description: Error reported for this table call.
+      - name: exhaustion_reason
+        type: eFateExhaustionReason
+        description: Reason selection stopped before filling every requested slot.
+      - name: selected_events
+        type: Array<Struct>
+        description: Detailed events for the direct selections made by this table.
+
+  FatePreviewResult.GetBranches:
+    notes:
+      - >-
+        Each branch represents one complete hypothetical Preview result. Factories are
+        represented by undefined values because Preview never executes arbitrary factory code.
+    fields:
+      - name: probability
+        type: Real
+        description: Probability of this complete branch.
+      - name: entries
+        type: Array<Struct.FateEntry>
+        description: Final producing entries for the branch.
+      - name: values
+        type: Array<Any>
+        description: Final values aligned with entries. Factory-produced values are undefined.
+    see_also:
+      - FateTable.Preview
+      - FatePreviewRequest
+
+  FateCaptureSnapshot:
+    see_also:
+      - FateRestoreSnapshot
+      - FateSnapshotResult
+
+  FateRestoreSnapshot:
+    see_also:
+      - FateFinalizeRestore
+      - FateRestoreResult
+      - FateCaptureSnapshot
+
+  FateTestSimulate:
+    see_also:
+      - FateSimulationConfig
+      - FateSimulationResult
+      - FateTestSimulationAssert
+
+enums:
+  FateStrictness:
+    description: Controls how Fate reports invalid authored configuration and runtime misuse.
+    members:
+      SILENT: No diagnostic output.
+      DEBUG: Report problems as debug messages.
+      ERROR: Raise errors for reportable problems.
+      NUM: Sentinel/count value.
+
+  eFateRollError:
+    description: High-level error reported by FateRollResult.
+    members:
+      NONE: The roll did not fail with a request, RNG, or policy error.
+      INVALID_REQUEST: The roll request is invalid.
+      INVALID_RNG: The supplied RNG is invalid.
+      POLICY_CONFLICT: Registered policies produced an unresolved conflict.
+      NUM: Sentinel/count value.
+
+  eFatePreviewReason:
+    description: Explains why a Preview result is not exact.

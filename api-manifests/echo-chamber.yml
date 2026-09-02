@@ -1,0 +1,716 @@
+library:
+  id: echo-chamber
+  name: Echo Chamber
+  symbol_prefix: Echo
+  macro_prefix: ECHO_
+source_globs:
+- scripts/scr_echo_chamber_bootstrap/*.gml
+- scripts/scr_echo_chamber_controls/*.gml
+- scripts/scr_echo_chamber_debug_console/*.gml
+- scripts/scr_echo_chamber_debug_core/*.gml
+- scripts/scr_echo_chamber_debug_inspection/*.gml
+- scripts/scr_echo_chamber_debug_reports/*.gml
+- scripts/scr_echo_chamber_debug_runtime/*.gml
+- scripts/scr_echo_chamber_debug_shared/*.gml
+- scripts/scr_echo_chamber_input/*.gml
+- scripts/scr_echo_chamber_library_registration/*.gml
+- scripts/scr_echo_chamber_macros/*.gml
+- scripts/scr_echo_chamber_panel/*.gml
+- scripts/scr_echo_chamber_root/*.gml
+- scripts/scr_echo_chamber_themes/*.gml
+- scripts/scr_echo_chamber_window/*.gml
+require_public_coverage: true
+require_macro_coverage: true
+page:
+  layout: default
+  title: API Reference
+  heading: API Reference
+  parent: Echo Chamber
+  nav_order: 5
+  doc_version: current
+  intro: Complete reference for Echo Chamber's roots, windows, panels, controls, input, themes, and Echo Console
+    APIs. For explanations and worked examples, start with the teaching pages; this page is for looking up exact
+    capabilities.
+sections:
+- title: Binding and input
+  types:
+  - EchoChamberFieldBinding
+  - EchoChamberInputBinding
+  - EchoChamberInputBindingKey
+  - EchoChamberInputBindingFunc
+  - EchoChamberInputBindingBlock
+  - EchoChamberInputContext
+- title: Desktop, windows, and panels
+  types:
+  - EchoChamberRoot
+  - EchoChamberScrollState
+  - EchoChamberWindow
+  - EchoChamberPanel
+- title: Controls
+  types:
+  - EchoChamberControlBase
+  - EchoChamberTextBlock
+  - EchoChamberButton
+  - EchoChamberSlider
+  - EchoChamberToggle
+  - EchoChamberTextInput
+  - EchoChamberTextBox
+  - EchoChamberSeparator
+  - EchoChamberListView
+  - EchoChamberDropdownBase
+  - EchoChamberDropdownSelect
+  - EchoChamberDropdownToggleMenu
+  - EchoChamberColorButton
+- title: Echo Console
+  types:
+  - EchoConsoleCommandArg
+  - EchoConsoleTarget
+  - EchoConsoleManager
+- title: Themes
+  types:
+  - EchoChamberTheme
+  - EchoChamberThemeMidnightNeon
+  - EchoChamberThemePhosphorTerminal
+  - EchoChamberThemeBiohazardConsole
+  - EchoChamberThemeEmeraldUltraviolet
+  - EchoChamberThemeAmberForest
+  - EchoChamberThemeSakuraPunch
+  - EchoChamberThemeArcadeWave
+  - EchoChamberThemeCircuitCandy
+  - EchoChamberThemeToxicTerminal
+  - EchoChamberThemeSunsetGlitch
+  - EchoChamberThemeBubblegumTerminal
+  - EchoChamberThemeMangoMint
+function_sections:
+- title: Top-level functions
+  subsections:
+  - title: Root and lifecycle
+    functions:
+    - GetEchoChamberRoot
+    - EnsureEchoChamberRoot
+    - EchoChamberReleaseGpuResources
+  - title: Input
+    functions:
+    - EchoChamberInputFormatKey
+    - EchoChamberInputFormatBinding
+  - title: Echo Console
+    functions:
+    - EchoChamberOpenConsole
+    - EchoConsoleGetManager
+    - EchoConsoleSetInstanceTarget
+    - EchoConsoleClearTarget
+    - EchoConsoleGetTarget
+    - EchoConsoleOpenWindow
+    - EchoConsoleStartInstancePick
+    - EchoConsoleCancelPick
+    - EchoConsoleIsPicking
+    - EchoConsoleAddInstanceWatch
+    - EchoConsoleAddGlobalWatch
+    - EchoConsoleAddCallbackWatch
+    - EchoConsoleRemoveWatch
+    - EchoConsoleClearWatches
+    - EchoConsoleAddCommand
+    - EchoConsoleUnregisterCommand
+    - EchoConsoleRunCommand
+    - EchoConsoleCaptureSnapshot
+    - EchoConsoleCopySnapshot
+    - EchoConsoleSaveSnapshot
+    - EchoConsoleClearSavedSnapshots
+    - EchoConsoleEnableCrashCapture
+    - EchoConsoleDisableCrashCapture
+    - EchoConsoleHasCrashReport
+    - EchoConsoleCopyCrashReport
+    - EchoConsoleClearCrashReport
+    - EchoConsoleStartInputRecording
+    - EchoConsoleStopInputRecording
+    - EchoConsolePlayInputRecording
+    - EchoConsoleOpenDataStructureScanner
+    - EchoConsoleHandleAsyncSystem
+  - title: Library integration
+    functions:
+    - EchoConsoleLibraryRegistration
+  - title: Theme assets
+    functions:
+    - EchoChamberThemeTryGetFont
+    - EchoChamberThemeTryGetSprite
+enum_sections:
+- title: Enums
+  groups:
+  - title: Layout and drawing
+    enums:
+    - eEchoChamberDock
+    - eEchoChamberChromeButtonSlot
+    - eEchoChamberChromeIcon
+    - eEchoChamberChromeIconState
+    - eEchoChamberChromeIconVisualKind
+    - eEchoChamberCollapse
+    - eEchoChamberPanelSizeMode
+    - eEchoChamberPanelFlow
+    - eEchoChamberPanelRowAlign
+    - eEchoChamberPanelRowDistribution
+    - eEchoChamberAlignHor
+    - eEchoChamberAlignVer
+    - eEchoChamberBoxShape
+    - eEchoChamberLabelPlacement
+    - eEchoChamberLabelAlign
+  - title: Popup and controls
+    enums:
+    - eEchoChamberPopupDirection
+    - eEchoChamberColorPopupVisualSpace
+    - eEchoChamberColorButtonValueTextMode
+    - eEchoChamberSliderValuePosition
+    - eEchoChamberValidationKind
+    - eEchoChamberValidationDisplay
+    - eEchoChamberSeparatorOrientation
+    - eEchoChamberBindingKind
+  - title: Input
+    enums:
+    - eEchoChamberInputCheck
+    - eEchoChamberInputBindKind
+  - title: Echo Console
+    enums:
+    - eEchoChamberDebugTheme
+    - eEchoChamberDebugTargetKind
+    - eEchoConsoleDsKind
+    - eEchoConsoleCommandArgType
+    - eEchoConsoleCommandCallbackKind
+    - eEchoChamberDebugPickMode
+    - eEchoChamberWatchKind
+macro_sections:
+- title: Macros
+  groups:
+  - title: Version and Console setup
+    macros:
+    - ECHO_CHAMBER_VERSION
+    - ECHO_CHAMBER_CONSOLE_ENABLED
+    - ECHO_CHAMBER_CONSOLE_KEY
+    - ECHO_CHAMBER_LAUNCH_ON_STARTUP
+    - ECHO_CHAMBER_DEBUG_THEME
+  - title: Core input action ids
+    macros:
+    - ECHO_UI_ACTION_CANCEL
+    - ECHO_UI_ACTION_ACCEPT
+    - ECHO_UI_ACTION_TAB_NEXT
+    - ECHO_UI_ACTION_TAB_PREV
+    - ECHO_UI_ACTION_NAV_UP
+    - ECHO_UI_ACTION_NAV_DOWN
+    - ECHO_UI_ACTION_PAGE_UP
+    - ECHO_UI_ACTION_PAGE_DOWN
+    - ECHO_UI_ACTION_HOME
+    - ECHO_UI_ACTION_END
+    - ECHO_UI_ACTION_RESTORE_WINDOWS
+  - title: Default core bindings
+    macros:
+    - ECHO_UI_BIND_CANCEL
+    - ECHO_UI_BIND_ACCEPT
+    - ECHO_UI_BIND_TAB_NEXT
+    - ECHO_UI_BIND_TAB_PREV
+    - ECHO_UI_BIND_NAV_UP
+    - ECHO_UI_BIND_NAV_DOWN
+    - ECHO_UI_BIND_PAGE_UP
+    - ECHO_UI_BIND_PAGE_DOWN
+    - ECHO_UI_BIND_HOME
+    - ECHO_UI_BIND_END
+    - ECHO_UI_BIND_RESTORE_WINDOWS
+  - title: Built-in debug window ids
+    macros:
+    - ECHO_DEBUG_WINDOW_INSPECTOR
+    - ECHO_DEBUG_WINDOW_WATCHES
+    - ECHO_DEBUG_WINDOW_GAME
+    - ECHO_DEBUG_WINDOW_RUNTIME
+    - ECHO_DEBUG_WINDOW_DATA_STRUCTURES
+    - ECHO_DEBUG_WINDOW_COMMAND_HELP
+    - ECHO_DEBUG_WINDOW_INPUT
+    - ECHO_DEBUG_WINDOW_CRASH
+    - ECHO_DEBUG_WINDOW_SNAPSHOT
+  - title: Console limits
+    macros:
+    - ECHO_CONSOLE_ROOM_SCAN_LIMIT
+    - ECHO_CONSOLE_DS_SCAN_LIMIT
+    - ECHO_CONSOLE_DS_INSPECT_LIMIT
+  - title: Text input modes
+    macros:
+    - ECHO_TEXTMODE_TEXT
+    - ECHO_TEXTMODE_INT
+    - ECHO_TEXTMODE_FLOAT
+    - ECHO_TEXTMODE_IDENTIFIER
+    - ECHO_TEXTMODE_PATH
+    - ECHO_TEXTMODE_CODE
+    - ECHO_TEXTMODE_PASSWORD
+types:
+  EchoChamberControlBase:
+    require_grouping: true
+    method_groups:
+      Hierarchy and style:
+      - GetRoot
+      - GetWindow
+      - GetPanel
+      - SetStyleKey
+      - Style
+      Sizing:
+      - SetPreferredWidth
+      - SetPreferredHeight
+      - SetFillWidth
+      Caption and labels:
+      - SetCaption
+      - SetLabel
+      - SetLabelPlacement
+      - SetLabelGap
+      - SetLabelWidth
+      - SetLabelAutoMinControlWidth
+      - SetStyleKeyLabel
+      - SetLabelAlign
+      - SetLabelEnabled
+      State and drawing:
+      - SetTooltip
+      - SetVisible
+      - SetEnabled
+      - DrawManual
+  EchoChamberTextInput:
+    require_grouping: true
+    method_groups:
+      Binding and callbacks:
+      - BindText
+      - OnChange
+      - OnSubmit
+      - SetSubmitOnEnter
+      - OnHistoryPrevious
+      - OnHistoryNext
+      - OnCancel
+      - OnFocus
+      - OnBlur
+      - OnLiveChange
+      - SetLiveChangeRateMs
+      - SetOnLiveChange
+      Input behaviour:
+      - SetPlaceholder
+      - SetContextMenuStyleKey
+      - SetReadOnly
+      - SetMaxLength
+      - SetAllowedChars
+      - SetDeniedChars
+      - SetNumericOnly
+      - SetSelectAllOnFocus
+      Filtering and transforms:
+      - SetFilter
+      - AddTransform
+      - ClearTransforms
+      - SetAutoTrim
+      - SetAutoUpper
+      - SetAutoLower
+      Validation:
+      - SetInvalid
+      - SetValidationMessage
+      - ClearValidationMessage
+      - SetValidationVisible
+      - SetValidationDisplay
+      Input modes and editor:
+      - SetInputMode
+      - SetInputModeInt
+      - SetInputModeFloat
+      - SetInputModeCode
+      - SetInputModePassword
+      - SetTabInserts
+      - SetTabUsesSpaces
+      - SetTabSpaces
+      Skin and forced sizing:
+      - SetBackgroundSprite
+      - SetBorderSprite
+      - SetCaretSprite
+      - SetGripSprite
+      - SetExpandSprite
+      - SetSkinTint
+      - SetForceSizeFromBackgroundSprite
+      - SetForceSizeFromBorderSprite
+      - SetForceSizeFromSprite
+      - ClearForceSize
+  EchoChamberListView:
+    require_grouping: true
+    method_groups:
+      Sizing and data:
+      - SetVisibleRows
+      - SetAutoHeightFromCount
+      - SetAutoWidthFromContent
+      - SetFillWidth
+      - SetPreferredHeight
+      - SetPreferredWidth
+      - SetRowMeasure
+      - SetCountGetter
+      - SetRowDrawer
+      - SetRowTooltipGetter
+      Events:
+      - SetOnSelect
+      - SetOnActivate
+      - SetOnDoubleClick
+      - SetOnRightClick
+      Selection and scrolling:
+      - SetAutoScroll
+      - JumpToBottom
+      - IsNearBottom
+      - IsAutoFollowPaused
+      - GetSelectedIndex
+      - SetSelectedIndex
+  EchoConsoleManager:
+    require_grouping: true
+    method_groups:
+      Target and picking:
+      - SetTarget
+      - SetInstanceTarget
+      - ClearTarget
+      - GetTarget
+      - GetTargetKind
+      - GetTargetValue
+      - GetTargetRevision
+      - GetTargetSummary
+      - GetConsoleSummary
+      - StartInstancePick
+      - CancelPick
+      - IsPicking
+      - IsPickingInstance
+      - GetPickMode
+      - GetPickHoverInstance
+      - GetPickHoverCount
+      Watches:
+      - AddInstanceVariableWatch
+      - AddGlobalWatch
+      - AddCallbackWatch
+      - RemoveWatch
+      - ClearWatches
+      - BuildWatchesSnapshotText
+      Input recording:
+      - StartInputRecording
+      - StopInputRecording
+      - PlayInputRecording
+      - HandleAsyncSystem
+      Snapshots and crash reports:
+      - CaptureSnapshot
+      - CopySnapshot
+      - SaveSnapshot
+      - ClearSavedSnapshots
+      - EnableCrashCapture
+      - DisableCrashCapture
+      - HasCrashReport
+      - CopyCrashReport
+      - ClearCrashReport
+      - GetCrashReportText
+      Commands:
+      - AddCommand
+      - UnregisterCommand
+      - RunCommand
+      - GetCommandOutput
+      - GetCommandOutputIsError
+      - GetPreviousCommand
+      - GetNextCommand
+      Integration and windows:
+      - RegisterTargetListener
+      - UnregisterTargetListener
+      - RegisterWindowOpener
+      - UnregisterWindowOpener
+      - OpenWindow
+      - OpenCommandHelp
+      - ResetBuiltInWindowLayouts
+      - RegisterOverlayDrawer
+      - UnregisterOverlayDrawer
+  EchoChamberPanel:
+    require_grouping: true
+    method_groups:
+      Style and content:
+      - SetStyleKey
+      - Style
+      - LabelStyle
+      - SetContentDrawer
+      - GetThickness
+      Controls:
+      - AddControl
+      - InsertControl
+      - MoveControl
+      - MoveControlToPanel
+      - SetControlOrder
+      - RemoveControl
+      - ClearControls
+      - FindControl
+      Child panels:
+      - AddChildPanel
+      - RemoveChildPanel
+      - ClearChildPanels
+      Layout and sizing:
+      - SetActive
+      - SetSizeMode
+      - SetSize
+      - SetFlowMode
+      - SetRowAlign
+      - SetRowVerticalAlign
+      - SetRowDistribution
+      - SetMinSize
+      - SetMaxSize
+      Scrolling:
+      - SetScrollable
+      - SetScrollState
+      Labels and collapse:
+      - SetLabelPlacement
+      - SetLabelGap
+      - SetLabelWidth
+      - SetLabelWidthClamp
+      - SetStyleKeyLabel
+      - SetCollapseMode
+      - SetCollapsed
+  EchoChamberRoot:
+    require_grouping: true
+    method_groups:
+      Theme and input:
+      - RefreshTheme
+      - MarkThemeDirty
+      - ApplyTheme
+      - GetDefaultInputContextId
+      - BindCoreInputAction
+      - GetInputContext
+      - CreateInputContext
+      - RemoveInputContext
+      - EC_InputPressed
+      - EC_InputDown
+      - EC_InputReleased
+      Panels and windows:
+      - AddPanel
+      - CreateWindow
+      - GetDebugManager
+      - RegisterWindow
+      - FindWindow
+      - FindControl
+      - DumpUI
+      - RemoveWindow
+      Window ordering and modality:
+      - BringWindowToFront
+      - BringWindowToFrontById
+      - SendWindowToBack
+      - SetWindowZIndex
+      - SetModalWindow
+      - ClearModalWindow
+      - GetModalWindow
+      - IsWindowFrontmostForPointerInput
+      - BringWindowsBack
+      - ResetWindowLayouts
+      Persistence:
+      - SetPersistenceFile
+      - SetPersistenceSection
+      - SaveLayout
+      - LoadLayout
+      Pointer, scrolling, and clipping:
+      - SetMouseCapture
+      - ClearMouseCapture
+      - RunDesktop
+      - ConsumeMouse
+      - ConsumeWheel
+      - DrawScrollArea
+      - PushClipRect
+      - PopClipRect
+      - HitTestRect
+      Tooltips, popups, and overlays:
+      - RequestTooltip
+      - DrawTooltipTextAt
+      - SetActiveOverlayOwner
+      - ClearActiveOverlayOwner
+      - ConsumeOverlayCloseRequest
+      - ResolveAnchoredPopupRect
+      - ResolvePointPopupRect
+      - ShouldClosePopupOnOutsideClick
+      - DrawPopupFrame
+      - OpenColorPickerPopup
+      - CloseColorPickerPopup
+      - IsColorPickerPopupOpen
+      - QueueOverlay
+      - OpenContextMenu
+      - CloseContextMenu
+      - IsContextMenuOpen
+      - ShowToast
+      - CopyToClipboard
+      Text and control focus:
+      - FocusTextInput
+      - BlurTextInput
+      - SubmitTextInput
+      - CancelTextInput
+      - IsActiveTextInput
+      - GetActiveText
+      - GetTextBuffer
+      - FocusControl
+      - IsControlFocused
+      - BlurControlFocus
+  EchoChamberWindow:
+    require_grouping: true
+    method_groups:
+      Identity, input, and theme:
+      - SetTitle
+      - SetInputContext
+      - SwapInputContext
+      - SetStyleKey
+      - Style
+      - SetStyleKeyHeader
+      - SetStyleKeyChromeButton
+      - RefreshThemeOverride
+      - MarkThemeDirty
+      - ApplyTheme
+      - ClearThemeOverride
+      Visibility and lifecycle:
+      - SetVisible
+      - OnClose
+      - OnMove
+      - OnResize
+      - OnShow
+      - OnHide
+      - OnFocus
+      - OnBlur
+      - OnMinimize
+      - OnRestore
+      - Close
+      - SetPinned
+      - TogglePinned
+      - SetMinimized
+      - ToggleMinimized
+      Geometry and layout:
+      - SetRect
+      - SetPosition
+      - GetWidth
+      - GetHeight
+      - SetMinSize
+      - SetMaxSize
+      - SetDefaultLayout
+      - ResetLayout
+      - SetAutoFit
+      - FitToContent
+      Panels and controls:
+      - AddPanel
+      - AddScrollablePanelBody
+      - RemovePanel
+      - ClearPanels
+      - FindPanel
+      - FindControl
+      - MoveControlToPanel
+      Interaction and drawing:
+      - ContainsPoint
+      - BeginLayoutBatch
+      - EndLayoutBatch
+      - ProcessWindowInteractions
+      - Draw
+enums:
+  eEchoChamberDock:
+    description: Chooses how a panel claims space from its parent. Echo Chamber lays out `TOP`, `BOTTOM`, `LEFT`,
+      and `RIGHT` edge strips first, then gives `FILL` whatever space remains. Panels that use the same dock direction
+      are handled in their added order.
+  eEchoChamberChromeButtonSlot:
+    description: Identifies which title-bar button on a window you want to style or address.
+  eEchoChamberChromeIcon:
+    description: Names the built-in icon meaning used by window title-bar buttons.
+  eEchoChamberChromeIconState:
+    description: Describes the current visual state of a title-bar icon so a style can provide different visuals
+      for normal, hovered, pressed, or disabled states.
+  eEchoChamberChromeIconVisualKind:
+    description: 'Chooses how a title-bar icon is represented: not drawn, drawn from a sprite, drawn from Echo Chamber''s
+      built-in buffer, or drawn as text.'
+  eEchoChamberCollapse:
+    description: Controls whether a panel can collapse and, when it can, which edge it collapses toward.
+  eEchoChamberPanelSizeMode:
+    description: Chooses whether a docked panel uses an explicit thickness (`FIXED`) or sizes that thickness from
+      its contents (`FIT_CONTENT`). For top/bottom panels the thickness is height, while for left/right panels it's
+      width.
+  eEchoChamberPanelFlow:
+    description: Chooses how a panel arranges its direct controls. `ROW` packs controls across rows and can wrap,
+      while `COLUMN` stacks them vertically.
+  eEchoChamberPanelRowAlign:
+    description: When a packed row doesn't use the full available width, chooses whether that row sits at the start,
+      centre, or end.
+  eEchoChamberPanelRowDistribution:
+    description: Controls horizontal space inside packed rows. `PACK` keeps controls at their desired widths, while
+      `FILL` distributes available row width to controls that are allowed to fill.
+  eEchoChamberAlignHor:
+    description: General left/centre/right alignment used by layouts, popups, and styles.
+  eEchoChamberAlignVer:
+    description: General top/middle/bottom alignment used by layouts and styles.
+  eEchoChamberBoxShape:
+    description: Chooses the shape drawn by style surfaces that support rectangular or rounded boxes.
+    members:
+      NUM: Enum sentinel. Use RECTANGLE or ROUNDRECT for style SetShape() calls.
+  eEchoChamberLabelPlacement:
+    description: Chooses where a control's separate form label is drawn. `LEADING` places it beside the control,
+      `ABOVE` puts it above, `NONE` hides it, and `AUTO` lets the panel/style choose based on available room.
+  eEchoChamberLabelAlign:
+    description: Chooses the horizontal alignment of label text. `AUTO` leaves the choice to the active label style
+      and placement rules.
+  eEchoChamberPopupDirection:
+    description: Chooses whether an anchored popup prefers to open below or above its anchor, or lets Echo Chamber
+      choose from the available space.
+  eEchoChamberColorPopupVisualSpace:
+    description: Chooses whether the colour picker presents its colour controls in HSV or HSL space.
+  eEchoChamberColorButtonValueTextMode:
+    description: Chooses whether a colour button also prints the current RGB value as text.
+  eEchoChamberSliderValuePosition:
+    description: Chooses whether a slider's displayed value text appears above or below the slider body.
+  eEchoChamberValidationKind:
+    description: Describes how serious a validation message is when a text control reports a problem or informational
+      note.
+  eEchoChamberValidationDisplay:
+    description: Chooses whether validation feedback is shown inline, as a tooltip, or chosen automatically.
+  eEchoChamberSeparatorOrientation:
+    description: Chooses whether a separator control draws horizontally or vertically.
+  eEchoChamberBindingKind:
+    description: Internal storage mode used by dynamic control bindings. Configure bindings with the relevant Bind*()
+      method instead of assigning this enum directly.
+  eEchoChamberInputCheck:
+    description: 'Chooses which moment of a key/input action counts: the first press, every frame it''s held, or
+      the release.'
+  eEchoChamberInputBindKind:
+    description: Describes whether a named Echo Chamber action is connected to a keyboard key, a custom function,
+      or deliberately blocked from parent-context fallback.
+  eEchoChamberDebugTheme:
+    description: Chooses the dedicated visual theme used by Echo Console and the other built-in debugger windows.
+  eEchoChamberDebugTargetKind:
+    description: Tells the debugger what kind of value is currently selected as its shared target, such as a live
+      instance, struct, global scope, asset, or log entry.
+  eEchoConsoleDsKind:
+    description: Lists the GameMaker DS types the Data Structure Scanner knows how to inspect.
+  eEchoConsoleCommandArgType:
+    description: Tells the Console command parser how to turn one typed argument into a GML value. `TEXT` consumes
+      the rest of the command line and is useful for values containing spaces.
+  eEchoConsoleCommandCallbackKind:
+    description: Describes whether a registered command callback receives raw command text or arguments that Echo
+      Console has already parsed.
+  eEchoChamberDebugPickMode:
+    description: Describes whether the debugger is currently waiting for the user to click a live instance in the
+      game.
+  eEchoChamberWatchKind:
+    description: 'Describes where a watch gets the value it keeps visible: one instance field, one global field,
+      or a callback that calculates the value.'
+macros:
+  ECHO_CHAMBER_VERSION:
+    description: Current Echo Chamber source version string.
+  ECHO_CHAMBER_CONSOLE_ENABLED:
+    description: Compile-time switch controlling whether Echo Console is enabled.
+  ECHO_CHAMBER_CONSOLE_KEY:
+    description: Default keyboard key used to open Echo Console.
+  ECHO_CHAMBER_LAUNCH_ON_STARTUP:
+    description: Controls whether Echo Console opens automatically at startup.
+  ECHO_CHAMBER_DEBUG_THEME:
+    description: Selects the built-in debugger theme used by Echo Console and specialist debug windows.
+symbols:
+  GetEchoChamberRoot:
+    see_also:
+    - EnsureEchoChamberRoot
+    - EchoChamberRoot
+  EnsureEchoChamberRoot:
+    see_also:
+    - GetEchoChamberRoot
+    - EchoChamberRoot
+  EchoChamberOpenConsole:
+    see_also:
+    - EchoConsoleGetManager
+    - EchoConsoleManager
+  EchoConsoleGetManager:
+    see_also:
+    - EchoConsoleManager
+    - GetEchoChamberRoot
+  EchoChamberThemeTryGetFont:
+    see_also:
+    - EchoChamberThemeTryGetSprite
+    - EchoChamberTheme
+  EchoChamberThemeTryGetSprite:
+    see_also:
+    - EchoChamberThemeTryGetFont
+    - EchoChamberTheme

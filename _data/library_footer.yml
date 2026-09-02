@@ -56,9 +56,22 @@ quill:
   description: A free advanced text box system with text selection, right-click context menus, cut/copy/paste, single-line and multi-line editing, and extensive customisation.
 
 echo:
-  name: Echo / Echo Chamber
+  name: Echo
   github: https://github.com/RefresherTowel/Echo
   discord: "https://discord.gg/w5NWDBwNta"
   itch: https://refreshertowel.itch.io/echo
   icon: /assets/echo_icon.png
-  description: A debug manager with a fully featured debug UI builder for creating your own in-game development tools.
+  description: A lightweight debug logger with levels, tags, history, raw capture, and file dumps. Echo ships together with Echo Chamber and Echo Console.
+  product_group: echo
+  requirements_note: Echo ships with Echo Chamber, but the logger itself can be used without creating or running any Echo Chamber UI.
+
+echo-chamber:
+  name: Echo Chamber
+  github: https://github.com/RefresherTowel/Echo-Chamber
+  discord: "https://discord.gg/jpAqpqxyM8"
+  itch: https://refreshertowel.itch.io/echo
+  icon: /assets/echo_icon.png
+  description: An in-game debug UI framework for building inspectors, tuning panels, consoles, and other development tools.
+  product_group: echo
+  show_in_other_stuff: false
+  requirements_note: Echo Chamber ships together with Echo and powers the bundled Echo Console.

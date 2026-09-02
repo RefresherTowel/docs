@@ -1,0 +1,1015 @@
+library:
+  id: echo-chamber
+  name: Echo Chamber
+  symbol_prefix: Echo
+source_globs:
+- scripts/scr_echo_chamber_styles/*.gml
+require_public_coverage: true
+page:
+  layout: default
+  title: Style API Reference
+  heading: Style API Reference
+  parent: Echo Chamber
+  nav_order: 6
+  doc_version: current
+  intro: Complete reference for Echo Chamber style families and style constructors. Inherited fluent setters are
+    shown on each concrete style so you can see the complete visual API available to that style.
+sections:
+- title: Style families
+  types:
+  - EchoPanelStyleFamily
+  - EchoWindowStyleFamily
+  - EchoWindowHeaderStyleFamily
+  - EchoTextBlockStyleFamily
+  - EchoLabelStyleFamily
+  - EchoSeparatorStyleFamily
+  - EchoButtonStyleFamily
+  - EchoWindowChromeButtonStyleFamily
+  - EchoColorButtonStyleFamily
+  - EchoColorPickerStyleFamily
+  - EchoToggleStyleFamily
+  - EchoDropdownStyleFamily
+  - EchoTextInputStyleFamily
+  - EchoTextBoxOverlayStyleFamily
+  - EchoSliderStyleFamily
+  - EchoPopupStyleFamily
+  - EchoTooltipStyleFamily
+  - EchoToastStyleFamily
+  - EchoScrollbarStyleFamily
+  - EchoListRowStyleFamily
+  - EchoContextMenuStyleFamily
+- title: Windows and layout
+  types:
+  - EchoWindowChromeButtonStyle
+  - EchoWindowStyle
+  - EchoWindowHeaderStyle
+  - EchoPanelStyle
+  - EchoPopupStyle
+  - EchoScrollbarStyle
+- title: Text, lists, and display
+  types:
+  - EchoListRowStyle
+  - EchoContextMenuStyle
+  - EchoTextBlockStyle
+  - EchoLabelStyle
+  - EchoTooltipStyle
+  - EchoToastStyle
+  - EchoSeparatorStyle
+- title: Interactive controls
+  types:
+  - EchoButtonStyle
+  - EchoColorButtonStyle
+  - EchoToggleStyle
+  - EchoDropdownStyle
+  - EchoTextInputStyle
+  - EchoTextBoxOverlayStyle
+  - EchoSliderStyle
+  - EchoColorPickerStyle
+types:
+  EchoWindowChromeButtonStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetFont
+      - SetActiveBgColour
+      - SetActiveBorderColour
+      - SetActiveTextColour
+      - SetActiveBgAlpha
+      - SetActiveBorderAlpha
+      - SetActiveTextAlpha
+      - SetIconColour
+      - SetIconAlpha
+      - SetHoverIconColour
+      - SetHoverIconAlpha
+      - SetPressedIconColour
+      - SetPressedIconAlpha
+      - SetActiveIconColour
+      - SetActiveIconAlpha
+      Stateful box:
+      - SetBgColour
+      - SetBorderColour
+      - SetTextColour
+      - SetBgAlpha
+      - SetBorderAlpha
+      - SetTextAlpha
+      - SetHoverBgColour
+      - SetHoverBorderColour
+      - SetHoverTextColour
+      - SetHoverBgAlpha
+      - SetHoverBorderAlpha
+      - SetHoverTextAlpha
+      - SetPressedMix
+      - SetPressedBgColour
+      - SetPressedBorderColour
+      - SetPressedTextColour
+      - SetPressedBgAlpha
+      - SetPressedBorderAlpha
+      - SetPressedTextAlpha
+      - SetDisabledBgColour
+      - SetDisabledBorderColour
+      - SetDisabledTextColour
+      - SetDisabledBgAlpha
+      - SetDisabledBorderAlpha
+      - SetDisabledTextAlpha
+      - SetShape
+      - SetCornerRadius
+  EchoButtonStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetFont
+      - SetIconGap
+      - SetIconScale
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+      Stateful box:
+      - SetBgColour
+      - SetBorderColour
+      - SetTextColour
+      - SetBgAlpha
+      - SetBorderAlpha
+      - SetTextAlpha
+      - SetHoverBgColour
+      - SetHoverBorderColour
+      - SetHoverTextColour
+      - SetHoverBgAlpha
+      - SetHoverBorderAlpha
+      - SetHoverTextAlpha
+      - SetPressedMix
+      - SetPressedBgColour
+      - SetPressedBorderColour
+      - SetPressedTextColour
+      - SetPressedBgAlpha
+      - SetPressedBorderAlpha
+      - SetPressedTextAlpha
+      - SetDisabledBgColour
+      - SetDisabledBorderColour
+      - SetDisabledTextColour
+      - SetDisabledBgAlpha
+      - SetDisabledBorderAlpha
+      - SetDisabledTextAlpha
+      - SetShape
+      - SetCornerRadius
+      Alignment:
+      - SetTextAlign
+      - SetVerticalAlign
+  EchoListRowStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetRowHeight
+      - SetNormalBgColour
+      - SetHoverBgColour
+      - SetSelectedBgColour
+      - SetPressedBgColour
+      - SetDisabledBgColour
+      - SetNormalTextColour
+      - SetHoverTextColour
+      - SetSelectedTextColour
+      - SetPressedTextColour
+      - SetDisabledTextColour
+      - SetNormalBgAlpha
+      - SetHoverBgAlpha
+      - SetSelectedBgAlpha
+      - SetPressedBgAlpha
+      - SetDisabledBgAlpha
+      - SetNormalTextAlpha
+      - SetHoverTextAlpha
+      - SetSelectedTextAlpha
+      - SetPressedTextAlpha
+      - SetDisabledTextAlpha
+      - SetFont
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+  EchoContextMenuStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetFont
+      - SetRowHeight
+      - SetMinWidth
+      - SetMaxWidth
+      - SetViewportMargin
+      - SetItemInsetX
+      - SetItemBgInsetX
+      - SetItemBgColour
+      - SetItemBgAlpha
+      - SetItemHoverBgColour
+      - SetItemHoverBgAlpha
+      - SetItemDisabledBgColour
+      - SetItemDisabledBgAlpha
+      - SetItemTextColour
+      - SetItemTextAlpha
+      - SetItemHoverTextColour
+      - SetItemHoverTextAlpha
+      - SetItemDisabledTextColour
+      - SetItemDisabledTextAlpha
+      - SetIconSize
+      - SetIconGap
+      - SetIconColour
+      - SetIconAlpha
+      - SetIconHoverColour
+      - SetIconHoverAlpha
+      - SetIconDisabledColour
+      - SetIconDisabledAlpha
+      - SetShortcutGap
+      - SetShortcutTextColour
+      - SetShortcutTextAlpha
+      - SetShortcutHoverTextColour
+      - SetShortcutHoverTextAlpha
+      - SetShortcutDisabledTextColour
+      - SetShortcutDisabledTextAlpha
+      - SetSeparatorHeight
+      - SetSeparatorColour
+      - SetSeparatorAlpha
+      - SetSeparatorInsetX
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+      Frame:
+      - SetBgColour
+      - SetBorderColour
+      - SetBgAlpha
+      - SetBorderAlpha
+  EchoWindowStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetClampMargin
+      - SetClampMarginX
+      - SetClampMarginY
+      - SetClampMarginLeft
+      - SetClampMarginTop
+      - SetClampMarginRight
+      - SetClampMarginBottom
+      - SetClampMarginLTRB
+      - SetTitlebarVisible
+      - SetResizeGripSize
+      - SetMinimizedHeight
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+      Frame:
+      - SetBgColour
+      - SetBorderColour
+      - SetBgAlpha
+      - SetBorderAlpha
+  EchoWindowHeaderStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetFont
+      - SetTextColour
+      - SetTextAlpha
+      - SetDisabledTextColour
+      - SetDisabledTextAlpha
+      - SetTextAlign
+      - SetHeight
+      - SetButtonGap
+      - SetButtonSize
+      - SetChromeIconSize
+      - SetChromeIconStrokeWidth
+      - SetChromeIconCloseSprite
+      - SetChromeIconMinimiseSprite
+      - SetChromeIconMaximiseSprite
+      - SetChromeIconRestoreSprite
+      - SetChromeIconPinSprite
+      - SetChromeIconUnpinSprite
+      - SetShowCloseButton
+      - SetShowMinimizeButton
+      - SetShowPinButton
+      - SetChromeIconCloseSpriteSet
+      - SetChromeIconMinimiseSpriteSet
+      - SetChromeIconMaximiseSpriteSet
+      - SetChromeIconRestoreSpriteSet
+      - SetChromeIconPinSpriteSet
+      - SetChromeIconUnpinSpriteSet
+      - SetShowChromeButtons
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+      Frame:
+      - SetBgColour
+      - SetBorderColour
+      - SetBgAlpha
+      - SetBorderAlpha
+  EchoPanelStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetCollapseHandleSize
+      - SetCollapseHandleBgColour
+      - SetCollapseHandleBgAlpha
+      - SetCollapseHandleHoverBgColour
+      - SetCollapseHandleHoverBgAlpha
+      - SetCollapseHandleBorderColour
+      - SetCollapseHandleBorderAlpha
+      - SetCollapseHandleGlyphColour
+      - SetCollapseHandleGlyphAlpha
+      - SetSplitterHitSize
+      - SetSplitterDrawSize
+      - SetSplitterColour
+      - SetSplitterAlpha
+      - SetSplitterHoverColour
+      - SetSplitterHoverAlpha
+      - SetSplitterActiveColour
+      - SetSplitterActiveAlpha
+      - SetGapX
+      - SetGapY
+      - SetGap
+      - SetRowHeight
+      - SetCollapsedSize
+      - SetScrollGutterPad
+      - SetScrollGutterPadX
+      - SetScrollGutterPadY
+      - SetScrollGutterPadLeft
+      - SetScrollGutterPadTop
+      - SetScrollGutterPadRight
+      - SetScrollGutterPadBottom
+      - SetScrollGutterPadLTRB
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+      Margins:
+      - SetMargin
+      - SetMarginX
+      - SetMarginY
+      - SetMarginLeft
+      - SetMarginTop
+      - SetMarginRight
+      - SetMarginBottom
+      - SetMarginLTRB
+      Frame:
+      - SetBgColour
+      - SetBorderColour
+      - SetBgAlpha
+      - SetBorderAlpha
+  EchoPopupStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetHeaderBgColour
+      - SetHeaderAlpha
+      - SetAnchorGap
+      - SetViewportMargin
+      - SetViewportMarginX
+      - SetViewportMarginY
+      - SetViewportMarginLeft
+      - SetViewportMarginTop
+      - SetViewportMarginRight
+      - SetViewportMarginBottom
+      - SetViewportMarginLTRB
+      Frame:
+      - SetBgColour
+      - SetBorderColour
+      - SetBgAlpha
+      - SetBorderAlpha
+  EchoTextBlockStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetTextAlign
+      - SetMaxWidth
+      - SetWrap
+      - SetFillAvailableWhileWrapping
+      Text surface:
+      - SetFont
+      - SetTextColour
+      - SetTextAlpha
+      - SetDisabledTextColour
+      - SetDisabledTextAlpha
+  EchoLabelStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetGap
+      - SetWidth
+      - SetMinWidth
+      - SetMaxWidth
+      - SetMaxRatio
+      - SetPlacement
+      - SetAutoMinControlWidth
+      - SetLeadingAlign
+      - SetAboveAlign
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+      Text surface:
+      - SetFont
+      - SetTextColour
+      - SetTextAlpha
+      - SetDisabledTextColour
+      - SetDisabledTextAlpha
+  EchoTooltipStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetFont
+      - SetTextColour
+      - SetTextAlpha
+      - SetMaxWidth
+      - SetAnchorOffsetX
+      - SetAnchorOffsetY
+      - SetViewportMargin
+      - SetViewportMarginX
+      - SetViewportMarginY
+      - SetViewportMarginLeft
+      - SetViewportMarginTop
+      - SetViewportMarginRight
+      - SetViewportMarginBottom
+      - SetViewportMarginLTRB
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+      Frame:
+      - SetBgColour
+      - SetBorderColour
+      - SetBgAlpha
+      - SetBorderAlpha
+  EchoToastStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetFont
+      - SetTextColour
+      - SetTextAlpha
+      - SetMaxWidth
+      - SetViewportMargin
+      - SetViewportMarginX
+      - SetViewportMarginY
+      - SetViewportMarginLeft
+      - SetViewportMarginTop
+      - SetViewportMarginRight
+      - SetViewportMarginBottom
+      - SetViewportMarginLTRB
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+      Frame:
+      - SetBgColour
+      - SetBorderColour
+      - SetBgAlpha
+      - SetBorderAlpha
+  EchoSeparatorStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetLineColour
+      - SetLineAlpha
+      - SetDisabledLineColour
+      - SetDisabledLineAlpha
+      - SetThickness
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+  EchoColorButtonStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetFont
+      - SetIconGap
+      - SetIconScale
+      - SetSwatchSize
+      - SetSwatchGap
+      - SetValueGap
+      - SetSwatchBorderColour
+      - SetValueTextColour
+      - SetValueTextAlpha
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+      Stateful box:
+      - SetBgColour
+      - SetBorderColour
+      - SetTextColour
+      - SetBgAlpha
+      - SetBorderAlpha
+      - SetTextAlpha
+      - SetHoverBgColour
+      - SetHoverBorderColour
+      - SetHoverTextColour
+      - SetHoverBgAlpha
+      - SetHoverBorderAlpha
+      - SetHoverTextAlpha
+      - SetPressedMix
+      - SetPressedBgColour
+      - SetPressedBorderColour
+      - SetPressedTextColour
+      - SetPressedBgAlpha
+      - SetPressedBorderAlpha
+      - SetPressedTextAlpha
+      - SetDisabledBgColour
+      - SetDisabledBorderColour
+      - SetDisabledTextColour
+      - SetDisabledBgAlpha
+      - SetDisabledBorderAlpha
+      - SetDisabledTextAlpha
+      - SetShape
+      - SetCornerRadius
+      Alignment:
+      - SetTextAlign
+      - SetVerticalAlign
+  EchoToggleStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetFont
+      - SetTextAlign
+      - SetVerticalAlign
+      - SetBoxSize
+      - SetBoxGap
+      - SetBoxOnColour
+      - SetBoxOffColour
+      - SetBoxBorderColour
+      - SetBoxOnAlpha
+      - SetBoxOffAlpha
+      - SetBoxBorderAlpha
+      - SetHoverBoxBorderColour
+      - SetHoverBoxBorderAlpha
+      - SetPressedBoxBorderColour
+      - SetPressedBoxBorderAlpha
+      - SetHoverBoxOnColour
+      - SetHoverBoxOnAlpha
+      - SetPressedBoxOnColour
+      - SetPressedBoxOnAlpha
+      - SetHoverBoxOffColour
+      - SetHoverBoxOffAlpha
+      - SetPressedBoxOffColour
+      - SetPressedBoxOffAlpha
+      - SetDisabledBoxOnColour
+      - SetDisabledBoxOnAlpha
+      - SetDisabledBoxOffColour
+      - SetDisabledBoxOffAlpha
+      - SetDisabledBoxBorderColour
+      - SetDisabledBoxBorderAlpha
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+      Stateful box:
+      - SetBgColour
+      - SetBorderColour
+      - SetTextColour
+      - SetBgAlpha
+      - SetBorderAlpha
+      - SetTextAlpha
+      - SetHoverBgColour
+      - SetHoverBorderColour
+      - SetHoverTextColour
+      - SetHoverBgAlpha
+      - SetHoverBorderAlpha
+      - SetHoverTextAlpha
+      - SetPressedMix
+      - SetPressedBgColour
+      - SetPressedBorderColour
+      - SetPressedTextColour
+      - SetPressedBgAlpha
+      - SetPressedBorderAlpha
+      - SetPressedTextAlpha
+      - SetDisabledBgColour
+      - SetDisabledBorderColour
+      - SetDisabledTextColour
+      - SetDisabledBgAlpha
+      - SetDisabledBorderAlpha
+      - SetDisabledTextAlpha
+      - SetShape
+      - SetCornerRadius
+  EchoDropdownStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetOpenMix
+      - SetFont
+      - SetOverlayMaxHeight
+      - SetOverlayBgColour
+      - SetOverlayBorderColour
+      - SetOverlayBgAlpha
+      - SetOverlayBorderAlpha
+      - SetOverlayRowBgColour
+      - SetOverlayRowHoverColour
+      - SetOverlayRowSelectedColour
+      - SetOverlayRowPressedColour
+      - SetOverlayRowBgAlpha
+      - SetOverlayRowHoverAlpha
+      - SetOverlayRowSelectedAlpha
+      - SetOverlayRowPressedAlpha
+      - SetOverlayTextColour
+      - SetOverlayHoverTextColour
+      - SetOverlaySelectedTextColour
+      - SetOverlayPressedTextColour
+      - SetOverlayTextAlpha
+      - SetOverlayHoverTextAlpha
+      - SetOverlaySelectedTextAlpha
+      - SetOverlayPressedTextAlpha
+      - SetOverlaySearchBgColour
+      - SetOverlaySearchHoverBgColour
+      - SetOverlaySearchBorderColour
+      - SetOverlaySearchBgAlpha
+      - SetOverlaySearchHoverBgAlpha
+      - SetOverlaySearchBorderAlpha
+      - SetOverlaySearchTextColour
+      - SetOverlaySearchPlaceholderColour
+      - SetOverlaySearchTextAlpha
+      - SetOverlaySearchPlaceholderAlpha
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+      Stateful box:
+      - SetBgColour
+      - SetBorderColour
+      - SetTextColour
+      - SetBgAlpha
+      - SetBorderAlpha
+      - SetTextAlpha
+      - SetHoverBgColour
+      - SetHoverBorderColour
+      - SetHoverTextColour
+      - SetHoverBgAlpha
+      - SetHoverBorderAlpha
+      - SetHoverTextAlpha
+      - SetPressedMix
+      - SetPressedBgColour
+      - SetPressedBorderColour
+      - SetPressedTextColour
+      - SetPressedBgAlpha
+      - SetPressedBorderAlpha
+      - SetPressedTextAlpha
+      - SetDisabledBgColour
+      - SetDisabledBorderColour
+      - SetDisabledTextColour
+      - SetDisabledBgAlpha
+      - SetDisabledBorderAlpha
+      - SetDisabledTextAlpha
+      - SetShape
+      - SetCornerRadius
+      Alignment:
+      - SetTextAlign
+      - SetVerticalAlign
+  EchoTextInputStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetActiveBgColour
+      - SetActiveBorderColour
+      - SetActiveTextColour
+      - SetActiveBgAlpha
+      - SetActiveBorderAlpha
+      - SetActiveTextAlpha
+      - SetReadonlyBgColour
+      - SetReadonlyBorderColour
+      - SetReadonlyTextColour
+      - SetReadonlyBgAlpha
+      - SetReadonlyBorderAlpha
+      - SetReadonlyTextAlpha
+      - SetInvalidBgColour
+      - SetInvalidBorderColour
+      - SetInvalidTextColour
+      - SetInvalidBgAlpha
+      - SetInvalidBorderAlpha
+      - SetInvalidTextAlpha
+      - SetSelectionBgColour
+      - SetSelectionTextColour
+      - SetInactiveSelectionBgColour
+      - SetInactiveSelectionTextColour
+      - SetSelectionBgAlpha
+      - SetSelectionTextAlpha
+      - SetInactiveSelectionBgAlpha
+      - SetInactiveSelectionTextAlpha
+      - SetCaretColour
+      - SetCaretAlpha
+      - SetCaretChar
+      - SetCaretBlinkMs
+      - SetCaretWidth
+      - SetCaretHeight
+      - SetCaretInsetX
+      - SetCaretInsetY
+      - SetPlaceholderColour
+      - SetPlaceholderAlpha
+      - SetValidationGap
+      - SetValidationAlpha
+      - SetValidationErrorColour
+      - SetValidationWarnColour
+      - SetValidationInfoColour
+      - SetValidationFont
+      - SetTextBoxExpandSprite
+      - SetTextBoxGripSprite
+      - SetTextBoxGripSize
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+      Stateful box:
+      - SetFont
+      - SetBgColour
+      - SetBorderColour
+      - SetTextColour
+      - SetBgAlpha
+      - SetBorderAlpha
+      - SetTextAlpha
+      - SetHoverBgColour
+      - SetHoverBorderColour
+      - SetHoverTextColour
+      - SetHoverBgAlpha
+      - SetHoverBorderAlpha
+      - SetHoverTextAlpha
+      - SetPressedMix
+      - SetPressedBgColour
+      - SetPressedBorderColour
+      - SetPressedTextColour
+      - SetPressedBgAlpha
+      - SetPressedBorderAlpha
+      - SetPressedTextAlpha
+      - SetDisabledBgColour
+      - SetDisabledBorderColour
+      - SetDisabledTextColour
+      - SetDisabledBgAlpha
+      - SetDisabledBorderAlpha
+      - SetDisabledTextAlpha
+      - SetShape
+      - SetCornerRadius
+      Alignment:
+      - SetTextAlign
+      - SetVerticalAlign
+  EchoTextBoxOverlayStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetDimColour
+      - SetDimAlpha
+      - SetViewportMargin
+      - SetMinWidth
+      - SetMaxWidth
+      - SetMinHeight
+      - SetMaxHeight
+      - SetGap
+      - SetRowMinHeight
+      - SetButtonWidth
+      - SetButtonBgColour
+      - SetButtonHoverBgColour
+      - SetButtonBorderColour
+      - SetButtonBgAlpha
+      - SetButtonBorderAlpha
+      - SetButtonTextColour
+      - SetButtonTextAlpha
+      - SetButtonCancelInsetX
+      - SetButtonDoneInsetX
+      - SetTitleFont
+      - SetTitleTextColour
+      - SetTitleTextAlpha
+      - SetEditorBgColour
+      - SetEditorBorderColour
+      - SetEditorBgAlpha
+      - SetEditorBorderAlpha
+      - SetEditorInnerPadding
+      - SetEditorScrollbarExtraWidth
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+      Frame:
+      - SetBgColour
+      - SetBorderColour
+      - SetBgAlpha
+      - SetBorderAlpha
+  EchoSliderStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetTrackBgColour
+      - SetTrackFillColour
+      - SetTrackBorderColour
+      - SetKnobColour
+      - SetTrackBgAlpha
+      - SetTrackFillAlpha
+      - SetTrackBorderAlpha
+      - SetKnobAlpha
+      - SetHoverTrackBgColour
+      - SetHoverTrackFillColour
+      - SetHoverTrackBorderColour
+      - SetHoverKnobColour
+      - SetHoverTrackBgAlpha
+      - SetHoverTrackFillAlpha
+      - SetHoverTrackBorderAlpha
+      - SetHoverKnobAlpha
+      - SetPressedTrackBgColour
+      - SetPressedTrackFillColour
+      - SetPressedTrackBorderColour
+      - SetPressedKnobColour
+      - SetPressedTrackBgAlpha
+      - SetPressedTrackFillAlpha
+      - SetPressedTrackBorderAlpha
+      - SetPressedKnobAlpha
+      - SetDisabledTrackBgColour
+      - SetDisabledTrackFillColour
+      - SetDisabledTrackBorderColour
+      - SetDisabledKnobColour
+      - SetDisabledTrackBgAlpha
+      - SetDisabledTrackFillAlpha
+      - SetDisabledTrackBorderAlpha
+      - SetDisabledKnobAlpha
+      - SetBodyHeight
+      - SetTrackHeight
+      - SetKnobSize
+      - SetShowValue
+      - SetValuePosition
+      - SetValueGap
+      - SetValueFont
+      - SetValueTextColour
+      - SetValueTextAlpha
+      - SetDisabledValueTextColour
+      - SetDisabledValueTextAlpha
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+  EchoColorPickerStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetPopupStyleKey
+      - SetPopupWidth
+      - SetHeaderHeight
+      - SetPreviewHeight
+      - SetModeRowHeight
+      - SetModeGap
+      - SetEditorOuterRadius
+      - SetEditorInnerRadius
+      - SetEditorRingSegments
+      - SetEditorFieldSize
+      - SetEditorGap
+      - SetRowHeight
+      - SetRowGap
+      - SetSectionGap
+      - SetLabelWidth
+      - SetInputWidth
+      - SetHexInputWidth
+      - SetEyedropperButtonWidth
+      - SetSliderGap
+      - SetTextColour
+      - SetPreviewBorderColour
+      - SetTrackBgColour
+      - SetTrackBorderColour
+      - SetTabBgColour
+      - SetTabBorderColour
+      - SetTabTextColour
+      - SetTabBgAlpha
+      - SetTabBorderAlpha
+      - SetTabTextAlpha
+      - SetHoverTabBgColour
+      - SetHoverTabBorderColour
+      - SetHoverTabTextColour
+      - SetHoverTabBgAlpha
+      - SetHoverTabBorderAlpha
+      - SetHoverTabTextAlpha
+      - SetActiveTabBgColour
+      - SetActiveTabBorderColour
+      - SetActiveTabTextColour
+      - SetActiveTabBgAlpha
+      - SetActiveTabBorderAlpha
+      - SetActiveTabTextAlpha
+      - SetEditorBorderColour
+      - SetEditorSelectorFillColour
+      - SetEditorSelectorBorderColour
+      Padding:
+      - SetPadding
+      - SetPaddingX
+      - SetPaddingY
+      - SetPaddingLeft
+      - SetPaddingTop
+      - SetPaddingRight
+      - SetPaddingBottom
+      - SetPaddingLTRB
+  EchoScrollbarStyle:
+    include_inherited_methods: true
+    require_grouping: true
+    method_groups:
+      Style-specific:
+      - SetTrackWidth
+      - SetHandleWidth
+      - SetTrackBgColour
+      - SetTrackBgAlpha
+      - SetHoverTrackBgColour
+      - SetHoverTrackBgAlpha
+      - SetTrackBorderColour
+      - SetTrackBorderAlpha
+      - SetHandleBgColour
+      - SetHandleBgAlpha
+      - SetHoverHandleBgColour
+      - SetHoverHandleBgAlpha
+      - SetPressedHandleBgColour
+      - SetPressedHandleBgAlpha
+      - SetHandleBorderColour
+      - SetHandleBorderAlpha

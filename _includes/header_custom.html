@@ -10,7 +10,7 @@
 {% endif %}
 
 {% assign version_data = site.data.doc_versions[library_id] %}
-{% if version_data %}
+{% if version_data and version_data.versions.size > 0 %}
   {% assign active_root = version_data.current_root | relative_url %}
   {% if active_version != 'current' %}
     {% for item in version_data.versions %}

@@ -6,10 +6,40 @@
 /* -------------------------------------------------------------------------- */
 
 .main-content .api-type-title {
+  position: relative;
+	margin-top: 3rem;
+	padding-top: 2rem;
+	border-top: 2px dotted rgba(255, 255, 255, 0.1);
+
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 1.4rem;
   font-weight: 600;
-  letter-spacing: -0.015em;
+  letter-spacing: 0.01em;
+}
+
+/* Type boundaries should read much more strongly than the 1px separators
+   between individual methods. The short accent makes a new API object easy
+   to spot while scanning a long generated reference page. */
+.main-content .api-type-title::before {
+	content: "";
+	position: absolute;
+	top: -3px;
+	left: 25%;
+	width: 50%;
+	height: 4px;
+	background: rgb(100, 100, 100);
+}
+
+/* A conceptual H2 already provides the section break. Avoid immediately
+   stacking another strong divider underneath it for the first type. */
+.main-content h2 + .api-type-title {
+  margin-top: 1.75rem;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.main-content h2 + .api-type-title::before {
+  display: none;
 }
 
 .main-content .api-methods code,
@@ -30,6 +60,28 @@
 
 .main-content .api-methods a:hover {
   text-decoration: underline;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Function subsections                                                       */
+/* -------------------------------------------------------------------------- */
+
+/* Function groups stay within the same top-level API category, but later
+   groups need a clear boundary while scanning a long reference page. */
+.main-content .api-function-subsection-title {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+/* The first group belongs directly to the H2 above it, so do not introduce
+   a second section break immediately after the parent heading. */
+.main-content .api-function-subsection-title-first {
+  margin-top: 1rem;
+  padding-top: 0;
+  border-top: 0;
 }
 
 /* -------------------------------------------------------------------------- */
