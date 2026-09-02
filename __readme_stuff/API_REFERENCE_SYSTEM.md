@@ -9,7 +9,7 @@ The GML source owns facts that should never be copied by hand:
 - parameter types and descriptions
 - return types and descriptions
 - inheritance
-- enum members
+- enum names, members, and descriptions when documented beside the enum
 - macro names, values, and descriptions
 
 The YAML manifest owns presentation decisions:
@@ -21,7 +21,9 @@ The YAML manifest owns presentation decisions:
 - optional extra notes and returned-struct field descriptions
 - explicit See also links
 - short enum/member explanations when the source does not carry them
-- macro grouping
+- macro grouping and optional type/navigation metadata
+- whether a returned/internal constructor is rendered as `opaque`
+- presentation aliases such as `display_name`
 
 This keeps the reference tied to the code without asking JSDoc to decide how the docs should be organised.
 
@@ -45,24 +47,6 @@ python tools\generate_api.py `
 The generator exits with an error when the manifest refers to a symbol, enum, or macro that no longer exists. Fate also enables `require_public_coverage`, so a new public top-level Fate symbol or enum must be deliberately placed in the manifest before generation succeeds. Libraries that expose public macros can additionally enable `require_macro_coverage`; `library.macro_prefix` controls which macros that coverage check owns. Large types can enable `require_grouping`, which similarly catches new methods that have not been assigned to a method group.
 
 Methods on types without explicit groups are added automatically in source order. A type that inherits callable public methods from a base constructor can opt into `include_inherited_methods: true`; inherited methods are then rendered as methods of the public child type, with nearer overrides winning. This is primarily useful when the implementation uses internal base constructors to compose a public API.
-
-## Generate Echo and Echo Chamber
-
-Echo, Echo Chamber, and the Echo Chamber style API share one source project but generate three reference pages. From the docs-site root on Windows:
-
-```powershell
-.\tools\generate_echo_api.ps1 -EchoRoot "C:\path\to\Echo"
-```
-
-This generates:
-
-```text
-echo/api-reference.md
-echo-chamber/api-reference.md
-echo-chamber/style-api-reference.md
-```
-
-The three manifests live in `api-manifests/` and use strict public coverage so newly exposed API must be deliberately represented before generation succeeds.
 
 ## Manual method metadata
 
@@ -105,7 +89,23 @@ macro_sections:
       - EXAMPLE_DEBUG_ENABLED
 ```
 
-A manifest-level `macros.<name>.description` remains available as an exceptional presentation override, but normal API facts should stay in source JSDoc.
+A manifest-level `macros.<name>.description` remains available as an exceptional presentation override, but normal API facts should stay in source JSDoc. Macro presentation metadata can additionally provide `type` and `see_also` without duplicating the source-owned description.
+
+## Opaque returned types
+
+Some APIs return structs that users should inspect or call methods on but should not construct directly. Mark those manifest types as `opaque: true`; the generator documents the type and its methods while omitting the constructor signature and constructor arguments. This also allows an ignored/internal constructor to be deliberately represented without making it public construction API.
+
+```yaml
+types:
+  ExamplePendingResult:
+    opaque: true
+
+  __ExampleRepairRow:
+    opaque: true
+    display_name: Repair row
+```
+
+`display_name` changes the documentation heading while preserving the real source type and anchor. When the names differ, the generated page also states the real returned type. Behavioural descriptions still belong beside the constructor in source JSDoc, even when that constructor is marked `@ignore`; the manifest should only carry the `opaque`/`display_name` presentation decisions.
 
 ## Cross-links
 
