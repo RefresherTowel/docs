@@ -1,5 +1,5 @@
 library:
-  id: echo-chamber
+  id: echo_chamber
   name: Echo Chamber
   symbol_prefix: Echo
 source_globs:
@@ -10,7 +10,7 @@ page:
   title: Style API Reference
   heading: Style API Reference
   parent: Echo Chamber
-  nav_order: 6
+  nav_order: 7
   doc_version: current
   intro: Complete reference for Echo Chamber style families and style constructors. Inherited fluent setters are
     shown on each concrete style so you can see the complete visual API available to that style.

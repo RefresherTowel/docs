@@ -12,7 +12,7 @@ page:
   title: API Reference
   heading: API Reference
   parent: Echo
-  nav_order: 2
+  nav_order: 3
   doc_version: current
   intro: Complete reference for Echo's logging, filtering, history, and tag APIs. For explanations and worked examples,
     start with the teaching pages; this page is for looking up exact capabilities.
@@ -52,9 +52,15 @@ enum_sections:
   - eEchoDebugUrgency
 macro_sections:
 - title: Macros
-  macros:
-  - ECHO_VERSION
-  - ECHO_DEBUG_ENABLED
+  groups:
+  - title: Version
+    role: metadata
+    macros:
+    - ECHO_VERSION
+  - title: Debug setup
+    role: setting
+    macros:
+    - ECHO_DEBUG_ENABLED
 enums:
   eEchoDebugLevel:
     description: Controls which messages pass into Echo's normal output and filtered history. Raw capture is separate
@@ -72,6 +78,11 @@ enums:
       WARNING: Something looks wrong, but the game can probably continue.
       SEVERE: Something is broken enough that you should investigate it immediately.
       NUM: Enum sentinel used internally for validation. Don't use it as a message urgency.
+macros:
+  ECHO_DEBUG_ENABLED:
+    see_also:
+    - EchoDebugSetLevel
+    - eEchoDebugLevel
 symbols:
   EchoDebugDumpLog:
     see_also:

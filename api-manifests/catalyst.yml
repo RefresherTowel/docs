@@ -99,6 +99,7 @@ function_sections:
 
 macro_sections:
   - title: Package globals
+    role: symbol
     macros:
       - CATALYST_COUNTDOWN
 

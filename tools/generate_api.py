@@ -65,6 +65,7 @@ class MacroDef:
     source_file: str
     source_line: int
     description: str = ""
+    hidden: bool = False
 
 
 def strip_code_for_braces(line: str) -> str:
@@ -411,7 +412,8 @@ def parse_gml(source_root: Path, globs: list[str]) -> tuple[dict[str, Symbol], d
                     doc_start -= 1
                 if doc_start + 1 < macro_idx:
                     candidate = parse_doc_block(lines[doc_start + 1:macro_idx])
-                    if candidate.get("macro") == macro_name:
+                    documented_name = candidate.get("macro")
+                    if documented_name == macro_name or (candidate.get("ignore") and not documented_name):
                         doc = candidate
                 macros[macro_name] = MacroDef(
                     name=macro_name,
@@ -419,6 +421,7 @@ def parse_gml(source_root: Path, globs: list[str]) -> tuple[dict[str, Symbol], d
                     source_file=str(path.relative_to(source_root)),
                     source_line=macro_idx + 1,
                     description=doc.get("desc", ""),
+                    hidden=bool(doc.get("ignore")),
                 )
 
         # Enums
@@ -960,16 +963,29 @@ def render_see_also(see_also: list[Any], exact: dict[str, str], bare: dict[str, 
     return ' <span aria-hidden="true">·</span> '.join(links)
 
 
-def render_macro(name: str, macro: MacroDef, manifest: dict[str, Any], exact: dict[str, str], bare: dict[str, str]) -> list[str]:
+def render_macro(
+    name: str,
+    macro: MacroDef,
+    manifest: dict[str, Any],
+    exact: dict[str, str],
+    bare: dict[str, str],
+    inherited_role: str | None = None,
+) -> list[str]:
     cfg = ((manifest.get("macros") or {}).get(name) or {})
-    lines = [f'<div class="api-method-entry" id="{macro_anchor(name)}">', f'  <div class="api-method-name">{html.escape(name)}</div>']
+    role = str(cfg.get("role", inherited_role or "value")).strip().lower()
+    lines = [
+        f'<div class="api-method-entry api-macro-entry api-macro-{html.escape(role)}" id="{macro_anchor(name)}">',
+        f'  <div class="api-method-name">{html.escape(name)}</div>',
+    ]
     desc = cfg.get("description", macro.description)
     if desc:
         lines.append(f'  <p class="api-method-summary">{linkify(str(desc), exact, bare)}</p>')
-    lines.append('  <div class="api-detail-section">')
-    lines.append('    <div class="api-detail-heading">Value</div>')
-    lines.append(f'    <pre class="api-example"><code>{html.escape(macro.value)}</code></pre>')
-    lines.append('  </div>')
+    if role != "symbol":
+        value_heading = "Default" if role == "setting" else "Value"
+        lines.append('  <div class="api-detail-section">')
+        lines.append(f'    <div class="api-detail-heading">{value_heading}</div>')
+        lines.append(f'    <pre class="api-example"><code>{html.escape(macro.value)}</code></pre>')
+        lines.append('  </div>')
     macro_type = cfg.get("type")
     if macro_type:
         lines.append('  <div class="api-detail-section">')
@@ -1004,6 +1020,22 @@ def validate(
     for name in represented_macros:
         if name not in macros:
             errors.append(f"Manifest references missing macro: {name}")
+        elif macros[name].hidden:
+            errors.append(f"Ignored/internal macro cannot be represented: {name}")
+
+    valid_macro_roles = {"value", "setting", "symbol", "metadata"}
+    for section in manifest.get("macro_sections") or []:
+        section_role = section.get("role")
+        if section_role is not None and str(section_role).strip().lower() not in valid_macro_roles:
+            errors.append(f"Unknown macro role on section {section.get('title', '')}: {section_role}")
+        for group in section.get("groups") or []:
+            group_role = group.get("role")
+            if group_role is not None and str(group_role).strip().lower() not in valid_macro_roles:
+                errors.append(f"Unknown macro role on group {group.get('title', '')}: {group_role}")
+    for name, cfg in (manifest.get("macros") or {}).items():
+        role = (cfg or {}).get("role") if isinstance(cfg, dict) else None
+        if role is not None and str(role).strip().lower() not in valid_macro_roles:
+            errors.append(f"Unknown macro role for {name}: {role}")
     for type_name, cfg in (manifest.get("types") or {}).items():
         if type_name not in symbols:
             continue
@@ -1030,6 +1062,8 @@ def validate(
     for name in (manifest.get("macros") or {}):
         if name not in macros:
             errors.append(f"Manual metadata references missing macro: {name}")
+        elif macros[name].hidden:
+            errors.append(f"Manual metadata references ignored/internal macro: {name}")
     # Optional broad coverage lint: all library-prefixed public top-level symbols should be represented.
     prefix = str(manifest.get("library", {}).get("symbol_prefix", ""))
     if manifest.get("require_public_coverage") and prefix:
@@ -1045,7 +1079,9 @@ def validate(
                 errors.append(f"Public enum is not represented: {name}")
     macro_prefix = str(manifest.get("library", {}).get("macro_prefix", prefix))
     if manifest.get("require_macro_coverage") and macro_prefix:
-        for name in macros:
+        for name, macro in macros.items():
+            if macro.hidden:
+                continue
             if name.startswith(macro_prefix) and name not in represented_macros:
                 errors.append(f"Public macro is not represented: {name}")
     return errors, warnings
@@ -1155,12 +1191,14 @@ def generate(manifest_path: Path, source_root: Path, output_path: Path | None, d
         for group in section.get("groups") or []:
             lines.append(f'### {group["title"]}')
             lines.append('')
+            macro_role = group.get("role", section.get("role"))
             for name in group.get("macros") or []:
-                lines.extend(render_macro(name, macros[name], manifest, exact, bare))
+                lines.extend(render_macro(name, macros[name], manifest, exact, bare, macro_role))
                 lines.append('')
         if not section.get("groups"):
+            macro_role = section.get("role")
             for name in section.get("macros") or []:
-                lines.extend(render_macro(name, macros[name], manifest, exact, bare))
+                lines.extend(render_macro(name, macros[name], manifest, exact, bare, macro_role))
                 lines.append('')
 
     lines.append('## Symbol index')

@@ -1,5 +1,5 @@
 library:
-  id: echo-chamber
+  id: echo_chamber
   name: Echo Chamber
   symbol_prefix: Echo
   macro_prefix: ECHO_
@@ -26,7 +26,7 @@ page:
   title: API Reference
   heading: API Reference
   parent: Echo Chamber
-  nav_order: 5
+  nav_order: 6
   doc_version: current
   intro: Complete reference for Echo Chamber's roots, windows, panels, controls, input, themes, and Echo Console
     APIs. For explanations and worked examples, start with the teaching pages; this page is for looking up exact
@@ -179,14 +179,19 @@ enum_sections:
 macro_sections:
 - title: Macros
   groups:
-  - title: Version and Console setup
+  - title: Version
+    role: metadata
     macros:
     - ECHO_CHAMBER_VERSION
+  - title: Console setup
+    role: setting
+    macros:
     - ECHO_CHAMBER_CONSOLE_ENABLED
     - ECHO_CHAMBER_CONSOLE_KEY
     - ECHO_CHAMBER_LAUNCH_ON_STARTUP
     - ECHO_CHAMBER_DEBUG_THEME
   - title: Core input action ids
+    role: symbol
     macros:
     - ECHO_UI_ACTION_CANCEL
     - ECHO_UI_ACTION_ACCEPT
@@ -200,6 +205,7 @@ macro_sections:
     - ECHO_UI_ACTION_END
     - ECHO_UI_ACTION_RESTORE_WINDOWS
   - title: Default core bindings
+    role: setting
     macros:
     - ECHO_UI_BIND_CANCEL
     - ECHO_UI_BIND_ACCEPT
@@ -213,6 +219,7 @@ macro_sections:
     - ECHO_UI_BIND_END
     - ECHO_UI_BIND_RESTORE_WINDOWS
   - title: Built-in debug window ids
+    role: symbol
     macros:
     - ECHO_DEBUG_WINDOW_INSPECTOR
     - ECHO_DEBUG_WINDOW_WATCHES
@@ -224,11 +231,13 @@ macro_sections:
     - ECHO_DEBUG_WINDOW_CRASH
     - ECHO_DEBUG_WINDOW_SNAPSHOT
   - title: Console limits
+    role: setting
     macros:
     - ECHO_CONSOLE_ROOM_SCAN_LIMIT
     - ECHO_CONSOLE_DS_SCAN_LIMIT
     - ECHO_CONSOLE_DS_INSPECT_LIMIT
   - title: Text input modes
+    role: symbol
     macros:
     - ECHO_TEXTMODE_TEXT
     - ECHO_TEXTMODE_INT
@@ -679,16 +688,160 @@ enums:
     description: 'Describes where a watch gets the value it keeps visible: one instance field, one global field,
       or a callback that calculates the value.'
 macros:
-  ECHO_CHAMBER_VERSION:
-    description: Current Echo Chamber source version string.
-  ECHO_CHAMBER_CONSOLE_ENABLED:
-    description: Compile-time switch controlling whether Echo Console is enabled.
-  ECHO_CHAMBER_CONSOLE_KEY:
-    description: Default keyboard key used to open Echo Console.
-  ECHO_CHAMBER_LAUNCH_ON_STARTUP:
-    description: Controls whether Echo Console opens automatically at startup.
   ECHO_CHAMBER_DEBUG_THEME:
-    description: Selects the built-in debugger theme used by Echo Console and specialist debug windows.
+    see_also:
+    - eEchoChamberDebugTheme
+  ECHO_UI_ACTION_CANCEL:
+    see_also:
+    - EchoChamberRoot.BindCoreInputAction
+    - EchoChamberInputContext.BindAction
+  ECHO_UI_ACTION_ACCEPT:
+    see_also:
+    - EchoChamberRoot.BindCoreInputAction
+    - EchoChamberInputContext.BindAction
+  ECHO_UI_ACTION_TAB_NEXT:
+    see_also:
+    - EchoChamberRoot.BindCoreInputAction
+    - EchoChamberInputContext.BindAction
+  ECHO_UI_ACTION_TAB_PREV:
+    see_also:
+    - EchoChamberRoot.BindCoreInputAction
+    - EchoChamberInputContext.BindAction
+  ECHO_UI_ACTION_NAV_UP:
+    see_also:
+    - EchoChamberRoot.BindCoreInputAction
+    - EchoChamberInputContext.BindAction
+  ECHO_UI_ACTION_NAV_DOWN:
+    see_also:
+    - EchoChamberRoot.BindCoreInputAction
+    - EchoChamberInputContext.BindAction
+  ECHO_UI_ACTION_PAGE_UP:
+    see_also:
+    - EchoChamberRoot.BindCoreInputAction
+    - EchoChamberInputContext.BindAction
+  ECHO_UI_ACTION_PAGE_DOWN:
+    see_also:
+    - EchoChamberRoot.BindCoreInputAction
+    - EchoChamberInputContext.BindAction
+  ECHO_UI_ACTION_HOME:
+    see_also:
+    - EchoChamberRoot.BindCoreInputAction
+    - EchoChamberInputContext.BindAction
+  ECHO_UI_ACTION_END:
+    see_also:
+    - EchoChamberRoot.BindCoreInputAction
+    - EchoChamberInputContext.BindAction
+  ECHO_UI_ACTION_RESTORE_WINDOWS:
+    see_also:
+    - EchoChamberRoot.BindCoreInputAction
+    - EchoChamberInputContext.BindAction
+  ECHO_UI_BIND_CANCEL:
+    see_also:
+    - ECHO_UI_ACTION_CANCEL
+    - EchoChamberRoot.BindCoreInputAction
+  ECHO_UI_BIND_ACCEPT:
+    see_also:
+    - ECHO_UI_ACTION_ACCEPT
+    - EchoChamberRoot.BindCoreInputAction
+  ECHO_UI_BIND_TAB_NEXT:
+    see_also:
+    - ECHO_UI_ACTION_TAB_NEXT
+    - EchoChamberRoot.BindCoreInputAction
+  ECHO_UI_BIND_TAB_PREV:
+    see_also:
+    - ECHO_UI_ACTION_TAB_PREV
+    - EchoChamberRoot.BindCoreInputAction
+  ECHO_UI_BIND_NAV_UP:
+    see_also:
+    - ECHO_UI_ACTION_NAV_UP
+    - EchoChamberRoot.BindCoreInputAction
+  ECHO_UI_BIND_NAV_DOWN:
+    see_also:
+    - ECHO_UI_ACTION_NAV_DOWN
+    - EchoChamberRoot.BindCoreInputAction
+  ECHO_UI_BIND_PAGE_UP:
+    see_also:
+    - ECHO_UI_ACTION_PAGE_UP
+    - EchoChamberRoot.BindCoreInputAction
+  ECHO_UI_BIND_PAGE_DOWN:
+    see_also:
+    - ECHO_UI_ACTION_PAGE_DOWN
+    - EchoChamberRoot.BindCoreInputAction
+  ECHO_UI_BIND_HOME:
+    see_also:
+    - ECHO_UI_ACTION_HOME
+    - EchoChamberRoot.BindCoreInputAction
+  ECHO_UI_BIND_END:
+    see_also:
+    - ECHO_UI_ACTION_END
+    - EchoChamberRoot.BindCoreInputAction
+  ECHO_UI_BIND_RESTORE_WINDOWS:
+    see_also:
+    - ECHO_UI_ACTION_RESTORE_WINDOWS
+    - EchoChamberRoot.BindCoreInputAction
+  ECHO_DEBUG_WINDOW_INSPECTOR:
+    see_also:
+    - EchoConsoleOpenWindow
+    - EchoConsoleManager.OpenWindow
+  ECHO_DEBUG_WINDOW_WATCHES:
+    see_also:
+    - EchoConsoleOpenWindow
+    - EchoConsoleManager.OpenWindow
+  ECHO_DEBUG_WINDOW_GAME:
+    see_also:
+    - EchoConsoleOpenWindow
+    - EchoConsoleManager.OpenWindow
+  ECHO_DEBUG_WINDOW_RUNTIME:
+    see_also:
+    - EchoConsoleOpenWindow
+    - EchoConsoleManager.OpenWindow
+  ECHO_DEBUG_WINDOW_DATA_STRUCTURES:
+    see_also:
+    - EchoConsoleOpenWindow
+    - EchoConsoleManager.OpenWindow
+  ECHO_DEBUG_WINDOW_COMMAND_HELP:
+    see_also:
+    - EchoConsoleOpenWindow
+    - EchoConsoleManager.OpenWindow
+  ECHO_DEBUG_WINDOW_INPUT:
+    see_also:
+    - EchoConsoleOpenWindow
+    - EchoConsoleManager.OpenWindow
+  ECHO_DEBUG_WINDOW_CRASH:
+    see_also:
+    - EchoConsoleOpenWindow
+    - EchoConsoleManager.OpenWindow
+  ECHO_DEBUG_WINDOW_SNAPSHOT:
+    see_also:
+    - EchoConsoleOpenWindow
+    - EchoConsoleManager.OpenWindow
+  ECHO_CONSOLE_DS_SCAN_LIMIT:
+    see_also:
+    - EchoConsoleOpenDataStructureScanner
+  ECHO_CONSOLE_DS_INSPECT_LIMIT:
+    see_also:
+    - EchoConsoleOpenDataStructureScanner
+  ECHO_TEXTMODE_TEXT:
+    see_also:
+    - EchoChamberTextInput.SetInputMode
+  ECHO_TEXTMODE_INT:
+    see_also:
+    - EchoChamberTextInput.SetInputMode
+  ECHO_TEXTMODE_FLOAT:
+    see_also:
+    - EchoChamberTextInput.SetInputMode
+  ECHO_TEXTMODE_IDENTIFIER:
+    see_also:
+    - EchoChamberTextInput.SetInputMode
+  ECHO_TEXTMODE_PATH:
+    see_also:
+    - EchoChamberTextInput.SetInputMode
+  ECHO_TEXTMODE_CODE:
+    see_also:
+    - EchoChamberTextInput.SetInputMode
+  ECHO_TEXTMODE_PASSWORD:
+    see_also:
+    - EchoChamberTextInput.SetInputMode
 symbols:
   GetEchoChamberRoot:
     see_also:
