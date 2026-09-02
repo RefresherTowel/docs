@@ -9060,6 +9060,7 @@ new EchoChamberThemeMangoMint()
 ## Enums
 
 ### Layout and drawing
+{: .api-function-subsection-title .api-function-subsection-title-first }
 
 <div class="api-enum-entry" id="enum-e-echo-chamber-dock">
   <div class="api-enum-name">eEchoChamberDock</div>
@@ -9379,6 +9380,7 @@ new EchoChamberThemeMangoMint()
 </div>
 
 ### Popup and controls
+{: .api-function-subsection-title }
 
 <div class="api-enum-entry" id="enum-e-echo-chamber-popup-direction">
   <div class="api-enum-name">eEchoChamberPopupDirection</div>
@@ -9525,6 +9527,7 @@ new EchoChamberThemeMangoMint()
 </div>
 
 ### Input
+{: .api-function-subsection-title }
 
 <div class="api-enum-entry" id="enum-e-echo-chamber-input-check">
   <div class="api-enum-name">eEchoChamberInputCheck</div>
@@ -9565,6 +9568,7 @@ new EchoChamberThemeMangoMint()
 </div>
 
 ### Echo Console
+{: .api-function-subsection-title }
 
 <div class="api-enum-entry" id="enum-e-echo-chamber-debug-theme">
   <div class="api-enum-name">eEchoChamberDebugTheme</div>
@@ -9730,6 +9734,7 @@ new EchoChamberThemeMangoMint()
 ## Macros
 
 ### Version
+{: .api-function-subsection-title .api-function-subsection-title-first }
 
 <div class="api-method-entry api-macro-entry api-macro-metadata" id="macro-echo-chamber-version">
   <div class="api-method-name">ECHO_CHAMBER_VERSION</div>
@@ -9740,6 +9745,7 @@ new EchoChamberThemeMangoMint()
 </div>
 
 ### Console setup
+{: .api-function-subsection-title }
 
 <div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-chamber-console-enabled">
   <div class="api-method-name">ECHO_CHAMBER_CONSOLE_ENABLED</div>
@@ -9778,6 +9784,7 @@ new EchoChamberThemeMangoMint()
 </div>
 
 ### Core input action ids
+{: .api-function-subsection-title }
 
 <div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-ui-action-cancel">
   <div class="api-method-name">ECHO_UI_ACTION_CANCEL</div>
@@ -9868,6 +9875,7 @@ new EchoChamberThemeMangoMint()
 </div>
 
 ### Default core bindings
+{: .api-function-subsection-title }
 
 <div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-ui-bind-cancel">
   <div class="api-method-name">ECHO_UI_BIND_CANCEL</div>
@@ -10002,6 +10010,7 @@ new EchoChamberThemeMangoMint()
 </div>
 
 ### Built-in debug window ids
+{: .api-function-subsection-title }
 
 <div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-debug-window-inspector">
   <div class="api-method-name">ECHO_DEBUG_WINDOW_INSPECTOR</div>
@@ -10076,6 +10085,7 @@ new EchoChamberThemeMangoMint()
 </div>
 
 ### Console limits
+{: .api-function-subsection-title }
 
 <div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-console-room-scan-limit">
   <div class="api-method-name">ECHO_CONSOLE_ROOM_SCAN_LIMIT</div>
@@ -10110,6 +10120,7 @@ new EchoChamberThemeMangoMint()
 </div>
 
 ### Text input modes
+{: .api-function-subsection-title }
 
 <div class="api-method-entry api-macro-entry api-macro-symbol" id="macro-echo-textmode-text">
   <div class="api-method-name">ECHO_TEXTMODE_TEXT</div>

@@ -434,6 +434,7 @@ Complete reference for Echo's logging, filtering, history, and tag APIs. For exp
 ## Macros
 
 ### Version
+{: .api-function-subsection-title .api-function-subsection-title-first }
 
 <div class="api-method-entry api-macro-entry api-macro-metadata" id="macro-echo-version">
   <div class="api-method-name">ECHO_VERSION</div>
@@ -445,6 +446,7 @@ Complete reference for Echo's logging, filtering, history, and tag APIs. For exp
 </div>
 
 ### Debug setup
+{: .api-function-subsection-title }
 
 <div class="api-method-entry api-macro-entry api-macro-setting" id="macro-echo-debug-enabled">
   <div class="api-method-name">ECHO_DEBUG_ENABLED</div>
