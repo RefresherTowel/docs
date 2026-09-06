@@ -1,0 +1,411 @@
+library:
+  id: statement
+  name: Statement
+  symbol_prefix: Statement
+  macro_prefix: STATEMENT_
+
+# Statement ships Echo/Echo Chamber and has substantial internal Lens implementation code.
+# Restrict extraction to Statement's public core, Lens model/entry points, and package macros.
+source_globs:
+  - scripts/scr_statement_core/**/*.gml
+  - scripts/scr_statement_lens/**/*.gml
+  - scripts/scr_statement_macro/**/*.gml
+
+require_public_coverage: true
+require_macro_coverage: true
+
+page:
+  layout: default
+  title: API Reference
+  heading: API Reference
+  parent: Statement
+  nav_order: 12
+  doc_version: current
+  intro: >-
+    Complete reference for Statement's machines, states, transitions, templates,
+    timing, debug tooling, and Statement Lens API. For explanations and worked
+    examples, start with the teaching pages; this page is for looking up exact
+    constructors, methods, enums, settings, and top-level helpers.
+
+sections:
+  - title: Machines and states
+    types:
+      - Statement
+      - StatementState
+
+  - title: Transitions and results
+    types:
+      - StatementTransitionRule
+      - StatementTransitionResult
+
+  - title: Templates and custom events
+    types:
+      - StatementStateTemplate
+      - StatementEvent
+
+  - title: Statement Lens
+    types:
+      - StatementLens
+
+function_sections:
+  - title: Top-level functions
+    subsections:
+      - title: Update scheduling
+        functions:
+          - StatementSetUpdateMode
+          - StatementGetUpdateMode
+          - StatementSetGlobalTimeScale
+          - StatementGetGlobalTimeScale
+      - title: Statement Lens
+        functions:
+          - StatementLensGet
+          - StatementLensUpdate
+          - StatementLensOpen
+          - StatementDebugPruneRegistry
+
+macro_sections:
+  - title: Macros
+    groups:
+      - title: Version
+        role: metadata
+        macros:
+          - STATEMENT_VERSION
+      - title: Core settings
+        role: setting
+        macros:
+          - STATEMENT_DEBUG
+          - STATEMENT_MAX_UPDATES_PER_CALL
+      - title: Statement Lens settings
+        role: setting
+        macros:
+          - STATEMENT_LENS_GRAPH_PAN_BUTTON
+          - STATEMENT_LENS_STATE_CARD_NAME_LIMIT
+          - STATEMENT_LENS_BIND_CLOSE_INSPECTOR
+          - STATEMENT_LENS_BIND_PREV_MACHINE
+          - STATEMENT_LENS_BIND_NEXT_MACHINE
+          - STATEMENT_LENS_BIND_OPEN_SEARCH_PALETTE
+          - STATEMENT_LENS_BIND_CLOSE_SEARCH_PALETTE
+          - STATEMENT_LENS_BIND_SCROLL_UP_SEARCH_PALETTE
+          - STATEMENT_LENS_BIND_SCROLL_DOWN_SEARCH_PALETTE
+          - STATEMENT_LENS_BIND_ACCEPT_SEARCH_PALETTE
+          - STATEMENT_LENS_BIND_FIT_GRAPH
+          - STATEMENT_LENS_BIND_SELECT_ACTIVE
+
+enum_sections:
+  - title: Enums
+    groups:
+      - title: Events and handlers
+        enums:
+          - eStatementEvents
+          - eStatementEventDispatch
+          - eStatementBindMode
+      - title: Transitions and queues
+        enums:
+          - eStatementTransitionCause
+          - eStatementTransitionBlockReason
+          - eStatementTransitionPhase
+          - eStatementQueuePhase
+      - title: Runtime and submachines
+        enums:
+          - eStatementUpdateMode
+          - eStatementResetMode
+      - title: Debugging
+        enums:
+          - eStatementDebugPauseReason
+          - eStatementErrorBehavior
+      - title: Statement Lens
+        enums:
+          - eStatementLensSelectionKind
+          - eStatementLensLayout
+          - eStatementLensActivity
+
+types:
+  Statement:
+    require_grouping: true
+    method_groups:
+      Setup and lifecycle:
+        - SetInitialState
+        - SetResetMode
+        - SetInheritPause
+        - IsRunning
+        - Start
+        - Stop
+        - Reset
+        - ClearStates
+        - Destroy
+      States and hierarchy:
+        - AddState
+        - AddStateTemplate
+        - GetState
+        - RemoveState
+        - GetStateName
+        - IsInState
+        - IsInPath
+        - EnsureState
+        - GetChildMachine
+        - GetChildState
+      Direct transitions:
+        - ChangeState
+        - ReenterState
+        - PreviousState
+      Queued transitions:
+        - SetQueuePhase
+        - GetQueuePhase
+        - QueueState
+        - ProcessQueuedState
+        - HasQueuedState
+        - GetQueuedStateName
+        - GetQueuedStateData
+        - ClearQueuedState
+      Stack and history:
+        - SetHistoryLimit
+        - GetHistoryCount
+        - GetHistoryAt
+        - ClearHistory
+        - WasPreviouslyInState
+        - PushState
+        - PopState
+        - GetStateStackDepth
+        - PeekStateStack
+        - ClearStateStack
+        - GetPreviousStateName
+        - GetLastTransitionData
+      Rules and hooks:
+        - AddTransition
+        - RemoveTransition
+        - ClearTransitions
+        - AddAnyExitHook
+        - AddAnyEnterHook
+        - AddAnyTransitionHook
+        - ClearAnyExitHooks
+        - ClearAnyEnterHooks
+        - ClearAnyTransitionHooks
+      Timing, pause, and events:
+        - SetTimeScale
+        - GetTimeScale
+        - GetGlobalTimeScale
+        - SetPaused
+        - IsPaused
+        - GetStateTime
+        - SetStateTime
+        - Update
+        - Draw
+        - RunState
+        - EvaluateTransitions
+      Debugging and inspection:
+        - PrintStateNames
+        - DebugDescribe
+        - PrintStateHistory
+        - SetDebugEnabled
+        - IsDebugEnabled
+        - SetDebugName
+        - DebugTag
+        - GetDebugTag
+        - DebugPause
+        - DebugResume
+        - DebugStep
+        - IsDebugPaused
+        - GetDebugPauseReason
+        - GetDebugName
+        - DebugJumpToState
+        - GetDebugGraph
+        - GetDebugStateStats
+        - GetDebugStateStatsFor
+        - GetDebugTransitionHistory
+        - ClearDebugTransitionHistory
+        - DebugSetErrorBehavior
+        - DebugSetLogErrorsToFile
+
+  StatementState:
+    require_grouping: true
+    method_groups:
+      Submachines:
+        - CreateSubMachine
+        - HasSubMachine
+        - GetSubMachine
+        - OnSubmachineEnter
+        - OnSubmachineExit
+      Exit locks and guards:
+        - LockExit
+        - UnlockExit
+        - ClearExitLocks
+        - IsExitLocked
+        - HasExitLock
+        - GetExitLockCount
+        - AddExitGuard
+        - RemoveExitGuard
+        - ClearExitGuards
+        - HasExitGuard
+        - GetExitGuardCount
+      Config and timer:
+        - SetConfig
+        - GetConfig
+        - TimerStart
+        - TimerSet
+        - TimerGet
+        - TimerPause
+        - TimerResume
+        - TimerStop
+        - TimerIsRunning
+      Handlers and events:
+        - AddEnter
+        - AddUpdate
+        - AddExit
+        - AddDraw
+        - AddStateEvent
+        - HasStateEvent
+      Transition rules:
+        - AddTransition
+        - RemoveTransition
+        - ClearTransitions
+      Debug metadata:
+        - DebugLinkTo
+        - DebugPayload
+        - DebugBreakOnEnter
+        - DebugTag
+
+  StatementTransitionRule:
+    require_grouping: true
+    method_groups:
+      Target and ordering:
+        - GetTargetName
+        - SetPriority
+        - GetPriority
+        - SetPhase
+        - GetPhase
+      Enable and force:
+        - SetEnabled
+        - IsEnabled
+        - SetForce
+        - IsForced
+      Payload:
+        - SetData
+        - SetDataProvider
+        - GetData
+      Lifecycle:
+        - Remove
+        - Clone
+
+  StatementTransitionResult:
+    opaque: true
+    require_grouping: true
+    method_groups:
+      Status:
+        - Succeeded
+        - Blocked
+        - IsPending
+        - GetBlockReason
+        - GetBlockDetail
+      Source and destination:
+        - GetFromState
+        - GetFromName
+        - GetToState
+        - GetToName
+        - GetTargetState
+        - GetTargetName
+      Request context:
+        - GetMachine
+        - GetRequestedName
+        - GetTick
+        - GetData
+        - WasForced
+        - GetCause
+        - WasRedirected
+        - GetRedirectCount
+
+  StatementStateTemplate:
+    require_grouping: true
+    method_groups:
+      Config:
+        - SetConfigClone
+      Handlers and events:
+        - AddStateEvent
+        - AddEnter
+        - AddUpdate
+        - AddExit
+        - AddDraw
+      Transition rules:
+        - AddTransition
+        - RemoveTransition
+        - ClearTransitions
+      Debug metadata:
+        - DebugLinkTo
+        - DebugPayload
+        - DebugBreakOnEnter
+        - DebugTag
+      Build:
+        - Build
+
+  StatementLens:
+    opaque: true
+    require_grouping: true
+    method_groups:
+      Machine selection:
+        - SetMachine
+        - SelectMachineOverview
+        - SelectRelativeMachine
+      State and connection selection:
+        - SelectState
+      View and search:
+        - SetLayout
+        - SaveCurrentView
+        - LoadSavedView
+
+symbols:
+  Statement:
+    see_also:
+      - StatementState
+      - label: States & Lifecycle
+        href: /statement/states-and-lifecycle
+  Statement.ChangeState:
+    see_also:
+      - StatementTransitionResult
+      - label: Changing States & Passing Data
+        href: /statement/changing-states-and-data
+  Statement.QueueState:
+    see_also:
+      - label: Locks & Queues
+        href: /statement/locks-and-queues
+  Statement.PushState:
+    see_also:
+      - Statement.PopState
+      - label: Temporary States & History
+        href: /statement/temporary-states-and-history
+  Statement.SetTimeScale:
+    see_also:
+      - StatementSetGlobalTimeScale
+      - label: Timing, Pause & Update Behaviour
+        href: /statement/timing-pause-and-updates
+  StatementState.CreateSubMachine:
+    see_also:
+      - eStatementResetMode
+      - label: Nested State Machines
+        href: /statement/submachines
+  StatementStateTemplate:
+    see_also:
+      - StatementState
+      - label: State Templates
+        href: /statement/templates
+  StatementTransitionRule:
+    see_also:
+      - Statement.AddTransition
+      - StatementState.AddTransition
+      - label: Automatic Transitions
+        href: /statement/automatic-transitions
+  StatementEvent:
+    see_also:
+      - StatementState.AddStateEvent
+      - Statement.RunState
+      - label: Hooks & Custom Events
+        href: /statement/hooks-and-custom-events
+  StatementLensOpen:
+    see_also:
+      - StatementLensGet
+      - label: Statement Lens
+        href: /statement/visual-debugger-guide
+  StatementSetUpdateMode:
+    see_also:
+      - StatementGetUpdateMode
+      - eStatementUpdateMode
+      - label: Timing, Pause & Update Behaviour
+        href: /statement/timing-pause-and-updates

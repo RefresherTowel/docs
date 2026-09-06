@@ -180,7 +180,7 @@ or, if you used `SetDebugName`, something like:
 
 Click this bar and you will get a searchable dropdown of all known machines.
 
-![Machine dropdown]({{ '/assets/visual_debugger_guide/machine_dropdown.png' | relative_url }})
+![Machine dropdown]({{ '/assets/visual_debugger_guide/machines_dropdown.png' | relative_url }})
 
 Things you can do here:
 

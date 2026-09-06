@@ -1,15 +1,9 @@
 ---
 layout: default
-title: Statement Lens (Visual Debugger Guide)
+title: Statement Lens
 parent: Statement
-nav_order: 3
+nav_order: 11
 ---
-
-<!--
-/// visual_debugger_guide.md - Changelog:
-/// - 23-12-2025: Updated Statement Lens setup details and input notes to match current APIs.
-/// - 23-12-2025: Corrected debug jump wording and time unit references.
--->
 
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
@@ -24,614 +18,883 @@ nav_order: 3
 
 # Statement Lens
 
-![Statement Visual Debugger in action!](../assets/visual_debugger_guide/statement_visual_debugger_showoff.gif)
+A state machine can be completely sensible to look at in code and still be awkward to debug while the game is running.
 
-So, you have a bunch of state machines running around your project causing trouble, and you would like to actually see what those little gremlins are doing rather than guess from a wall of `show_debug_message` calls. That is what Statement Lens is for.
+Maybe the player is stuck in `Attack`. The code says an automatic rule should return to `Idle`, but staring at that rule doesn't tell you what the machine actually did. You want to know whether the rule was evaluated, whether something blocked the transition, whether an old request is sitting in the queue, or whether a child machine is paused somewhere below the state you're looking at.
 
-**Statement Lens** is the centre-piece of the **Statement v1.2** update. It is a **fully visual debugger**(!) that draws your machines as clickable graphs, shows you where they are right now, where they have been, and what they are trying to do next. Think of it as a live map of your game logic.
+**Statement Lens** is Statement's live visual debugger. It shows the running machines, their states and connections, recent transitions, failed attempts, timing and pause information, queues, history, rules, breakpoints, and the rest of the debug data Statement records while `STATEMENT_DEBUG` is enabled.
 
-You do not need Lens to use Statement. You can happily ship a game without ever opening it. But once your project grows past "one or two tiny machines in a jam game", Lens becomes a big quality of life upgrade. It turns a lot of painful "why is this not doing what I think it is doing" moments into "oh, it is stuck in this state because of that edge right there".
+Most things you do in Lens are inspection. Selecting a state or connection, moving around the graph, searching, and changing the graph layout don't alter the state machine. Controls that do change the machine use explicit actions such as **Jump to state**, **Process queue**, or **Clear state stack**.
 
-On this page we will walk through the visualiser in three passes:
+I encourage you to play around with Lens. Right click things to see if they have a context menu, try running your state machine through Lens, try pausing the state machine and stepping through its logical updates one at a time and so on. You can't break your state machines through Lens (everything will go right back to normal the next time you boot your game).
 
-- Beginner: get the visualiser on screen, point it at a machine, and learn how to read the basics.
-- Intermediate users: filters, history, overlays, and bookmarks so bigger graphs stop feeling like spaghetti.
-- Power users: breakpoints, debug jumps, EGO mode, and some extra tricks for when your machines get spicy.
-
-You do not have to memorize everything at once. Treat it like a skill tree. Grab the beginner stuff first, then come back and unlock the intermediate and power toys when your machines level up enough to need them.
-
-> Statement Lens is currently in a BETA state. It should absolutely be functional enough to use and it can't harm anything about your game, so don't be hesitant to try it out. However, some parts of it may be a little janky and I'm still working on what's important to show vs what I should be gating behind drop down menus (plus any other ways to reduce visual noise while maintaining good information density).
->
-> Please [**join the discord**](https://discord.gg/8spFZdyvkb) and offer suggestions or features, and detail any bugs you encounter!
-{: .warning}
-
-> Statement Lens requires Echo (with Echo Chamber) to be added to the project. Statement should ship with a version of Echo included.
-{: .note}
+The rest of this page is just detailing the specifics, so use it for reference if there's something in Lens that you don't quite understand.
 
 ---
 
-## 1. Getting set up
+## Turning Statement debugging on
 
-Before we can stare at pretty graphs, we need to do two things:
+Lens only exists while:
 
-1. Tell Statement it is allowed to gather debug info.
-2. Give the visualiser a place to update and draw.
-
-Once this is wired in, the rest of the page is just learning how to poke the UI.
-
-### 1.1 Enabling the debug build
-
-All of the visual debugger code is wrapped behind the `STATEMENT_DEBUG` macro in `scr_statement_macro`:
-
-```js
-#macro STATEMENT_DEBUG 1
+```text
+STATEMENT_DEBUG = 1
 ```
 
-While you are in development, leave this as `1`. That switches on:
+`STATEMENT_DEBUG` is one of the editable macros at the top of Statement's macro script. When you turn it off, the Lens UI and the debug records it relies on are left out of normal use.
 
-- Extra debug info on machines and states (graph edges, history, timers, etc).
-- A global list of machines that the visualiser can see.
-- A single global Statement Lens struct sitting in `global.__statement_lens`.
+You'll normally leave it on while developing and turn it off for a release build if you don't want Statement's debugging machinery running there.
 
-For your final release builds, you can (and usually should) set `STATEMENT_DEBUG` to `0`. That strips out:
+---
 
-- The visual debugger UI.
-- The extra bookkeeping.
-- The global machine registry.
+## Opening Lens
 
-Nothing in your game code needs to change. When `STATEMENT_DEBUG` is `0`, the debug helpers just turn into no-op functions that do nothing.
+Lens is an Echo Chamber window. If you're using the Echo Chamber setup bundled with Statement, you don't need to add anything to your Create, Step, or Draw GUI Events to run it.
 
-> If the visualiser is not showing up at all, the very first thing to check is that `STATEMENT_DEBUG` is set to `1` in the build you are actually running.
-{: .note}
+Press **F1** to open Echo Console, then choose **Statement Lens**. Statement creates the Lens window the first time you open it and keeps Lens updated automatically from then on. If you close the window and open it again later, the existing window is brought back to the front.
 
-You do not need to manually register machines. If you are constructing your machines through the usual `new Statement()` constructor calls, they will quietly register themselves while debug is on.
-
-### 1.2 Hooking the visualiser into your game
-
-Next, we need to give the visualiser a chance to run every frame. There are two global helper functions that you drop into your game loop:
+If you're using your own Echo Chamber root instead of the bundled controller, you can open Lens on that root directly:
 
 ```js
-/// Step event of some always-present controller object
-StatementLensUpdate();
-
-/// Draw GUI event of the same object
-StatementLensDraw();
+StatementLensOpen(ui_root);
 ```
 
-Both functions are safe to leave in permanently:
-
-- When `STATEMENT_DEBUG` is `1`, they update and draw the visual debugger.
-- When `STATEMENT_DEBUG` is `0`, they do nothing and return immediately.
-
-A common pattern is:
-
-1. Create a little controller object, for example `obj_debug_statement`.
-2. Put `StatementLensUpdate()` in its Step event.
-3. Put `StatementLensDraw()` in its Draw GUI event.
-4. Only place that object in rooms you care about, or only in your "debug" config.
-
-That is it. Run the game, and you should see the visual debugger appear over the top of your game window, usually tucked into the corner by default.
-
-![Visual Debugger interface](../assets/visual_debugger_guide/visual_debugger.png)
-
-If you do not see anything:
-
-- Check `STATEMENT_DEBUG`.
-- Make sure your controller object is actually in the room.
-- Make sure you are using the Draw GUI event, not the regular Draw.
-
-### 1.3 Optional: giving machines nice names
-
-By default, machines are displayed using a description of their owner, for example:
-
-- `$ref instance 100001 obj_player`
-- `struct` for struct-based machines.
-
-This is technically correct, but it gets old quickly when you have a lot of machines. You can give each machine a friendlier label using `SetDebugName` and `DebugTag`:
+Statement still takes care of updating Lens after it has been opened. Your Echo Chamber setup is only responsible for running that root's desktop in Draw GUI:
 
 ```js
-player_sm
+ui_root.RunDesktop();
+```
+
+`RunDesktop()` belongs to Echo Chamber rather than Lens, and you only want one desktop call for a given root. If you're using Echo Chamber's bundled controller, it already runs the default root's desktop, so don't add another `RunDesktop()` just for Lens.
+
+Older versions of Statement required `StatementLensUpdate()` in a Step Event. The current version doesn't. Existing projects can remove that call; if it's still present, Statement ignores it once Lens's automatic updates are running.
+
+There is no `StatementLensDraw()` call in the current version (there was in previous versions). Lens is drawn as part of the Echo Chamber desktop now.
+
+---
+
+## What you're looking at
+
+The Lens window is built around the state graph:
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│ Machine picker       pause status       Pause / Step        │
+├─────────────────────────────────────────────────────────────┤
+│ Layout / Activity / Connections / Search / Settings         │
+├─────────────────────────────────────┬───────────────────────┤
+│                                     │                       │
+│                                     │   Details             │
+│            State graph              │                       │
+│                                     │ Machine / Selection   │
+│                                     │ / States              │
+│                                     │                       │
+├─────────────────────────────────────┴───────────────────────┤
+│ Transition trace                                            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+The graph shows the states and the connections Statement knows about. The active state is highlighted, and selecting a state or connection fills the Details panel with the information for that item.
+
+The transition trace along the bottom shows successful transitions, newest first. It answers a different question from **Latest attempt** in the Machine panel. The trace tells you what actually happened. Latest attempt also records a transition that was requested and then blocked.
+
+The Details and trace panels can be resized or collapsed if you want more room for the graph.
+
+---
+
+## Give busy machines names
+
+A single Statement machine on one object is easy to recognise. Several machines owned by the same object are much easier to work with if you name them:
+
+```js
+state_machine
 	.SetDebugName("Player movement")
-	.DebugTag("player, movement, core");
+	.DebugTag("player, movement");
 ```
 
-- `SetDebugName(name)` sets the big label used in the machine picker.
-- `DebugTag("comma, separated, tags")` lets you group and filter machines in the UI.
+Lens uses the friendly name in the machine picker, while tags give you another way to find machines and states during debugging.
 
-A few tips:
+The picker can filter machines by:
 
-- Use `SetDebugName` for "what is this machine for".
-- Use `DebugTag` for "what family does this belong to", for example `ui`, `combat`, `boss`, `dialogue`, etc.
-- You can add or change these at any time; the next frame the visualiser will pick them up automatically.
+- instance owners
+- struct owners
+- whether they currently have an active state
 
-You do not have to do this up front, but you will thank yourself later when you are trying to find "that one combat machine" in a long list.
+Hosted child machines keep their place in the hierarchy, so you can see a path such as:
+
+```text
+Player movement
+└── Ground movement
+```
+
+When you're looking at a child machine, **Parent machine** moves back to the machine hosting it.
 
 ---
 
-## 2. Beginner: seeing your first machine
+## Finding the state you're actually in
 
-With the setup done, let us take a gentle first pass through the visualiser. The beginner goal is simple:
+The first thing to check when behaviour looks wrong is often the active state.
 
-- Pick a machine.
-- See it drawn on screen.
-- Understand the basic panels well enough to answer "what state are we in" and "what did we just do".
+For a simple machine:
 
-Once that feels normal, we can start layering on the fancy bits.
+```text
+Idle
+  ↓
+Move
+  ↓
+Attack
+```
 
-### 2.1 The Visual Debugger window
+Lens highlights whichever state is current.
 
-Just a few tips about the debugger window:
+Turn on **Follow active state** if you want the graph camera to centre itself as the machine changes state. Manual panning or zooming turns Follow active state back off, so the camera won't keep dragging you away from something you're inspecting.
 
-- You can drag it by clicking and dragging the window header.
-- You can resize the window by clicking and dragging the bottom right corner of the window.
+You can also move around manually:
 
-### 2.2 Picking a machine
+- click a state to inspect it
+- click a connection to inspect that route
+- click blank graph space to return to the machine selection
+- drag blank space to pan
+- use the mouse wheel to zoom
+- use **Fit graph** to bring all visible states back into view
 
-At the top left of the visualiser you will see a machine picker bar. It will show something like:
-
-> `$ref instance 100001 obj_player ...`
-
-or, if you used `SetDebugName`, something like:
-
-> `Player movement`
-
-Click this bar and you will get a searchable dropdown of all known machines.
-
-![Machine dropdown](../assets/visual_debugger_guide/machine_dropdown.png)
-
-Things you can do here:
-
-- Scroll the list with the mouse wheel.
-- Type to filter by debug name, tag, or owner text.
-- Use the `Instances` and `Structs` toggles to include or exclude those machine types.
-- Use the `Active` toggle to show only machines that currently have a state selected.
-
-Pick a machine from the list and you should see its state graph appear in the main panel.
-
-If you do not see a machine that you definitely know should exist:
-
-- Check that `STATEMENT_DEBUG` is on.
-- Make sure you actually created the machine before the visualiser update runs.
-- Double check that you are not filtering it out with the toggles.
-
-### 2.3 Panning and zooming
-
-The main graph view is fully interactive. You are not stuck with whatever layout it gives you the first time.
-
-Basic camera controls:
-
-- Scroll wheel: zoom in and out.
-- Middle mouse drag (or right mouse drag, depending on your settings): pan the camera.
-- `Center` button in the toolbar: snap the camera to the currently selected state.
-- `Camera Lock` toggle: in some modes this will keep the camera roughly centered on the active state.
-
-Typical pattern:
-
-1. Pick a machine.
-2. Hit `Center` to find it.
-3. Scroll out to see the big picture.
-4. Scroll in to investigate the part you care about.
-
-If you lose the machine off screen (it happens), hit `Center` again. That button is your "stop being lost" teleporter.
-
-### 2.4 Reading the right-hand panel
-
-![Inspector panel](../assets/visual_debugger_guide/righthand_panel.png)
-
-The panel on the right is your "at a glance" summary for the selected machine. It will show things like:
-
-- Owner (`obj_player`, some enemy, a struct, etc).
-- Current state, previous state, and queued state (if any).
-- How much scaled time has been spent in the current state.
-- Stack depth and history counts (if you are using stacks or history).
-- A short list of recent transitions.
-- A little table of per-state stats (entries and total time per state).
-
-As a beginner, you can get a surprising amount of value just from this panel alone. A few example questions it answers very quickly:
-
-- "Are we stuck in this state?"  
-  Look at the state age and entry count. If the age is huge and the machine never leaves, you have a problem.
-- "Why does it keep bouncing between these two states?"  
-  Watch the recent transitions. You will see a repeating pattern if it is flip flopping.
-- "Does this state ever run at all?"  
-  Check the entries column. If it is zero, the machine has never managed to get there.
-
-Instead of guessing from code or adding more logs, you can look at what the machine thinks is happening right now.
-
-### 2.5 Hovering and clicking nodes
-
-States are drawn as circular nodes on the graph. Edges between them represent transitions or debug links.
-
-![Nodes and edges](../assets/visual_debugger_guide/nodes_and_edges.png)
-
-Rough idea:
-
-- Solid edges are structural edges that come from real transitions in the machine.
-- Dotted or differently styled edges can be debug-only links or history trails, depending on what you have turned on.
-
-Basic interactions:
-
-- Hover a node to highlight its edges and deaccentuate other nodes.
-- Left click a node to select it (so the state info shows up in the panels).
-- Right click a node to bring up a context panel with more detailed info about that state.
-- Right click an edge to bring up a context panel with more detailed infor about that transition.
-
-One of the coolest elements of Statement Lens is the ability to control the state machine directly by the debugger. If you have the `Click to jump` toggle (under `General Settings`) enabled (it is enabled by default), then left clicking a node does a special thing: it asks the machine to jump straight to that state for you! This "put me into this state right now so I can test it" workflow is extremely handy for all sorts of situations. Explore and test your whole state machine just by clicking through the nodes on the screen.
-
-![Controlling states](../assets/visual_debugger_guide/visual_debugger_interact.gif)
-
-The state context panel can show, among other things:
-
-- Whether the state is currently active or has been active in the past.
-- How many times it has been entered.
-- How much scaled time it has been active.
-- Any debug tag or default payload set on that state.
-- Per-state options like `Break on enter` and `Can exit` that you can toggle live.
-
-You are allowed to poke these. They are debug-only flags, they do not change your saved game state or your shipped code. Use them as temporary switches while you investigate.
-
-### 2.6 Toggling labels and edges
-
-Along the top toolbar there are some simple, but very helpful, visibility toggles:
-
-- `State Names`: show or hide the text labels next to each node.
-- `Edges Shown`: choose which types of edges are drawn (structural, debug-only, history, etc).
-- `Edge History`: limit edges to "all time" or "only edges that were active in the last N ticks".
-
-When your graph starts to look like a bowl of noodles, do not suffer through it. Master the pasta by hiding labels or restrict to "Last 50" edges and you will usually get a much clearer picture of the recent behavior.
-
-![Radial layout](../assets/visual_debugger_guide/statement_radial.png)
-
-For a very quick sanity check:
-
-1. Turn on an overlay (for example heat by time, see later).
-2. Set `Edge History` to "Last 500".
-3. Run around in game for a bit.
-4. Pause and look. The hot nodes and edges will show you exactly where the action has been.
-
-At this point, if you can:
-
-- Pick your player or enemy machine in the list.
-- Watch the active state light up as you move, jump, attack, etc.
-- See state names and transitions update on the right.
-
-then you have already unlocked most of the day to day value of the debugger. The rest of this page is about turning it into a more advanced tool when your machines grow up.
+State cards can carry badges for things such as a Break on Enter breakpoint, a recorded error, a template-built state, or a hosted child machine. Hover information includes the state's debug activity statistics.
 
 ---
 
-## 3. Intermediate users: filters, overlays, history, bookmarks
+## Finding a state in a large machine
 
-Once you have more than a couple of machines, the visual debugger turns into a little dashboard for your project. This section is about keeping that dashboard under control so it helps rather than overwhelms.
+The search box matches state information such as:
 
-### 3.1 Machine filters and search
+- state names
+- debug tags
+- template names
+- child-machine names
 
-The machine picker bar has a few quality of life options built in.
+Non-string state names are searchable through the value Lens displays for them.
 
-Toggles:
+The default search controls include:
 
-- `Instances`: show or hide machines whose owners are GameMaker instances.
-- `Structs`: show or hide machines owned by plain structs.
-- `Active`: show only machines that currently have a state (hides machines that have not started yet, or have been torn down).
+```text
+Ctrl+F   focus search
+Up/Down  move through results
+Enter    select and centre
+Escape   clear search
+```
 
-When you click the machine picker, the first entry in the dropdown is a text box. Click that and start typing:
+The **States** tab in the Details panel gives you another list view of the current search results. Its markers tell you whether a state is active, previous, or queued, and it can also show badges for breakpoints, errors, templates, and child machines.
 
-- Part of the `SetDebugName` string.
-- Part of the object name (for instance `obj_enemy`).
-- A tag you assigned with `DebugTag`.
-
-The list below will filter as you type.
-
-> There is also a state search palette that you can open with the keyboard shortcut defined in `scr_statement_macro` (by default `Ctrl + F`). This searches the states attached to the currently selected machine, and will match both state names and any tags you have added via `DebugTag()` or in the state inspector popup in the visual debugger.
-{: .note}
-
-The idea is that you should never need to scroll miles of list to find "that one boss machine". Combine good `SetDebugName` / `DebugTag` usage with the filters and you can jump around the whole project very quickly.
-
-### 3.2 Overlay modes and heatmaps
-
-The `Overlay` dropdown lets you switch how the graph is colored:
-
-- `NONE`: plain nodes and edges.
-- `HEAT: TIME`: nodes and edges are colored by how much total time they have been active.
-- `HEAT: VISITS`: nodes and edges are colored by how many times they have been entered or used.
-
-The mental model here is:
-
-- Hot colors mean "this state or edge is used a lot".
-- Cold colors mean "this state almost never runs".
-
-This is useful for:
-
-- Spotting states you thought were important but that never actually trigger.
-- Finding rare edge cases that do run, but only once every thousand time units.
-- Identifying hot loops where you might want to optimize or restructure your design.
-
-Example workflow:
-
-1. Set overlay to `HEAT: TIME`.
-2. Play your game for a couple of minutes like a regular player would.
-3. Pause and look at the graph.
-
-If your "fancy complex combo system" is cold, that tells you that real play is not actually reaching that part of the machine much. Maybe that is by design, maybe it is a bug, but either way it is clearer than trying to infer it from code.
-
-### 3.3 History trails
-
-When history is enabled, the visualiser can show a little "breadcrumb trail" of where the machine has been recently:
-
-- Faint history edges show the path taken.
-- Small markers can slide along those edges, showing the order in which they were used.
-
-Controls:
-
-- There are toggles under the `Edges Shown` menu to turn history edges and markers on or off.
-- `Edge History` lets you limit the time window, for example "Last 50" or "Last 200" ticks.
-- The `Recent transitions` list in the right-hand Info panel lets you click on a specific transition to focus on it.
-
-One very common use case:
-
-1. You trigger some fiddly sequence in game (a particular combo, a weird boss phase change, a dialogue branch, etc).
-2. Something goes wrong, but you are not sure "how we got here".
-3. Pause the machine (see the next subsection).
-4. Look at the history. You can literally follow the path across the graph.
-
-This often turns "no idea what it did" into "ah, it bounced through this state here when it should have gone there instead".
-
-### 3.4 Pausing and stepping machines
-
-The toolbar includes a `Pause` toggle and a `Step` button. These map to debug methods on the machine:
-
-- `DebugPause()` and `DebugResume()` pause and resume the current machine.
-- `DebugStep()` runs exactly one `Update()` tick while the machine is paused.
-
-There is also a `Pause all` toggle in the general settings menu that sets a global flag respected by all machines.
-
-You also still have the regular Statement pause for gameplay (`SetPaused` / `IsPaused`) if you want to integrate with your game logic, but the debug pause is independent. It is literally "stop the machine where it is so I can stare at it".
-
-Some practical ways to use this:
-
-- Freeze the entire world and then step one frame at a time to see when a wrong transition fires.
-- Pause only one machine while everything else is still running. For example, pause an enemy AI machine while the player keeps moving, so you can focus on the AI behavior in isolation.
-- Pause as soon as a breakpoint triggers (see below), inspect the machine, and only resume when you are ready.
-- If you have a very quick transition between a few different states (such as multiple states cycling through in a single frame) set a breakpoint trigger in the first frame and then step through the state chain one by one.
-
-Once you get comfortable with pausing and stepping, you can debug state logic without spamming logs all over the place.
-
-### 3.5 Bookmarks and camera presets
-
-Big graphs can be intimidating, and nobody enjoys manually panning across them every time.
-
-The `Bookmarks` dropdown in the toolbar lets you save and recall camera presets:
-
-- A bookmark stores the current camera position and zoom.
-- By default it will name the bookmark after the state closest to the center of the screen, but you can rename it.
-- You can have multiple bookmarks per machine, for example "Intro", "Core loop", "Boss phases", "Menus".
-
-Typical use:
-
-1. Pan and zoom until you are nicely centered on some cluster of states you care about.
-2. Add a bookmark.
-3. Repeat for other important regions.
-4. Now you can jump between these views instantly instead of wrestling the camera every time.
-
-It is a small thing, but it makes working with big machines much less annoying.
-
-### 3.6 Edge filters and presets
-
-We briefly mentioned `Edges Shown` and `Edge History` earlier. As your machines get more complex, these two controls become your best friends.
-
-- Use `Edges Shown` when you are thinking about structure. For example "show me all structural edges" or "only show debug-only links".
-- Use `Edge History` when you care about recent behavior. For example "just the last 50 transitions" to answer "how did I end up in this weird state".
-
-Quick recipes:
-
-- "I want to see the design":  
-  `Edges Shown = All structural`, `Edge History = All`.
-- "I want to see how we got into this bug":  
-  `Edges Shown = All`, `Edge History = Last 50`, then trigger the bug and pause.
-- "I want to see the main loop of combat":  
-  Play a fight for a bit, then use `HEAT: VISITS` with `Edge History = Last 200`.
-
-Once you are in the habit of nudging these filters around instead of fighting the raw graph, the visualiser stops being "just a pretty picture" and becomes a real analysis tool.
+Selecting a state in this list only inspects and centres it. It doesn't enter the state.
 
 ---
 
-## 4. Power users: breakpoints, jumps, layouts, and extra tools
+## Nested machines show their active path
 
-If you are comfortable with everything above, this section is about leaning on the visual debugger as a serious day to day weapon. These are the features you reach for when you want to surgically poke a machine, not just watch it.
+With nested machines, looking at the root state alone may not tell you where the behaviour is really coming from.
 
-### 4.1 Breakpoints on states
+Suppose the root machine is here:
 
-Every `StatementState` has a debug-only flag called `debug_break_on_enter`. You can control this in two ways:
-
-- In code, via `DebugBreakOnEnter([flag])`.
-- In the visualiser, via:
-  - The `Break on enter` checkbox in the state context panel.
-  - The `Break` toggle in the toolbar, which applies to the currently active state.
-
-When a state with `debug_break_on_enter` set is entered, the owning machine pauses itself automatically. No extra code, no manual checks.
-
-From there you can:
-
-- Step frame by frame with `Step`.
-- Inspect history, overlays, and stats at your leisure.
-- Manually jump to other states to see how they behave in the same situation.
-
-Perfect for rare edge cases like:
-
-- An "emergency failover" state that should never really happen.
-- A late boss enrage phase that only triggers if the fight runs long enough.
-- Deep nested menu states that are painful to reach by hand.
-
-Instead of sprinkling log calls everywhere "just in case", you set one breakpoint and then play normally until it hits.
-
-### 4.2 Jumping directly between states
-
-Sometimes you do not want to wait for the machine to naturally walk into a state. You just want it there now so you can test the visuals or some local behavior.
-
-From code, you can jump straight to a state by name:
-
-```js
-player_sm.DebugJumpToState("CombatIdle");
+```text
+Grounded
+└── Sprint
 ```
 
-`DebugJumpToState(name, [force])` will:
+`Grounded` may be exactly the state you expected, while the active child `Sprint` explains why the player is still using sprint behaviour.
 
-- Look up a state by its name.
-- Request a jump to that state.
-- Optionally force the jump even if exit conditions would normally block it (depending on your debug flags).
+The Machine panel shows the active child path, and a state that hosts a child machine can open that child directly.
 
-States can also define a default debug payload:
-
-```js
-attack_state
-	.DebugPayload({
-		debug_spawn_position: 0,
-		debug_damage_override: 999
-	});
-```
-
-If you define a default payload like that, the visualiser will use it when you jump to this state from the UI. That lets you set up a "debug default context" without bolting on special case code.
-
-On the UI side:
-
-- When `Click to jump` is enabled, clicking a state will request a debug jump.
-- The toolbar typically has a `Force` style toggle that decides whether jumps respect `Can exit` locks or not.
-
-Use this for things like:
-
-- "Jump straight into phase 3 of the boss fight".
-- "Jump into this menu page without clicking through the whole flow".
-- "Jump into this error-handling state to see what it looks like".
-
-### 4.3 Debug-only links and graph shaping
-
-Not every relationship between states is a "real" transition. Sometimes events, queues, or external triggers move your machine around in ways that do not show up as direct edges. The visualiser lets you draw additional "debug-only" links just for clarity:
-
-```js
-phase1.DebugLinkTo("Phase2");
-phase1.DebugLinkTo("Phase3");
-```
-
-`DebugLinkTo(target_name)` does not change how the machine runs. It simply adds an edge that only the visualiser knows about.
-
-You can use these to:
-
-- Group related states visually (for example all the phases of a boss fight).
-- Sketch out "design intent" arrows, like "from this state we conceptually flow to one of these two".
-- Fill in graphs for machines that rely heavily on queued transitions, events, or `DebugJumpToState` so the shape is easier to read.
-
-Think of debug links as labeling strings between states in your design doc, but directly in the tool.
-
-### 4.4 Layouts
-
-The visualiser has several layout modes, controlled by its internal `mode` and `full_layout_mode` flags:
-
-- `FULL`: classic force-directed layout of the whole graph.
-- `RADIAL`: radial layout around some pivot.
-- `CLOUD`: looser network-style layout.
-- `EGO`: focus mode where you only care about one state and its neighbors.
-
-You can cycle layout modes using the keyboard shortcut defined in `scr_statement_macro` (by default `V`).
-
-The FULL mode builds a simple BFS tree, laying out your nodes in order from the currently selected nodes, to the nodes connected to that, then the nodes connected to those nodes, and so on in expanding columns. This gives a clean overall visual of your state machine.
-
-![Layout Full mode](../assets/visual_debugger_guide/layout_full_mode.png)
-
-RADIAL mode is designed to show the interconnectedness of the state machines graph. This is great for getting a direct visual of how many transitions there are that flow across the states. The circular layout means that all transitions cross across the center, creating a focal point for you to examine.
-
-![Layout Radial mode](../assets/visual_debugger_guide/layout_radial_mode.png)
-
-CLOUD mode is designed to show how states are "grouped". You might have state machines that have a few different tight groupings of states, with sparse transitions between these groups. CLOUD mode builds a dynamic map of your states, with each transition acting as a "spring" that pulls connected states together. The more connections, the tighter the grouping will be. 
-
-![Layout Cloud mode](../assets/visual_debugger_guide/layout_cloud_mode.png)
-
-EGO mode in particular is designed for "graph spelunking". In EGO mode, the currently selected state is centered, states that can transition to it are on the left and states it can transition to are on the right. Other states are ignored, so this gives you a very clean visual to reason about for the exact state you have selected. You can move between neighbors with the EGO movement bindings (defaults to arrow keys, editable in `scr_statement_macro`). Use the select binding defined by `STATEMENT_LENS_BIND_EGO_MODE_SELECT_STATE` (default `O`) to choose the current state.
-
-![Layout Ego mode](../assets/visual_debugger_guide/layout_ego_mode.png)
-
-This is like exploring a dungeon room by room instead of staring at the whole dungeon map. This is great for exploring unfamiliar machines without constantly zooming and panning, reasoning about a particular state and ONLY that state, or even teaching someone else how a machine works, step by step.
-
-If the other layout modes feel like too much visual noise at times, EGO mode is your quieter, more guided view.
-
-### 4.5 Error handling and logging
-
-Sometimes it is not your transitions that are broken, it is the code inside a state (for example an exception in your Enter or Update handler). Statement has a per-machine setting for what to do when it catches such an error:
-
-- `eStatementErrorBehavior.PAUSE` (default): record the error, pause the machine, and let you inspect it in the debugger.
-- `eStatementErrorBehavior.RETHROW`: record the error and then rethrow the exception so your normal GameMaker error flow takes over.
-
-You control this via:
-
-```js
-sm.DebugSetErrorBehavior(eStatementErrorBehavior.RETHROW);
-sm.DebugSetLogErrorsToFile(true);
-```
-
-When `DebugSetLogErrorsToFile(true)` is enabled, caught errors are appended to `debug_statement_errors.log` with:
-
-- Which machine and owner were involved.
-- Which state was active.
-- The error message and some extra context.
-
-This is particularly handy when:
-
-- Testing on someone else's machine where you do not have the visual debugger window.
-- Hunting down rare errors that only happen in specific builds.
-
-### 4.6 Time scaling and heat decay
-
-Statement supports time scaling both globally and per-machine:
-
-- `StatementSetGlobalTimeScale` to set the global scale.
-- `GetGlobalTimeScale` on a machine to read the global scale.
-- `SetTimeScale` / `GetTimeScale` on individual machines.
-
-The visual debugger plays nicely with these:
-
-- If you slow a machine down, you can see it crawl along the graph in slow motion.
-- If you speed things up, you can stress test loops and see how the overlays react.
-
-The heat overlays also decay over time, so that:
-
-- Long-running sessions do not permanently burn in old hot spots.
-- Recent activity stands out against the background of older behavior.
-
-A fun stress test:
-
-1. Set a machine's time scale to something silly like 5x.
-2. Enable `HEAT: VISITS`.
-3. Let it run for a while, then pause.
-
-You will get a very strong visual impression of which parts of the graph are doing most of the work.
-
-### 4.7 Working with multiple machines
-
-Under the hood, when `STATEMENT_DEBUG` is enabled, Statement keeps track of machines in a global registry used by Statement Lens. If you are building your own tools, the public helper is `StatementDebugPruneRegistry([prune_destroyed_owners])`, which removes stale entries from that registry. For everything else, keep direct references to your machines rather than relying on the registry.
+It also shows the machine's reset mode and whether pause inheritance is enabled. Timing is shown separately through Statement's global update mode, the local time scale, the root global scale, and the machine's stored update credit. There isn't a separate child "inherit time scale" setting.
 
 ---
 
-## 5. Where to go from here
+## When a transition should have happened
 
-You absolutely do not have to master everything on this page in one sitting. A nice, realistic progression looks something like this:
+Suppose `Attack` should have returned to `Idle`, but it hasn't.
 
-1. **Beginner**  
-   - Turn `STATEMENT_DEBUG` on.  
-   - Drop `StatementLensUpdate()` and `StatementLensDraw()` into a debug controller object.  
-   - Pick a machine, hit `Center`, and just watch the current state as you play.
+Start with **Latest attempt** on the Machine page.
 
-2. **Intermediate**  
-   - Start naming and tagging your machines.  
-   - Use the machine search and filters to get around faster.  
-   - Turn on overlays and history when you are confused about "how did we end up here".  
-   - Add a couple of bookmarks on your bigger graphs so navigation is not a chore.
+Statement records the newest transition request whether it succeeded or not. If it was blocked, Lens shows the same kind of reason you would get from the returned `StatementTransitionResult`, for example:
 
-3. **Power user**  
-   - Sprinkle `SetDebugName` and `DebugTag` calls in the bits of code you touch a lot.  
-   - Set `Break on enter` on suspicious states and get used to pausing and stepping.  
-   - Use `DebugJumpToState` and EGO mode when you want to poke specific parts of a machine.  
-   - Flip the error behavior to `PAUSE` when you are tracking down a crashy state.
+```text
+Exit lock blocked transition
+Exit guard blocked transition
+Already in target state
+Target missing
+No queued transition
+State stack empty
+No previous state
+```
 
-The main habit I would nudge you toward is this:
+A blocked guard also keeps the guard name, so a vague problem like:
 
-> Any time a machine is confusing you, open the visual debugger, hit `Center`, and ask "what does the machine think is happening right now".
+```text
+Attack won't leave
+```
 
-If the graph says one thing and your mental model says another, that mismatch is exactly where the bug is hiding. The visual debugger is there to shine a big neon sign on that mismatch so you do not have to guess.
+can turn into:
+
+```text
+Exit guard blocked transition: animation_finished
+```
+
+The selected state's details show its current exit-lock count and exit guards as well, which lets you compare the blocked attempt with the restrictions that are active now.
+
+If Latest attempt already shows a successful `Attack -> Idle` transition, then the problem isn't that this request failed. Something else may have changed the machine again afterward, and the transition trace is the next place to look.
+
+---
+
+## Checking an automatic rule
+
+Automatic rules carry their own debug telemetry.
+
+Consider:
+
+```js
+_attack
+	.AddTransition(
+		new StatementTransitionRule("Dead", function() {
+			return hp <= 0;
+		})
+		.SetPriority(100)
+	)
+	.AddTransition(
+		new StatementTransitionRule("Idle", function(_state) {
+			return _state.TimerGet() >= attack_duration;
+		})
+	);
+```
+
+Select `Attack` and its rule list shows the rules in evaluation order.
+
+For each rule Lens can show the definition and recent evaluation information, including its target, phase, priority, payload or provider information, force setting, how many times the condition has been evaluated, how many times it passed, the latest evaluation result and tick, any block reason from the latest attempt, and a recorded condition error.
+
+That helps with cases where the condition itself looks fine in code but the rule never gets a chance to decide anything.
+
+Statement stops automatic-rule evaluation after the first passing rule is attempted. If a higher-priority rule passes first, a lower rule won't be evaluated during that phase. The rule telemetry lets you see that its evaluation tick didn't move rather than assuming its condition returned false.
+
+Selecting a rule also selects the graph connection that rule contributes to.
+
+---
+
+## Reading the transition trace
+
+The trace at the bottom records successful transitions newest first.
+
+A basic row looks like:
+
+```text
+tick   Move -> Attack   Direct
+```
+
+The record also carries the payload and force flag when those are relevant.
+
+Statement records why a transition happened, so the cause can distinguish:
+
+```text
+Start
+Stop
+Direct change
+Automatic rule
+Queued transition
+Push state
+Pop state
+Previous state
+Re-enter
+Debug jump
+```
+
+For example, if `Hitstun` appeared unexpectedly, a `QUEUED` cause points you toward a buffered request rather than the code that normally calls `ChangeState("Hitstun")` directly.
+
+Selecting a trace row selects and centres the matching connection. Its right-click menu can copy the row, copy the payload, filter the state search toward the destination, or clear the trace.
+
+Blocked transitions don't appear in the successful trace because the machine never travelled across that connection. That's why Latest attempt is kept separately.
+
+---
+
+## Checking what is queued
+
+The Machine page shows the pending queue request, including its destination, payload, force flag, and queue processing phase.
+
+The phase is one of:
+
+```text
+Before Update
+After Update
+Manual
+```
+
+If the player seems to be carrying an old buffered input, you can see the exact request waiting there instead of inferring it from input code.
+
+The same page has explicit controls to:
+
+```text
+Process queue
+Clear queue
+Clear previous-state history
+Clear state stack
+Clear transition trace
+```
+
+These buttons change the live machine. They are deliberately separate from normal selection and inspection controls.
+
+The stack and previous-state history are displayed on the Machine page too, which is useful when `PopState()` or `PreviousState()` isn't returning where you expected.
+
+---
+
+## When a machine isn't updating
+
+There are two broad things to check: runtime pause and timing.
+
+A machine can be runtime-paused by:
+
+- its own `SetPaused(true)`
+- a parent machine whose pause it inherits
+- an inactive host state keeping a child paused
+
+Lens breaks those contributors out in the Machine details.
+
+Debug pause is separate. A machine may also be stopped for inspection by:
+
+- **Pause in Lens**
+- a state breakpoint
+- a connection breakpoint
+- a debug error configured to pause
+- the global debug pause
+
+The status in the toolbar tells you whether the selected machine is gameplay-paused, paused by a machine-local Lens reason, globally debug-paused, or running.
+
+Timing can also make a machine appear to skip work without being paused. In EVENT mode, a local scale below `1` means one call may only contribute part of a logical update. In DELTA_TIME mode, a short frame can also leave only part of an update stored. A local scale of `0` stops the machine from reaching new logical updates at all. The Machine page shows the global update mode, the stored fractional credit, the local time scale, and the global root time scale.
+
+---
+
+## Lens pause and gameplay pause are different
+
+Clicking **Pause in Lens** calls the machine's debug pause:
+
+```js
+state_machine.DebugPause();
+```
+
+**Resume Lens pause** calls:
+
+```js
+state_machine.DebugResume();
+```
+
+That only clears the machine-local debug pause. It doesn't undo `SetPaused(true)`, inherited parent pause, host pause, or the global debug-pause setting.
+
+This separation means you can stop a running machine for inspection without changing the pause state your game is using.
+
+---
+
+## Stepping one logical update
+
+The **Step** button uses:
+
+```js
+state_machine.DebugStep();
+```
+
+It runs exactly one logical machine update, ignoring the normal update mode and time scale for that step, then restores the debug pause state.
+
+Step is available when the machine isn't runtime-paused and either the selected machine or the global debugger is currently debug-paused.
+
+If the machine is gameplay-paused, Step stays disabled. `DebugStep()` doesn't pretend a gameplay pause is only a debugger pause.
+
+Stepping lets you answer questions such as:
+
+```text
+What happens on the next Statement update?
+```
+
+without changing the machine's normal time scale just to inspect it.
+
+---
+
+## Breaking when a state is entered
+
+If the interesting state only lasts for a moment, set a breakpoint before reproducing the bug.
+
+Right-click the state and enable **Break on Enter**, or select the state and use the same toggle in its Details page.
+
+The next time that state is entered, Statement gives the machine a state-breakpoint debug pause.
+
+Suppose `Dead` is being entered while the player still has health left. Breaking on `Dead` lets you inspect the machine at the transition instead of several frames later. You can look at the incoming connection, transition cause, payload, trace, and the code or rule that led there while the relevant state is still current.
+
+Resume Lens pause when you're ready to continue.
+
+---
+
+## Breaking on one connection
+
+Sometimes the destination is fine, but one route into it looks suspicious.
+
+For example:
+
+```text
+Idle -------> Hitstun
+Move -------> Hitstun
+Attack -----> Hitstun
+```
+
+If only `Attack -> Hitstun` is behaving strangely, select that connection and enable **Break on Transition**.
+
+Statement pauses when that endpoint pair is successfully traversed.
+
+The Connection details show information such as:
+
+- source and destination states
+- where the graph connection came from
+- how many times it has been used
+- first and most recent fired ticks
+- the most recent transition cause
+- last payload and force flag
+- breakpoint information
+- the latest connection error
+- declared rules that contribute to that pair
+
+A connection breakpoint applies to the endpoint pair rather than one particular transition rule. If several routes all produce `Attack -> Hitstun`, the breakpoint observes the transition between those states.
+
+---
+
+## Where graph connections come from
+
+Lens can know about a state connection before the machine has actually travelled across it, or it can discover one from runtime behaviour.
+
+There are three sources.
+
+### Declared
+
+A declared connection comes from a live `StatementTransitionRule`.
+
+For a state-owned rule:
+
+```js
+_attack.AddTransition(
+	new StatementTransitionRule("Idle", function() {
+		return attack_finished;
+	})
+);
+```
+
+Lens can draw:
+
+```text
+Attack -> Idle
+```
+
+before that rule has ever fired.
+
+Machine-wide rules are declared from every registered source state to their target because any of those states can potentially evaluate the rule.
+
+### Manual links
+
+Some transitions only appear inside ordinary gameplay code:
+
+```js
+if (got_hit) {
+	state_machine.ChangeState("Hitstun");
+}
+```
+
+Statement can't infer every possible direct `ChangeState()` destination while building the graph, so you can give the debugger a manual hint:
+
+```js
+_attack.DebugLinkTo("Hitstun");
+```
+
+That adds the connection to the debug graph without changing gameplay behaviour.
+
+### Observed
+
+Once the machine actually moves across a pair of states, Lens records that pair as observed.
+
+A connection can be declared, manual, observed, or more than one at once.
+
+Lens calls a connection **runtime-only** when it has been observed but has no declared rule or manual link behind it. These are useful for finding routes that only reveal themselves while the game runs.
+
+The **Connections** menu can show or hide declared, manual, and runtime-only connections. The usage filter can narrow them to connections touching the selected state, touching the active state, or used within a recent tick window.
+
+A debugger jump is recorded with the `DEBUG_JUMP` transition cause, but making that jump doesn't turn the route into one of your declared gameplay connections.
+
+---
+
+## Moving the machine from Lens
+
+Inspecting a state never enters it.
+
+If you deliberately want to move the live machine, right-click the state or use its Details page:
+
+```text
+Jump to state
+Force jump to state
+```
+
+A normal debug jump uses Statement's normal exit rules. If the active state is locked or a guard rejects the destination, the jump can be blocked. Latest attempt records that failure.
+
+A forced jump bypasses exit locks and guards, like a forced transition in code.
+
+The two controls answer different debugging needs. A normal jump lets you test whether the machine can legally reach the state right now. A forced jump is for putting the machine somewhere regardless of those exit restrictions.
+
+Both are explicit because they mutate gameplay state.
+
+---
+
+## Choosing a graph layout
+
+Lens has four graph layouts.
+
+### Layered
+
+Layered arranges the graph around a directional flow, using the initial state as the starting root and placing disconnected groups deterministically.
+
+It works well for machines that mostly move through recognisable stages.
+
+### Radial
+
+Radial places the states around a ring.
+
+It can be easier to read when the machine doesn't have a useful left-to-right direction.
+
+### Clustered
+
+Clustered lets strongly connected parts of the machine collect into groups.
+
+A large machine with several dense areas can be much easier to scan this way than as one long layered graph.
+
+### Neighbourhood
+
+Neighbourhood concentrates on one state. Incoming states are placed on one side and outgoing states on the other.
+
+If you haven't selected anything, Lens uses the active state.
+
+Use this layout when the whole graph is too busy and you're currently asking:
+
+```text
+What can reach this state, and where can it go?
+```
+
+With Follow active state enabled, the neighbourhood can move along with the machine.
+
+---
+
+## Seeing which states are actually used
+
+The **Activity** menu can overlay runtime usage on the graph:
+
+```text
+Off
+Total active time
+Entries
+Recent activity
+```
+
+**Total active time** reflects how many logical active updates a state has accumulated.
+
+**Entries** reflects how often the state has been entered.
+
+**Recent activity** uses real elapsed wall-clock time to make recently active states stand out and then fade. The half-life can be changed from Lens Settings.
+
+That recent-activity fade is only a debugger visualisation. It doesn't change Statement timers, state age, time scale, or update timing.
+
+---
+
+## The Machine page
+
+Click blank graph space or choose the Machine tab when the problem isn't obviously tied to one state.
+
+The Machine page collects the live information that applies to the machine as a whole.
+
+It includes identity and hierarchy information:
+
+```text
+debug name
+tags
+owner
+machine path
+```
+
+Execution information includes:
+
+```text
+running state
+current state
+previous state
+initial state
+queued state
+logical state age
+pause contributors
+```
+
+Timing includes:
+
+```text
+update mode
+stored update credit
+local time scale
+global root time scale
+```
+
+You'll also find the queue phase and payload, Latest attempt, machine-wide rule count, state stack, previous-state history, transition trace size, active child path, reset mode, pause inheritance, and the machine's debug error configuration.
+
+The action buttons on this page are the ones that deliberately alter queue/history/debug records, so ordinary inspection remains read-only.
+
+---
+
+## The State page
+
+Select a state when the bug belongs to one particular state.
+
+The State page shows whether the state is active or previous, its entry count and total active time, last-enter tick, timer value and status, and the handlers registered on it.
+
+It also shows the state's template/config information, debug tag, default debug-jump payload, manual debug links, exit locks, exit guards, hosted child machine, breakpoint, recorded error, and its automatic transition rules.
+
+The exit values are live inspection. Clicking the state doesn't silently clear a lock or disable a guard.
+
+From this page you can also:
+
+```text
+Centre state
+Jump to state
+Force jump to state
+Open child machine
+Copy config
+Copy last error
+```
+
+Only the actions that say they change something actually change the running machine.
+
+---
+
+## The Connection page
+
+Select a graph connection to see the aggregate information for that pair of states.
+
+The Connection page shows:
+
+```text
+from / to
+declared rule count
+manual-link status
+observed status
+runtime-only status
+hit count
+first / last fired tick
+last cause
+last payload
+last force flag
+breakpoint information
+latest error
+contributing declared rules
+```
+
+When several mechanisms can lead between the same two states, the connection represents the endpoint pair while the contributing-rules list shows the particular automatic rules that declare it.
+
+---
+
+## Errors in Lens
+
+With Statement debugging enabled, errors raised while Statement is invoking state handlers or evaluating transition conditions are recorded against the relevant state or connection before Statement decides what to do with the error.
+
+A new machine's debug error behaviour is `RETHROW`, so the error is rethrown after the debug information is recorded.
+
+If you want Statement to stop in the debugger instead, configure the machine with:
+
+```js
+state_machine.DebugSetErrorBehavior(eStatementErrorBehavior.PAUSE);
+```
+
+A caught state error then gives the machine a state-error debug pause. A transition-condition error gives it a connection-error debug pause.
+
+State and connection cards can show error badges, and the corresponding Details page keeps the latest error message and context.
+
+You can also ask Statement to append caught debug errors to `debug_statement_errors.log`:
+
+```js
+state_machine.DebugSetLogErrorsToFile(true);
+```
+
+That logging option is independent of whether the machine pauses or rethrows.
+
+---
+
+## Saved views
+
+If you keep returning to the same corner of a large graph, use **Settings -> Save current view**.
+
+A saved view remembers the current session's:
+
+- graph camera
+- layout
+- activity mode
+- connection visibility
+- usage filter
+
+Lens gives the view a label based on the selected or active state, such as:
+
+```text
+Near Attack
+```
+
+**Load saved view** restores those settings for the same live machine.
+
+These are debugger-session views, not gameplay data you need to save with the game.
+
+---
+
+## A reliable way to chase a state-machine bug
+
+When you don't yet know which part of the machine is wrong, work from what the machine actually recorded.
+
+First, find the machine and check its current state and active child path. If the state is wrong, the transition trace tells you how it got there.
+
+If a transition should have happened but didn't, inspect Latest attempt. A block reason may answer the question immediately.
+
+For an automatic transition, select the source state and look at the rule telemetry. Check whether the rule was evaluated, whether it passed, and whether a higher-priority rule got there first.
+
+If temporary-state behaviour is involved, look at the queue, stack, and previous-state history rather than reconstructing them from memory.
+
+When the machine isn't moving, check its runtime pause contributors and timing information before assuming the Update handler is broken.
+
+And if the interesting moment disappears too quickly, put Break on Enter on the destination state or Break on Transition on the suspicious connection, reproduce the problem, and inspect it while the debugger is stopped there.
+
+---
+
+## Lens keyboard controls
+
+The default Lens key bindings are editable macros near the top of Statement's macro script.
+
+The supplied defaults include:
+
+```text
+Ctrl+F       focus state search
+Escape       close/clear the active Lens UI context
+Page Up      previous machine
+Page Down    next machine
+F            fit graph
+A            select active state
+Middle mouse pan graph
+Mouse wheel  zoom graph
+```
+
+The search result list uses the arrow keys and Enter while the search UI is active.
+
+If those bindings conflict with your project, change the `STATEMENT_LENS_BIND_*` and graph-pan macros rather than editing Lens internals.
+
+---
+
+## If Lens itself looks wrong
+
+### The Lens window doesn't appear
+
+Check that:
+
+```text
+STATEMENT_DEBUG == 1
+```
+
+If you're using the Echo Chamber setup bundled with Statement, press **F1** to open Echo Console and choose **Statement Lens**. You don't need to open or update Lens anywhere else in your game code.
+
+If you're using your own Echo Chamber root, open Lens on that root directly:
+
+```js
+StatementLensOpen(ui_root);
+```
+
+Lens won't open when debug support is disabled or when the supplied value isn't an `EchoChamberRoot`.
+
+### Input or drawing happens twice
+
+Check how many times the same Echo Chamber root calls:
+
+```js
+ui_root.RunDesktop();
+```
+
+If the bundled Echo Chamber controller already owns that desktop, don't add another Draw GUI call for Lens.
+
+### Step is disabled
+
+Step requires a debug pause and a machine that isn't runtime-paused.
+
+Look at the pause status and Machine page. A local gameplay pause, inherited parent pause, or inactive-host pause keeps `DebugStep()` from running.
+
+### A normal jump fails
+
+Check Latest attempt and the active state's exit locks and guards.
+
+Use **Force jump to state** only when you actually want to bypass those restrictions.
+
+### A connection seems to be missing
+
+Check the **Connections** source toggles and the usage filter.
+
+A connection may be declared by a rule, added as a manual debug link, discovered only at runtime, or hidden by the current filter.
+
+### A destroyed machine still appears
+
+Use:
+
+```text
+Settings -> Prune stale machines
+```
+
+Lens also prunes the debug registry when it opens, but the Settings action lets you do it explicitly while the window is already open.
+
+---
+
+## Code-side debug helpers
+
+Lens covers most day-to-day inspection, but Statement also has debug methods you can use directly in code.
+
+Some useful ones are:
+
+```js
+state_machine.SetDebugName(...);
+state_machine.DebugTag(...);
+state_machine.DebugPause();
+state_machine.DebugResume();
+state_machine.DebugStep();
+state_machine.DebugJumpToState(...);
+state_machine.DebugDescribe();
+state_machine.PrintStateNames();
+state_machine.PrintStateHistory();
+```
+
+States also have helpers for graph hints and debugger defaults:
+
+```js
+_state.DebugLinkTo(...);
+_state.DebugPayload(...);
+_state.DebugBreakOnEnter(...);
+_state.DebugTag(...);
+```
+
+For caught debug errors, the machine controls are:
+
+```js
+state_machine.DebugSetErrorBehavior(...);
+state_machine.DebugSetLogErrorsToFile(...);
+```
+
+Use these when you want a bit of Statement's debugger information without keeping the Lens window open.
+
+---
+
+## Lens doesn't replace the state machine
+
+Your gameplay still uses the normal Statement APIs:
+
+```js
+state_machine.ChangeState(...);
+state_machine.QueueState(...);
+state_machine.PushState(...);
+state_machine.PopState(...);
+
+_state.LockExit(...);
+_state.AddExitGuard(...);
+_state.AddTransition(...);
+```
+
+Lens shows what those systems are doing while the game runs and gives you a few deliberate controls for debugging them.
+
+Once the machine is large enough that a transition can fail for several different reasons, or a root state can contain another active machine underneath it, seeing the recorded state of the system is usually more useful than adding another `show_debug_message()` and trying to reconstruct the sequence afterward.

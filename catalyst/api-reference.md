@@ -1,13 +1,11 @@
 ---
 layout: "default"
 title: "API Reference"
-parent: "Catalyst 2"
+parent: "Catalyst"
 nav_order: 10
 library_id: "catalyst"
 doc_version: "current"
 api_reference: true
-redirect_from:
-  - /catalyst/reference.html
 ---
 
 <!-- GENERATED FILE. DO NOT EDIT DIRECTLY. -->
@@ -8396,48 +8394,48 @@ Repair row created by <a href="#catalyst-repair-add-effect-manager"><code>Cataly
     <div class="api-symbol-row"><a href="#catalyst-repair-statistic"><code>__CatalystRepairStatistic</code></a></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">A</div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-add-countdown-tracker"><code>AddCountdownTracker()</code></a><span class="api-symbol-owner">CatalystRepair</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-add-effect"><code>AddEffect()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-add-effect"><code>AddEffect()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-add-effect"><code>AddEffect()</code></a><span class="api-symbol-owner">CatalystRepair</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-add-effect-manager"><code>AddEffectManager()</code></a><span class="api-symbol-owner">CatalystRepair</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-add-effect-manager"><code>AddEffectManager()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-add-flow"><code>AddFlow()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-add-flow"><code>AddFlow()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-add-flow"><code>AddFlow()</code></a><span class="api-symbol-owner">CatalystRepair</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-add-flow"><code>AddFlow()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-add-maximum-modifier"><code>AddMaximumModifier()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-add-minimum-modifier"><code>AddMinimumModifier()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-add-modifier"><code>AddModifier()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-add-modifier"><code>AddModifier()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-add-modifier"><code>AddModifier()</code></a><span class="api-symbol-owner">CatalystModifierSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-add-modifier"><code>AddModifier()</code></a><span class="api-symbol-owner">CatalystRepair</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-add-modifier"><code>AddModifier()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-add-resource"><code>AddResource()</code></a><span class="api-symbol-owner">CatalystRepair</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-add-resource"><code>AddResource()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-add-stacks"><code>AddStacks()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-add-statistic"><code>AddStatistic()</code></a><span class="api-symbol-owner">CatalystRepair</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-add-statistic"><code>AddStatistic()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-add-tag"><code>AddTag()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-add-tag"><code>AddTag()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-add-tag"><code>AddTag()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-applied"><code>Applied()</code></a><span class="api-symbol-owner">CatalystEffectApplicationResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-applied"><code>Applied()</code></a><span class="api-symbol-owner">CatalystModifierEvaluation</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-apply"><code>Apply()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-apply-swap"><code>ApplySwap()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-add-countdown-tracker"><code>AddCountdownTracker()</code></a> <span class="api-symbol-owner">| CatalystRepair</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-add-effect"><code>AddEffect()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-add-effect"><code>AddEffect()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-add-effect"><code>AddEffect()</code></a> <span class="api-symbol-owner">| CatalystRepair</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-add-effect-manager"><code>AddEffectManager()</code></a> <span class="api-symbol-owner">| CatalystRepair</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-add-effect-manager"><code>AddEffectManager()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-add-flow"><code>AddFlow()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-add-flow"><code>AddFlow()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-add-flow"><code>AddFlow()</code></a> <span class="api-symbol-owner">| CatalystRepair</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-add-flow"><code>AddFlow()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-add-maximum-modifier"><code>AddMaximumModifier()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-add-minimum-modifier"><code>AddMinimumModifier()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-add-modifier"><code>AddModifier()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-add-modifier"><code>AddModifier()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-add-modifier"><code>AddModifier()</code></a> <span class="api-symbol-owner">| CatalystModifierSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-add-modifier"><code>AddModifier()</code></a> <span class="api-symbol-owner">| CatalystRepair</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-add-modifier"><code>AddModifier()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-add-resource"><code>AddResource()</code></a> <span class="api-symbol-owner">| CatalystRepair</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-add-resource"><code>AddResource()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-add-stacks"><code>AddStacks()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-add-statistic"><code>AddStatistic()</code></a> <span class="api-symbol-owner">| CatalystRepair</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-add-statistic"><code>AddStatistic()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-add-tag"><code>AddTag()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-add-tag"><code>AddTag()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-add-tag"><code>AddTag()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-applied"><code>Applied()</code></a> <span class="api-symbol-owner">| CatalystEffectApplicationResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-applied"><code>Applied()</code></a> <span class="api-symbol-owner">| CatalystModifierEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-apply"><code>Apply()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-apply-swap"><code>ApplySwap()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">B</div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-statistic-base-func"><code>BaseFunc()</code></a><span class="api-symbol-owner">__CatalystRepairStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-bind-chance-per-tick-statistic"><code>BindChancePerTickStatistic()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-bind-chance-to-apply-statistic"><code>BindChanceToApplyStatistic()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-bind-maximum-statistic"><code>BindMaximumStatistic()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-bind-minimum-statistic"><code>BindMinimumStatistic()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-bind-rate-statistic"><code>BindRateStatistic()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-statistic-base-func"><code>BaseFunc()</code></a> <span class="api-symbol-owner">| __CatalystRepairStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-bind-chance-per-tick-statistic"><code>BindChancePerTickStatistic()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-bind-chance-to-apply-statistic"><code>BindChanceToApplyStatistic()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-bind-maximum-statistic"><code>BindMaximumStatistic()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-bind-minimum-statistic"><code>BindMinimumStatistic()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-bind-rate-statistic"><code>BindRateStatistic()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">C</div>
-    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-can-ignore"><code>CanIgnore()</code></a><span class="api-symbol-owner">CatalystStateCallbackRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-can-ignore"><code>CanIgnore()</code></a><span class="api-symbol-owner">CatalystStateCountdownTrackerRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-capture-state"><code>CaptureState()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-can-ignore"><code>CanIgnore()</code></a> <span class="api-symbol-owner">| CatalystStateCallbackRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-can-ignore"><code>CanIgnore()</code></a> <span class="api-symbol-owner">| CatalystStateCountdownTrackerRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-capture-state"><code>CaptureState()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
     <div class="api-symbol-row"><a href="#catalyst-countdown"><code>CatalystCountdown()</code></a></div>
     <div class="api-symbol-row"><a href="#catalyst-countdown-tracker"><code>CatalystCountdownTracker</code></a></div>
     <div class="api-symbol-row"><a href="#catalyst-effect"><code>CatalystEffect</code></a></div>
@@ -8472,437 +8470,437 @@ Repair row created by <a href="#catalyst-repair-add-effect-manager"><code>Cataly
     <div class="api-symbol-row"><a href="#catalyst-statistic-layer-evaluation"><code>CatalystStatisticLayerEvaluation</code></a></div>
     <div class="api-symbol-row"><a href="#catalyst-statistic-refresh-result"><code>CatalystStatisticRefreshResult</code></a></div>
     <div class="api-symbol-row"><a href="#catalyst-subscription"><code>CatalystSubscription</code></a></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-effect-chance-per-tick"><code>ChancePerTick()</code></a><span class="api-symbol-owner">__CatalystRepairEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-chance-succeeded"><code>ChanceSucceeded()</code></a><span class="api-symbol-owner">CatalystEffectTickResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-effect-chance-to-apply"><code>ChanceToApply()</code></a><span class="api-symbol-owner">__CatalystRepairEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change"><code>Change()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-change-base-value"><code>ChangeBaseValue()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-change-max-value"><code>ChangeMaxValue()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-change-min-value"><code>ChangeMinValue()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-past-bounds"><code>ChangePastBounds()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-clear-base-func"><code>ClearBaseFunc()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-clear-condition"><code>ClearCondition()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-clear-delay"><code>ClearDelay()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-clear-fact-view"><code>ClearFactView()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-clear-fact-view"><code>ClearFactView()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-clear-family"><code>ClearFamily()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-clear-layer-order"><code>ClearLayerOrder()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-clear-on-apply"><code>ClearOnApply()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-clear-on-remove"><code>ClearOnRemove()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-clear-on-tick"><code>ClearOnTick()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-clear-post-process"><code>ClearPostProcess()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-clear-random-function"><code>ClearRandomFunction()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-clear-resolve-tick"><code>ClearResolveTick()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-clear-rounding"><code>ClearRounding()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-clear-stack-func"><code>ClearStackFunc()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-clear-tags"><code>ClearTags()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-clear-tags"><code>ClearTags()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-clear-tags"><code>ClearTags()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-clear-tick-interval"><code>ClearTickInterval()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-complete"><code>Complete()</code></a><span class="api-symbol-owner">CatalystStateRestoreResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-modifier-condition"><code>Condition()</code></a><span class="api-symbol-owner">__CatalystRepairModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-countdown"><code>Countdown()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-effect-chance-per-tick"><code>ChancePerTick()</code></a> <span class="api-symbol-owner">| __CatalystRepairEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-chance-succeeded"><code>ChanceSucceeded()</code></a> <span class="api-symbol-owner">| CatalystEffectTickResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-effect-chance-to-apply"><code>ChanceToApply()</code></a> <span class="api-symbol-owner">| __CatalystRepairEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change"><code>Change()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-change-base-value"><code>ChangeBaseValue()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-change-max-value"><code>ChangeMaxValue()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-change-min-value"><code>ChangeMinValue()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-past-bounds"><code>ChangePastBounds()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-clear-base-func"><code>ClearBaseFunc()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-clear-condition"><code>ClearCondition()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-clear-delay"><code>ClearDelay()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-clear-fact-view"><code>ClearFactView()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-clear-fact-view"><code>ClearFactView()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-clear-family"><code>ClearFamily()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-clear-layer-order"><code>ClearLayerOrder()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-clear-on-apply"><code>ClearOnApply()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-clear-on-remove"><code>ClearOnRemove()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-clear-on-tick"><code>ClearOnTick()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-clear-post-process"><code>ClearPostProcess()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-clear-random-function"><code>ClearRandomFunction()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-clear-resolve-tick"><code>ClearResolveTick()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-clear-rounding"><code>ClearRounding()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-clear-stack-func"><code>ClearStackFunc()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-clear-tags"><code>ClearTags()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-clear-tags"><code>ClearTags()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-clear-tags"><code>ClearTags()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-clear-tick-interval"><code>ClearTickInterval()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-complete"><code>Complete()</code></a> <span class="api-symbol-owner">| CatalystStateRestoreResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-modifier-condition"><code>Condition()</code></a> <span class="api-symbol-owner">| __CatalystRepairModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-countdown"><code>Countdown()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">D</div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-debug-describe"><code>DebugDescribe()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-debug-dump"><code>DebugDump()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-decrease"><code>Decrease()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-decrease-past-minimum"><code>DecreasePastMinimum()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-delay"><code>Delay()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-destroy"><code>Destroy()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-destroy"><code>Destroy()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-destroy"><code>Destroy()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-destroy"><code>Destroy()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-destroy"><code>Destroy()</code></a><span class="api-symbol-owner">CatalystModifierSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-destroy"><code>Destroy()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-destroy"><code>Destroy()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-destroy-all-modifiers"><code>DestroyAllModifiers()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-destroy-flow"><code>DestroyFlow()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-destroy-maximum-modifier"><code>DestroyMaximumModifier()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-destroy-minimum-modifier"><code>DestroyMinimumModifier()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-destroy-modifier"><code>DestroyModifier()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-destroy-modifiers-by-source-id"><code>DestroyModifiersBySourceId()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-destroy-modifiers-by-source-label"><code>DestroyModifiersBySourceLabel()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-destroy-modifiers-by-source-meta"><code>DestroyModifiersBySourceMeta()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-destroy-modifiers-by-tag"><code>DestroyModifiersByTag()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-detach-effect"><code>DetachEffect()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-detach-flow"><code>DetachFlow()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-detach-modifier"><code>DetachModifier()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-detach-modifier"><code>DetachModifier()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-did-change"><code>DidChange()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-refresh-result-did-change"><code>DidChange()</code></a><span class="api-symbol-owner">CatalystSetRefreshResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-refresh-result-did-change"><code>DidChange()</code></a><span class="api-symbol-owner">CatalystStatisticRefreshResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-debug-describe"><code>DebugDescribe()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-debug-dump"><code>DebugDump()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-decrease"><code>Decrease()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-decrease-past-minimum"><code>DecreasePastMinimum()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-delay"><code>Delay()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-destroy"><code>Destroy()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-destroy"><code>Destroy()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-destroy"><code>Destroy()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-destroy"><code>Destroy()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-destroy"><code>Destroy()</code></a> <span class="api-symbol-owner">| CatalystModifierSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-destroy"><code>Destroy()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-destroy"><code>Destroy()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-destroy-all-modifiers"><code>DestroyAllModifiers()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-destroy-flow"><code>DestroyFlow()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-destroy-maximum-modifier"><code>DestroyMaximumModifier()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-destroy-minimum-modifier"><code>DestroyMinimumModifier()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-destroy-modifier"><code>DestroyModifier()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-destroy-modifiers-by-source-id"><code>DestroyModifiersBySourceId()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-destroy-modifiers-by-source-label"><code>DestroyModifiersBySourceLabel()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-destroy-modifiers-by-source-meta"><code>DestroyModifiersBySourceMeta()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-destroy-modifiers-by-tag"><code>DestroyModifiersByTag()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-detach-effect"><code>DetachEffect()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-detach-flow"><code>DetachFlow()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-detach-modifier"><code>DetachModifier()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-detach-modifier"><code>DetachModifier()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-did-change"><code>DidChange()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-refresh-result-did-change"><code>DidChange()</code></a> <span class="api-symbol-owner">| CatalystSetRefreshResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-refresh-result-did-change"><code>DidChange()</code></a> <span class="api-symbol-owner">| CatalystStatisticRefreshResult</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">E</div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-empty"><code>Empty()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-evaluate"><code>Evaluate()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-explain"><code>Explain()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-empty"><code>Empty()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-evaluate"><code>Evaluate()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-explain"><code>Explain()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">F</div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-fill"><code>Fill()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-find-modifiers-by-source-id"><code>FindModifiersBySourceId()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-find-modifiers-by-source-label"><code>FindModifiersBySourceLabel()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-find-modifiers-by-source-meta"><code>FindModifiersBySourceMeta()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-fill"><code>Fill()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-find-modifiers-by-source-id"><code>FindModifiersBySourceId()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-find-modifiers-by-source-label"><code>FindModifiersBySourceLabel()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-find-modifiers-by-source-meta"><code>FindModifiersBySourceMeta()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">G</div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-applied"><code>GetApplied()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-get-base-value"><code>GetBaseValue()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-evaluation-get-base-value"><code>GetBaseValue()</code></a><span class="api-symbol-owner">CatalystStatisticEvaluation</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-callbacks"><code>GetCallbacks()</code></a><span class="api-symbol-owner">CatalystStateCallbackRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-get-chance"><code>GetChance()</code></a><span class="api-symbol-owner">CatalystEffectApplicationResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-get-chance"><code>GetChance()</code></a><span class="api-symbol-owner">CatalystEffectTickResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-get-chance-per-tick-statistic"><code>GetChancePerTickStatistic()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-get-chance-to-apply-statistic"><code>GetChanceToApplyStatistic()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-change"><code>GetChange()</code></a><span class="api-symbol-owner">CatalystResourceFlowResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-component"><code>GetComponent()</code></a><span class="api-symbol-owner">CatalystStateCallbackRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-get-contribution"><code>GetContribution()</code></a><span class="api-symbol-owner">CatalystModifierEvaluation</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-countdown-amount"><code>GetCountdownAmount()</code></a><span class="api-symbol-owner">CatalystResourceFlowResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-get-countdown-mode"><code>GetCountdownMode()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-get-countdown-tracker"><code>GetCountdownTracker()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-get-countdown-tracker"><code>GetCountdownTracker()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-get-countdown-tracker"><code>GetCountdownTracker()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-current"><code>GetCurrent()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-current"><code>GetCurrent()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-refresh-result-get-current"><code>GetCurrent()</code></a><span class="api-symbol-owner">CatalystStatisticRefreshResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-preview-entry-get-current-value"><code>GetCurrentValue()</code></a><span class="api-symbol-owner">CatalystSetPreviewEntry</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-get-delay-remaining"><code>GetDelayRemaining()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-get-details"><code>GetDetails()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-apply-result-get-diagnostics"><code>GetDiagnostics()</code></a><span class="api-symbol-owner">CatalystSetApplyResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-preview-result-get-diagnostics"><code>GetDiagnostics()</code></a><span class="api-symbol-owner">CatalystSetPreviewResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-get-effect"><code>GetEffect()</code></a><span class="api-symbol-owner">CatalystEffectApplicationResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-get-effect"><code>GetEffect()</code></a><span class="api-symbol-owner">CatalystEffectTickResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-get-effective-stacks"><code>GetEffectiveStacks()</code></a><span class="api-symbol-owner">CatalystModifierEvaluation</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-get-effect-manager"><code>GetEffectManager()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-get-effect-managers"><code>GetEffectManagers()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-details-get-effect-managers"><code>GetEffectManagers()</code></a><span class="api-symbol-owner">CatalystSetDetails</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-effects"><code>GetEffects()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-effects-by-family"><code>GetEffectsByFamily()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-effects-by-identity"><code>GetEffectsByIdentity()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-effects-tagged"><code>GetEffectsTagged()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-preview-result-get-entries"><code>GetEntries()</code></a><span class="api-symbol-owner">CatalystSetPreviewResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-preview-entry-get-evaluation"><code>GetEvaluation()</code></a><span class="api-symbol-owner">CatalystSetPreviewEntry</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-statistic-detail-get-evaluation"><code>GetEvaluation()</code></a><span class="api-symbol-owner">CatalystSetStatisticDetail</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-get-fact-view"><code>GetFactView()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-get-fact-view"><code>GetFactView()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-get-family"><code>GetFamily()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-flow"><code>GetFlow()</code></a><span class="api-symbol-owner">CatalystResourceFlowResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-get-flow-results"><code>GetFlowResults()</code></a><span class="api-symbol-owner">CatalystEffectTickResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-flows"><code>GetFlows()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-fraction"><code>GetFraction()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-get-identity"><code>GetIdentity()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-get-identity"><code>GetIdentity()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-identity"><code>GetIdentity()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-get-identity"><code>GetIdentity()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-get-identity"><code>GetIdentity()</code></a><span class="api-symbol-owner">CatalystModifierSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-identity"><code>GetIdentity()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-get-identity"><code>GetIdentity()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-get-identity"><code>GetIdentity()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-identity"><code>GetIdentity()</code></a><span class="api-symbol-owner">CatalystStateCallbackRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-identity"><code>GetIdentity()</code></a><span class="api-symbol-owner">CatalystStateCountdownTrackerRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-get-identity"><code>GetIdentity()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-ignore-identity"><code>GetIgnoreIdentity()</code></a><span class="api-symbol-owner">CatalystStateCallbackRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-ignore-identity"><code>GetIgnoreIdentity()</code></a><span class="api-symbol-owner">CatalystStateCountdownTrackerRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-ignore-type"><code>GetIgnoreType()</code></a><span class="api-symbol-owner">CatalystStateCallbackRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-ignore-type"><code>GetIgnoreType()</code></a><span class="api-symbol-owner">CatalystStateCountdownTrackerRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-get-incoming-effect"><code>GetIncomingEffect()</code></a><span class="api-symbol-owner">CatalystEffectApplicationResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-preview-entry-get-incoming-modifiers"><code>GetIncomingModifiers()</code></a><span class="api-symbol-owner">CatalystSetPreviewEntry</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-last-change"><code>GetLastChange()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-layer-evaluation-get-layer"><code>GetLayer()</code></a><span class="api-symbol-owner">CatalystStatisticLayerEvaluation</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-get-layer-order"><code>GetLayerOrder()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-get-layer-order"><code>GetLayerOrder()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-evaluation-get-layers"><code>GetLayers()</code></a><span class="api-symbol-owner">CatalystStatisticEvaluation</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-maximum"><code>GetMaximum()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-maximum"><code>GetMaximum()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-maximum-bound-mode"><code>GetMaximumBoundMode()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-maximum-statistic"><code>GetMaximumStatistic()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-get-max-value"><code>GetMaxValue()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-get-meta"><code>GetMeta()</code></a><span class="api-symbol-owner">CatalystModifierSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-meta"><code>GetMeta()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-get-meta"><code>GetMeta()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-minimum"><code>GetMinimum()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-minimum"><code>GetMinimum()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-minimum-bound-mode"><code>GetMinimumBoundMode()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-minimum-statistic"><code>GetMinimumStatistic()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-get-min-value"><code>GetMinValue()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-missing"><code>GetMissing()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-get-missing-callbacks"><code>GetMissingCallbacks()</code></a><span class="api-symbol-owner">CatalystStateRestoreResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-get-missing-countdown-trackers"><code>GetMissingCountdownTrackers()</code></a><span class="api-symbol-owner">CatalystStateRestoreResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-get-modifier"><code>GetModifier()</code></a><span class="api-symbol-owner">CatalystModifierEvaluation</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-get-modifier-order"><code>GetModifierOrder()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-evaluation-get-modifier-results"><code>GetModifierResults()</code></a><span class="api-symbol-owner">CatalystStatisticEvaluation</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-layer-evaluation-get-modifier-results"><code>GetModifierResults()</code></a><span class="api-symbol-owner">CatalystStatisticLayerEvaluation</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-get-modifiers"><code>GetModifiers()</code></a><span class="api-symbol-owner">CatalystModifierSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-get-modifiers"><code>GetModifiers()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-get-multiplier"><code>GetMultiplier()</code></a><span class="api-symbol-owner">CatalystEffectTickResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-multiplier"><code>GetMultiplier()</code></a><span class="api-symbol-owner">CatalystResourceFlowResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-name"><code>GetName()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-get-name"><code>GetName()</code></a><span class="api-symbol-owner">CatalystModifierSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-name"><code>GetName()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-get-name"><code>GetName()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-get-name"><code>GetName()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-get-name"><code>GetName()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-operation"><code>GetOperation()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-get-outcome"><code>GetOutcome()</code></a><span class="api-symbol-owner">CatalystEffectApplicationResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-route-diagnostic-get-outcome"><code>GetOutcome()</code></a><span class="api-symbol-owner">CatalystRouteDiagnostic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-preview-entry-get-outgoing-modifiers"><code>GetOutgoingModifiers()</code></a><span class="api-symbol-owner">CatalystSetPreviewEntry</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-overflow"><code>GetOverflow()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-owner"><code>GetOwner()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-path"><code>GetPath()</code></a><span class="api-symbol-owner">CatalystStateCallbackRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-path"><code>GetPath()</code></a><span class="api-symbol-owner">CatalystStateCountdownTrackerRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-preview-entry-get-preview-value"><code>GetPreviewValue()</code></a><span class="api-symbol-owner">CatalystSetPreviewEntry</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-previous"><code>GetPrevious()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-refresh-result-get-previous"><code>GetPrevious()</code></a><span class="api-symbol-owner">CatalystStatisticRefreshResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-previous-maximum"><code>GetPreviousMaximum()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-previous-minimum"><code>GetPreviousMinimum()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-rate"><code>GetRate()</code></a><span class="api-symbol-owner">CatalystResourceFlowResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-get-rate-statistic"><code>GetRateStatistic()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-get-reapply-policy"><code>GetReapplyPolicy()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-reason"><code>GetReason()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-apply-result-get-refresh-results"><code>GetRefreshResults()</code></a><span class="api-symbol-owner">CatalystSetApplyResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-capture-result-get-report"><code>GetReport()</code></a><span class="api-symbol-owner">CatalystStateCaptureResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-get-report"><code>GetReport()</code></a><span class="api-symbol-owner">CatalystStateRestoreResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-requested"><code>GetRequested()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-requested"><code>GetRequested()</code></a><span class="api-symbol-owner">CatalystResourceFlowResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-resource"><code>GetResource()</code></a><span class="api-symbol-owner">CatalystResourceFlowResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-get-resource"><code>GetResource()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-resource-refresh-entry-get-resource"><code>GetResource()</code></a><span class="api-symbol-owner">CatalystSetResourceRefreshEntry</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-refresh-result-get-resource-results"><code>GetResourceResults()</code></a><span class="api-symbol-owner">CatalystSetRefreshResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-get-resources"><code>GetResources()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-details-get-resources"><code>GetResources()</code></a><span class="api-symbol-owner">CatalystSetDetails</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-resource-refresh-entry-get-result"><code>GetResult()</code></a><span class="api-symbol-owner">CatalystSetResourceRefreshEntry</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-statistic-refresh-entry-get-result"><code>GetResult()</code></a><span class="api-symbol-owner">CatalystSetStatisticRefreshEntry</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-get-roll"><code>GetRoll()</code></a><span class="api-symbol-owner">CatalystEffectApplicationResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-get-roll"><code>GetRoll()</code></a><span class="api-symbol-owner">CatalystEffectTickResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-saved-callback-name"><code>GetSavedCallbackName()</code></a><span class="api-symbol-owner">CatalystStateCallbackRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-get-skip-reason"><code>GetSkipReason()</code></a><span class="api-symbol-owner">CatalystModifierEvaluation</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-source"><code>GetSource()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-get-stack-mode"><code>GetStackMode()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-get-starting-value"><code>GetStartingValue()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-capture-result-get-state"><code>GetState()</code></a><span class="api-symbol-owner">CatalystStateCaptureResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-route-diagnostic-get-statistic"><code>GetStatistic()</code></a><span class="api-symbol-owner">CatalystRouteDiagnostic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-get-statistic"><code>GetStatistic()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-preview-entry-get-statistic"><code>GetStatistic()</code></a><span class="api-symbol-owner">CatalystSetPreviewEntry</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-statistic-detail-get-statistic"><code>GetStatistic()</code></a><span class="api-symbol-owner">CatalystSetStatisticDetail</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-statistic-refresh-entry-get-statistic"><code>GetStatistic()</code></a><span class="api-symbol-owner">CatalystSetStatisticRefreshEntry</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-details-get-statistic-evaluations"><code>GetStatisticEvaluations()</code></a><span class="api-symbol-owner">CatalystSetDetails</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-refresh-result-get-statistic-results"><code>GetStatisticResults()</code></a><span class="api-symbol-owner">CatalystSetRefreshResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-get-statistics"><code>GetStatistics()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-preview-result-get-status"><code>GetStatus()</code></a><span class="api-symbol-owner">CatalystSetPreviewResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-struct"><code>GetStruct()</code></a><span class="api-symbol-owner">CatalystStateCallbackRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-struct"><code>GetStruct()</code></a><span class="api-symbol-owner">CatalystStateCountdownTrackerRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-route-diagnostic-get-subject"><code>GetSubject()</code></a><span class="api-symbol-owner">CatalystRouteDiagnostic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-target"><code>GetTarget()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-get-target-identity"><code>GetTargetIdentity()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-route-diagnostic-get-target-identity"><code>GetTargetIdentity()</code></a><span class="api-symbol-owner">CatalystRouteDiagnostic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-get-tick-duration"><code>GetTickDuration()</code></a><span class="api-symbol-owner">CatalystEffectTickResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-get-tick-interval"><code>GetTickInterval()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-get-time-scale"><code>GetTimeScale()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-tracker-identity"><code>GetTrackerIdentity()</code></a><span class="api-symbol-owner">CatalystStateCountdownTrackerRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-type"><code>GetType()</code></a><span class="api-symbol-owner">CatalystStateCallbackRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-type"><code>GetType()</code></a><span class="api-symbol-owner">CatalystStateCountdownTrackerRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-get-underflow"><code>GetUnderflow()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-get-value"><code>GetValue()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-evaluation-get-value"><code>GetValue()</code></a><span class="api-symbol-owner">CatalystStatisticEvaluation</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-get-value-after"><code>GetValueAfter()</code></a><span class="api-symbol-owner">CatalystModifierEvaluation</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-get-value-before"><code>GetValueBefore()</code></a><span class="api-symbol-owner">CatalystModifierEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-applied"><code>GetApplied()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-get-base-value"><code>GetBaseValue()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-evaluation-get-base-value"><code>GetBaseValue()</code></a> <span class="api-symbol-owner">| CatalystStatisticEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-callbacks"><code>GetCallbacks()</code></a> <span class="api-symbol-owner">| CatalystStateCallbackRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-get-chance"><code>GetChance()</code></a> <span class="api-symbol-owner">| CatalystEffectApplicationResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-get-chance"><code>GetChance()</code></a> <span class="api-symbol-owner">| CatalystEffectTickResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-get-chance-per-tick-statistic"><code>GetChancePerTickStatistic()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-get-chance-to-apply-statistic"><code>GetChanceToApplyStatistic()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-change"><code>GetChange()</code></a> <span class="api-symbol-owner">| CatalystResourceFlowResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-component"><code>GetComponent()</code></a> <span class="api-symbol-owner">| CatalystStateCallbackRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-get-contribution"><code>GetContribution()</code></a> <span class="api-symbol-owner">| CatalystModifierEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-countdown-amount"><code>GetCountdownAmount()</code></a> <span class="api-symbol-owner">| CatalystResourceFlowResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-get-countdown-mode"><code>GetCountdownMode()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-get-countdown-tracker"><code>GetCountdownTracker()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-get-countdown-tracker"><code>GetCountdownTracker()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-get-countdown-tracker"><code>GetCountdownTracker()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-current"><code>GetCurrent()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-current"><code>GetCurrent()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-refresh-result-get-current"><code>GetCurrent()</code></a> <span class="api-symbol-owner">| CatalystStatisticRefreshResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-preview-entry-get-current-value"><code>GetCurrentValue()</code></a> <span class="api-symbol-owner">| CatalystSetPreviewEntry</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-get-delay-remaining"><code>GetDelayRemaining()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-get-details"><code>GetDetails()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-apply-result-get-diagnostics"><code>GetDiagnostics()</code></a> <span class="api-symbol-owner">| CatalystSetApplyResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-preview-result-get-diagnostics"><code>GetDiagnostics()</code></a> <span class="api-symbol-owner">| CatalystSetPreviewResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-get-effect"><code>GetEffect()</code></a> <span class="api-symbol-owner">| CatalystEffectApplicationResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-get-effect"><code>GetEffect()</code></a> <span class="api-symbol-owner">| CatalystEffectTickResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-get-effective-stacks"><code>GetEffectiveStacks()</code></a> <span class="api-symbol-owner">| CatalystModifierEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-get-effect-manager"><code>GetEffectManager()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-get-effect-managers"><code>GetEffectManagers()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-details-get-effect-managers"><code>GetEffectManagers()</code></a> <span class="api-symbol-owner">| CatalystSetDetails</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-effects"><code>GetEffects()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-effects-by-family"><code>GetEffectsByFamily()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-effects-by-identity"><code>GetEffectsByIdentity()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-effects-tagged"><code>GetEffectsTagged()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-preview-result-get-entries"><code>GetEntries()</code></a> <span class="api-symbol-owner">| CatalystSetPreviewResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-preview-entry-get-evaluation"><code>GetEvaluation()</code></a> <span class="api-symbol-owner">| CatalystSetPreviewEntry</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-statistic-detail-get-evaluation"><code>GetEvaluation()</code></a> <span class="api-symbol-owner">| CatalystSetStatisticDetail</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-get-fact-view"><code>GetFactView()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-get-fact-view"><code>GetFactView()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-get-family"><code>GetFamily()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-flow"><code>GetFlow()</code></a> <span class="api-symbol-owner">| CatalystResourceFlowResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-get-flow-results"><code>GetFlowResults()</code></a> <span class="api-symbol-owner">| CatalystEffectTickResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-flows"><code>GetFlows()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-fraction"><code>GetFraction()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-get-identity"><code>GetIdentity()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-get-identity"><code>GetIdentity()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-identity"><code>GetIdentity()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-get-identity"><code>GetIdentity()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-get-identity"><code>GetIdentity()</code></a> <span class="api-symbol-owner">| CatalystModifierSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-identity"><code>GetIdentity()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-get-identity"><code>GetIdentity()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-get-identity"><code>GetIdentity()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-identity"><code>GetIdentity()</code></a> <span class="api-symbol-owner">| CatalystStateCallbackRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-identity"><code>GetIdentity()</code></a> <span class="api-symbol-owner">| CatalystStateCountdownTrackerRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-get-identity"><code>GetIdentity()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-ignore-identity"><code>GetIgnoreIdentity()</code></a> <span class="api-symbol-owner">| CatalystStateCallbackRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-ignore-identity"><code>GetIgnoreIdentity()</code></a> <span class="api-symbol-owner">| CatalystStateCountdownTrackerRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-ignore-type"><code>GetIgnoreType()</code></a> <span class="api-symbol-owner">| CatalystStateCallbackRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-ignore-type"><code>GetIgnoreType()</code></a> <span class="api-symbol-owner">| CatalystStateCountdownTrackerRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-get-incoming-effect"><code>GetIncomingEffect()</code></a> <span class="api-symbol-owner">| CatalystEffectApplicationResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-preview-entry-get-incoming-modifiers"><code>GetIncomingModifiers()</code></a> <span class="api-symbol-owner">| CatalystSetPreviewEntry</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-last-change"><code>GetLastChange()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-layer-evaluation-get-layer"><code>GetLayer()</code></a> <span class="api-symbol-owner">| CatalystStatisticLayerEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-get-layer-order"><code>GetLayerOrder()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-get-layer-order"><code>GetLayerOrder()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-evaluation-get-layers"><code>GetLayers()</code></a> <span class="api-symbol-owner">| CatalystStatisticEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-maximum"><code>GetMaximum()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-maximum"><code>GetMaximum()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-maximum-bound-mode"><code>GetMaximumBoundMode()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-maximum-statistic"><code>GetMaximumStatistic()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-get-max-value"><code>GetMaxValue()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-get-meta"><code>GetMeta()</code></a> <span class="api-symbol-owner">| CatalystModifierSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-meta"><code>GetMeta()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-get-meta"><code>GetMeta()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-minimum"><code>GetMinimum()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-minimum"><code>GetMinimum()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-minimum-bound-mode"><code>GetMinimumBoundMode()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-minimum-statistic"><code>GetMinimumStatistic()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-get-min-value"><code>GetMinValue()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-missing"><code>GetMissing()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-get-missing-callbacks"><code>GetMissingCallbacks()</code></a> <span class="api-symbol-owner">| CatalystStateRestoreResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-get-missing-countdown-trackers"><code>GetMissingCountdownTrackers()</code></a> <span class="api-symbol-owner">| CatalystStateRestoreResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-get-modifier"><code>GetModifier()</code></a> <span class="api-symbol-owner">| CatalystModifierEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-get-modifier-order"><code>GetModifierOrder()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-evaluation-get-modifier-results"><code>GetModifierResults()</code></a> <span class="api-symbol-owner">| CatalystStatisticEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-layer-evaluation-get-modifier-results"><code>GetModifierResults()</code></a> <span class="api-symbol-owner">| CatalystStatisticLayerEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-get-modifiers"><code>GetModifiers()</code></a> <span class="api-symbol-owner">| CatalystModifierSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-get-modifiers"><code>GetModifiers()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-get-multiplier"><code>GetMultiplier()</code></a> <span class="api-symbol-owner">| CatalystEffectTickResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-multiplier"><code>GetMultiplier()</code></a> <span class="api-symbol-owner">| CatalystResourceFlowResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-name"><code>GetName()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-get-name"><code>GetName()</code></a> <span class="api-symbol-owner">| CatalystModifierSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-name"><code>GetName()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-get-name"><code>GetName()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-get-name"><code>GetName()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-get-name"><code>GetName()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-operation"><code>GetOperation()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-get-outcome"><code>GetOutcome()</code></a> <span class="api-symbol-owner">| CatalystEffectApplicationResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-route-diagnostic-get-outcome"><code>GetOutcome()</code></a> <span class="api-symbol-owner">| CatalystRouteDiagnostic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-preview-entry-get-outgoing-modifiers"><code>GetOutgoingModifiers()</code></a> <span class="api-symbol-owner">| CatalystSetPreviewEntry</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-overflow"><code>GetOverflow()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-get-owner"><code>GetOwner()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-path"><code>GetPath()</code></a> <span class="api-symbol-owner">| CatalystStateCallbackRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-path"><code>GetPath()</code></a> <span class="api-symbol-owner">| CatalystStateCountdownTrackerRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-preview-entry-get-preview-value"><code>GetPreviewValue()</code></a> <span class="api-symbol-owner">| CatalystSetPreviewEntry</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-previous"><code>GetPrevious()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-refresh-result-get-previous"><code>GetPrevious()</code></a> <span class="api-symbol-owner">| CatalystStatisticRefreshResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-previous-maximum"><code>GetPreviousMaximum()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-previous-minimum"><code>GetPreviousMinimum()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-rate"><code>GetRate()</code></a> <span class="api-symbol-owner">| CatalystResourceFlowResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-get-rate-statistic"><code>GetRateStatistic()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-get-reapply-policy"><code>GetReapplyPolicy()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-reason"><code>GetReason()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-apply-result-get-refresh-results"><code>GetRefreshResults()</code></a> <span class="api-symbol-owner">| CatalystSetApplyResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-capture-result-get-report"><code>GetReport()</code></a> <span class="api-symbol-owner">| CatalystStateCaptureResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-get-report"><code>GetReport()</code></a> <span class="api-symbol-owner">| CatalystStateRestoreResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-requested"><code>GetRequested()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-requested"><code>GetRequested()</code></a> <span class="api-symbol-owner">| CatalystResourceFlowResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-get-resource"><code>GetResource()</code></a> <span class="api-symbol-owner">| CatalystResourceFlowResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-get-resource"><code>GetResource()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-resource-refresh-entry-get-resource"><code>GetResource()</code></a> <span class="api-symbol-owner">| CatalystSetResourceRefreshEntry</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-refresh-result-get-resource-results"><code>GetResourceResults()</code></a> <span class="api-symbol-owner">| CatalystSetRefreshResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-get-resources"><code>GetResources()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-details-get-resources"><code>GetResources()</code></a> <span class="api-symbol-owner">| CatalystSetDetails</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-resource-refresh-entry-get-result"><code>GetResult()</code></a> <span class="api-symbol-owner">| CatalystSetResourceRefreshEntry</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-statistic-refresh-entry-get-result"><code>GetResult()</code></a> <span class="api-symbol-owner">| CatalystSetStatisticRefreshEntry</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-get-roll"><code>GetRoll()</code></a> <span class="api-symbol-owner">| CatalystEffectApplicationResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-get-roll"><code>GetRoll()</code></a> <span class="api-symbol-owner">| CatalystEffectTickResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-saved-callback-name"><code>GetSavedCallbackName()</code></a> <span class="api-symbol-owner">| CatalystStateCallbackRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-get-skip-reason"><code>GetSkipReason()</code></a> <span class="api-symbol-owner">| CatalystModifierEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-source"><code>GetSource()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-get-stack-mode"><code>GetStackMode()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-get-starting-value"><code>GetStartingValue()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-capture-result-get-state"><code>GetState()</code></a> <span class="api-symbol-owner">| CatalystStateCaptureResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-route-diagnostic-get-statistic"><code>GetStatistic()</code></a> <span class="api-symbol-owner">| CatalystRouteDiagnostic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-get-statistic"><code>GetStatistic()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-preview-entry-get-statistic"><code>GetStatistic()</code></a> <span class="api-symbol-owner">| CatalystSetPreviewEntry</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-statistic-detail-get-statistic"><code>GetStatistic()</code></a> <span class="api-symbol-owner">| CatalystSetStatisticDetail</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-statistic-refresh-entry-get-statistic"><code>GetStatistic()</code></a> <span class="api-symbol-owner">| CatalystSetStatisticRefreshEntry</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-details-get-statistic-evaluations"><code>GetStatisticEvaluations()</code></a> <span class="api-symbol-owner">| CatalystSetDetails</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-refresh-result-get-statistic-results"><code>GetStatisticResults()</code></a> <span class="api-symbol-owner">| CatalystSetRefreshResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-get-statistics"><code>GetStatistics()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-preview-result-get-status"><code>GetStatus()</code></a> <span class="api-symbol-owner">| CatalystSetPreviewResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-struct"><code>GetStruct()</code></a> <span class="api-symbol-owner">| CatalystStateCallbackRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-struct"><code>GetStruct()</code></a> <span class="api-symbol-owner">| CatalystStateCountdownTrackerRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-route-diagnostic-get-subject"><code>GetSubject()</code></a> <span class="api-symbol-owner">| CatalystRouteDiagnostic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-get-target"><code>GetTarget()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-get-target-identity"><code>GetTargetIdentity()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-route-diagnostic-get-target-identity"><code>GetTargetIdentity()</code></a> <span class="api-symbol-owner">| CatalystRouteDiagnostic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-get-tick-duration"><code>GetTickDuration()</code></a> <span class="api-symbol-owner">| CatalystEffectTickResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-get-tick-interval"><code>GetTickInterval()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-get-time-scale"><code>GetTimeScale()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-tracker-identity"><code>GetTrackerIdentity()</code></a> <span class="api-symbol-owner">| CatalystStateCountdownTrackerRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-get-type"><code>GetType()</code></a> <span class="api-symbol-owner">| CatalystStateCallbackRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-get-type"><code>GetType()</code></a> <span class="api-symbol-owner">| CatalystStateCountdownTrackerRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-get-underflow"><code>GetUnderflow()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-get-value"><code>GetValue()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-evaluation-get-value"><code>GetValue()</code></a> <span class="api-symbol-owner">| CatalystStatisticEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-get-value-after"><code>GetValueAfter()</code></a> <span class="api-symbol-owner">| CatalystModifierEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-get-value-before"><code>GetValueBefore()</code></a> <span class="api-symbol-owner">| CatalystModifierEvaluation</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">H</div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-has-effect"><code>HasEffect()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-has-effect-identity"><code>HasEffectIdentity()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-has-effect-manager"><code>HasEffectManager()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-has-flow"><code>HasFlow()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-has-layer"><code>HasLayer()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-has-modifier"><code>HasModifier()</code></a><span class="api-symbol-owner">CatalystModifierSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-has-modifier"><code>HasModifier()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-has-modifier-from-source-id"><code>HasModifierFromSourceId()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-has-modifier-from-source-label"><code>HasModifierFromSourceLabel()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-has-modifier-from-source-meta"><code>HasModifierFromSourceMeta()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-has-resource"><code>HasResource()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-has-statistic"><code>HasStatistic()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-has-tag"><code>HasTag()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-has-tag"><code>HasTag()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-has-tag"><code>HasTag()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-has-tag"><code>HasTag()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-has-effect"><code>HasEffect()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-has-effect-identity"><code>HasEffectIdentity()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-has-effect-manager"><code>HasEffectManager()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-has-flow"><code>HasFlow()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-has-layer"><code>HasLayer()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-has-modifier"><code>HasModifier()</code></a> <span class="api-symbol-owner">| CatalystModifierSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-has-modifier"><code>HasModifier()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-has-modifier-from-source-id"><code>HasModifierFromSourceId()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-has-modifier-from-source-label"><code>HasModifierFromSourceLabel()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-has-modifier-from-source-meta"><code>HasModifierFromSourceMeta()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-has-resource"><code>HasResource()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-has-statistic"><code>HasStatistic()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-has-tag"><code>HasTag()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-has-tag"><code>HasTag()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-has-tag"><code>HasTag()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-has-tag"><code>HasTag()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">I</div>
-    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-ignore"><code>Ignore()</code></a><span class="api-symbol-owner">CatalystStateCallbackRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-ignore"><code>Ignore()</code></a><span class="api-symbol-owner">CatalystStateCountdownTrackerRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-ignore-missing"><code>IgnoreMissing()</code></a><span class="api-symbol-owner">CatalystStateRestoreResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-increase"><code>Increase()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-increase-past-maximum"><code>IncreasePastMaximum()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-is-active"><code>IsActive()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-subscription-is-active"><code>IsActive()</code></a><span class="api-symbol-owner">CatalystSubscription</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-is-automatic"><code>IsAutomatic()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-fact-binding-is-bound"><code>IsBound()</code></a><span class="api-symbol-owner">CatalystFactBinding</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-is-chance-per-tick-bound"><code>IsChancePerTickBound()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-is-chance-to-apply-bound"><code>IsChanceToApplyBound()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-is-complete"><code>IsComplete()</code></a><span class="api-symbol-owner">CatalystStateRestoreResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-is-delayed"><code>IsDelayed()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-is-empty"><code>IsEmpty()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-is-full"><code>IsFull()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-is-maximum-bound"><code>IsMaximumBound()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-is-minimum-bound"><code>IsMinimumBound()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-is-paused"><code>IsPaused()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-is-rate-bound"><code>IsRateBound()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-is-tracking-effect"><code>IsTrackingEffect()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-is-tracking-flow"><code>IsTrackingFlow()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-is-tracking-modifier"><code>IsTrackingModifier()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-ignore"><code>Ignore()</code></a> <span class="api-symbol-owner">| CatalystStateCallbackRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-ignore"><code>Ignore()</code></a> <span class="api-symbol-owner">| CatalystStateCountdownTrackerRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-ignore-missing"><code>IgnoreMissing()</code></a> <span class="api-symbol-owner">| CatalystStateRestoreResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-increase"><code>Increase()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-increase-past-maximum"><code>IncreasePastMaximum()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-is-active"><code>IsActive()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-subscription-is-active"><code>IsActive()</code></a> <span class="api-symbol-owner">| CatalystSubscription</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-is-automatic"><code>IsAutomatic()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-fact-binding-is-bound"><code>IsBound()</code></a> <span class="api-symbol-owner">| CatalystFactBinding</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-is-chance-per-tick-bound"><code>IsChancePerTickBound()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-is-chance-to-apply-bound"><code>IsChanceToApplyBound()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-is-complete"><code>IsComplete()</code></a> <span class="api-symbol-owner">| CatalystStateRestoreResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-is-delayed"><code>IsDelayed()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-is-empty"><code>IsEmpty()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-is-full"><code>IsFull()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-is-maximum-bound"><code>IsMaximumBound()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-is-minimum-bound"><code>IsMinimumBound()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-is-paused"><code>IsPaused()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-is-rate-bound"><code>IsRateBound()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-is-tracking-effect"><code>IsTrackingEffect()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-is-tracking-flow"><code>IsTrackingFlow()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-is-tracking-modifier"><code>IsTrackingModifier()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">M</div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-resource-maximum"><code>Maximum()</code></a><span class="api-symbol-owner">__CatalystRepairResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-resource-minimum"><code>Minimum()</code></a><span class="api-symbol-owner">__CatalystRepairResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-resource-maximum"><code>Maximum()</code></a> <span class="api-symbol-owner">| __CatalystRepairResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-resource-minimum"><code>Minimum()</code></a> <span class="api-symbol-owner">| __CatalystRepairResource</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">N</div>
-    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-needs"><code>Needs()</code></a><span class="api-symbol-owner">CatalystStateCallbackRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-needs"><code>Needs()</code></a> <span class="api-symbol-owner">| CatalystStateCallbackRequirement</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">O</div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-effect-on-apply"><code>OnApply()</code></a><span class="api-symbol-owner">__CatalystRepairEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-on-change"><code>OnChange()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-on-change"><code>OnChange()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-on-effect-applied"><code>OnEffectApplied()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-on-effect-removed"><code>OnEffectRemoved()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-effect-on-remove"><code>OnRemove()</code></a><span class="api-symbol-owner">__CatalystRepairEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-effect-on-tick"><code>OnTick()</code></a><span class="api-symbol-owner">__CatalystRepairEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-effect-on-apply"><code>OnApply()</code></a> <span class="api-symbol-owner">| __CatalystRepairEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-on-change"><code>OnChange()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-on-change"><code>OnChange()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-on-effect-applied"><code>OnEffectApplied()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-on-effect-removed"><code>OnEffectRemoved()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-effect-on-remove"><code>OnRemove()</code></a> <span class="api-symbol-owner">| __CatalystRepairEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-effect-on-tick"><code>OnTick()</code></a> <span class="api-symbol-owner">| __CatalystRepairEffect</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">P</div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-statistic-post-process"><code>PostProcess()</code></a><span class="api-symbol-owner">__CatalystRepairStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-preview"><code>Preview()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-preview"><code>Preview()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-preview-modifiers"><code>PreviewModifiers()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-preview-swap"><code>PreviewSwap()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-publish-to-fact"><code>PublishToFact()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-publish-to-fact"><code>PublishToFact()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-statistic-post-process"><code>PostProcess()</code></a> <span class="api-symbol-owner">| __CatalystRepairStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-preview"><code>Preview()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-preview"><code>Preview()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-preview-modifiers"><code>PreviewModifiers()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-preview-swap"><code>PreviewSwap()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-publish-to-fact"><code>PublishToFact()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-publish-to-fact"><code>PublishToFact()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">Q</div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-queued"><code>Queued()</code></a><span class="api-symbol-owner">CatalystEffectApplicationResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-queued"><code>Queued()</code></a> <span class="api-symbol-owner">| CatalystEffectApplicationResult</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">R</div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-effect-manager-random-function"><code>RandomFunction()</code></a><span class="api-symbol-owner">__CatalystRepairEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-flow-rate"><code>Rate()</code></a><span class="api-symbol-owner">__CatalystRepairFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-refresh"><code>Refresh()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-refresh"><code>Refresh()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-refresh"><code>Refresh()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-remove-effect"><code>RemoveEffect()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-remove-effect-manager"><code>RemoveEffectManager()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-remove-effects-by-identity"><code>RemoveEffectsByIdentity()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-remove-effects-tagged"><code>RemoveEffectsTagged()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-remove-flow"><code>RemoveFlow()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-remove-flow"><code>RemoveFlow()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-remove-modifier"><code>RemoveModifier()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-remove-modifier"><code>RemoveModifier()</code></a><span class="api-symbol-owner">CatalystModifierSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-remove-resource"><code>RemoveResource()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-remove-statistic"><code>RemoveStatistic()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-remove-tag"><code>RemoveTag()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-remove-tag"><code>RemoveTag()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-remove-tag"><code>RemoveTag()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-repair"><code>Repair()</code></a><span class="api-symbol-owner">CatalystStateRestoreResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-reset-all"><code>ResetAll()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-reset-duration"><code>ResetDuration()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-reset-duration"><code>ResetDuration()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-reset-to-starting"><code>ResetToStarting()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-resolve"><code>Resolve()</code></a><span class="api-symbol-owner">CatalystStateCallbackRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-resolve"><code>Resolve()</code></a><span class="api-symbol-owner">CatalystStateCountdownTrackerRequirement</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-resolve-callbacks"><code>ResolveCallbacks()</code></a><span class="api-symbol-owner">CatalystStateRestoreResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-effect-resolve-tick"><code>ResolveTick()</code></a><span class="api-symbol-owner">__CatalystRepairEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-restore-state"><code>RestoreState()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-effect-manager-random-function"><code>RandomFunction()</code></a> <span class="api-symbol-owner">| __CatalystRepairEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-flow-rate"><code>Rate()</code></a> <span class="api-symbol-owner">| __CatalystRepairFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-refresh"><code>Refresh()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-refresh"><code>Refresh()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-refresh"><code>Refresh()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-remove-effect"><code>RemoveEffect()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-remove-effect-manager"><code>RemoveEffectManager()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-remove-effects-by-identity"><code>RemoveEffectsByIdentity()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-remove-effects-tagged"><code>RemoveEffectsTagged()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-remove-flow"><code>RemoveFlow()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-remove-flow"><code>RemoveFlow()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-remove-modifier"><code>RemoveModifier()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-remove-modifier"><code>RemoveModifier()</code></a> <span class="api-symbol-owner">| CatalystModifierSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-remove-resource"><code>RemoveResource()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-remove-statistic"><code>RemoveStatistic()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-remove-tag"><code>RemoveTag()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-remove-tag"><code>RemoveTag()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-remove-tag"><code>RemoveTag()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-repair"><code>Repair()</code></a> <span class="api-symbol-owner">| CatalystStateRestoreResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-reset-all"><code>ResetAll()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-reset-duration"><code>ResetDuration()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-reset-duration"><code>ResetDuration()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-reset-to-starting"><code>ResetToStarting()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-callback-requirement-resolve"><code>Resolve()</code></a> <span class="api-symbol-owner">| CatalystStateCallbackRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-countdown-tracker-requirement-resolve"><code>Resolve()</code></a> <span class="api-symbol-owner">| CatalystStateCountdownTrackerRequirement</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-restore-result-resolve-callbacks"><code>ResolveCallbacks()</code></a> <span class="api-symbol-owner">| CatalystStateRestoreResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-effect-resolve-tick"><code>ResolveTick()</code></a> <span class="api-symbol-owner">| __CatalystRepairEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-restore-state"><code>RestoreState()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">S</div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-active"><code>SetActive()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-set-base-func"><code>SetBaseFunc()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-set-base-value"><code>SetBaseValue()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-set-chance-per-tick"><code>SetChancePerTick()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-set-chance-to-apply"><code>SetChanceToApply()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-set-clamped"><code>SetClamped()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-condition"><code>SetCondition()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-set-countdown-tracker"><code>SetCountdownTracker()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-countdown-tracker"><code>SetCountdownTracker()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-countdown-tracker"><code>SetCountdownTracker()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-set-current"><code>SetCurrent()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-set-duration"><code>SetDuration()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-duration"><code>SetDuration()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-set-fact-view"><code>SetFactView()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-set-fact-view"><code>SetFactView()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-set-family"><code>SetFamily()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-family"><code>SetFamily()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-family-mode"><code>SetFamilyMode()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-family-scope"><code>SetFamilyScope()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-set-identity"><code>SetIdentity()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-set-identity"><code>SetIdentity()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-set-identity"><code>SetIdentity()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-identity"><code>SetIdentity()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-set-identity"><code>SetIdentity()</code></a><span class="api-symbol-owner">CatalystModifierSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-set-identity"><code>SetIdentity()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-identity"><code>SetIdentity()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-set-identity"><code>SetIdentity()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-set-identity"><code>SetIdentity()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-layer"><code>SetLayer()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-set-layer-order"><code>SetLayerOrder()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-set-layer-order"><code>SetLayerOrder()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-maths-op"><code>SetMathsOp()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-set-maximum"><code>SetMaximum()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-set-maximum-bound-mode"><code>SetMaximumBoundMode()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-max-stacks"><code>SetMaxStacks()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-set-max-value"><code>SetMaxValue()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-set-meta"><code>SetMeta()</code></a><span class="api-symbol-owner">CatalystModifierSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-set-meta"><code>SetMeta()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-set-minimum"><code>SetMinimum()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-set-minimum-bound-mode"><code>SetMinimumBoundMode()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-set-min-value"><code>SetMinValue()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-set-modifier-order"><code>SetModifierOrder()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-set-multiplier"><code>SetMultiplier()</code></a><span class="api-symbol-owner">CatalystEffectTickResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-set-name"><code>SetName()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-set-name"><code>SetName()</code></a><span class="api-symbol-owner">CatalystModifierSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-set-name"><code>SetName()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-name"><code>SetName()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-set-name"><code>SetName()</code></a><span class="api-symbol-owner">CatalystSet</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-set-name"><code>SetName()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-set-on-apply"><code>SetOnApply()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-set-on-remove"><code>SetOnRemove()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-set-on-tick"><code>SetOnTick()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-set-paused"><code>SetPaused()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-set-post-process"><code>SetPostProcess()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-manager-set-random-function"><code>SetRandomFunction()</code></a><span class="api-symbol-owner">CatalystEffectManager</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-rate"><code>SetRate()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-set-reapply-policy"><code>SetReapplyPolicy()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-set-resolve-tick"><code>SetResolveTick()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-statistic-set-rounding-step"><code>SetRoundingStep()</code></a><span class="api-symbol-owner">CatalystStatistic</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-source-id"><code>SetSourceId()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-source-id"><code>SetSourceId()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-source-label"><code>SetSourceLabel()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-source-label"><code>SetSourceLabel()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-source-meta"><code>SetSourceMeta()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-source-meta"><code>SetSourceMeta()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-stack-func"><code>SetStackFunc()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-stack-mode"><code>SetStackMode()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-stacks"><code>SetStacks()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-set-succeeded"><code>SetSucceeded()</code></a><span class="api-symbol-owner">CatalystEffectTickResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-target-identity"><code>SetTargetIdentity()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-set-tick-interval"><code>SetTickInterval()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-set-time-scale"><code>SetTimeScale()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-set-value"><code>SetValue()</code></a><span class="api-symbol-owner">CatalystModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-repair-modifier-stack-func"><code>StackFunc()</code></a><span class="api-symbol-owner">__CatalystRepairModifier</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-start-automatic"><code>StartAutomatic()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-stop-automatic"><code>StopAutomatic()</code></a><span class="api-symbol-owner">CatalystCountdownTracker</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-succeeded"><code>Succeeded()</code></a><span class="api-symbol-owner">CatalystEffectApplicationResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-succeeded"><code>Succeeded()</code></a><span class="api-symbol-owner">CatalystEffectTickResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-change-succeeded"><code>Succeeded()</code></a><span class="api-symbol-owner">CatalystResourceChange</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-succeeded"><code>Succeeded()</code></a><span class="api-symbol-owner">CatalystResourceFlowResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-apply-result-succeeded"><code>Succeeded()</code></a><span class="api-symbol-owner">CatalystSetApplyResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-set-preview-result-succeeded"><code>Succeeded()</code></a><span class="api-symbol-owner">CatalystSetPreviewResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-state-capture-result-succeeded"><code>Succeeded()</code></a><span class="api-symbol-owner">CatalystStateCaptureResult</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-fact-binding-sync"><code>Sync()</code></a><span class="api-symbol-owner">CatalystFactBinding</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-active"><code>SetActive()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-set-base-func"><code>SetBaseFunc()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-set-base-value"><code>SetBaseValue()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-set-chance-per-tick"><code>SetChancePerTick()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-set-chance-to-apply"><code>SetChanceToApply()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-set-clamped"><code>SetClamped()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-condition"><code>SetCondition()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-set-countdown-tracker"><code>SetCountdownTracker()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-countdown-tracker"><code>SetCountdownTracker()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-countdown-tracker"><code>SetCountdownTracker()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-set-current"><code>SetCurrent()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-set-duration"><code>SetDuration()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-duration"><code>SetDuration()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-set-fact-view"><code>SetFactView()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-set-fact-view"><code>SetFactView()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-set-family"><code>SetFamily()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-family"><code>SetFamily()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-family-mode"><code>SetFamilyMode()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-family-scope"><code>SetFamilyScope()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-set-identity"><code>SetIdentity()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-set-identity"><code>SetIdentity()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-set-identity"><code>SetIdentity()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-identity"><code>SetIdentity()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-set-identity"><code>SetIdentity()</code></a> <span class="api-symbol-owner">| CatalystModifierSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-set-identity"><code>SetIdentity()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-identity"><code>SetIdentity()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-set-identity"><code>SetIdentity()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-set-identity"><code>SetIdentity()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-layer"><code>SetLayer()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-set-layer-order"><code>SetLayerOrder()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-set-layer-order"><code>SetLayerOrder()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-maths-op"><code>SetMathsOp()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-set-maximum"><code>SetMaximum()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-set-maximum-bound-mode"><code>SetMaximumBoundMode()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-max-stacks"><code>SetMaxStacks()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-set-max-value"><code>SetMaxValue()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-set-meta"><code>SetMeta()</code></a> <span class="api-symbol-owner">| CatalystModifierSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-set-meta"><code>SetMeta()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-set-minimum"><code>SetMinimum()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-set-minimum-bound-mode"><code>SetMinimumBoundMode()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-set-min-value"><code>SetMinValue()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-set-modifier-order"><code>SetModifierOrder()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-set-multiplier"><code>SetMultiplier()</code></a> <span class="api-symbol-owner">| CatalystEffectTickResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-set-name"><code>SetName()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-set-name"><code>SetName()</code></a> <span class="api-symbol-owner">| CatalystModifierSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-set-name"><code>SetName()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-name"><code>SetName()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-set-name"><code>SetName()</code></a> <span class="api-symbol-owner">| CatalystSet</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-set-name"><code>SetName()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-set-on-apply"><code>SetOnApply()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-set-on-remove"><code>SetOnRemove()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-set-on-tick"><code>SetOnTick()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-set-paused"><code>SetPaused()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-set-post-process"><code>SetPostProcess()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-manager-set-random-function"><code>SetRandomFunction()</code></a> <span class="api-symbol-owner">| CatalystEffectManager</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-rate"><code>SetRate()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-set-reapply-policy"><code>SetReapplyPolicy()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-set-resolve-tick"><code>SetResolveTick()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-statistic-set-rounding-step"><code>SetRoundingStep()</code></a> <span class="api-symbol-owner">| CatalystStatistic</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-source-id"><code>SetSourceId()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-source-id"><code>SetSourceId()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-source-label"><code>SetSourceLabel()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-source-label"><code>SetSourceLabel()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-source-meta"><code>SetSourceMeta()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-set-source-meta"><code>SetSourceMeta()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-stack-func"><code>SetStackFunc()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-stack-mode"><code>SetStackMode()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-stacks"><code>SetStacks()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-set-succeeded"><code>SetSucceeded()</code></a> <span class="api-symbol-owner">| CatalystEffectTickResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-target-identity"><code>SetTargetIdentity()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-set-tick-interval"><code>SetTickInterval()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-set-time-scale"><code>SetTimeScale()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-set-value"><code>SetValue()</code></a> <span class="api-symbol-owner">| CatalystModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-repair-modifier-stack-func"><code>StackFunc()</code></a> <span class="api-symbol-owner">| __CatalystRepairModifier</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-start-automatic"><code>StartAutomatic()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-countdown-tracker-stop-automatic"><code>StopAutomatic()</code></a> <span class="api-symbol-owner">| CatalystCountdownTracker</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-application-result-succeeded"><code>Succeeded()</code></a> <span class="api-symbol-owner">| CatalystEffectApplicationResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-tick-result-succeeded"><code>Succeeded()</code></a> <span class="api-symbol-owner">| CatalystEffectTickResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-change-succeeded"><code>Succeeded()</code></a> <span class="api-symbol-owner">| CatalystResourceChange</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-result-succeeded"><code>Succeeded()</code></a> <span class="api-symbol-owner">| CatalystResourceFlowResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-apply-result-succeeded"><code>Succeeded()</code></a> <span class="api-symbol-owner">| CatalystSetApplyResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-set-preview-result-succeeded"><code>Succeeded()</code></a> <span class="api-symbol-owner">| CatalystSetPreviewResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-state-capture-result-succeeded"><code>Succeeded()</code></a> <span class="api-symbol-owner">| CatalystStateCaptureResult</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-fact-binding-sync"><code>Sync()</code></a> <span class="api-symbol-owner">| CatalystFactBinding</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">U</div>
-    <div class="api-symbol-row"><a href="#catalyst-fact-binding-unbind"><code>Unbind()</code></a><span class="api-symbol-owner">CatalystFactBinding</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-unbind-chance-per-tick-statistic"><code>UnbindChancePerTickStatistic()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-effect-unbind-chance-to-apply-statistic"><code>UnbindChanceToApplyStatistic()</code></a><span class="api-symbol-owner">CatalystEffect</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-unbind-maximum-statistic"><code>UnbindMaximumStatistic()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-unbind-minimum-statistic"><code>UnbindMinimumStatistic()</code></a><span class="api-symbol-owner">CatalystResource</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-resource-flow-unbind-rate-statistic"><code>UnbindRateStatistic()</code></a><span class="api-symbol-owner">CatalystResourceFlow</span></div>
-    <div class="api-symbol-row"><a href="#catalyst-subscription-unsubscribe"><code>Unsubscribe()</code></a><span class="api-symbol-owner">CatalystSubscription</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-fact-binding-unbind"><code>Unbind()</code></a> <span class="api-symbol-owner">| CatalystFactBinding</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-unbind-chance-per-tick-statistic"><code>UnbindChancePerTickStatistic()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-effect-unbind-chance-to-apply-statistic"><code>UnbindChanceToApplyStatistic()</code></a> <span class="api-symbol-owner">| CatalystEffect</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-unbind-maximum-statistic"><code>UnbindMaximumStatistic()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-unbind-minimum-statistic"><code>UnbindMinimumStatistic()</code></a> <span class="api-symbol-owner">| CatalystResource</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-resource-flow-unbind-rate-statistic"><code>UnbindRateStatistic()</code></a> <span class="api-symbol-owner">| CatalystResourceFlow</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-subscription-unsubscribe"><code>Unsubscribe()</code></a> <span class="api-symbol-owner">| CatalystSubscription</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">W</div>
-    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-won-family"><code>WonFamily()</code></a><span class="api-symbol-owner">CatalystModifierEvaluation</span></div>
+    <div class="api-symbol-row"><a href="#catalyst-modifier-evaluation-won-family"><code>WonFamily()</code></a> <span class="api-symbol-owner">| CatalystModifierEvaluation</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">Enums</div>
     <div class="api-symbol-row"><a href="#enum-e-cat-countdown-mode"><code>eCatCountdownMode</code></a><span class="api-symbol-owner">enum</span></div>

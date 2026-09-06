@@ -1229,7 +1229,7 @@ def generate(manifest_path: Path, source_root: Path, output_path: Path | None, d
                 lines.append('  </div>')
             lines.append(f'  <div class="api-symbol-letter"><div class="api-symbol-letter-heading">{html.escape(letter)}</div>')
             current_letter = letter
-        owner_text = f'<span class="api-symbol-owner">{html.escape(sym.owner)}</span>' if sym.owner else ''
+        owner_text = f' <span class="api-symbol-owner">| {html.escape(sym.owner)}</span>' if sym.owner else ''
         lines.append(f'    <div class="api-symbol-row"><a href="#{symbol_anchor(sym)}"><code>{html.escape(sym.name)}{("()" if sym.kind != "type" else "")}</code></a>{owner_text}</div>')
     if current_letter is not None:
         lines.append('  </div>')
