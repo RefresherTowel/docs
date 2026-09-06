@@ -362,7 +362,7 @@ Debug pause is separate. A machine may also be stopped for inspection by:
 
 The status in the toolbar tells you whether the selected machine is gameplay-paused, paused by a machine-local Lens reason, globally debug-paused, or running.
 
-Timing can also make a machine appear to skip work without being paused. In EVENT mode, a local scale below `1` means one call may only contribute part of a logical update. In DELTA_TIME mode, a short frame can also leave only part of an update stored. A local scale of `0` stops the machine from reaching new logical updates at all. The Machine page shows the global update mode, the stored fractional credit, the local time scale, and the global root time scale.
+Timing can also make a machine appear to skip work without being paused. In EVENT mode, a local scale below `1` means one call may only contribute part of a logical update. In ELAPSED_TIME mode, a short frame can also leave only part of an update stored. A local scale of `0` stops the machine from reaching new logical updates at all. The Machine page shows the global update mode, the stored fractional credit, the local time scale, and the global root time scale.
 
 ---
 

@@ -223,6 +223,8 @@ types:
         - CreateSubMachine
         - HasSubMachine
         - GetSubMachine
+        - LockExitUntilSubIn
+        - LockExitWhileSubNot
         - OnSubmachineEnter
         - OnSubmachineExit
       Exit locks and guards:

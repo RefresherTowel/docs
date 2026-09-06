@@ -570,4 +570,4 @@ If Settings is later opened from a different state with `PushState("Settings")`,
 
 The examples so far have used `GetStateTime()` as a convenient count without spending much time on how Statement decides when an update should happen.
 
-[**Timing, Pause & Update Behaviour**](timing_pause_and_updates) covers that clock, including Statement's default event-based updates, optional `delta_time` scheduling, local and global time scale, state timers, gameplay pause, and how timing moves through nested machines.
+[**Timing, Pause & Update Behaviour**](timing_pause_and_updates) covers that clock, including Statement's default event-based updates, optional elapsed-time scheduling, local and global time scale, state timers, gameplay pause, and how timing moves through nested machines.

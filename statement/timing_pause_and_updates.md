@@ -28,9 +28,9 @@ and we've treated that as "give Statement its update." With Statement's default 
 
 Time scale can change how often those opportunities become whole state-machine updates, and Statement can also switch globally to using GameMaker's `delta_time` when you want elapsed frame time to decide the pace instead. Statement will try to make it so that if a frame takes longer to update, it has the chance to run the state multiple times in a frame, if it runs too quickly, it will try to run the state fewer times (skipping updates occasionally when a frame runs).
 
-Statement can't apply `delta_time` to the code inside your Update handlers, so `DELTA_TIME` mode instead uses a fixed-step approximation: It measures how much real frame time has passed and runs as many ordinary logical updates as that time represents.
+Statement can't apply `delta_time` to the code inside your Update handlers, so `ELAPSED_TIME` mode instead uses a fixed-step approximation: It measures how much real frame time has passed and runs as many ordinary logical updates as that time represents.
 
-This preserves the average rate of ordinary step-based behaviour, but it isn't the same as writing properly delta-aware code. Fast frames can produce no logical update, while slow frames can produce several, so input checks and other once-per-Step behaviour need particular care when Statement is running in `DELTA_TIME` mode (for instance, if you are checking for player input with `keyboard_check_pressed()` inside of Update for a state and Statement happens to skip a logical update for that frame because of fast running frames, that input can be completely missed, or conversely, if Statement runs multiple logical updates during one frame, the same input can potentially be seen more than once, so a combination of code outside of Statement and inside of Statement can be better here).
+This preserves the average rate of ordinary step-based behaviour, but it isn't the same as writing properly delta-aware code. Fast frames can produce no logical update, while slow frames can produce several, so input checks and other once-per-Step behaviour need particular care when Statement is running in `ELAPSED_TIME` mode (for instance, if you are checking for player input with `keyboard_check_pressed()` inside of Update for a state and Statement happens to skip a logical update for that frame because of fast running frames, that input can be completely missed, or conversely, if Statement runs multiple logical updates during one frame, the same input can potentially be seen more than once, so a combination of code outside of Statement and inside of Statement can be better here).
 
 The state code itself still looks like normal step-based GameMaker code:
 
@@ -61,7 +61,7 @@ state_machine.Update()
 one Statement logical update
 ```
 
-Once time scale, pause, `delta_time` scheduling, or nested machines get involved, those two counts can diverge. `GetStateTime()` and Statement's state timer count logical updates, not raw Step Events.
+Once time scale, pause, elapsed-time scheduling, or nested machines get involved, those two counts can diverge. `GetStateTime()` and Statement's state timer count logical updates, not raw Step Events.
 
 ---
 
@@ -84,10 +84,10 @@ var _mode = StatementGetUpdateMode();
 If you want Statement to use real elapsed frame time instead, switch the whole library to:
 
 ```js
-StatementSetUpdateMode(eStatementUpdateMode.DELTA_TIME);
+StatementSetUpdateMode(eStatementUpdateMode.ELAPSED_TIME);
 ```
 
-In **DELTA_TIME** mode, a root machine being updated by your game compares the current `delta_time` with GameMaker's target frame duration and turns that into update credit.
+In **ELAPSED_TIME** mode, a root machine being updated by your game compares the current `delta_time` with GameMaker's target frame duration and turns that into update credit.
 
 Imagine the current call contributes half an update:
 
@@ -117,15 +117,15 @@ The important part is that the state itself doesn't have to care which mode Stat
 x += 4;
 ```
 
-still runs once for each logical update. `EVENT` mode starts from one opportunity per call, while DELTA_TIME mode starts from however much frame time has actually passed.
+still runs once for each logical update. `EVENT` mode starts from one opportunity per call, while ELAPSED_TIME mode starts from however much frame time has actually passed.
 
-Because the update mode is global, you don't set `EVENT` or `DELTA_TIME` separately on individual machines. Switching it changes where all Statement machines get their update timing from.
+Because the update mode is global, you don't set `EVENT` or `ELAPSED_TIME` separately on individual machines. Switching it changes where all Statement machines get their update timing from.
 
 ---
 
 ## Several updates in one call have a cap
 
-One call to `Update()` can sometimes produce several logical updates. In `DELTA_TIME` mode that can happen while catching up after a slow frame, and in either mode a high enough time scale can create several updates from one opportunity.
+One call to `Update()` can sometimes produce several logical updates. In `ELAPSED_TIME` mode that can happen while catching up after a slow frame, and in either mode a high enough time scale can create several updates from one opportunity.
 
 Statement limits the number of whole updates one `Update()` call may process with:
 
@@ -149,7 +149,7 @@ drop the extra 4 whole updates
 keep 0.4 credit
 ```
 
-That lets `DELTA_TIME` mode catch up after an ordinary slow frame, while preventing a very large hitch or extreme time scale from turning one call into an essentially unlimited replay loop.
+That lets `ELAPSED_TIME` mode catch up after an ordinary slow frame, while preventing a very large hitch or extreme time scale from turning one call into an essentially unlimited replay loop.
 
 ---
 
@@ -171,7 +171,7 @@ state_machine.SetTimeScale(2);
 
 that same `EVENT`-mode machine can process two logical updates from each ordinary call to `Update()`.
 
-`DELTA_TIME` mode uses the same scale in exactly the same place. A scale of `0.5` halves the updates produced by elapsed frame time, while `2` doubles them. Both update modes behave the same in regards to the time scaling.
+`ELAPSED_TIME` mode uses the same scale in exactly the same place. A scale of `0.5` halves the updates produced by elapsed frame time, while `2` doubles them. Both update modes behave the same in regards to the time scaling.
 
 Read the current value with:
 
@@ -253,7 +253,7 @@ if (state_machine.GetStateTime() >= 20) {
 
 will become true during the twentieth logical update of that state.
 
-In the default `EVENT` mode, with a scale of `1` and one `Update()` call per Step, that lines up with the twentieth Step exactly. At `0.5`, reaching age `20` takes twice as many update calls. At `2`, it takes half as many. `DELTA_TIME` mode can produce zero, one, or several logical updates during a Step depending on how much real frame time passed, but the state age still counts those logical updates in exactly the same way.
+In the default `EVENT` mode, with a scale of `1` and one `Update()` call per Step, that lines up with the twentieth Step exactly. At `0.5`, reaching age `20` takes twice as many update calls. At `2`, it takes half as many. `ELAPSED_TIME` mode can produce zero, one, or several logical updates during a Step depending on how much real frame time passed, but the state age still counts those logical updates in exactly the same way.
 
 You can replace the current age manually when you have a reason to:
 
@@ -408,7 +408,7 @@ This only changes inherited **pause**. Time scale composes through the hierarchy
 
 ## Child timing comes from parent updates
 
-A hosted child doesn't use `EVENT` or `DELTA_TIME` to decide its timing separately. Every time its parent actually processes one logical update opportunity, Statement calls the child once, and the child applies its own local time scale to those parent opportunities.
+A hosted child doesn't use `EVENT` or `ELAPSED_TIME` to decide its timing separately. Every time its parent actually processes one logical update opportunity, Statement calls the child once, and the child applies its own local time scale to those parent opportunities.
 
 Suppose:
 
@@ -437,7 +437,7 @@ player local scale 0.5
 half of those child updates
 ```
 
-So the child ends up at one quarter of the normal update rate. The same relationship holds in `DELTA_TIME` mode: the root is simply following elapsed frame time instead of beginning each ordinary `Update()` call with a flat `1`.
+So the child ends up at one quarter of the normal update rate. The same relationship holds in `ELAPSED_TIME` mode: the root is simply following elapsed frame time instead of beginning each ordinary `Update()` call with a flat `1`.
 
 A child with local scale `1` simply follows the parent's actual cadence. A grandchild repeats the same process from its own parent. There is no `SetInheritTimeScale()` switch because a child is already driven by the updates that make it through the hierarchy above it.
 
@@ -459,7 +459,7 @@ var _move = new StatementState(self, "Move")
 
 If the object's Step Event calls `state_machine.Update()` once, this handler runs once per Step at the normal time scale, and the movement line handles the frame duration itself.
 
-You generally wouldn't combine that style with Statement's `DELTA_TIME` mode for the same piece of behaviour. `DELTA_TIME` mode already changes how often the handler runs according to elapsed frame time, so multiplying the movement by `delta_time` inside the handler as well would apply the same rough idea twice.
+You generally wouldn't combine that style with Statement's `ELAPSED_TIME` mode for the same piece of behaviour. `ELAPSED_TIME` mode already changes how often the handler runs according to elapsed frame time, so multiplying the movement by `delta_time` inside the handler as well would apply the same rough idea twice.
 
 ---
 
@@ -488,7 +488,7 @@ one inner logical update
 
 You don't need to configure that inner machine differently.
 
-This matters most in `DELTA_TIME` mode. A slow frame can make the outer machine process several logical updates in one Step, which means the inner machine may be called several times. Those inner calls each receive one opportunity; they don't each read and apply the same GameMaker `delta_time` again. The global Statement scale isn't applied again either, although the inner machine's own local time scale still is.
+This matters most in `ELAPSED_TIME` mode. A slow frame can make the outer machine process several logical updates in one Step, which means the inner machine may be called several times. Those inner calls each receive one opportunity; they don't each read and apply the same GameMaker `delta_time` again. The global Statement scale isn't applied again either, although the inner machine's own local time scale still is.
 
 A normal child created with:
 
@@ -511,7 +511,7 @@ stored credit: 0.4
 Changing the global update mode doesn't clear that partial progress:
 
 ```js
-StatementSetUpdateMode(eStatementUpdateMode.DELTA_TIME);
+StatementSetUpdateMode(eStatementUpdateMode.ELAPSED_TIME);
 ```
 
 The machine still has its `0.4` afterward. That stored fraction means the same thing in either mode, so there is nothing to clear when you switch.

@@ -109,7 +109,7 @@ Movement, aiming, checking input, steering AI, checking a timer, and deciding to
 
 By default, one call to `Update()` gives the machine one logical update, just like ordinary Step Event code. Statement can also use real elapsed frame time to decide how often these logical updates happen, which means time scale and slow motion can affect the whole state without every line of state code having to multiply by a delta value.
 
-It's essentially a poor man's `delta_time` (if you don't know what `delta_time` is, don't worry, it's not a detail you need to learn to use Statement). We will get deeper into that on the timing page, after the basic state-machine behaviour is familiar.
+It's essentially a state machine derived variation on `delta_time` (if you don't know what `delta_time` is, don't worry, it's not a detail you need to learn to use Statement). We will get deeper into that on the timing page, after the basic state-machine behaviour is familiar.
 
 ---
 

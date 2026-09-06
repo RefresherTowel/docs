@@ -1537,6 +1537,8 @@ new StatementState(id, name)
 <tr><td><a href="#statement-state-create-sub-machine"><code>CreateSubMachine()</code></a></td><td>Creates and attaches a child <a href="#statement"><code>Statement</code></a> machine to this state.</td></tr>
 <tr><td><a href="#statement-state-has-sub-machine"><code>HasSubMachine()</code></a></td><td>Returns whether this state hosts a child machine.</td></tr>
 <tr><td><a href="#statement-state-get-sub-machine"><code>GetSubMachine()</code></a></td><td>Returns the child machine hosted by this state.</td></tr>
+<tr><td><a href="#statement-state-lock-exit-until-sub-in"><code>LockExitUntilSubIn()</code></a></td><td>Prevents normal exits while this state&#x27;s child machine is not currently in the supplied state. Does not restrict exit when no child machine exists.</td></tr>
+<tr><td><a href="#statement-state-lock-exit-while-sub-not"><code>LockExitWhileSubNot()</code></a></td><td>Prevents normal exits while the supplied child-machine condition returns false. The callback is called as fn(submachine). Does not restrict exit when no child machine exists.</td></tr>
 <tr><td><a href="#statement-state-on-submachine-enter"><code>OnSubmachineEnter()</code></a></td><td>Sets a callback that runs after this state enters and its child machine is ready. It is called as fn(state, submachine, transition).</td></tr>
 <tr><td><a href="#statement-state-on-submachine-exit"><code>OnSubmachineExit()</code></a></td><td>Sets a callback that runs when this state exits and its child machine stops or suspends. It is called as fn(state, submachine, transition).</td></tr>
 </tbody></table>
@@ -1667,6 +1669,44 @@ new StatementState(id, name)
       <span class="api-argument-name">function</span>
       <span class="api-argument-type">Function</span>
       <span class="api-argument-description">The callback function.</span>
+    </div>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Returns</div>
+    <div class="api-return-row api-return-only">
+      <span class="api-return-type">Struct.<a href="#statement-state">StatementState</a></span>
+    </div>
+  </div>
+</div>
+
+<div class="api-method-entry" id="statement-state-lock-exit-until-sub-in">
+  <div class="api-method-name">LockExitUntilSubIn(state_name)</div>
+  <p class="api-method-summary">Prevents normal exits while this state&#x27;s child machine is not currently in the supplied state. Does not restrict exit when no child machine exists.</p>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Arguments</div>
+    <div class="api-argument">
+      <span class="api-argument-name">state_name</span>
+      <span class="api-argument-type">Any</span>
+      <span class="api-argument-description">The child state name/tag value required before the host may exit.</span>
+    </div>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Returns</div>
+    <div class="api-return-row api-return-only">
+      <span class="api-return-type">Struct.<a href="#statement-state">StatementState</a></span>
+    </div>
+  </div>
+</div>
+
+<div class="api-method-entry" id="statement-state-lock-exit-while-sub-not">
+  <div class="api-method-name">LockExitWhileSubNot(condition)</div>
+  <p class="api-method-summary">Prevents normal exits while the supplied child-machine condition returns false. The callback is called as fn(submachine). Does not restrict exit when no child machine exists.</p>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Arguments</div>
+    <div class="api-argument">
+      <span class="api-argument-name">condition</span>
+      <span class="api-argument-type">Function</span>
+      <span class="api-argument-description">Function that returns true when the host state may exit.</span>
     </div>
   </div>
   <div class="api-detail-section">
@@ -3637,7 +3677,7 @@ Stores <a href="#statement"><code>Statement</code></a> Lens selection, saved vie
         <span class="api-enum-member">EVENT</span>
       </div>
       <div class="api-enum-row api-enum-row-compact">
-        <span class="api-enum-member">DELTA_TIME</span>
+        <span class="api-enum-member">ELAPSED_TIME</span>
       </div>
       <div class="api-enum-row api-enum-row-compact">
         <span class="api-enum-member">NUM</span>
@@ -4081,6 +4121,8 @@ Stores <a href="#statement"><code>Statement</code></a> Lens selection, saved vie
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">L</div>
     <div class="api-symbol-row"><a href="#statement-lens-load-saved-view"><code>LoadSavedView()</code></a> <span class="api-symbol-owner">| StatementLens</span></div>
     <div class="api-symbol-row"><a href="#statement-state-lock-exit"><code>LockExit()</code></a> <span class="api-symbol-owner">| StatementState</span></div>
+    <div class="api-symbol-row"><a href="#statement-state-lock-exit-until-sub-in"><code>LockExitUntilSubIn()</code></a> <span class="api-symbol-owner">| StatementState</span></div>
+    <div class="api-symbol-row"><a href="#statement-state-lock-exit-while-sub-not"><code>LockExitWhileSubNot()</code></a> <span class="api-symbol-owner">| StatementState</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">O</div>
     <div class="api-symbol-row"><a href="#statement-state-on-submachine-enter"><code>OnSubmachineEnter()</code></a> <span class="api-symbol-owner">| StatementState</span></div>

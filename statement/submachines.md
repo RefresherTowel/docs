@@ -338,19 +338,16 @@ Recovery
 
 and an ordinary request to leave AttackSequence should only succeed once the child reaches Recovery.
 
-The parent can use the same exit-guard system we already learned:
+The parent has a dedicated helper for this:
 
 ```js
 var _attack_sequence = new StatementState(self, "AttackSequence")
-	.AddExitGuard("child_recovered", function(_state) {
-		var _child = _state.GetSubMachine();
-		return _child.IsInState("Recovery");
-	});
+	.LockExitUntilSubIn("Recovery");
 ```
 
-Any non-forced transition out of AttackSequence now asks its child machine first.
+Any non-forced transition out of AttackSequence now only succeeds while its child machine is currently in Recovery.
 
-If the guard fails:
+If the helper blocks:
 
 ```js
 var _result = state_machine.ChangeState("Idle");
@@ -362,19 +359,18 @@ the result reports:
 eStatementTransitionBlockReason.EXIT_GUARD
 ```
 
-and:
+because the submachine helper is backed by the same exit-guard system we already learned.
+
+If leaving depends on something more complicated than one child state, you can instead provide a condition:
 
 ```js
-_result.GetBlockDetail();
+var _attack_sequence = new StatementState(self, "AttackSequence")
+	.LockExitWhileSubNot(function(_child) {
+		return _child.IsInState("Recovery") && recovery_finished;
+	});
 ```
 
-returns the guard name:
-
-```text
-child_recovered
-```
-
-There isn't a separate submachine locking API for this case. The child state is just part of the condition the parent uses to decide whether it may exit.
+The condition receives the child machine and returns `true` when the parent may leave. `LockExitUntilSubIn()` and `LockExitWhileSubNot()` replace one another if you configure both on the same state, but unrelated exit guards remain attached. If the state doesn't have a child machine, neither helper blocks it from exiting.
 
 A forced transition still bypasses the guard:
 
