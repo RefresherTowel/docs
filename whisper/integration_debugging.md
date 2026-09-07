@@ -2,7 +2,7 @@
 layout: default
 title: Integration and Debugging
 parent: Whisper
-nav_order: 2
+nav_order: 4
 ---
 <!--
 / integration_debugging.md - Changelog:

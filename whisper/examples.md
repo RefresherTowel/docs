@@ -2,7 +2,7 @@
 layout: default
 title: Examples
 parent: Whisper
-nav_order: 6
+nav_order: 5
 ---
 <!--
 /// examples.md - Changelog:

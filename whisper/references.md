@@ -1,8 +1,8 @@
 ---
 layout: default
-title: Scripting Reference
+title: API Reference
 parent: Whisper
-nav_order: 5
+nav_order: 6
 ---
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
@@ -15,7 +15,7 @@ nav_order: 5
 </details>
 </div>
 
-# Scripting Reference
+# API Reference
 
 This page documents the public Whisper API.
 

@@ -2,7 +2,7 @@
 layout: default
 title: Usage
 parent: Whisper
-nav_order: 4
+nav_order: 2
 ---
 <!--
 /// usage.md - Changelog:
