@@ -1,9 +1,10 @@
 ---
 layout: default
-parent: Whisper
 title: Concepts
-nav_order: 1
+parent: Whisper
+nav_order: 2
 ---
+
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
