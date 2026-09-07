@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Statement
+title: Statement 2
 redirect_from:
   - /statement/integration/
   - /statement/scripting/
@@ -32,11 +32,11 @@ And then, slowly, you add a few flags. Then a switch. Then a second switch "just
 
 Yeah, that's what Statement is here to help with.
 
-**Statement** is a feature rich **state machine framework** for GameMaker that replaces that mess with something simpler while also being far more powerful.
+**Statement 2** is a feature rich **state machine framework** for GameMaker that replaces that mess with something simpler while also being far more powerful.
 
 You can start extremely simply, then add the more powerful parts only when your game actually needs them.
 
-<iframe frameborder="0" src="https://itch.io/embed/4088827?linkback=true&amp;border_width=2&amp;bg_color=132f4b&amp;fg_color=ffffff&amp;link_color=007992&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/statement">Statement by RefresherTowel</a></iframe>
+<iframe frameborder="0" src="https://itch.io/embed/4088827?linkback=true&amp;border_width=2&amp;bg_color=132f4b&amp;fg_color=ffffff&amp;link_color=007992&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/statement">Statement 2 by RefresherTowel</a></iframe>
 
 ---
 
@@ -102,7 +102,7 @@ Statement also includes **Statement Lens**, a visual debugger for inspecting you
 
 Once a machine becomes large enough that looking at the code no longer immediately tells you what happened, Lens can show the active state, child machines, blocked transitions, queued requests, transition rules, history, pause reasons, and the routes the machine has actually taken. You can also actively drive your state machine via Statement Lens (for instance, force a character to transition to their jumping state), which can be extremely helpful when dealing with complicated state machines like a bosses fight phases, allowing you to swap between states at will.
 
-![Statement Lens showing a live state machine](../assets/statement_lens.png)
+![Statement Lens showing a live state machine]({{ '/assets/statement_lens_state_driving2.gif' | relative-url }})
 
 > *Statement Lens is free for all owners of Statement and is included with the library.*
 {: .note}

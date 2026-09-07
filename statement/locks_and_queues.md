@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Locks & Queues
-parent: Statement
+parent: Statement 2
 nav_order: 5
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Automatic Transitions
-parent: Statement
+parent: Statement 2
 nav_order: 4
 ---
 
