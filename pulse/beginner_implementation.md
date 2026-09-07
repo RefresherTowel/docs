@@ -4,7 +4,6 @@ title: Beginner Implementation
 parent: Pulse
 nav_order: 2
 ---
-
 <!--
 /// beginner_implementation.md - Changelog:
 /// - 20-02-2026: New Beginner Implementation page.

@@ -4,7 +4,6 @@ title: Advanced Implementation
 parent: Pulse
 nav_order: 3
 ---
-
 <!--
 /// advanced_implementation.md - Changelog:
 /// - 20-02-2026: New Advanced Implementation page.

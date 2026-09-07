@@ -4,7 +4,6 @@ title: Quickstart
 parent: Pulse
 nav_order: 1
 ---
-
 <!--
 /// quickstart.md - Changelog:
 /// - 20-02-2026: New Quickstart page.

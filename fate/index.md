@@ -4,7 +4,6 @@ title: Fate
 nav_order: 7
 has_children: true
 ---
-
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
@@ -16,7 +15,7 @@ has_children: true
 </details>
 </div>
 
-![Fate icon](../assets/fate_icon.png)
+![Fate icon]({{ '/assets/fate_icon.png' | relative_url }})
 {: .text-center}
 
 *Decide your players' Fate.*
@@ -72,7 +71,7 @@ This lets you start simple, and gradually add complexity as you become more comf
 
 If you like Fate, then be sure to check out my other libraries:
 
-[![Statement icon](../assets/statement_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/statement)
+[![Statement icon]({{ '/assets/statement_icon.png' | relative_url }}){: style="max-width: 256px;"}](https://refreshertowel.itch.io/statement)
 {: .text-center}
 
 ### [**Statement**](https://refreshertowel.itch.io/statement)
@@ -83,7 +82,7 @@ An easy to use state manager that comes packed with a lot of awesome features.
 
 ---
 
-[![Pulse icon](../assets/pulse_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/pulse)
+[![Pulse icon]({{ '/assets/pulse_icon.png' | relative_url }}){: style="max-width: 256px;"}](https://refreshertowel.itch.io/pulse)
 {: .text-center}
 
 ### [**Pulse**](https://refreshertowel.itch.io/pulse)
@@ -94,7 +93,7 @@ A signals & queries manager that allows you to easily uncouple dependencies and 
 
 ---
 
-[![Catalyst icon](../assets/catalyst_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/catalyst)
+[![Catalyst icon]({{ '/assets/catalyst_icon.png' | relative_url }}){: style="max-width: 256px;"}](https://refreshertowel.itch.io/catalyst)
 {: .text-center}
 
 ### [**Catalyst**](https://refreshertowel.itch.io/catalyst)
@@ -105,7 +104,7 @@ An extremely powerful stat manager, allowing you to quickly build stats for your
 
 ---
 
-[![Whisper icon](../assets/whisper_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/whisper)
+[![Whisper icon]({{ '/assets/whisper_icon.png' | relative_url }}){: style="max-width: 256px;"}](https://refreshertowel.itch.io/whisper)
 {: .text-center}
 
 ### [**Whisper**](https://refreshertowel.itch.io/whisper)
@@ -116,7 +115,7 @@ A narrative manager that allows you to create complex, dynamic storytelling by p
 
 ---
 
-[![Quill icon](../assets/quill_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/quill)
+[![Quill icon]({{ '/assets/quill_icon.png' | relative_url }}){: style="max-width: 256px;"}](https://refreshertowel.itch.io/quill)
 {: .text-center}
 
 ### [**Quill**](https://refreshertowel.itch.io/quill)
@@ -127,7 +126,7 @@ A free advanced text box creator for that automatically gives you text selection
 
 ---
 
-[![Echo icon](../assets/echo_icon.png){: style="max-width: 256px;"}](https://refreshertowel.itch.io/echo)
+[![Echo icon]({{ '/assets/echo_icon.png' | relative_url }}){: style="max-width: 256px;"}](https://refreshertowel.itch.io/echo)
 {: .text-center}
 
 ### [**Echo**](https://refreshertowel.itch.io/echo)

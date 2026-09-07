@@ -4,7 +4,6 @@ title: Common Patterns and Recipes
 parent: Pulse
 nav_order: 4
 ---
-
 <!--
 /// patterns.md - Changelog:
 /// - 20-02-2026: New patterns/recipes page.

@@ -4,7 +4,6 @@ title: Integration and Debugging
 parent: Whisper
 nav_order: 2
 ---
-
 <!--
 / integration_debugging.md - Changelog:
 / - 25-01-2026: Initial draft (install, bootstrapping, run ids, debugging helpers).

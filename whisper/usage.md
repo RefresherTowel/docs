@@ -4,7 +4,6 @@ title: Usage
 parent: Whisper
 nav_order: 4
 ---
-
 <!--
 /// usage.md - Changelog:
 /// - 25-01-2026: Initial Whisper usage docs.
@@ -315,7 +314,7 @@ Whisper can:
 
 This is big enough that it has its own page:
 
-* [Verbs & Insertions]({% link whisper/verbs_insertions.md %})
+* [Verbs & Insertions](./verbs_insertions.md)
 
 But here's the short version so you know where it fits:
 
@@ -372,7 +371,7 @@ That's what the debug helpers are for:
 
 Those are covered here:
 
-* [Integration & Debugging]({% link whisper/integration_debugging.md %})
+* [Integration & Debugging](./integration_debugging.md)
 
 ---
 

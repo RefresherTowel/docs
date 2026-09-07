@@ -4,7 +4,6 @@ title: Scripting Reference
 parent: Whisper
 nav_order: 5
 ---
-
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>

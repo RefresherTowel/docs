@@ -4,7 +4,6 @@ title: Examples
 parent: Whisper
 nav_order: 6
 ---
-
 <!--
 /// examples.md - Changelog:
 /// - 25-01-2026: Document manual tick time option.

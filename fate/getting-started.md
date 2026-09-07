@@ -4,7 +4,6 @@ title: Getting Started
 parent: Fate
 nav_order: 1
 ---
-
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>

@@ -4,7 +4,6 @@ title: Scripting Reference
 parent: Quill
 nav_order: 4
 ---
-
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>

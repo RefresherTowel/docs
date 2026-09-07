@@ -4,7 +4,6 @@ title: Scripting Reference
 parent: Pulse
 nav_order: 5
 ---
-
 <!--
 /// scripting.md - Changelog:
 /// - 23-12-2025: Updated Pulse public API coverage and requirements.

@@ -4,7 +4,6 @@ title: Whisper
 nav_order: 6
 has_children: true
 ---
-
 <!--
 /// whisper/index.md - Changelog:
 /// - 25-01-2026: Initial Whisper docs draft.
@@ -21,7 +20,7 @@ has_children: true
 </details>
 </div>
 
-![Whisper icon](../assets/whisper_icon.png)
+![Whisper icon]({{ '/assets/whisper_icon.png' | relative_url }})
 {: .text-center}
 
 *Small story bits, picked at the right moment.*

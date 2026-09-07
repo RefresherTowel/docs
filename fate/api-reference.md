@@ -4,7 +4,6 @@ title: Scripting Reference
 parent: Fate
 nav_order: 6
 ---
-
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>

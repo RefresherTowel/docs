@@ -4,7 +4,6 @@ title: Beginner Workflow
 parent: Fate
 nav_order: 2
 ---
-
 <div class="sticky-toc" markdown="block">
 <details open markdown="block">
   <summary>On this page</summary>
