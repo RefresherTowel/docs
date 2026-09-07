@@ -1,5 +1,6 @@
 ---
 layout: default
+parent: Whisper
 title: Concepts
 nav_order: 1
 ---
