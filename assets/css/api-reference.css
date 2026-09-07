@@ -7,9 +7,9 @@
 
 .main-content .api-type-title {
   position: relative;
-	margin-top: 3rem;
+	margin-top: 4rem;
 	padding-top: 2rem;
-	border-top: 2px dotted rgba(255, 255, 255, 0.1);
+	border-top: 2px dotted rgba(255, 255, 255, 0.25);
 
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 1.4rem;
@@ -27,7 +27,7 @@
 	left: 25%;
 	width: 50%;
 	height: 4px;
-	background: rgb(100, 100, 100);
+	background: rgb(200, 200, 200);
 }
 
 /* A conceptual H2 already provides the section break. Avoid immediately
@@ -62,6 +62,13 @@
   text-decoration: underline;
 }
 
+.main-content h2 {
+  font-weight: 500 !important;
+  font-size: 2.5rem !important;
+  padding-top: 2rem !important;
+  letter-spacing: 0.01em !important;
+}
+
 /* -------------------------------------------------------------------------- */
 /* Function subsections                                                       */
 /* -------------------------------------------------------------------------- */
@@ -69,18 +76,20 @@
 /* Function groups stay within the same top-level API category, but later
    groups need a clear boundary while scanning a long reference page. */
 .main-content .api-function-subsection-title {
-  margin-top: 3rem;
+  margin-top: 5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.22);
-  font-size: 1.15rem;
-  font-weight: 500;
+  padding-left: 3rem;
+  border-top: 3px dotted rgba(255, 255, 255, 0.22);
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.025em !important;
 }
 
 /* The first group belongs directly to the H2 above it, so do not introduce
    a second section break immediately after the parent heading. */
 .main-content .api-function-subsection-title-first {
   margin-top: 1rem;
-  padding-top: 0;
+  padding-top: 1rem;
   border-top: 0;
 }
 
@@ -188,11 +197,8 @@
 /* Returns use the same visual language, but the type gets its own line so
    longer return types never crash into the explanation. */
 .main-content .api-return-row {
-  display: grid;
-  grid-template-columns: minmax(8rem, 0.65fr) minmax(0, 1.35fr);
-  column-gap: 1.25rem;
-  align-items: baseline;
-  padding: 0.2rem 0 0.35rem;
+	display: block;
+	padding: 0.2rem 0 0.35rem;
 }
 
 .main-content .api-return-type {
@@ -202,8 +208,9 @@
 }
 
 .main-content .api-return-description {
-  min-width: 0;
-  line-height: 1.5;
+	margin-top: 0.35rem;
+	min-width: 0;
+	line-height: 1.5;
 }
 
 /* Full examples keep the strong code-block treatment. */
@@ -232,9 +239,86 @@
       "description";
     row-gap: 0.18rem;
   }
+}
 
-  .main-content .api-return-row {
-    grid-template-columns: 1fr;
-    row-gap: 0.25rem;
-  }
+/* Return types are the lookup surface in the generated reference. A linked type
+   gets the full row width even if older API CSS still defines returns as a grid. */
+.main-content .api-return-row.api-return-only {
+	display: block;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Enums                                                                      */
+/* -------------------------------------------------------------------------- */
+
+.main-content .api-enum-entry {
+	margin-top: 3rem;
+	padding-top: 1.8rem;
+	border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+/* The enum-group heading already establishes the first boundary. */
+.main-content h3 + .api-enum-entry {
+	margin-top: 1.25rem;
+	padding-top: 0;
+	border-top: 0;
+}
+
+.main-content .api-enum-name {
+	margin: 0 0 0.55rem;
+	font-family: SFMono-Regular, Menlo, Monaco, Consolas,
+		"Liberation Mono", "Courier New", monospace;
+	font-size: 1.22rem;
+	font-weight: 700;
+	line-height: 1.35;
+	letter-spacing: -0.015em;
+}
+
+.main-content .api-enum-summary {
+	margin: 0;
+	line-height: 1.55;
+}
+
+.main-content .api-enum-values {
+	margin-top: 1.35rem;
+}
+
+.main-content .api-enum-members {
+	border-top: 1px solid rgba(255, 255, 255, 0.08);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.main-content .api-enum-row {
+	display: grid;
+	grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+	column-gap: 1.25rem;
+	align-items: baseline;
+	padding: 0.55rem 0;
+}
+
+.main-content .api-enum-row + .api-enum-row {
+	border-top: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.main-content .api-enum-row-compact {
+	display: block;
+}
+
+.main-content .api-enum-member {
+	font-family: SFMono-Regular, Menlo, Monaco, Consolas,
+		"Liberation Mono", "Courier New", monospace;
+	font-size: 0.92rem;
+	font-weight: 600;
+}
+
+.main-content .api-enum-description {
+	min-width: 0;
+	line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+	.main-content .api-enum-row {
+		grid-template-columns: 1fr;
+		row-gap: 0.25rem;
+	}
 }
