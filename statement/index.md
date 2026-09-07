@@ -115,6 +115,4 @@ Start with [**States & Lifecycle**](states_and_lifecycle). It builds out a real 
 
 From there, the docs add one problem at a time: passing data between states, automatic transitions, locks and queues, temporary states and history, timing, nested machines, templates, hooks, custom events, and finally the full Lens guide, so you can work your way up from knowing nothing about Statement to being a Statement expert in a simple stepped progression.
 
----
-
 {% include library-footer.html %}

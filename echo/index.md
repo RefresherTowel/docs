@@ -95,6 +95,4 @@ If you want to build your own in-game console, inspector, tuning panel, or any o
 - [Echo API Reference](api-reference) is the exhaustive Echo logger reference.
 - [Echo Chamber](../echo-chamber/) starts the in-game debug UI side of the package.
 
----
-
 {% include library-footer.html %}

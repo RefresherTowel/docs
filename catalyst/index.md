@@ -122,6 +122,4 @@ Then move to **[Resources](resources)** for values with a current amount that ge
 
 **[Effects](effects)** bring those pieces together into gameplay states with shared duration and cleanup. The later guides cover Sets and previews, advanced Statistic rules, saving and loading, and complete gameplay patterns.
 
----
-
 {% include library-footer.html %}

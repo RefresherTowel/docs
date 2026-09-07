@@ -146,6 +146,4 @@ Echo Chamber's drawing coordinates are also separate from your game's GUI setup.
 
 The two reference pages are lookup material. You don't need to read them front to back before using the teaching pages. Use them as, interestingly enough, reference pages for when you have a specific command you want to look up (or want to see the full range of what's available to you).
 
----
-
 {% include library-footer.html %}
