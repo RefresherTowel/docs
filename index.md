@@ -20,6 +20,7 @@ Each library is built to solve a specific pain point, with a clean API, full Fea
 - **Statement** decides what the game is doing.
 - **Pulse** describes what just happened to anything listening.
 - **Catalyst 2** makes the numbers in your game, like health, stats, buffs, fun.
+- **Sundial** gives an existing 2D scene a continuous time-of-day atmosphere without turning into a full lighting engine.
 - **Whisper** tells your game when it should show what dialogue, so it can feel reactive and alive.
 - **Echo** tells you, in plain text, what all of the above actually did.
 - **Echo Chamber** turns that debugging work into in-game consoles, inspectors, and custom development tools.
@@ -109,6 +110,23 @@ Are your stats boring? Do they just sit around doing nothing? Well in that case 
 <iframe frameborder="0" src="https://itch.io/embed/4164612?linkback=true&amp;border_width=2&amp;bg_color=450074&amp;fg_color=ffffff&amp;link_color=9080ff&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/catalyst">Catalyst 2 (GameMaker Moddable Stats) by RefresherTowel</a></iframe>
 
 ##### [**EXPLORE THE CATALYST DOCS**](/catalyst/)
+{: .text-center }
+
+---
+
+[![Sundial icon](./assets/sundial_icon.png){: style="max-width: 256px;"}](/sundial/)
+{: .text-center }
+## [**SUNDIAL**](/sundial/)
+{: .text-center }
+> #### *A visual time-of-day colour grader for GameMaker*
+
+Want a scene to move from morning to day, dusk, night and dawn without building a whole lighting system around it?
+
+**Sundial** grades an existing 2D scene through a continuous day/night cycle. Author six colour looks, control day/night brightness separately, optionally split indoor and outdoor areas with a mask, and let Sundial handle the transitions between them.
+
+Its native IDE plugin lets you import a screenshot from your own game and tune the result visually, while the runtime itself stays small and can still be configured entirely from GML.
+
+##### [**EXPLORE THE SUNDIAL DOCS**](/sundial/)
 {: .text-center }
 
 ---

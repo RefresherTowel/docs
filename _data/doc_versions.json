@@ -10,6 +10,11 @@
       }
     ]
   },
+  "sundial": {
+    "name": "Sundial",
+    "current_root": "/sundial/",
+    "versions": []
+  },
   "echo": {
     "name": "Echo",
     "current_root": "/echo/",

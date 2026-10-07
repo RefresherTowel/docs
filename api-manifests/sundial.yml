@@ -1,0 +1,174 @@
+library:
+  id: sundial
+  name: Sundial
+  symbol_prefix: Sundial
+
+source_globs:
+  - scripts/scr_sundial/**/*.gml
+  - scripts/scr_sundial_import/**/*.gml
+
+require_public_coverage: true
+
+page:
+  layout: default
+  title: API Reference
+  heading: API Reference
+  parent: Sundial
+  nav_order: 6
+  doc_version: current
+  intro: >-
+    Complete reference for Sundial's grading, time, mask and callback API. For
+    explanations and worked examples, start with the teaching pages; this page
+    is for looking up exact methods, arguments, return values and enum members.
+
+sections:
+  - title: Sundial
+    types:
+      - Sundial
+
+function_sections:
+  - title: Top-level functions
+    functions:
+      - SundialImport
+
+enum_sections:
+  - title: Enums
+    groups:
+      - title: Grading
+        enums:
+          - eSundial
+      - title: Time
+        enums:
+          - eSundialPeriod
+          - eSundialPhase
+
+types:
+  Sundial:
+    require_grouping: true
+    method_groups:
+      Grading:
+        - SetGrading
+        - SetGradingStrength
+        - SetBrightness
+      Indoor and outdoor masking:
+        - SetIndoorGrading
+        - SetIndoorGradingStrength
+        - SetIndoorDaylightInfluence
+        - SetIndoorBrightness
+        - SetMask
+        - ClearMask
+        - HasMask
+        - GetMask
+      Time and clock:
+        - SetTimeOfDay
+        - GetTimeOfDay
+        - SetDayPercent
+        - GetDayPercent
+        - SetMorningTime
+        - GetMorningTime
+        - SetTime
+        - GetTime
+        - GetHour
+        - GetMinute
+        - SetCycleTiming
+      Automatic progression:
+        - SetAutoTime
+        - GetAutoTime
+        - SetDayLength
+        - GetDayLength
+        - SetSpeed
+        - GetSpeed
+        - Update
+      Periods and callbacks:
+        - GetPeriod
+        - OnPeriodChanged
+        - OnPeriod
+        - OnMorning
+        - OnDay
+        - OnAfternoon
+        - OnDusk
+        - OnNight
+        - OnDawn
+      Resolver information:
+        - GetSunlightAmount
+        - GetPhase
+        - GetPhaseName
+      Drawing:
+        - Draw
+
+enums:
+  eSundial:
+    description: The six authored grading anchors Sundial blends through over one full day.
+    members:
+      MORNING: Morning grading anchor.
+      DAY: Day grading anchor.
+      AFTERNOON: Afternoon grading anchor.
+      DUSK: Dusk grading anchor. Sundial's internal Sunset and Twilight phases both resolve through this authored grade.
+      NIGHT: Night grading anchor.
+      DAWN: Dawn grading anchor used during the later part of Predawn.
+      NUM: Sentinel/count value.
+
+  eSundialPeriod:
+    description: The six semantic schedule periods used by GetPeriod() and period callbacks.
+    members:
+      MORNING: Morning period beginning at the normalized cycle seam.
+      DAY: Day period.
+      AFTERNOON: Afternoon period.
+      DUSK: Dusk period.
+      NIGHT: Night period.
+      DAWN: Dawn period.
+      NUM: Sentinel/count value.
+
+  eSundialPhase:
+    description: The more detailed internal temporal phases used by Sundial's continuous visual resolver.
+    members:
+      MORNING: Morning is the dominant resolver phase.
+      DAY: Day is the dominant resolver phase.
+      AFTERNOON: Afternoon is the dominant resolver phase.
+      SUNSET: Sunset is the dominant resolver phase and contributes to the authored Dusk grade.
+      TWILIGHT: Twilight is the dominant resolver phase and contributes to the authored Dusk grade.
+      NIGHT: Night is the dominant resolver phase.
+      PREDAWN: Predawn is the dominant resolver phase and hands the grade from Night through Dawn toward Morning.
+      NUM: Sentinel/count value.
+
+symbols:
+  SundialImport:
+    example: |-
+      sundial = SundialImport();
+
+      // Or load one named preset.
+      winter_sundial = SundialImport("Winter");
+    see_also:
+      - Sundial
+
+  Sundial.Draw:
+    example: |-
+      sundial.Draw(application_surface);
+
+      // Or choose the destination rectangle explicitly.
+      sundial.Draw(application_surface, 0, 0, 1280, 720);
+
+  Sundial.SetMask:
+    notes:
+      - The mask surface must match the source surface dimensions used by Draw(). Only the red channel is read; black is outdoor and white is indoor.
+    see_also:
+      - Sundial.ClearMask
+      - Sundial.HasMask
+      - Sundial.GetMask
+
+  Sundial.SetTime:
+    example: |-
+      sundial.SetTime(18.5); // 18:30
+    see_also:
+      - Sundial.GetTime
+      - Sundial.SetMorningTime
+      - Sundial.SetTimeOfDay
+
+  Sundial.OnPeriodChanged:
+    example: |-
+      sundial.OnPeriodChanged(function(_from, _to) {
+          global.current_period = _to;
+      });
+    see_also:
+      - Sundial.OnPeriod
+      - eSundialPeriod

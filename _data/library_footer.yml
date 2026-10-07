@@ -31,6 +31,15 @@ catalyst:
   icon: /assets/catalyst_icon.png
   description: A powerful stat manager for building values such as attack power, movement speed, health, or anything else that needs to be modified and recalculated as the game changes.
 
+sundial:
+  name: Sundial
+  github: https://github.com/RefresherTowel/Sundial
+  itch: https://refreshertowel.itch.io/sundial
+  icon: /assets/sundial_icon.png
+  description: A lightweight time-of-day colour grading system for giving 2D scenes a continuous day/night atmosphere without building a full lighting engine.
+  requirements_note: The Sundial runtime works without the IDE plugin. Visual preset authoring through Tools > Sundial additionally requires a GameMaker version that supports native IDE plugins.
+  show_in_other_stuff: false
+
 whisper:
   name: Whisper
   github: https://github.com/RefresherTowel/Whisper
