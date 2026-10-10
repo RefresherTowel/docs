@@ -18,23 +18,26 @@ nav_order: 4
 
 # Indoor & Outdoor Grading
 
-A full-screen colour grade works nicely until the camera can see both a sunset and the inside of a house at the same time.
+A full-screen colour grade works nicely until both indoors and outdoors are visible at the same time, at which point you start to need a little more control.
 
-The sky should be turning orange. The grass can pick up that warmth too. The room inside the house probably shouldn't suddenly look like somebody filled it with orange fog.
-
-Sundial handles that split with a mask.
+Let's say it's deep night, the sky is dark purple, the grass is cool and tinged blue, but there are people walking around a room inside a house. That house should *probably* have some light in it. Sundial handles this split with a mask.
 
 ---
 
-## The mask chooses indoor and outdoor pixels
+## The indoor mask
 
-Give Sundial a surface the same size as the source surface you're grading:
+Masking is relatively simple.
+
+Build out a black and white image, either programmatically on a surface or as a presupplied sprite, and then hand Sundial that image:
 
 ```js
 sundial.SetMask(indoor_mask_surface);
+
+// Or if you're using a prebuilt sprite:
+sundial.SetSpriteMask(spr_indoor_mask);
 ```
 
-Sundial reads the **red channel** of that surface:
+Sundial reads that surface/sprite like this:
 
 ```text
 black      = outdoor
@@ -42,37 +45,19 @@ white      = indoor
 50% grey   = halfway between outdoor and indoor
 ```
 
-The blend is proportional, so the mask doesn't have to be only pure black and white. Soft edges or partially covered pixels can transition between the two treatments cleanly.
+> Technically, Sundial only cares about the red channel internally, but it's easier to just author everything in greyscale which gives the exact same result.
+{: .note}
 
-The green, blue and alpha channels don't affect the indoor amount. If you're generating the mask yourself, treating it as a simple greyscale surface is normally the least confusing option.
+As you might've noticed, the mask doesn't have to be only pure black and white, you can blend and soften edges to transition between the outdoor and indoor colour grading cleanly.
 
----
-
-## The mask must match the source surface
-
-If you're grading `application_surface`, the mask needs the same width and height as `application_surface` when `Draw()` runs.
-
-Sundial checks this because a differently sized mask would no longer describe the same pixels:
-
-```text
-source pixel (500, 300)
-        needs to match
-mask pixel   (500, 300)
-```
-
-If the dimensions don't match, `Draw()` reports an error rather than stretching the mask and producing something that looks vaguely plausible but is spatially wrong.
-
-How you create the mask is up to your renderer. A room system might draw visible interiors into it, a tilemap-driven game might build it from indoor tiles, or a simpler game might only need a few solid shapes.
-
-Sundial only cares about receiving the finished same-sized surface.
+> A nice effect that you can make with a white to black gradient is to mask out the windows of a house in white, so that the windows are lit up at night, and then have a blended blur to black move outwards from the sharp white of actual window, creating a "indoor light leaking out into the dark" kind of effect.
+{: .tip}
 
 ---
 
-## The game owns the mask surface
+## Dealing with surfaces
 
-`SetMask()` stores the surface handle. It doesn't copy the surface or take over its lifetime.
-
-That means the usual GameMaker surface rules still apply. If the surface is lost or destroyed, recreate it and give Sundial the new handle:
+`SetMask()` stores the surface handle, and as we know, surfaces are volatile and can be destroyed at any point in time. If the surface is lost or destroyed, you'll need to recreate it and give Sundial the new handle:
 
 ```js
 if (!surface_exists(indoor_mask_surface)) {
@@ -81,12 +66,16 @@ if (!surface_exists(indoor_mask_surface)) {
         surface_get_height(application_surface)
     );
 
+    
+    surface_set_target(indoor_mask_surface);
     // Rebuild the mask here.
+    surface_reset_target();
+
     sundial.SetMask(indoor_mask_surface);
 }
 ```
 
-You can ask whether Sundial's current mask still exists:
+You don't need to keep track of the surface handle you hand to Sundial if you don't want to as Sundial will hold it for you (although, as I've said above, you still need to make sure the surface hasn't been destroyed or lost). You can ask whether Sundial's current mask still exists:
 
 ```js
 if (sundial.HasMask()) {
@@ -108,17 +97,17 @@ sundial.ClearMask();
 
 ---
 
-## Indoor colour is its own base grade
+## Indoor colour grading
 
 The outdoor scene moves through the six Morning, Day, Afternoon, Dusk, Night and Dawn grades.
 
-Indoors don't need six more authored colours. Instead, Sundial starts indoor pixels from one base indoor grade:
+Indoors don't deal with an additional six more authored colours. Instead, Sundial starts indoor pixels from one base indoor grade:
 
 ```js
 sundial.SetIndoorGrading(make_color_rgb(230, 220, 205));
 ```
 
-Then choose how strongly that colour should affect the interior:
+And you can choose how strongly that colour should affect the interior:
 
 ```js
 sundial.SetIndoorGradingStrength(0.8);
@@ -130,7 +119,7 @@ If there is no mask, these indoor settings don't change the output because every
 
 ---
 
-## Daylight influence keeps interiors connected to outside
+## Daylight influence keeps interiors visually connected to outside
 
 A completely fixed indoor grade can look strange when the outside world becomes very dramatic.
 
@@ -155,7 +144,7 @@ This setting changes colour influence, not brightness. Indoor brightness has its
 
 ---
 
-## Indoor brightness has separate Day and Night values
+## Indoor brightness
 
 Set the indoor Day and Night brightness together:
 
@@ -165,7 +154,7 @@ sundial.SetIndoorBrightness(0.85, 0.55);
 
 Sundial continuously blends between those two values using the same sunlight amount that drives outdoor brightness.
 
-This lets an interior stay darker than outdoors during the day without becoming unreadably dark at night, or do the opposite if that's what the scene needs.
+This lets an interior stay lighter than outdoors during the night without becoming unbearably bright during the day (or do the opposite if that's the kind of thing you're going for).
 
 For example:
 
@@ -179,49 +168,29 @@ makes the outdoor world change much more strongly between Day and Night while ke
 
 ---
 
-## Preview masks and runtime masks are separate
+## Preview masks vs in-game masks
 
-The IDE's **Import Preview Mask** button exists so you can see indoor/outdoor behaviour on the screenshot while you're authoring a preset.
+As I stated during the IDE Plugin page, the IDE's **Import Preview Mask** button exists so you can test out the indoor/outdoor behaviour on the screenshot while you're creating a preset, it does NOT use that mask in the actual game.
 
-That mask is not automatically used by the game.
-
-The screenshot and preview mask are editor-only files. Runtime masks usually need to follow the current room, camera and visible interiors anyway, so the game supplies the real surface with `SetMask()`.
-
-The semantics are the same in both places:
-
-```text
-black = outdoor
-white = indoor
-red channel = blend amount
-```
-
-So the preview is still showing the same grading maths the runtime will use once your game provides the corresponding mask.
+So ensure you provide the mask via code in-game when you need to mask out some indoor space.
 
 ---
 
-## A simple masked setup
+## A basic masked setup
 
-A complete setup might look roughly like this:
+A complete mask setup might look roughly like this:
 
 ```js
 sundial = SundialImport();
 sundial.SetMask(indoor_mask_surface);
 ```
 
-Then the normal draw call doesn't change:
-
-```js
-sundial.Draw(application_surface);
-```
-
-Sundial sees that a valid mask exists and blends the outdoor and indoor multipliers per pixel while drawing the source.
-
-You don't need a separate outdoor draw pass and indoor draw pass. The mask is what tells the one Sundial draw which treatment each pixel should receive.
+Easy, wholesome, rustic.
 
 ---
 
 ## Next: Configuring Sundial in Code
 
-If you're using the IDE, you may already have all the grading configuration you need. The next page is mainly for people who want to build or alter the complete setup programmatically.
+If you're using the IDE plugin, you already have all the grading configuration you need at your fingertips. The next page is mainly for people who want to build or alter the complete setup programmatically without touching the IDE plugin.
 
 Continue with **[Configuring Sundial in Code](manual-configuration)** for grading anchors, strengths, brightness and cycle timing without relying on an authored preset.

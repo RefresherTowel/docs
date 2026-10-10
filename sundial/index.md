@@ -22,13 +22,13 @@ has_children: true
 *A visual time-of-day colour grader for GameMaker*
 {: .text-center}
 
-A day/night effect often starts with something very simple. Make the screen a bit blue at night, maybe a bit orange around sunset, and call it done.
+It's all too easy to chuck a semi-transparent black overlay over your game when night falls and call it a day (or perhaps call it a night, lol). But is that *really* what you want your players to see?
 
-Then you want dawn to feel different from morning. Night needs to actually be darker, not just bluer. The sunset transition looks good but the interior of a house suddenly turns bright orange with everything outside it. You add a few more colours, a few more timings, and now you've got a surprisingly fiddly little lighting system sitting in the middle of your game.
+What if you could adjust the actual **mood** of your game over the course of a day. A cold, crisp morning flows gently into a bright sunny midday, followed by an orange, warm afternoon, and a spectacular sunset, of course. Then a night with deep, rich purples.
 
-**Sundial** is built to handle that particular problem without turning into a full lighting engine.
+Well **Sundial** is designed to give you exactly that. And best of all, you can **visually author it inside GM itself**.
 
-It takes an existing 2D scene and grades it continuously through six authored parts of the day:
+Sundial takes an existing 2D scene and grades it continuously through six authored parts of the day:
 
 - **Morning**
 - **Day**
@@ -37,118 +37,42 @@ It takes an existing 2D scene and grades it continuously through six authored pa
 - **Night**
 - **Dawn**
 
-You choose the colour and strength of those looks, Sundial blends between them, and separate day/night brightness controls handle how light the scene should actually be.
+You choose the colour and strength of those looks, Sundial blends between them, and separate day/night brightness controls handle how light the scene should actually be. So you can give your game a stylistic mood easily.
 
 The easiest way to author Sundial is through its GameMaker IDE plugin. Import a screenshot from your game, scrub through the day, drag the period timings around, and tune the result while looking at the actual scene you're trying to grade.
 
-The runtime itself stays small. Once you've authored a preset, using it in-game can be as simple as:
+Once you've authored a look, using it in-game is as simple as calling:
 
 ```js
 sundial = SundialImport();
 ```
 
-and then, wherever your game draws the surface you want to grade:
+and then in the Post-Draw Event:
 
 ```js
-sundial.Draw(application_surface);
+sundial.Draw();
 ```
 
-That's enough to load the default IDE-authored preset and draw the current Sundial grade.
+That's the only code you need to get Sundial up and running, beautifying your day and night cycle!
 
 > Sundial is part of the **RefresherTowel Games** suite of libraries for GameMaker.
 {: .note}
 
 ---
 
-## Your first Sundial setup
-
-Suppose you've opened the Sundial IDE editor, imported a screenshot, and adjusted the preset until you like how the day looks.
-
-In your controller's Create Event:
-
-```js
-sundial = SundialImport();
-```
-
-`SundialImport()` creates a new `Sundial` using the preset marked as **Default** in the editor. The colours, strengths, brightness, timings, start time, Auto Time setting and authored callbacks all come with it.
-
-If you made several presets, ask for one by name instead:
-
-```js
-sundial = SundialImport("Winter");
-```
-
-The name must exactly match one of the presets you authored. If it doesn't, Sundial throws a clear error instead of quietly loading something else and leaving you wondering why the game looks wrong.
-
-Now draw the surface through Sundial:
-
-```js
-sundial.Draw(application_surface);
-```
-
-Sundial doesn't take ownership of the surface or decide how your game should render everything else. It simply takes the source surface you give it, applies the current grade, and draws the result to the active render target.
-
-If your final surface normally needs to be drawn somewhere other than its original size, provide the destination too:
-
-```js
-sundial.Draw(application_surface, 0, 0, 1280, 720);
-```
-
-The rest of your rendering setup can stay exactly where it already belongs.
-
----
-
-## Time can be manual or automatic
-
-For a game that already owns its own clock, you can simply tell Sundial what time it is:
-
-```js
-sundial.SetTime(18.5);
-```
-
-`18.5` means 18:30 on Sundial's 24-hour clock.
-
-Or let Sundial advance the clock itself:
-
-```js
-sundial
-    .SetDayLength(600)
-    .SetAutoTime(true);
-```
-
-Now a complete in-game day takes 600 real-world seconds, or ten minutes.
-
-You don't have to manually lerp between six colours or work out which side of midnight you're on. Sundial resolves the continuous grade, brightness and current period for you.
-
----
-
 ## Indoor and outdoor areas can react differently
 
-Without a mask, Sundial grades the entire source surface as outdoor scenery.
+Sundial also lets you alter how indoor and outdoor areas are graded, by letting you provide an "indoor mask".
 
-If your scene contains interiors, you can provide a same-sized mask surface:
+On the mask (which should be the same size as your rendering surface), anything drawn as white is considered indoors, anything drawn as black is considered outdoors, and anything greyscale is considered "inbetween" (meaning you can greyscale towards black away from your windows, for a "light spill" during night).
 
-```text
-black = outdoor
-white = indoor
-grey  = a blend between the two
-```
-
-Sundial only reads the mask's red channel.
-
-Indoor pixels can have their own base colour, grading strength and day/night brightness. They can also inherit some of the outdoor colour through **Indoor Daylight Influence**, which lets a room stay recognisably indoors while still picking up some of the warmth of dusk or the coolness of night.
-
-The editor can use a preview mask while you're authoring, but that image is only for the editor. Your game still supplies the real runtime mask with `SetMask()`.
+Indoor pixels have their own base colour, grading strength and day/night brightness. They can also inherit some of the outdoor colour through **Indoor Daylight Influence**, which lets a room stay recognisably indoors while still picking up some of the warmth of dusk or the coolness of night.
 
 ---
 
 ## You don't need the IDE to use Sundial
 
-The IDE plugin is there because colour grading is much easier to author when you can actually see it.
-
-It isn't a runtime dependency.
-
-You can build a Sundial entirely in code:
+While the IDE plugin makes it incredibly easy to create the exact moods you want because you're just working visually, Sundial also has code equivalents for every change you can make in the plugin. So you can build a Sundial entirely in code (if that's your weird little preference):
 
 ```js
 sundial = new Sundial()
@@ -160,13 +84,23 @@ sundial = new Sundial()
 
 Every setting the importer applies goes through the same public `Sundial` API available to your own code. The editor is simply a visual authoring layer over that runtime.
 
-That also means disabling or uninstalling the IDE plugin doesn't suddenly make a built project depend on it. The GML runtime and the compiled preset data live in the project itself.
+That also means disabling or uninstalling the IDE plugin won't suddenly break your projects using Sundial. The GML runtime and the compiled preset data live in the project itself.
+
+---
+
+## In-Game Control
+
+Sundial also gives you plenty of procedural control while your game is running. You can set times directly, skip ahead, reverse time, have Sundial automatically handle time for you or take complete manual control  of it.
+
+You can check the amount of sunlight there currently is (independently of what the actual phase of day or colour grading is), you can set explicit callbacks that run when each milestone is reached during the day (i.e. have a function that turns all streetlights on when Dusk arrives, etc).
+
+And you can also set all the same grading/brightness/etc controls through code as you can through the IDE plugin.
 
 ---
 
 ## Where to go next
 
-Start with **[Using the IDE Plugin](ide-plugin)**. That's the intended authoring path and the quickest way to understand what Sundial is doing visually.
+Start with **[Using the IDE Plugin](ide-plugin)**. That's the magic sauce of Sundial and the quickest way to get Sundial tuned to perfection for your game.
 
 Then move to **[Runtime Usage](runtime-usage)** for importing presets and drawing them in-game. **[Time, Periods & Callbacks](time-periods-and-callbacks)** covers the clock, automatic time progression and gameplay reactions to Morning, Dusk, Night and the other authored periods.
 

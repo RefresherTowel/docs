@@ -18,11 +18,9 @@ nav_order: 5
 
 # Configuring Sundial in Code
 
-The IDE plugin is the easiest way to author Sundial because you can see the result while you're changing it.
+The IDE plugin is the easiest way to author Sundial because you can see the result while you're changing it. But sometimes you just wanna get your hands dirty with code.
 
-It isn't required, though.
-
-`SundialImport()` ultimately creates an ordinary `Sundial` and configures it through the same public methods on this page. If your game wants to generate its own looks, load settings from somewhere else, or simply keep the whole setup in GML, you can start directly with:
+`SundialImport()` ultimately calls the `Sundial` constructor and configures it through the same methods outlined on this page. If you want to load settings from somewhere else, or simply keep the whole setup in GML, you can use the exact same methods, starting with creating the Sundial constructor:
 
 ```js
 sundial = new Sundial();
@@ -60,11 +58,9 @@ Then set how strongly that colour should bias the scene:
 sundial.SetGradingStrength(eSundial.DUSK, 1.48);
 ```
 
-A strength of `0` leaves that stage neutral. `1` applies the full luminance-normalized colour bias, and values above `1` deliberately exaggerate it.
+A strength of `0` leaves that stage neutral. `1` applies the full luminance-normalized colour bias, and values above `1` deliberately exaggerate it. Exactly like the IDE plugin.
 
-Sundial normalizes the grading colour around its luminance before applying the strength. In practical terms, the colour control is mainly answering "what colour should this part of the day feel like?" rather than secretly deciding how bright it should be as well.
-
-Brightness is configured separately.
+Sundial normalizes the grading colour around its luminance before applying the strength. In practical terms, the colour control is mainly answering "what colour should this part of the day feel like?" while essentially ignoring brightness, which is configured separately.
 
 ---
 
@@ -80,13 +76,13 @@ The first value is Day brightness. The second is Night brightness.
 
 Sundial blends continuously between them using its resolved sunlight amount, so you don't need to create a separate brightness value for all six grading anchors.
 
-This separation is useful because two scenes can use the same Dusk colour but very different exposure. A bright stylised game might keep Night around `0.7`, while a horror game might deliberately push it much lower.
+This separation is because two scenes could use the same Dusk colour but very different exposures. A bright stylised game might keep Night around `0.7`, whereas a grimy horror game might want to push it much lower.
 
 ---
 
-## A complete outdoor setup
+## A full grading setup
 
-You can chain the configuration calls:
+Sundial uses a fluent interface, so you can chain the configuration calls:
 
 ```js
 sundial = new Sundial()
@@ -105,15 +101,13 @@ sundial = new Sundial()
     .SetBrightness(1.09, 0.39);
 ```
 
-Those are Sundial's current built-in defaults. You don't need to repeat them when you like the defaults; the example is just showing what a full code-authored grading setup looks like.
-
-Normally, start with the visual result you want rather than treating these numbers as rules. There isn't a mathematically correct Dusk strength. The useful value is the one that makes *your* scene look right.
+Those are just using Sundial's current built-in defaults.
 
 ---
 
 ## Configuring interiors in code
 
-The indoor settings use the same public runtime API whether the Sundial came from `new Sundial()` or `SundialImport()`:
+The indoor settings are a bit simpler, since we don't need all the particular time of day gradings:
 
 ```js
 sundial
@@ -131,7 +125,7 @@ See **[Indoor & Outdoor Grading](indoor-and-outdoor)** for the mask itself and t
 
 ## Configuring cycle timing
 
-`SetCycleTiming()` controls the normalized shape of Sundial's continuous resolver:
+`SetCycleTiming()` controls the shape of Sundial's continuous time period resolver:
 
 ```js
 sundial.SetCycleTiming(
@@ -144,7 +138,7 @@ sundial.SetCycleTiming(
 );
 ```
 
-All six values live in Sundial's normalized `0..1` cycle.
+All six values live in Sundial's normalized `0..1` day cycle.
 
 They mean:
 
@@ -172,11 +166,11 @@ Dawn      = 1 - predawn_duration * 0.5
 
 `afternoon_start` is deliberately separate from the public Afternoon boundary. It controls when the Afternoon colour begins blending in before the authored Afternoon period is considered active.
 
-This is the one part of Sundial I would normally recommend authoring in the IDE unless you have a specific reason not to. Dragging the visible period nodes around a timeline is simply easier to reason about than editing six normalized timing values by hand.
+This is the one part of Sundial I would absolutely recommend authoring in the IDE unless you have a very specific reason not to. Dragging the visible period nodes around a timeline is simply easier to reason about than editing six normalized timing values by hand like this.
 
 ---
 
-## Giving the normalized cycle a clock
+## Giving Sundial a clock
 
 The visual cycle itself only needs `0..1`. If game code wants a 24-hour clock as well, tell Sundial what time Morning represents:
 
@@ -194,7 +188,7 @@ sundial.SetTime(17.5);
 
 which means 17:30.
 
-The clock origin doesn't change the visual timing shape. It gives the existing normalized cycle a human-readable 24-hour interpretation.
+The clock origin doesn't change the visual timing shape, it just tells Sundial where the "seam" is between days.
 
 ---
 
@@ -217,13 +211,13 @@ sundial
     .SetAutoTime(true);
 ```
 
-The two controls describe the same progression rate in different ways. Setting one updates the value represented by the other.
+The two controls describe the same progression rate in different ways, so setting one updates the value represented by the other, you don't need to set both.
 
 See **[Time, Periods & Callbacks](time-periods-and-callbacks)** for the exact synchronization and callback behaviour.
 
 ---
 
-## Adding period callbacks in code
+## Adding time period callbacks in code
 
 The general form is:
 
@@ -233,7 +227,7 @@ sundial.OnPeriod(eSundialPeriod.NIGHT, function() {
 });
 ```
 
-but the convenience calls are usually nicer to read:
+but the convenience calls are usually a bit nicer to work with:
 
 ```js
 sundial
@@ -245,7 +239,7 @@ sundial
     });
 ```
 
-`OnPeriodChanged()` is available when one callback wants every change instead:
+`OnPeriodChanged()` is available when one callback needs to react to every time period change instead of just one:
 
 ```js
 sundial.OnPeriodChanged(function(_from, _to) {
@@ -273,12 +267,12 @@ if (hard_mode) {
 }
 ```
 
-Or use the IDE for the Overworld and create a tiny special-purpose Sundial in code for a dream sequence.
+Or use the IDE for the Overworld and create a tiny special-purpose Sundial in code for a dream sequence, or whatever. It's your game, not mine, so it's your decision to make how and why to mix and match, if at all.
 
-Once imported, a `Sundial` is just a normal Sundial. Use whichever authoring path keeps the thing you're trying to express easiest to understand.
+Once imported, the handle returned by `SundialImport` is just a normal Sundial struct built from the constructor. Use whichever authoring path keeps the thing you're trying to express easiest to understand for you.
 
 ---
 
 ## API Reference
 
-The teaching pages focus on how the pieces fit together. For exact signatures, argument types, return values and enum members, continue to the **[API Reference](api-reference)**.
+That's the end of the teaching material for Sundial. For exact signatures, argument types, return values and enum members, *the plain code of Sundial*, continue to the **[API Reference](api-reference)**.
