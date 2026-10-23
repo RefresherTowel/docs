@@ -2,12 +2,15 @@ library:
   id: sundial
   name: Sundial
   symbol_prefix: Sundial
+  macro_prefix: SUNDIAL_
 
 source_globs:
   - scripts/scr_sundial/**/*.gml
   - scripts/scr_sundial_import/**/*.gml
+  - scripts/scr_sundial_start/**/*.gml
 
 require_public_coverage: true
+require_macro_coverage: true
 
 page:
   layout: default
@@ -17,9 +20,9 @@ page:
   nav_order: 6
   doc_version: current
   intro: >-
-    Complete reference for Sundial's grading, time, mask and callback API. For
-    explanations and worked examples, start with the teaching pages; this page
-    is for looking up exact methods, arguments, return values and enum members.
+    A list of Sundial's functions and settings, including what each argument does
+    and what each function returns. If you're new to Sundial, the other pages
+    walk you through using it in your game.
 
 sections:
   - title: Sundial
@@ -27,20 +30,27 @@ sections:
       - Sundial
 
 function_sections:
-  - title: Top-level functions
+  - title: Starting, stopping and loading
     functions:
+      - SundialStart
+      - SundialStop
       - SundialImport
 
 enum_sections:
   - title: Enums
     groups:
-      - title: Grading
+      - title: Grading colours
         enums:
           - eSundial
       - title: Time
         enums:
           - eSundialPeriod
           - eSundialPhase
+
+macro_sections:
+  - title: Version
+    macros:
+      - SUNDIAL_VERSION
 
 types:
   Sundial:
@@ -50,12 +60,13 @@ types:
         - SetGrading
         - SetGradingStrength
         - SetBrightness
-      Indoor and outdoor masking:
+      Indoor and outdoor:
         - SetIndoorGrading
         - SetIndoorGradingStrength
         - SetIndoorDaylightInfluence
         - SetIndoorBrightness
         - SetMask
+        - SetMaskSprite
         - ClearMask
         - HasMask
         - GetMask
@@ -71,7 +82,7 @@ types:
         - GetHour
         - GetMinute
         - SetCycleTiming
-      Automatic progression:
+      Automatic time:
         - SetAutoTime
         - GetAutoTime
         - SetDayLength
@@ -89,47 +100,48 @@ types:
         - OnDusk
         - OnNight
         - OnDawn
-      Resolver information:
+      Daylight and colour changes:
         - GetSunlightAmount
         - GetPhase
         - GetPhaseName
-      Drawing:
+      Drawing and stopping:
         - Draw
+        - CleanUp
 
 enums:
   eSundial:
-    description: The six authored grading anchors Sundial blends through over one full day.
+    description: The six parts of the day you can give their own colours and grading strengths.
     members:
-      MORNING: Morning grading anchor.
-      DAY: Day grading anchor.
-      AFTERNOON: Afternoon grading anchor.
-      DUSK: Dusk grading anchor. Sundial's internal Sunset and Twilight phases both resolve through this authored grade.
-      NIGHT: Night grading anchor.
-      DAWN: Dawn grading anchor used during the later part of Predawn.
-      NUM: Sentinel/count value.
+      MORNING: Use this to change the Morning colour.
+      DAY: Use this to change the Day colour.
+      AFTERNOON: Use this to change the Afternoon colour.
+      DUSK: Use this to change the Dusk colour, including sunset and twilight.
+      NIGHT: Use this to change the Night colour.
+      DAWN: Use this to change the Dawn colour, as night turns into Morning.
+      NUM: The number of grading choices. It is not a part of the day.
 
   eSundialPeriod:
-    description: The six semantic schedule periods used by GetPeriod() and period callbacks.
+    description: The six parts of the day reported by GetPeriod() and used by functions such as OnMorning() and OnNight().
     members:
-      MORNING: Morning period beginning at the normalized cycle seam.
-      DAY: Day period.
-      AFTERNOON: Afternoon period.
-      DUSK: Dusk period.
-      NIGHT: Night period.
-      DAWN: Dawn period.
-      NUM: Sentinel/count value.
+      MORNING: Morning, when Sundial's day begins.
+      DAY: Daytime.
+      AFTERNOON: Afternoon.
+      DUSK: Dusk.
+      NIGHT: Nighttime.
+      DAWN: Dawn.
+      NUM: The number of periods. Not a period itself.
 
   eSundialPhase:
-    description: The more detailed internal temporal phases used by Sundial's continuous visual resolver.
+    description: More detailed parts of the day used by Sundial's colour changes, including Sunset, Twilight and Predawn.
     members:
-      MORNING: Morning is the dominant resolver phase.
-      DAY: Day is the dominant resolver phase.
-      AFTERNOON: Afternoon is the dominant resolver phase.
-      SUNSET: Sunset is the dominant resolver phase and contributes to the authored Dusk grade.
-      TWILIGHT: Twilight is the dominant resolver phase and contributes to the authored Dusk grade.
-      NIGHT: Night is the dominant resolver phase.
-      PREDAWN: Predawn is the dominant resolver phase and hands the grade from Night through Dawn toward Morning.
-      NUM: Sentinel/count value.
+      MORNING: The Morning part of the colour changes.
+      DAY: The Day part of the colour changes.
+      AFTERNOON: The Afternoon part of the colour changes.
+      SUNSET: Sunset, when the colours are moving towards Dusk.
+      TWILIGHT: Twilight, between Dusk and Night.
+      NIGHT: Nighttime.
+      PREDAWN: The change from Night through Dawn and back to Morning.
+      NUM: The number of phases. Not a phase itself.
 
 symbols:
   SundialImport:
@@ -143,18 +155,47 @@ symbols:
 
   Sundial.Draw:
     example: |-
-      sundial.Draw(application_surface);
+      // In Post Draw, colour grade your game.
+      sundial.Draw();
 
-      // Or choose the destination rectangle explicitly.
-      sundial.Draw(application_surface, 0, 0, 1280, 720);
+      // Or draw your own surface at a chosen position and size.
+      sundial.Draw(my_surface, 0, 0, 1280, 720);
 
   Sundial.SetMask:
-    notes:
-      - The mask surface must match the source surface dimensions used by Draw(). Only the red channel is read; black is outdoor and white is indoor.
     see_also:
+      - Sundial.SetMaskSprite
       - Sundial.ClearMask
       - Sundial.HasMask
       - Sundial.GetMask
+
+  Sundial.SetMaskSprite:
+    see_also:
+      - Sundial.SetMask
+      - Sundial.ClearMask
+      - Sundial.HasMask
+      - Sundial.GetMask
+
+  Sundial.CleanUp:
+    see_also:
+      - Sundial.Draw
+      - SundialStart
+      - SundialStop
+
+  SundialStart:
+    example: |-
+      sundial = SundialStart();
+      sundial.SetDayLength(600);
+    see_also:
+      - SundialStop
+      - SundialImport
+      - Sundial.CleanUp
+
+  SundialStop:
+    example: |-
+      SundialStop();
+    see_also:
+      - SundialStart
+      - Sundial.CleanUp
 
   Sundial.SetTime:
     example: |-
