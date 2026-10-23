@@ -22,6 +22,9 @@ You *can* configure Sundial entirely in code, but choosing how different colours
 
 That's why I built the **Sundial Visual Editor** plugin, which gives Sundial a native GameMaker editor to allow you to edit your day/night grading live. Simply import a screenshot from your game, scrub through the time of day and change the colours while looking at the actual scene as it would appear in-game.
 
+>The Sundial Visual Editor is **completely free** to try out! Simply visit <a href="https://plugins.refreshertowel.games/" target="_blank" rel="noopener noreferrer">RefresherTowel Games Plugin Access</a> for instructions on how to download and install it, then start trying it out with your game!
+{: .important}
+
 This page will walk you through exactly how to use the Visual Editor plugin for Sundial, taking you from installing the plugin to an authored preset running in your game.
 
 ![Full shot of the Sundial Visual Editor](../assets/plugins/sundial-visual-editor/01-visual-editor.png)
@@ -33,7 +36,7 @@ This page will walk you through exactly how to use the Visual Editor plugin for 
 
 Sundial Visual Editor is installed through GameMaker's Package Manager and is available completely free for you to try out (of course, it won't make Sundial work in your game unless you have actually purchased Sundial). 
 
-For full instructions on how to get and install plugins for my libraries into GM, please visit this page: [RefresherTowel Games Plugin Access](https://refreshertowelgames.pages.dev/access/)
+For full instructions on how to get and install plugins for my libraries into GM, please visit this page: <a href="https://plugins.refreshertowel.games/" target="_blank" rel="noopener noreferrer">RefresherTowel Games Plugin Access</a>
 
 Quickly, the steps for a clean install are:
 

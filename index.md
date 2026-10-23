@@ -49,9 +49,7 @@ Use it for players, AI, UI, abilities, cutscenes. Anywhere things need to behave
 
 I built out Statement for it to handle the annoying state machine boilerplate so you can simply focus on the behavior you want.
 
-
-
-<iframe frameborder="0" src="https://itch.io/embed/4088827?linkback=true&amp;border_width=2&amp;bg_color=132f4b&amp;fg_color=ffffff&amp;link_color=007992&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/statement">Statement by RefresherTowel</a></iframe>
+<center><iframe frameborder="0" src="https://itch.io/embed/4088827?linkback=true&amp;border_width=2&amp;bg_color=132f4b&amp;fg_color=ffffff&amp;link_color=007992&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/statement">Statement by RefresherTowel</a></iframe></center>
 
 ##### [**EXPLORE THE STATEMENT DOCS**](/statement/)
 {: .text-center }
@@ -86,7 +84,7 @@ For bigger, messier projects, Pulse scales up with you:
 If all you want is "emit event, something happens", Pulse does that in a couple of lines.
 If you want your whole project to sit on a clean, debuggable event layer, Pulse is built for that too.
 
-<iframe frameborder="0" src="https://itch.io/embed/4116520?linkback=true&amp;border_width=2&amp;bg_color=370028&amp;fg_color=ffffff&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/pulse">Pulse by RefresherTowel</a></iframe>
+<center><iframe frameborder="0" src="https://itch.io/embed/4116520?linkback=true&amp;border_width=2&amp;bg_color=370028&amp;fg_color=ffffff&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/pulse">Pulse by RefresherTowel</a></iframe></center>
 
 ##### [**EXPLORE THE PULSE DOCS**](/pulse/)
 {: .text-center }
@@ -107,7 +105,7 @@ Are your stats boring? Do they just sit around doing nothing? Well in that case 
 - Stack and combine effects without writing a new special case every time.
 - Built for weird ideas: context aware modifiers, derived stats, and complex interactions without tearing up your code.
 
-<iframe frameborder="0" src="https://itch.io/embed/4164612?linkback=true&amp;border_width=2&amp;bg_color=450074&amp;fg_color=ffffff&amp;link_color=9080ff&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/catalyst">Catalyst 2 (GameMaker Moddable Stats) by RefresherTowel</a></iframe>
+<center><iframe frameborder="0" src="https://itch.io/embed/4164612?linkback=true&amp;border_width=2&amp;bg_color=450074&amp;fg_color=ffffff&amp;link_color=9080ff&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/catalyst">Catalyst 2 (GameMaker Moddable Stats) by RefresherTowel</a></iframe></center>
 
 ##### [**EXPLORE THE CATALYST DOCS**](/catalyst/)
 {: .text-center }
@@ -122,26 +120,13 @@ Are your stats boring? Do they just sit around doing nothing? Well in that case 
 
 Want a scene to move from morning to day, dusk, night and dawn without building a whole lighting system around it?
 
-**Sundial** grades an existing 2D scene through a continuous day/night cycle. Author six colour looks, control day/night brightness separately, optionally split indoor and outdoor areas with a mask, and let Sundial handle the transitions between them.
+**Sundial** grades an existing 2D scene through a continuous day/night cycle. Author colour looks for different periods of the day, control day/night brightness separately, optionally split indoor and outdoor areas with a mask, and let Sundial handle the transitions between them.
 
-Its native IDE plugin lets you import a screenshot from your own game and tune the result visually, while the runtime itself stays small and can still be configured entirely from GML.
+Its native IDE plugin ([available free to try out!](https://plugins.refreshertowel.games/)) lets you import a screenshot from your own game and tune the result visually, while the runtime itself stays small and can still be configured entirely from GML.
+
+<center><iframe frameborder="0" src="https://itch.io/embed/5130558?bg_color=8d4800&amp;border_width=2&amp;fg_color=ffffff&amp;link_color=faa85b&amp;border_color=ffffff" width="552" height="167"><a href="https://refreshertowel.itch.io/sundial">Sundial - Day/Night Cycle &amp; Moods by RefresherTowel</a></iframe></center>
 
 ##### [**EXPLORE THE SUNDIAL DOCS**](/sundial/)
-{: .text-center }
-
----
-
-[![Quill icon](./assets/quill_icon.png){: style="max-width: 256px;"}](/quill/)
-{: .text-center }
-## [**QUILL**](/quill/)
-{: .text-center }
-> #### *Let your players write with ease*
-
-Quill is an advanced text input library, designed to let you quickly and easily create interactable textboxes for your players. Quill automatically handles all the things that people expect when they encounter a textbox, such as caret movement, selection, clipboard, undo/redo, labels, right-click context menus, validation messaging, and proper theming including both basic primitives and sprites.
-
-<iframe frameborder="0" src="https://itch.io/embed/4281829?linkback=true&amp;border_width=2&amp;bg_color=502700&amp;fg_color=ffffff&amp;link_color=ffcb49&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/quill">Quill (GameMaker Text Boxes) by RefresherTowel</a></iframe>
-
-##### [**EXPLORE THE QUILL DOCS**](/quill/)
 {: .text-center }
 
 ---
@@ -158,9 +143,39 @@ Then you want Whisper.
 
 Whisper is a narrative manager built around the concept of "storylets". In essence, you add your story to Whisper, tell Whisper how you want that story managed, and then Whisper surfaces the right bit of story ("storylet") for the right moment in your game. 
 
-<iframe frameborder="0" src="https://itch.io/embed/4234087?linkback=true&amp;border_width=2&amp;bg_color=004140&amp;fg_color=ffffff&amp;link_color=5bfae2&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/whisper">Whisper (GameMaker Narrative Director) by RefresherTowel</a></iframe>
+<center><iframe frameborder="0" src="https://itch.io/embed/4234087?linkback=true&amp;border_width=2&amp;bg_color=004140&amp;fg_color=ffffff&amp;link_color=5bfae2&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/whisper">Whisper (GameMaker Narrative Director) by RefresherTowel</a></iframe></center>
 
 ##### [**EXPLORE THE WHISPER DOCS**](/whisper/)
+{: .text-center }
+
+---
+
+[![Quill icon](./assets/quill_icon.png){: style="max-width: 256px;"}](/quill/)
+{: .text-center }
+## [**QUILL**](/quill/)
+{: .text-center }
+> #### *Let your players write with ease*
+
+Quill is an advanced text input library, designed to let you quickly and easily create interactable textboxes for your players. Quill automatically handles all the things that people expect when they encounter a textbox, such as caret movement, selection, clipboard, undo/redo, labels, right-click context menus, validation messaging, and proper theming including both basic primitives and sprites.
+
+<center><iframe frameborder="0" src="https://itch.io/embed/4281829?linkback=true&amp;border_width=2&amp;bg_color=502700&amp;fg_color=ffffff&amp;link_color=ffcb49&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/quill">Quill (GameMaker Text Boxes) by RefresherTowel</a></iframe></center>
+
+##### [**EXPLORE THE QUILL DOCS**](/quill/)
+{: .text-center }
+
+---
+
+[![Fate icon](./assets/fate_icon.png){: style="max-width: 256px;"}](/fate/)
+{: .text-center }
+## [**FATE**](/fate/)
+{: .text-center }
+> #### *Decide your players' Fate!*
+
+Fate is a weighted drop library, designed to make random chance less random and more guided. Set up loot tables, give drops weighting, and then roll for a drop (or multiple drops)! It has plenty of features (including all the common gacha mechanics) to allow you to do things like guarantee particular drops, or apply pity mechanics to make sure players don't feel cheated by random bad luck, or have nested loop tables, and so on. Perfect for actual in-game drops from a chest, or even conceptually different things like deciding which enemies a player should encounter, or how your procedurally generated map picks its parts. There are many applications beyond simply dropping loot for your players!
+
+<center><iframe frameborder="0" src="https://itch.io/embed/4299009?linkback=true&amp;border_width=2&amp;bg_color=460000&amp;fg_color=ffffff&amp;link_color=e80000" width="554" height="169"><a href="https://refreshertowel.itch.io/fate">Fate - Advanced Weighted Drops for GameMaker by RefresherTowel</a></iframe></center>
+
+##### [**EXPLORE THE FATE DOCS**](/fate/)
 {: .text-center }
 
 ---
@@ -183,7 +198,7 @@ Echo ships free with all available frameworks and integrates cleanly with their 
 
 Echo also ships with [**Echo Chamber**](/echo-chamber/), the in-game debug UI framework used to build Echo Console and custom development tools.
 
-<iframe frameborder="0" src="https://itch.io/embed/4089088?border_width=2&amp;bg_color=1d471e&amp;fg_color=ffffff&amp;link_color=109200&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/echo">Echo by RefresherTowel</a></iframe>
+<center><iframe frameborder="0" src="https://itch.io/embed/4089088?border_width=2&amp;bg_color=1d471e&amp;fg_color=ffffff&amp;link_color=109200&amp;border_color=ffffff" width="554" height="169"><a href="https://refreshertowel.itch.io/echo">Echo by RefresherTowel</a></iframe></center>
 
 ##### [**EXPLORE THE ECHO DOCS**](/echo/)
 {: .text-center }

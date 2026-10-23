@@ -19,16 +19,20 @@ has_children: true
 ![Sundial icon](../assets/sundial_icon.png)
 {: .text-center}
 
-*A visual time-of-day colour grader for GameMaker*
+*Your game, mood-ified!*
 {: .text-center}
-
-<iframe frameborder="0" src="https://itch.io/embed/5130558?bg_color=8d4800&amp;fg_color=ffffff&amp;link_color=faa85b&amp;border_color=ffffff" width="552" height="167"><a href="https://refreshertowel.itch.io/sundial">Sundial - Day/Night Cycle &amp; Moods by RefresherTowel</a></iframe>
 
 It's all too easy to chuck a semi-transparent black overlay over your game when night falls and call it a day (or perhaps call it a night, lol). But is that *really* what you want your players to see?
 
 What if you could adjust the actual **mood** of your game over the course of a day. A cold, crisp morning flows gently into a bright sunny midday, followed by an orange, warm afternoon, and a spectacular sunset, of course. Then a night with deep, rich purples.
 
 Well **Sundial** is designed to give you exactly that. And best of all, you can **visually author it inside GM itself**.
+
+![Full shot of the Sundial Visual Editor](../assets/plugins/sundial-visual-editor/01-visual-editor.png)
+*The Sundial Visual Editor*
+
+>The Sundial Visual Editor is **completely free** to try out! Simply visit <a href="https://plugins.refreshertowel.games/" target="_blank" rel="noopener noreferrer">RefresherTowel Games Plugin Access</a> for instructions on how to download and install it, then start trying it out with your game!
+{: .important}
 
 Sundial takes an existing 2D scene and grades it continuously through six authored parts of the day:
 
@@ -60,6 +64,8 @@ That's the entire code you need to get Sundial up and running, beautifying your 
 > Of course, Sundial can also be used as a pure code library, and you can take control of the creation of Sundial constructors, set or change any settings, and also manage the drawing and updating if you wish to. The above code is simply the quickest and easiest way to get Sundial running in an automated way.
 {: .note}
 
+<center><iframe frameborder="0" src="https://itch.io/embed/5130558?bg_color=8d4800&amp;fg_color=ffffff&amp;link_color=faa85b&amp;border_color=ffffff" width="552" height="167"><a href="https://refreshertowel.itch.io/sundial">Sundial - Day/Night Cycle &amp; Moods by RefresherTowel</a></iframe></center>
+
 ---
 
 ## Indoor and outdoor areas can react differently
@@ -72,7 +78,7 @@ Indoor pixels have their own base colour, grading strength and day/night brightn
 
 ---
 
-## You don't need the IDE to use Sundial
+## You don't need the Visual Editor to use Sundial
 
 While the Visual Editor plugin makes it incredibly easy to create the exact moods you want, Sundial also has code equivalents for every change you can make in the plugin. So you can build Sundial entirely in code (if that's your weird little preference):
 

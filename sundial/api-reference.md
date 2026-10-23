@@ -23,7 +23,7 @@ api_reference: true
 
 # API Reference
 
-Complete reference for Sundial's grading, time, mask and callback API. For explanations and worked examples, start with the teaching pages; this page is for looking up exact methods, arguments, return values and enum members.
+A list of Sundial's functions and settings, including what each argument does and what each function returns. If you're new to Sundial, the other pages walk you through using it in your game.
 
 ---
 
@@ -32,11 +32,22 @@ Complete reference for Sundial's grading, time, mask and callback API. For expla
 ### Sundial
 {: #sundial .api-type-title }
 
-Creates a <a href="#sundial"><code>Sundial</code></a> with default colours, brightness and day/night timings. It starts at Morning with Auto Time turned off.
+Creates a <a href="#sundial"><code>Sundial</code></a> with default colours, brightness and day/night timings. It starts at Morning with Auto Time turned off. By default, it takes over drawing the application surface until CleanUp() is called.
 
-```js
-new Sundial()
+```gml
+new Sundial(manage_application_surface)
 ```
+
+<div class="api-constructor-meta">
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Arguments</div>
+    <div class="api-argument">
+      <span class="api-argument-name">manage_application_surface <span class="api-optional">optional</span></span>
+      <span class="api-argument-type">Bool</span>
+      <span class="api-argument-description">True to disable GameMaker&#x27;s automatic application-surface drawing so Draw() can present the graded game. False to leave your renderer&#x27;s setting untouched. Defaults to true. Creating a second managing <a href="#sundial"><code>Sundial</code></a> before CleanUp() on the first causes an error.</span>
+    </div>
+  </div>
+</div>
 
 #### Methods
 
@@ -47,7 +58,7 @@ new Sundial()
 <tr><td><a href="#sundial-set-brightness"><code>SetBrightness()</code></a></td><td>Sets how bright the outdoor scene should be during the day and at night. <a href="#sundial"><code>Sundial</code></a> changes the brightness smoothly between the two.</td></tr>
 </tbody></table>
 
-<div class="api-method-group-title">Indoor and outdoor masking</div>
+<div class="api-method-group-title">Indoor and outdoor</div>
 <table class="api-methods"><tbody>
 <tr><td><a href="#sundial-set-indoor-grading"><code>SetIndoorGrading()</code></a></td><td>Sets the base colour used for indoor areas. The indoor mask decides which parts of the scene this affects.</td></tr>
 <tr><td><a href="#sundial-set-indoor-grading-strength"><code>SetIndoorGradingStrength()</code></a></td><td>Changes how strongly the indoor grading colour affects the scene.</td></tr>
@@ -75,7 +86,7 @@ new Sundial()
 <tr><td><a href="#sundial-set-cycle-timing"><code>SetCycleTiming()</code></a></td><td>Changes when the different parts of the day start and how long the colour changes between them take. All six values use a fraction of the day from 0 to 1. Invalid ordering causes a fatal error.</td></tr>
 </tbody></table>
 
-<div class="api-method-group-title">Automatic progression</div>
+<div class="api-method-group-title">Automatic time</div>
 <table class="api-methods"><tbody>
 <tr><td><a href="#sundial-set-auto-time"><code>SetAutoTime()</code></a></td><td>Turns automatic time on or off. When enabled, <a href="#sundial"><code>Sundial</code></a> advances its clock using elapsed real time.</td></tr>
 <tr><td><a href="#sundial-get-auto-time"><code>GetAutoTime()</code></a></td><td>Checks whether Auto Time is turned on. It can still be turned on when the time speed is set to 0.</td></tr>
@@ -99,16 +110,17 @@ new Sundial()
 <tr><td><a href="#sundial-on-dawn"><code>OnDawn()</code></a></td><td>Adds a function to run when Dawn begins.</td></tr>
 </tbody></table>
 
-<div class="api-method-group-title">Resolver information</div>
+<div class="api-method-group-title">Daylight and colour changes</div>
 <table class="api-methods"><tbody>
 <tr><td><a href="#sundial-get-sunlight-amount"><code>GetSunlightAmount()</code></a></td><td>Gets <a href="#sundial"><code>Sundial</code></a>&#x27;s current daylight value. <a href="#sundial"><code>Sundial</code></a> uses this to work out brightness, but you can use it for your own lighting, shadows or other effects.</td></tr>
 <tr><td><a href="#sundial-get-phase"><code>GetPhase()</code></a></td><td>Gets the part of the day that currently has the strongest influence on the grading. This includes Sunset, Twilight and Predawn, which are separate from the six gameplay periods.</td></tr>
 <tr><td><a href="#sundial-get-phase-name"><code>GetPhaseName()</code></a></td><td>Gets the name of the current grading phase, such as &quot;sunset&quot; or &quot;twilight&quot;.</td></tr>
 </tbody></table>
 
-<div class="api-method-group-title">Drawing</div>
+<div class="api-method-group-title">Drawing and stopping</div>
 <table class="api-methods"><tbody>
-<tr><td><a href="#sundial-draw"><code>Draw()</code></a></td><td>Applies <a href="#sundial"><code>Sundial</code></a>&#x27;s colour grading and draws the result. Call Draw() with no arguments in Post Draw to grade your game automatically. You can also supply your own surface and choose where to draw it.</td></tr>
+<tr><td><a href="#sundial-draw"><code>Draw()</code></a></td><td>Colour grades your game and draws the result on screen. For most games, just call Draw() in Post Draw. By default, <a href="#sundial"><code>Sundial</code></a> stops GameMaker from drawing your game a second time. You can also give it your own surface and choose where to draw it. The surface you give it is left unchanged.</td></tr>
+<tr><td><a href="#sundial-clean-up"><code>CleanUp()</code></a></td><td>Restores the application-surface drawing setting captured when this <a href="#sundial"><code>Sundial</code></a> was created. Call this from your controller&#x27;s Clean Up event when it stops presenting the game. Repeated calls are safe. <a href="#sundial"><code>Sundial</code></a> does not free your surfaces or sprites.</td></tr>
 </tbody></table>
 
 <div class="api-method-entry" id="sundial-set-grading">
@@ -272,7 +284,7 @@ new Sundial()
     <div class="api-argument">
       <span class="api-argument-name">mask_surface</span>
       <span class="api-argument-type">Real</span>
-      <span class="api-argument-description">An existing surface to use as the mask. <a href="#sundial"><code>Sundial</code></a> reads its red channel. If GameMaker destroys the surface, you need to recreate it and call SetMask() again.</span>
+      <span class="api-argument-description">An existing surface to use as the mask. <a href="#sundial"><code>Sundial</code></a> reads its red channel but will not delete the surface for you. If GameMaker destroys it, recreate it and call SetMask() again.</span>
     </div>
   </div>
   <div class="api-detail-section">
@@ -854,15 +866,30 @@ new Sundial()
   </div>
 </div>
 
+<div class="api-method-entry" id="sundial-clean-up">
+  <div class="api-method-name">CleanUp()</div>
+  <p class="api-method-summary">Restores the application-surface drawing setting captured when this <a href="#sundial"><code>Sundial</code></a> was created. Call this from your controller&#x27;s Clean Up event when it stops presenting the game. Repeated calls are safe. <a href="#sundial"><code>Sundial</code></a> does not free your surfaces or sprites.</p>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Returns</div>
+    <div class="api-return-row api-return-only">
+      <span class="api-return-type">Struct.<a href="#sundial">Sundial</a></span>
+    </div>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#sundial-draw"><code>Sundial.Draw</code></a> <span aria-hidden="true">·</span> <a href="#sundial-start"><code>SundialStart</code></a> <span aria-hidden="true">·</span> <a href="#sundial-stop"><code>SundialStop</code></a></div>
+  </div>
+</div>
+
 <div class="api-method-entry" id="sundial-draw">
   <div class="api-method-name">Draw([source_surface], [x], [y], [width], [height])</div>
-  <p class="api-method-summary">Applies <a href="#sundial"><code>Sundial</code></a>&#x27;s colour grading and draws the result. Call Draw() with no arguments in Post Draw to grade your game automatically. You can also supply your own surface and choose where to draw it.</p>
+  <p class="api-method-summary">Colour grades your game and draws the result on screen. For most games, just call Draw() in Post Draw. By default, <a href="#sundial"><code>Sundial</code></a> stops GameMaker from drawing your game a second time. You can also give it your own surface and choose where to draw it. The surface you give it is left unchanged.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Arguments</div>
     <div class="api-argument">
       <span class="api-argument-name">source_surface <span class="api-optional">optional</span></span>
       <span class="api-argument-type">Real</span>
-      <span class="api-argument-description">The surface to grade. Leave this out in Post Draw to use the application surface. Omitting it in another event causes a fatal error. You cannot draw a surface onto itself.</span>
+      <span class="api-argument-description">The surface to grade. Leave this out in Post Draw to use the application surface. Omitting a surface while trying to Draw in another Draw event causes a fatal error (as you cannot draw a surface onto itself).</span>
     </div>
     <div class="api-argument">
       <span class="api-argument-name">x <span class="api-optional">optional</span></span>
@@ -886,26 +913,78 @@ new Sundial()
     </div>
   </div>
   <div class="api-detail-section">
+    <div class="api-detail-heading">Returns</div>
+    <div class="api-return-row api-return-only">
+      <span class="api-return-type">Id.Surface</span>
+    </div>
+  </div>
+  <div class="api-detail-section">
     <div class="api-detail-heading">Example</div>
-    <pre class="api-example"><code>// Post Draw event:
+    <pre class="api-example"><code>// In Post Draw, colour grade your game.
 sundial.Draw();
 
-// Or grade your own surface and choose where to draw it.
-sundial.Draw(game_surface, 0, 0, 1280, 720);</code></pre>
+// Or draw your own surface at a chosen position and size.
+sundial.Draw(my_surface, 0, 0, 1280, 720);</code></pre>
   </div>
 </div>
 
-## Top-level functions
+## Starting, stopping and loading
+
+<div class="api-method-entry" id="sundial-start">
+  <div class="api-method-name">SundialStart([preset_name])</div>
+  <p class="api-method-summary">Starts <a href="#sundial"><code>Sundial</code></a> using a preset from the Visual Editor. <a href="#sundial"><code>Sundial</code></a> will handle the drawing for you and keep working when you change rooms. If it&#x27;s already running, calling this again won&#x27;t restart the day or change the preset. Call <a href="#sundial-stop"><code>SundialStop()</code></a> first if you want to switch presets.</p>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Arguments</div>
+    <div class="api-argument">
+      <span class="api-argument-name">preset_name <span class="api-optional">optional</span></span>
+      <span class="api-argument-type">String</span>
+      <span class="api-argument-description">The name of the preset to load. Leave this out to use the default preset. To switch presets later, call <a href="#sundial-stop"><code>SundialStop()</code></a> first.</span>
+    </div>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Returns</div>
+    <div class="api-return-row api-return-only">
+      <span class="api-return-type">Struct.<a href="#sundial">Sundial</a></span>
+    </div>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Example</div>
+    <pre class="api-example"><code>sundial = SundialStart();
+sundial.SetDayLength(600);</code></pre>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#sundial-stop"><code>SundialStop</code></a> <span aria-hidden="true">·</span> <a href="#sundial-import"><code>SundialImport</code></a> <span aria-hidden="true">·</span> <a href="#sundial-clean-up"><code>Sundial.CleanUp</code></a></div>
+  </div>
+</div>
+
+<div class="api-method-entry" id="sundial-stop">
+  <div class="api-method-name">SundialStop()</div>
+  <p class="api-method-summary">Stops <a href="#sundial"><code>Sundial</code></a> if you started it with <a href="#sundial-start"><code>SundialStart()</code></a>. It puts GameMaker&#x27;s drawing setting back the way it was. You can call it more than once. It won&#x27;t change other Sundials you created yourself or masks you supplied.</p>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Example</div>
+    <pre class="api-example"><code>SundialStop();</code></pre>
+  </div>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">See also</div>
+    <div class="api-see-also"><a href="#sundial-start"><code>SundialStart</code></a> <span aria-hidden="true">·</span> <a href="#sundial-clean-up"><code>Sundial.CleanUp</code></a></div>
+  </div>
+</div>
 
 <div class="api-method-entry" id="sundial-import">
-  <div class="api-method-name">SundialImport([preset_name])</div>
-  <p class="api-method-summary">Loads a <a href="#sundial"><code>Sundial</code></a> preset you saved using the IDE plugin. Without a name, it loads whichever preset you marked as Default.</p>
+  <div class="api-method-name">SundialImport([preset_name], [manage_application_surface])</div>
+  <p class="api-method-summary">Loads a <a href="#sundial"><code>Sundial</code></a> preset you saved using <a href="#sundial"><code>Sundial</code></a> Visual Editor. Without a name, it loads whichever preset you marked as Default.</p>
   <div class="api-detail-section">
     <div class="api-detail-heading">Arguments</div>
     <div class="api-argument">
       <span class="api-argument-name">preset_name <span class="api-optional">optional</span></span>
       <span class="api-argument-type">String</span>
       <span class="api-argument-description">Exact name of the preset to load. Leave this out to load the default preset. An unknown name causes an error.</span>
+    </div>
+    <div class="api-argument">
+      <span class="api-argument-name">manage_application_surface <span class="api-optional">optional</span></span>
+      <span class="api-argument-type">Bool</span>
+      <span class="api-argument-description">True to let <a href="#sundial"><code>Sundial</code></a> manage application-surface drawing until CleanUp() is called. False to leave your renderer&#x27;s setting untouched. Defaults to true. Pass undefined for the preset name to use the default preset with this option.</span>
     </div>
   </div>
   <div class="api-detail-section">
@@ -929,42 +1008,42 @@ winter_sundial = SundialImport(&quot;Winter&quot;);</code></pre>
 
 ## Enums
 
-### Grading
+### Grading colours
 {: .api-function-subsection-title .api-function-subsection-title-first }
 
 <div class="api-enum-entry" id="enum-e-sundial">
   <div class="api-enum-name">eSundial</div>
-  <p class="api-enum-summary">The six authored grading anchors <a href="#sundial"><code>Sundial</code></a> blends through over one full day.</p>
+  <p class="api-enum-summary">The six parts of the day you can give their own colours and grading strengths.</p>
   <div class="api-detail-section api-enum-values">
     <div class="api-detail-heading">Values</div>
     <div class="api-enum-members">
       <div class="api-enum-row">
         <span class="api-enum-member">MORNING</span>
-        <span class="api-enum-description">Morning grading anchor.</span>
+        <span class="api-enum-description">Use this to change the Morning colour.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">DAY</span>
-        <span class="api-enum-description">Day grading anchor.</span>
+        <span class="api-enum-description">Use this to change the Day colour.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">AFTERNOON</span>
-        <span class="api-enum-description">Afternoon grading anchor.</span>
+        <span class="api-enum-description">Use this to change the Afternoon colour.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">DUSK</span>
-        <span class="api-enum-description">Dusk grading anchor. <a href="#sundial"><code>Sundial</code></a>&#x27;s internal Sunset and Twilight phases both resolve through this authored grade.</span>
+        <span class="api-enum-description">Use this to change the Dusk colour, including sunset and twilight.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">NIGHT</span>
-        <span class="api-enum-description">Night grading anchor.</span>
+        <span class="api-enum-description">Use this to change the Night colour.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">DAWN</span>
-        <span class="api-enum-description">Dawn grading anchor used during the later part of Predawn.</span>
+        <span class="api-enum-description">Use this to change the Dawn colour, as night turns into Morning.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">NUM</span>
-        <span class="api-enum-description">Sentinel/count value.</span>
+        <span class="api-enum-description">The number of grading choices. It is not a part of the day.</span>
       </div>
     </div>
   </div>
@@ -975,37 +1054,37 @@ winter_sundial = SundialImport(&quot;Winter&quot;);</code></pre>
 
 <div class="api-enum-entry" id="enum-e-sundial-period">
   <div class="api-enum-name">eSundialPeriod</div>
-  <p class="api-enum-summary">The six semantic schedule periods used by GetPeriod() and period callbacks.</p>
+  <p class="api-enum-summary">The six parts of the day reported by GetPeriod() and used by functions such as OnMorning() and OnNight().</p>
   <div class="api-detail-section api-enum-values">
     <div class="api-detail-heading">Values</div>
     <div class="api-enum-members">
       <div class="api-enum-row">
         <span class="api-enum-member">MORNING</span>
-        <span class="api-enum-description">Morning period beginning at the normalized cycle seam.</span>
+        <span class="api-enum-description">Morning, when <a href="#sundial"><code>Sundial</code></a>&#x27;s day begins.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">DAY</span>
-        <span class="api-enum-description">Day period.</span>
+        <span class="api-enum-description">Daytime.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">AFTERNOON</span>
-        <span class="api-enum-description">Afternoon period.</span>
+        <span class="api-enum-description">Afternoon.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">DUSK</span>
-        <span class="api-enum-description">Dusk period.</span>
+        <span class="api-enum-description">Dusk.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">NIGHT</span>
-        <span class="api-enum-description">Night period.</span>
+        <span class="api-enum-description">Nighttime.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">DAWN</span>
-        <span class="api-enum-description">Dawn period.</span>
+        <span class="api-enum-description">Dawn.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">NUM</span>
-        <span class="api-enum-description">Sentinel/count value.</span>
+        <span class="api-enum-description">The number of periods. Not a period itself.</span>
       </div>
     </div>
   </div>
@@ -1013,43 +1092,54 @@ winter_sundial = SundialImport(&quot;Winter&quot;);</code></pre>
 
 <div class="api-enum-entry" id="enum-e-sundial-phase">
   <div class="api-enum-name">eSundialPhase</div>
-  <p class="api-enum-summary">The more detailed internal temporal phases used by <a href="#sundial"><code>Sundial</code></a>&#x27;s continuous visual resolver.</p>
+  <p class="api-enum-summary">More detailed parts of the day used by <a href="#sundial"><code>Sundial</code></a>&#x27;s colour changes, including Sunset, Twilight and Predawn.</p>
   <div class="api-detail-section api-enum-values">
     <div class="api-detail-heading">Values</div>
     <div class="api-enum-members">
       <div class="api-enum-row">
         <span class="api-enum-member">MORNING</span>
-        <span class="api-enum-description">Morning is the dominant resolver phase.</span>
+        <span class="api-enum-description">The Morning part of the colour changes.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">DAY</span>
-        <span class="api-enum-description">Day is the dominant resolver phase.</span>
+        <span class="api-enum-description">The Day part of the colour changes.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">AFTERNOON</span>
-        <span class="api-enum-description">Afternoon is the dominant resolver phase.</span>
+        <span class="api-enum-description">The Afternoon part of the colour changes.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">SUNSET</span>
-        <span class="api-enum-description">Sunset is the dominant resolver phase and contributes to the authored Dusk grade.</span>
+        <span class="api-enum-description">Sunset, when the colours are moving towards Dusk.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">TWILIGHT</span>
-        <span class="api-enum-description">Twilight is the dominant resolver phase and contributes to the authored Dusk grade.</span>
+        <span class="api-enum-description">Twilight, between Dusk and Night.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">NIGHT</span>
-        <span class="api-enum-description">Night is the dominant resolver phase.</span>
+        <span class="api-enum-description">Nighttime.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">PREDAWN</span>
-        <span class="api-enum-description">Predawn is the dominant resolver phase and hands the grade from Night through Dawn toward Morning.</span>
+        <span class="api-enum-description">The change from Night through Dawn and back to Morning.</span>
       </div>
       <div class="api-enum-row">
         <span class="api-enum-member">NUM</span>
-        <span class="api-enum-description">Sentinel/count value.</span>
+        <span class="api-enum-description">The number of phases. Not a phase itself.</span>
       </div>
     </div>
+  </div>
+</div>
+
+## Version
+
+<div class="api-method-entry api-macro-entry api-macro-value" id="macro-sundial-version">
+  <div class="api-method-name">SUNDIAL_VERSION</div>
+  <p class="api-method-summary">The version of <a href="#sundial"><code>Sundial</code></a> you have installed.</p>
+  <div class="api-detail-section">
+    <div class="api-detail-heading">Value</div>
+    <pre class="api-example"><code>&quot;1.0.0&quot;</code></pre>
   </div>
 </div>
 
@@ -1057,6 +1147,7 @@ winter_sundial = SundialImport(&quot;Winter&quot;);</code></pre>
 
 <div class="api-symbol-index">
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">C</div>
+    <div class="api-symbol-row"><a href="#sundial-clean-up"><code>CleanUp()</code></a> <span class="api-symbol-owner">| Sundial</span></div>
     <div class="api-symbol-row"><a href="#sundial-clear-mask"><code>ClearMask()</code></a> <span class="api-symbol-owner">| Sundial</span></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">D</div>
@@ -1111,6 +1202,8 @@ winter_sundial = SundialImport(&quot;Winter&quot;);</code></pre>
     <div class="api-symbol-row"><a href="#sundial-set-time-of-day"><code>SetTimeOfDay()</code></a> <span class="api-symbol-owner">| Sundial</span></div>
     <div class="api-symbol-row"><a href="#sundial"><code>Sundial</code></a></div>
     <div class="api-symbol-row"><a href="#sundial-import"><code>SundialImport()</code></a></div>
+    <div class="api-symbol-row"><a href="#sundial-start"><code>SundialStart()</code></a></div>
+    <div class="api-symbol-row"><a href="#sundial-stop"><code>SundialStop()</code></a></div>
   </div>
   <div class="api-symbol-letter"><div class="api-symbol-letter-heading">U</div>
     <div class="api-symbol-row"><a href="#sundial-update"><code>Update()</code></a> <span class="api-symbol-owner">| Sundial</span></div>
@@ -1119,5 +1212,8 @@ winter_sundial = SundialImport(&quot;Winter&quot;);</code></pre>
     <div class="api-symbol-row"><a href="#enum-e-sundial"><code>eSundial</code></a><span class="api-symbol-owner">enum</span></div>
     <div class="api-symbol-row"><a href="#enum-e-sundial-period"><code>eSundialPeriod</code></a><span class="api-symbol-owner">enum</span></div>
     <div class="api-symbol-row"><a href="#enum-e-sundial-phase"><code>eSundialPhase</code></a><span class="api-symbol-owner">enum</span></div>
+  </div>
+  <div class="api-symbol-letter"><div class="api-symbol-letter-heading">Macros</div>
+    <div class="api-symbol-row"><a href="#macro-sundial-version"><code>SUNDIAL_VERSION</code></a><span class="api-symbol-owner">macro</span></div>
   </div>
 </div>
