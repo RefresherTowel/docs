@@ -84,8 +84,8 @@ While the Visual Editor plugin makes it incredibly easy to create the exact mood
 
 ```js
 sundial = new Sundial()
-    .SetGrading(eSundialPeriod.MORNING, make_color_rgb(194, 242, 229))
-    .SetGradingStrength(eSundialPeriod.MORNING, 2)
+    .SetGrading(eSundial.MORNING, make_color_rgb(194, 242, 229))
+    .SetGradingStrength(eSundial.MORNING, 2)
     .SetBrightness(1.09, 0.39)
     .SetTime(6);
 ```

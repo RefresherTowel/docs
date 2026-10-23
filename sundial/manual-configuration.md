@@ -28,6 +28,14 @@ sundial = new Sundial();
 
 The constructor already has a complete default day/night setup, so even that is a usable Sundial. From there, replace whichever parts your game wants to own.
 
+It's also important to remember to clean up once you've created a `Sundial` struct, either with `SundialImport()` or with `new Sundial()`. It's easy enough, just call `CleanUp()` on the `Sundial` reference you've got:
+
+```js
+sundial.CleanUp();
+```
+
+This will restore all the draw settings to what they were to prior Sundial taking over.
+
 ---
 
 ## The six grading anchors
