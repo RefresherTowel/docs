@@ -18,7 +18,7 @@ nav_order: 2
 
 # Using Sundial in Your Game
 
-Let's look at how you might use Sundial in your game.
+Let's look at how you might use Sundial in your game, without running it through the automated `SundialStart()` and `SundialStop()` functions, giving you more control over how Sundial works.
 
 In your Create Event (preferably in a singleton controller object):
 
@@ -32,17 +32,14 @@ Then in Post Draw:
 sundial.Draw();
 ```
 
-And you're done.
-
-## Wait that's it?
-
-Indded, if you've got **Auto Time** turned on in the IDE editor, that's the complete setup for most games. `SundialImport()` loads the default preset you made, Sundial keeps the time moving, and `Draw()` applies the colour grading to your application surface and draws it appropriately on the window.
+> Sundial takes over the application surface by default. This includes turning off automatic drawing of the application surface. This is something you should be aware of. You can tell sundial **not** to do this by providing `false` as the second argument to `SundialImport()` or as the first argument when creating a Sundial constructor yourself. However, this will mean that the app surface ends up drawing over Sundial during a naive post-draw cycle, so you'll then have to manage either separate surfaces, or handle turning off the app surface drawing yourself.
+{: .warning}
 
 ---
 
 ## Loading your preset
 
-`SundialImport()` loads whichever preset you marked as **Default** in the IDE:
+`SundialImport()` loads whichever preset you marked as **Default** in the Visual Editor:
 
 ```js
 sundial = SundialImport();
@@ -75,13 +72,15 @@ You don't need to pass `application_surface` yourself, and you don't need to wor
 
 Anything you draw later in **Draw GUI** will not be graded.
 
-The no-argument `Draw()` is intended for Post Draw. If you call it from another event and you don't supply a custom surface, Sundial will throw.
+The no-argument `Draw()` is intended for Post Draw. If you call it from another event and you don't supply a custom surface, Sundial will throw (this is because Sundial cannot draw the app surface while the app surface is the active draw target).
+
+You can also supply the x and y and width and height arguments if you so wish.
 
 ---
 
 ## Auto Time
 
-Unless your game already has its own clock, the easiest option is to simply leave **Auto Time** turned on in the IDE and set the **Start Time** and **Day Length** there.
+Unless your game already has its own clock, the easiest option is to simply leave **Auto Time** turned on in the Visual Editor and set the **Start Time** and **Day Length** there.
 
 That way, Sundial itself will manage the flow of time in your game.
 

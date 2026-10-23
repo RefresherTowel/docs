@@ -18,7 +18,7 @@ nav_order: 5
 
 # Configuring Sundial in Code
 
-The IDE plugin is the easiest way to author Sundial because you can see the result while you're changing it. But sometimes you just wanna get your hands dirty with code.
+The Visual Editor plugin is the easiest way to author Sundial because you can see the result while you're changing it. But sometimes you just wanna get your hands dirty with code.
 
 `SundialImport()` ultimately calls the `Sundial` constructor and configures it through the same methods outlined on this page. If you want to load settings from somewhere else, or simply keep the whole setup in GML, you can use the exact same methods, starting with creating the Sundial constructor:
 
@@ -58,7 +58,7 @@ Then set how strongly that colour should bias the scene:
 sundial.SetGradingStrength(eSundial.DUSK, 1.48);
 ```
 
-A strength of `0` leaves that stage neutral. `1` applies the full luminance-normalized colour bias, and values above `1` deliberately exaggerate it. Exactly like the IDE plugin.
+A strength of `0` leaves that stage neutral. `1` applies the full luminance-normalized colour bias, and values above `1` deliberately exaggerate it. Exactly like the Visual Editor plugin.
 
 Sundial normalizes the grading colour around its luminance before applying the strength. In practical terms, the colour control is mainly answering "what colour should this part of the day feel like?" while essentially ignoring brightness, which is configured separately.
 
@@ -166,7 +166,7 @@ Dawn      = 1 - predawn_duration * 0.5
 
 `afternoon_start` is deliberately separate from the public Afternoon boundary. It controls when the Afternoon colour begins blending in before the authored Afternoon period is considered active.
 
-This is the one part of Sundial I would absolutely recommend authoring in the IDE unless you have a very specific reason not to. Dragging the visible period nodes around a timeline is simply easier to reason about than editing six normalized timing values by hand like this.
+This is the one part of Sundial I would absolutely recommend authoring in the Visual Editor unless you have a very specific reason not to. Dragging the visible period nodes around a timeline is simply easier to reason about than editing six normalized timing values by hand like this.
 
 ---
 
@@ -249,25 +249,25 @@ sundial.OnPeriodChanged(function(_from, _to) {
 
 ---
 
-## Code-authored and IDE-authored Sundials can mix
+## Mix and match code-authored and Visual Editor-authored Sundial settings
 
-You don't have to make a project-wide choice between the IDE and manual configuration.
+You don't have to make a project-wide choice between the Visual Editor and manual configuration.
 
-For example, you can author the expensive visual part in the IDE:
+For example, you can author the expensive visual part in the Visual Editor:
 
 ```js
 sundial = SundialImport("Overworld");
 ```
 
-then let a difficulty mode alter Night brightness in code:
+then maybe alter the brightness in code when winter starts or something like that:
 
 ```js
-if (hard_mode) {
-    sundial.SetBrightness(1.09, 0.25);
+if (winter_started) {
+    sundial.SetBrightness(0.9, 0.15);
 }
 ```
 
-Or use the IDE for the Overworld and create a tiny special-purpose Sundial in code for a dream sequence, or whatever. It's your game, not mine, so it's your decision to make how and why to mix and match, if at all.
+Or use the Visual Editor for the Overworld and create a tiny special-purpose Sundial in code for a dream sequence, or whatever. It's your game, not mine, so it's your decision to make how and why to mix and match, if at all.
 
 Once imported, the handle returned by `SundialImport` is just a normal Sundial struct built from the constructor. Use whichever authoring path keeps the thing you're trying to express easiest to understand for you.
 

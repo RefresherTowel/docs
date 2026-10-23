@@ -18,11 +18,11 @@ nav_order: 3
 
 # Time, Periods & Callbacks
 
-The visual side of Sundial is continuous. Dusk doesn't suddenly snap on at 18:30 and replace Afternoon with a completely different colour. The grade is always moving smoothly through the cycle.
+The visual side of Sundial is continuous, as in Dusk doesn't suddenly snap on at 18:30 and replace Afternoon with a completely different colour. So the colour grading is always moving smoothly through the cycle.
 
 Gameplay often needs something more definite than that, though. For instance, street lights need a moment when they turn on, or shops might close at Night.
 
-Sundial handles both ideas at once. The grading stays continuous, while the six time period nodes act as clear semantic **period** boundaries for your game logic.
+Sundial has your back, and it gives you some options for running code when a specific time period moves into another.
 
 ---
 
@@ -50,7 +50,7 @@ eSundialPeriod.NIGHT
 eSundialPeriod.DAWN
 ```
 
-The timeline you create in the IDE is the same schedule `GetPeriod()` and the callback API use when your game is running.
+The timeline you create in the Visual Editor is the same schedule `GetPeriod()` and the callback API use when your game is running.
 
 In other words, if you put Dusk at 18:30 in the editor, then 18:30 is where Sundial starts reporting Dusk and where the Dusk callbacks fire.
 
@@ -72,7 +72,7 @@ switch (sundial.GetPeriod()) {
 }
 ```
 
-Use `GetPeriod()` for semantic game rules like this.
+Use `GetPeriod()` for game rules like this.
 
 Sundial also exposes `GetPhase()` and `GetPhaseName()`, but phases are a different thing. Internally, Sundial uses a slightly more detailed resolver with phases such as Sunset, Twilight and Predawn to make the continuous visual transitions look good. You may find a use for them, but usually it's just easier to rely on the six basic periods.
 
@@ -133,7 +133,7 @@ sundial.OnDusk(function() {
 
 Both of these will run, one after the other according to the order you added them, when Dusk begins.
 
-If the preset was imported from the IDE, any callback authored in the Dusk Callback field is already registered as well. Adding extra callbacks through code will simply add more behaviour to the same period.
+If the preset was imported from the Visual Editor, any callback authored in the Dusk Callback field is already registered as well. Adding extra callbacks through code will simply add more behaviour to the same period.
 
 ---
 
@@ -188,7 +188,7 @@ sundial.SetMorningTime(6);
 
 If you have set Morning to 06:00, then a normalized day position of `0.25` is 12:00, `0.5` is 18:00 and `0.75` is 00:00.
 
-When you use the IDE, changing Morning's Time field configures this clock origin for you.
+When you use the Visual Editor, changing Morning's Time field configures this clock origin for you.
 
 ---
 

@@ -33,8 +33,8 @@ Build out a black and white image, either programmatically on a surface or as a 
 ```js
 sundial.SetMask(indoor_mask_surface);
 
-// Or if you're using a prebuilt sprite:
-sundial.SetSpriteMask(spr_indoor_mask);
+// Or if you're using a sprite as a mask:
+sundial.SetMaskSprite(spr_indoor_mask);
 ```
 
 Sundial reads that surface/sprite like this:
@@ -57,7 +57,7 @@ As you might've noticed, the mask doesn't have to be only pure black and white, 
 
 ## Dealing with surfaces
 
-`SetMask()` stores the surface handle, and as we know, surfaces are volatile and can be destroyed at any point in time. If the surface is lost or destroyed, you'll need to recreate it and give Sundial the new handle:
+`SetMask()` stores the surface handle, and as we GameMakers know, surfaces are volatile and can be destroyed at any point in time. If the surface is lost or destroyed, you'll need to recreate it and give Sundial the new handle:
 
 ```js
 if (!surface_exists(indoor_mask_surface)) {
@@ -97,6 +97,34 @@ sundial.ClearMask();
 
 ---
 
+## Making a surface for the indoor mask
+
+I'm not going to go super indepth here, but just as a bit of a primer for what you might want to do:
+
+Create a surface (you want to do this in the Draw Event, as per the GM manual). It's a good idea to make it the same size as your target draw surface (usually the app surface, unless you're manually handling a surface you also want Sundial to draw to).
+
+If you have houses, you might want to create a sprite for their indoor mask according to their shape. Remember, in mask terms, white is **indoors** and black is **outdoors**. So if you have a window in the front of your house that you wanted to light up at night, you'd have the house mask sprite with it's windows coloured white, and the entire rest of the house coloured black.
+
+Then you'd simply draw this house mask sprite to the mask surface at roughly the same time you are drawing your actual houses. The timing doesn't matter too much, as long as all the masks are drawn to the mask surface before the Post Draw Event runs.
+
+`camera_apply()` can be a useful function here, if you are having trouble getting the coordinates of your mask drawing lining up with the actual sprites you want to be masking. Run it immediately after you switch your surface target:
+
+```js
+surface_set_target(my_mask_surface);
+draw_clear_alpha(c_black, 0); // Clear the mask surface to black with opacity 0
+camera_apply(camera_get_active());
+// Rest of mask drawing here
+surface_reset_target();
+```
+
+That's usually enough to get everything lined up so what you are drawing to the mask corresponds exactly to what is being shown on your camera.
+
+You don't need to continuously tell Sundial to use the the masking surface just because you are drawing to it. Just make sure that it exists, and if it doesn't, create it again and **then** hand Sundial the reference for that new mask.
+
+This should be enough to get you started with surfaces and how the mask works. There's lots of educational material out there on exactly how surfaces work, so if this is completely new to you, it'll be a good idea to get comfortable with surfaces before trying to add indoor masking to Sundial.
+
+---
+
 ## Indoor colour grading
 
 The outdoor scene moves through the six Morning, Day, Afternoon, Dusk, Night and Dawn grades.
@@ -119,11 +147,11 @@ If there is no mask, these indoor settings don't change the output because every
 
 ---
 
-## Daylight influence keeps interiors visually connected to outside
+## Using daylight influence to keep interiors visually connected to the outside
 
-A completely fixed indoor grade can look strange when the outside world becomes very dramatic.
+A completely fixed indoor grade can look strange when the outside world becomes very dramatically coloured.
 
-A tavern doesn't need to turn fully purple because Dawn is purple, but letting it pick up *some* of that colour can make the window light and the room around it feel like they still belong to the same time of day.
+For instance, you probably don't want a tavern to turn fully purple because Dawn is purple, but letting it pick up *some* of that colour can make the window light and the room around it feel like they still belong to the same time of day.
 
 Use `SetIndoorDaylightInfluence()` for that:
 
@@ -170,7 +198,7 @@ makes the outdoor world change much more strongly between Day and Night while ke
 
 ## Preview masks vs in-game masks
 
-As I stated during the IDE Plugin page, the IDE's **Import Preview Mask** button exists so you can test out the indoor/outdoor behaviour on the screenshot while you're creating a preset, it does NOT use that mask in the actual game.
+As I stated during the Visual Editor Plugin page, the Visual Editor's **Import Preview Mask** button exists so you can test out the indoor/outdoor behaviour on the screenshot while you're creating a preset, it does NOT use that mask in the actual game.
 
 So ensure you provide the mask via code in-game when you need to mask out some indoor space.
 
@@ -180,10 +208,24 @@ So ensure you provide the mask via code in-game when you need to mask out some i
 
 A complete mask setup might look roughly like this:
 
+**Create Event**
 ```js
 sundial = SundialImport();
-sundial.SetMask(indoor_mask_surface);
+global.indoor_mask_surface = undefined;
 ```
+
+**Draw Event**
+```js
+if (!surface_exists(global.indoor_mask_surface)) {
+    global.indoor_mask_surface = surface_create(
+        surface_get_width(application_surface),
+        surface_get_height(application_surface)
+    );
+    sundial.SetMask(global.indoor_mask_surface);
+}
+```
+
+Then you would simply draw to `global.indoor_mask_surface` whenever you want to draw some masking (making sure to run an existence check beforehand).
 
 Easy, wholesome, rustic.
 
@@ -191,6 +233,6 @@ Easy, wholesome, rustic.
 
 ## Next: Configuring Sundial in Code
 
-If you're using the IDE plugin, you already have all the grading configuration you need at your fingertips. The next page is mainly for people who want to build or alter the complete setup programmatically without touching the IDE plugin.
+If you're using the Visual Editor plugin, you already have all the grading configuration you need at your fingertips. The next page is mainly for people who want to build or alter the complete setup programmatically without touching the Visual Editor plugin.
 
 Continue with **[Configuring Sundial in Code](manual-configuration)** for grading anchors, strengths, brightness and cycle timing without relying on an authored preset.
