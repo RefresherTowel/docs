@@ -18,11 +18,11 @@ nav_order: 1
 
 # Using Echo
 
-This page starts with ordinary logging and adds the rest of Echo when a debugging problem gives you a reason to use it.
+This page builds up from basic logging towards all the different features that Echo gives you for scenarios you might encounter.
 
 ---
 
-## Log the thing you care about
+## Logging
 
 When something useful happens in your game, log it with the function that matches how much attention it deserves:
 
@@ -47,7 +47,7 @@ The four logging functions return `true` when the message passed Echo's current 
 
 ## Decide how much you want to hear
 
-A project can easily produce more useful debug messages than you want to look at all the time. Echo's debug level lets you decide how serious a message has to be before it appears in the normal output and filtered history.
+A project can easily produce more useful debug messages than you want to look at at any one time. Echo's debug level lets you decide how serious a message has to be before it appears in the normal output and filtered history.
 
 - `eEchoDebugLevel.NONE` lets no messages into the normal filtered log.
 - `eEchoDebugLevel.SEVERE_ONLY` lets through only severe messages.
@@ -58,18 +58,18 @@ A project can easily produce more useful debug messages than you want to look at
 EchoDebugSetLevel(eEchoDebugLevel.COMPLETE);
 ```
 
-For example, `COMPREHENSIVE` is useful when you want problems to stay visible without filling the output with routine information. Switch to `COMPLETE` while chasing a specific problem and the informational messages become visible too.
+For example, `COMPREHENSIVE` is useful when you want problems to stay visible without filling the output with routine information. Switch to `COMPLETE` to dump absolutely every message that passes filters into the console output.
 
-Warnings include stack traces in `COMPLETE`. Severe messages include a stack trace whenever they pass the normal filter.
+Warnings include stack traces in `COMPLETE` output. Severe messages always include a stack trace.
 
-Read the current level when a debug tool needs to show it:
+If you need to read the current level:
 
 ```js
 var _level = EchoDebugGetLevel();
 var _level_name = EchoDebugGetLevel(true);
 ```
 
-The level controls the normal filtered log. Raw history, covered later on this page, can deliberately remember messages before this filter is applied.
+The level controls the normal filtered log. Raw history, covered later on this page, can deliberately remember messages before this filter is applied (meaning that filtering doesn't just completely abandon debug messages entirely).
 
 ---
 
@@ -83,7 +83,7 @@ EchoDebugWarn("Controller disconnected", ["Input", "UI"]);
 EchoDebugWarn("Autosave retry", "Save");
 ```
 
-If the bug you're chasing seems to involve UI and input, tell Echo to let only those tagged messages into the normal log:
+If the bug you're chasing seems to involve UI and input, tell Echo to only let those tagged messages into the normal log:
 
 ```js
 EchoDebugSetTags(["UI", "Input"]);
@@ -91,7 +91,7 @@ EchoDebugSetTags(["UI", "Input"]);
 
 This function **always** takes an array, so pass arrays even when setting a single allowed tag: `EchoDebugSetTags(["UI"]);`
 
-A message can have one tag or several. It passes when at least one of its tags appears in the allowed list. While a tag filter is active, an untagged message doesn't pass because Echo has no way to know that it belongs to the part of the game you're asking for.
+A message can have more than one tag. It passes when at least one of its tags appears in the allowed list. While a tag filter is active, an untagged message doesn't pass because Echo has no way to know that it belongs to the part of the game you're asking for.
 
 ```js
 var _tags = EchoDebugGetTags();
@@ -102,9 +102,9 @@ EchoDebugClearTags();
 
 ---
 
-## Keep enough history to inspect what happened
+## History
 
-GameMaker's output keeps moving. A useful message can be gone from sight by the time you realise you need it, and an in-game debug tool may need to inspect messages that happened several seconds ago.
+When you've got a bunch of debug outputs all running, useful message can be gone from sight by the time you realise you need it, and an in-game debug tool may need to inspect messages that happened several minutes ago.
 
 Echo therefore remembers the messages that passed its normal level and tag filters. You can cap how many entries it keeps:
 
@@ -130,7 +130,7 @@ If you're building a richer tool, `EchoDebugGetStructuredHistory()` gives you th
 
 ---
 
-## Keep raw history when you want to re-filter later
+## Raw history
 
 There are two useful versions of the log:
 
@@ -139,7 +139,7 @@ There are two useful versions of the log:
 
 The first version is the normal filtered history. The second is raw history.
 
-Raw history matters when you're using Echo Console. Imagine your game is currently showing only warnings and severe messages, then you notice a problem and decide you want to inspect the informational messages from the previous few seconds as well. If Echo had thrown those messages away at the original filter, changing the Console view now couldn't bring them back.
+Imagine your game is currently showing only warnings and severe messages, then you notice a problem and decide you want to inspect the informational messages from the previous few seconds as well. If Echo had thrown those messages away at the original filter, changing the Console view now couldn't bring them back.
 
 Raw capture keeps that earlier information available:
 

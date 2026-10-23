@@ -27,14 +27,14 @@ Echo is a lightweight debug logger for GameMaker. It gives you a cleaner replace
 
 If you want the itch page: [Echo on itch.io](https://refreshertowel.itch.io/echo)
 
-> All of my other frameworks, [![Statement icon]({{ '/assets/statement_icon.png' | relative_url }}){: .framework-icon-small } **Statement**](https://refreshertowel.itch.io/statement), [![Pulse icon]({{ '/assets/pulse_icon.png' | relative_url }}){: .framework-icon-small } **Pulse**](https://refreshertowel.itch.io/pulse), [![Catalyst icon]({{ '/assets/catalyst_icon.png' | relative_url }}){: .framework-icon-small } **Catalyst**](https://refreshertowel.itch.io/catalyst) and [![Whisper icon]({{ '/assets/whisper_icon.png' | relative_url }}){: .framework-icon-small } **Whisper**](https://refreshertowel.itch.io/whisper) ship with **Echo** for free! So if either of them sounds interesting and you're thinking of buying Echo, grab them instead and get Echo bundled with them!
+> Some of my other libraries, [![Statement icon]({{ '/assets/statement_icon.png' | relative_url }}){: .framework-icon-small } **Statement**](https://refreshertowel.itch.io/statement), [![Pulse icon]({{ '/assets/pulse_icon.png' | relative_url }}){: .framework-icon-small } **Pulse**](https://refreshertowel.itch.io/pulse), [![Catalyst icon]({{ '/assets/catalyst_icon.png' | relative_url }}){: .framework-icon-small } **Catalyst**](https://refreshertowel.itch.io/catalyst) and [![Whisper icon]({{ '/assets/whisper_icon.png' | relative_url }}){: .framework-icon-small } **Whisper**](https://refreshertowel.itch.io/whisper) ship with **Echo** for free! So if any of them sounds interesting and you're thinking of buying Echo, grab them instead and get Echo bundled with them!
 {: .important}
 
 ---
 
 ## Start by logging something
 
-You don't need to configure Echo before you can use it. Put one of these wherever you would normally use `show_debug_message()`:
+Echo is quite simple, just put one of these wherever you would normally use `show_debug_message()`:
 
 ```js
 EchoDebugInfo("Player entered the room");
@@ -42,7 +42,7 @@ EchoDebugWarn("Save file is missing");
 EchoDebugSevere("Inventory failed to load");
 ```
 
-The three functions describe how important the message is. `INFO` is ordinary diagnostic information, `WARNING` is something worth investigating, and `SEVERE` is for something seriously wrong. Severe messages include a stack trace automatically.
+Use the three functions to describe how important the message is. `INFO` is ordinary diagnostic information, `WARNING` is something worth investigating, and `SEVERE` is for something seriously wrong. Severe messages include a stack trace automatically.
 
 With Echo's default debug level, warnings and severe messages are shown while info messages stay quiet. If you're actively investigating something and want to see everything, switch to complete logging:
 
