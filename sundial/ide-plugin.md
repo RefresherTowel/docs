@@ -44,9 +44,9 @@ Quickly, the steps for a clean install are:
 2. Make sure that it is enabled in Package Manager (the checkbox to the left of it needs to be **checked**). *This is almost certainly the step you will forget!* Make sure you look to the left of the plugin name, and make sure to check the check box that is there.
 3. Restart GameMaker **after** installing and enabling the plugin.
 4. Open the project you want to author.
-5. Choose **Tools > Sundial**.
+5. Choose **Tools > Sundial Visual Editor**.
 
-Installing the package and enabling the plugin are two **completely separate** steps in GameMaker. If Sundial is installed but **Tools > Sundial** doesn't appear, check that the plugin itself is enabled and has been loaded by the IDE.
+Installing the package and enabling the plugin are two **completely separate** steps in GameMaker. If Sundial is installed but **Tools > Sundial Visual Editor** doesn't appear, check that the plugin itself is enabled and has been loaded by the IDE.
 
 The plugin only helps you author your scene. It isn't something your game loads at runtime, and so it doesn't add any extra load times or cpu cost or anything like that, it's purely a GM editor only.
 
